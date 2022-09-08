@@ -92,6 +92,31 @@ public class Lab01 {
             out.println(ind);
         }
 
+        // Langkah 3 : Set pointer tiap huruf ke 0 (index pertama array lagi) - persiapan kalkulasi maksimal substring
+        pointerS = pointerO = pointerF = pointerI = pointerT = pointerA = 0;
+
+        // Langkah 4 : Memulai kalkulasi pointer sampai tidak bisa didapati substring
+        // jumlahHuruf >> Kondisi index lokasi stop iterasi (pointer == jumlahHuruf (artinya sudah null datanya))
+        while (pointerS < jumlahHurufS 
+            && pointerO < jumlahHurufO
+            && pointerF < jumlahHurufF
+            && pointerI < jumlahHurufI
+            && pointerT < jumlahHurufT
+            && pointerA < jumlahHurufA) {
+                // Sudah pasti urutannya harus S < O < F < I < T < A
+                if (indexHurufO[pointerO] > indexHurufS[pointerS]) {
+                    // Jika benar maka cek huruf selanjutnya
+                    if (indexHurufF[pointerF] > indexHurufO[pointerO]) {
+
+                    } else {
+                        pointerF++;
+                    }
+                } else {
+                    // Saat ternyata tidak lebih besar O !< S maka tambahkan pointer dan ulang operasi
+                    pointerO++;
+                }
+        }
+
         return 0;
     }
 
