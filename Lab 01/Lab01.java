@@ -67,29 +67,34 @@ public class Lab01 {
         }
 
         // Test : Index huruf dalam array sesuai dengan yang sesungguhnya
-        out.println("Huruf S");
+        out.print("Huruf S : ");
         for (int ind : indexHurufS) {
-            out.println(ind);
+            out.print(ind + ", ");
         }
-        out.println("Huruf O");
+        out.println();
+        out.print("Huruf O : ");
         for (int ind : indexHurufO) {
-            out.println(ind);
+            out.print(ind + ", ");
         }
-        out.println("Huruf F");
+        out.println();
+        out.print("Huruf F : ");
         for (int ind : indexHurufF) {
-            out.println(ind);
+            out.print(ind + ", ");
         }
-        out.println("Huruf I");
+        out.println();
+        out.print("Huruf I : ");
         for (int ind : indexHurufI) {
-            out.println(ind);
+            out.print(ind + ", ");
         }
-        out.println("Huruf T");
+        out.println();
+        out.print("Huruf T : ");
         for (int ind : indexHurufT) {
-            out.println(ind);
+            out.print(ind + ", ");
         }
-        out.println("Huruf A");
+        out.println();
+        out.print("Huruf A : ");
         for (int ind : indexHurufA) {
-            out.println(ind);
+            out.print(ind + ", ");
         }
 
         // Langkah 3 : Set pointer tiap huruf ke 0 (index pertama array lagi) - persiapan kalkulasi maksimal substring
@@ -155,7 +160,8 @@ public class Lab01 {
         }
 
         int ans = getTotalDeletedLetters(N, x);
-        out.println(ans);
+        out.println();
+        out.println("HASIL : " + ans);
 
         // Tutup out
         out.close();
