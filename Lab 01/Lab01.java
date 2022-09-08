@@ -7,6 +7,91 @@ public class Lab01 {
 
     static int getTotalDeletedLetters(int N, char[] x) {
         // TODO: implement method getTotalDeletedLetter(int, char[]) to get the answer
+        int jumlahHurufS, jumlahHurufO, jumlahHurufF, jumlahHurufI, jumlahHurufT, jumlahHurufA;
+        jumlahHurufS = jumlahHurufO = jumlahHurufF = jumlahHurufI = jumlahHurufT = jumlahHurufA = 0;
+        // Langkah 1 : Lakukan pendataan jumlah huruf masing-masing S,O,F,I,T,A dalam x[]
+        for (int i = 0; i < x.length; i++) {
+            if (x[i] == 'S') {
+                jumlahHurufS += 1;
+            } else if (x[i] == 'O') {
+                jumlahHurufO += 1;
+            } else if (x[i] == 'F') {
+                jumlahHurufF += 1;
+            } else if (x[i] == 'I') {
+                jumlahHurufI += 1;
+            } else if (x[i] == 'T') {
+                jumlahHurufT += 1;
+            } else if (x[i] == 'A') {
+                jumlahHurufA += 1;
+            }
+        }
+        // Optimasi : Saat huruf tak lengkap maka langsung kembalikan length dari x
+        if (jumlahHurufS == 0 | jumlahHurufO == 0 | jumlahHurufF == 0 | jumlahHurufI == 0 | jumlahHurufT == 0 | jumlahHurufA == 0) {
+            return x.length;
+        }
+
+        // Langkah 2 : Lakukan pendataan index dari setiap huruf S,O,F,I,T,A
+        // Inisiasi array yang digunakan untuk pendataan
+        int[] indexHurufS = new int[jumlahHurufS];
+        int[] indexHurufO = new int[jumlahHurufO];
+        int[] indexHurufF = new int[jumlahHurufF];
+        int[] indexHurufI = new int[jumlahHurufI];
+        int[] indexHurufT = new int[jumlahHurufT];
+        int[] indexHurufA = new int[jumlahHurufA];
+        // Pointer pengisi data
+        int pointerS, pointerO, pointerF, pointerI, pointerT, pointerA;
+        pointerS = pointerO = pointerF = pointerI = pointerT = pointerA = 0;
+        // Data semua index dari setiap huruf
+        for (int i = 0; i < x.length; i++) {
+            if (x[i] == 'S') {
+                // Index disimpan ke daftar index huruf
+                indexHurufS[pointerS] = i;
+                // Pointer ditambahkan
+                pointerS++;
+            } else if (x[i] == 'O') {
+                indexHurufO[pointerO] = i;
+                pointerO++;
+            } else if (x[i] == 'F') {
+                indexHurufF[pointerF] = i;
+                pointerF++;
+            } else if (x[i] == 'I') {
+                indexHurufI[pointerI] = i;
+                pointerI++;
+            } else if (x[i] == 'T') {
+                indexHurufT[pointerT] = i;
+                pointerT++;
+            } else if (x[i] == 'A') {
+                indexHurufA[pointerA] = i;
+                pointerA++;
+            }
+        }
+
+        // Test : Index huruf dalam array sesuai dengan yang sesungguhnya
+        out.println("Huruf S");
+        for (int ind : indexHurufS) {
+            out.println(ind);
+        }
+        out.println("Huruf O");
+        for (int ind : indexHurufO) {
+            out.println(ind);
+        }
+        out.println("Huruf F");
+        for (int ind : indexHurufF) {
+            out.println(ind);
+        }
+        out.println("Huruf I");
+        for (int ind : indexHurufI) {
+            out.println(ind);
+        }
+        out.println("Huruf T");
+        for (int ind : indexHurufT) {
+            out.println(ind);
+        }
+        out.println("Huruf A");
+        for (int ind : indexHurufA) {
+            out.println(ind);
+        }
+
         return 0;
     }
 
@@ -28,7 +113,7 @@ public class Lab01 {
         }
 
         int ans = getTotalDeletedLetters(N, x);
-        out.println(ans);
+        // out.println(ans);
 
         // Tutup out
         out.close();
