@@ -123,13 +123,13 @@ public class Lab01 {
                                     // Artinya ditemui subsekuens berbentuk SOFITA
                                     jumlahSOFITA++;
                                 } else {
-                                    pointerT++;
+                                    pointerA++;
                                 }
                             } else {
-                                pointerI++;
+                                pointerT++;
                             }
                         } else {
-                            pointerF++;
+                            pointerI++;
                         }
                     } else {
                         pointerF++;
