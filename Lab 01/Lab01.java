@@ -6,7 +6,6 @@ public class Lab01 {
     private static PrintWriter out;
 
     static int getTotalDeletedLetters(int N, char[] x) {
-        // TODO: implement method getTotalDeletedLetter(int, char[]) to get the answer
         int jumlahHurufS, jumlahHurufO, jumlahHurufF, jumlahHurufI, jumlahHurufT, jumlahHurufA;
         jumlahHurufS = jumlahHurufO = jumlahHurufF = jumlahHurufI = jumlahHurufT = jumlahHurufA = 0;
         // Langkah 1 : Lakukan pendataan jumlah huruf masing-masing S,O,F,I,T,A dalam x[]
@@ -139,7 +138,10 @@ public class Lab01 {
                     pointerO++;
                 }
         }
-        return jumlahSOFITA;
+        out.println();
+        out.println("-----------------------------");
+        out.println("JUMLAH SOFITA : " + jumlahSOFITA);
+        return N-(jumlahSOFITA*6);
     }
 
     // Fungsi utama berjalannya program
@@ -160,8 +162,7 @@ public class Lab01 {
         }
 
         int ans = getTotalDeletedLetters(N, x);
-        out.println();
-        out.println("HASIL : " + ans);
+        out.println("JUMLAH HURUF DICORET : " + ans);
 
         // Tutup out
         out.close();
