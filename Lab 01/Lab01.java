@@ -161,8 +161,12 @@ public class Lab01 {
             x[i] = in.next().charAt(0);
         }
 
+        long startTime = System.nanoTime(); // Test : Timing
         int ans = getTotalDeletedLetters(N, x);
         out.println("JUMLAH HURUF DICORET : " + ans);
+        long endTime   = System.nanoTime(); // Test : Timing
+        long totalTime = endTime - startTime; // Test : Timing
+        out.println("TOTAL WAKTU : " + totalTime + " ns | " + totalTime/1000000000 + " s"); // Test : Timing (ns)
 
         // Tutup out
         out.close();
