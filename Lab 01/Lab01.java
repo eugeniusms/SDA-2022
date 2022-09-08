@@ -95,7 +95,9 @@ public class Lab01 {
         // Langkah 3 : Set pointer tiap huruf ke 0 (index pertama array lagi) - persiapan kalkulasi maksimal substring
         pointerS = pointerO = pointerF = pointerI = pointerT = pointerA = 0;
 
-        // Langkah 4 : Memulai kalkulasi pointer sampai tidak bisa didapati substring
+        // Langkah 4 : Memulai kalkulasi pointer sampai tidak bisa didapati subsekuens SOFITA
+        // Variabel merupakan jumlah subsekuens SOFITA
+        int jumlahSOFITA = 0;
         // jumlahHuruf >> Kondisi index lokasi stop iterasi (pointer == jumlahHuruf (artinya sudah null datanya))
         while (pointerS < jumlahHurufS 
             && pointerO < jumlahHurufO
@@ -107,7 +109,23 @@ public class Lab01 {
                 if (indexHurufO[pointerO] > indexHurufS[pointerS]) {
                     // Jika benar maka cek huruf selanjutnya
                     if (indexHurufF[pointerF] > indexHurufO[pointerO]) {
-
+                        if (indexHurufI[pointerI] > indexHurufF[pointerF]) {
+                            if (indexHurufT[pointerT] > indexHurufI[pointerI]) {
+                                if (indexHurufA[pointerA] > indexHurufT[pointerT]) {
+                                    // Saat sudah terbentuk S < O < F < I < T < A
+                                    // Maka semua pointer perlu ditambahkan agar bergeser
+                                    pointerS++; pointerO++; pointerF++; pointerI++; pointerT++; pointerA++;
+                                    // Artinya ditemui subsekuens berbentuk SOFITA
+                                    jumlahSOFITA++;
+                                } else {
+                                    pointerT++;
+                                }
+                            } else {
+                                pointerI++;
+                            }
+                        } else {
+                            pointerF++;
+                        }
                     } else {
                         pointerF++;
                     }
@@ -116,8 +134,7 @@ public class Lab01 {
                     pointerO++;
                 }
         }
-
-        return 0;
+        return jumlahSOFITA;
     }
 
     // Fungsi utama berjalannya program
@@ -138,7 +155,7 @@ public class Lab01 {
         }
 
         int ans = getTotalDeletedLetters(N, x);
-        // out.println(ans);
+        out.println(ans);
 
         // Tutup out
         out.close();
