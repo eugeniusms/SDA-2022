@@ -1,12 +1,11 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Lab01 {
+public class Lab01Debug {
     private static InputReader in;
     private static PrintWriter out;
 
     static int getTotalDeletedLetters(int N, char[] x) {
-        // Inisiasi jumlah huruf
         int jumlahHurufS, jumlahHurufO, jumlahHurufF, jumlahHurufI, jumlahHurufT, jumlahHurufA;
         jumlahHurufS = jumlahHurufO = jumlahHurufF = jumlahHurufI = jumlahHurufT = jumlahHurufA = 0;
         // Langkah 1 : Lakukan pendataan jumlah huruf masing-masing S,O,F,I,T,A dalam x[]
@@ -66,6 +65,37 @@ public class Lab01 {
             }
         }
 
+        // Test : Index huruf dalam array sesuai dengan yang sesungguhnya
+        out.print("Huruf S : ");
+        for (int ind : indexHurufS) {
+            out.print(ind + ", ");
+        }
+        out.println();
+        out.print("Huruf O : ");
+        for (int ind : indexHurufO) {
+            out.print(ind + ", ");
+        }
+        out.println();
+        out.print("Huruf F : ");
+        for (int ind : indexHurufF) {
+            out.print(ind + ", ");
+        }
+        out.println();
+        out.print("Huruf I : ");
+        for (int ind : indexHurufI) {
+            out.print(ind + ", ");
+        }
+        out.println();
+        out.print("Huruf T : ");
+        for (int ind : indexHurufT) {
+            out.print(ind + ", ");
+        }
+        out.println();
+        out.print("Huruf A : ");
+        for (int ind : indexHurufA) {
+            out.print(ind + ", ");
+        }
+
         // Langkah 3 : Set pointer tiap huruf ke 0 (index pertama array lagi) - persiapan kalkulasi maksimal substring
         pointerS = pointerO = pointerF = pointerI = pointerT = pointerA = 0;
 
@@ -108,7 +138,9 @@ public class Lab01 {
                     pointerO++;
                 }
         }
-        // Mengembalikan jumlah huruf dicoret : (total huruf - jumlahSOFITA*6)
+        out.println();
+        out.println("-----------------------------");
+        out.println("JUMLAH SOFITA : " + jumlahSOFITA);
         return N-(jumlahSOFITA*6);
     }
 
@@ -129,9 +161,12 @@ public class Lab01 {
             x[i] = in.next().charAt(0);
         }
 
-        // Melakukan pencetakan total deleted letters
+        long startTime = System.nanoTime(); // Test : Timing
         int ans = getTotalDeletedLetters(N, x);
-        out.println(ans);
+        out.println("JUMLAH HURUF DICORET : " + ans);
+        long endTime   = System.nanoTime(); // Test : Timing
+        long totalTime = endTime - startTime; // Test : Timing
+        out.println("TOTAL WAKTU : " + totalTime + " ns | " + totalTime/1000000000 + " s"); // Test : Timing (ns)
 
         // Tutup out
         out.close();
