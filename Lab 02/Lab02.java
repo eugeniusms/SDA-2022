@@ -33,6 +33,9 @@ public class Lab02 {
         // Jika toples kosong maka return -1
         if (siToplesPalingKanan.empty()) {
             return -1;
+        } else if (siToplesPalingKanan.peek() >= 4 || siToplesPalingKanan.peek() < 0) {
+            // Ketika paling atas di atas kode 3 atau di bawah 0 maka return -1
+            return -1;
         } else {
             // Jika masih ada isinya maka return kode kue paling atas dalam toples untuk dicetak
             return siToplesPalingKanan.peek();
