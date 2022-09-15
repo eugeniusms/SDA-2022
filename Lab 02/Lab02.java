@@ -3,7 +3,6 @@ import java.util.StringTokenizer;
 import java.util.*;
 
 public class Lab02 {
-    // TODO : Silahkan menambahkan struktur data yang diperlukan
     private static InputReader in;
     private static PrintWriter out;
 
@@ -20,6 +19,7 @@ public class Lab02 {
     public static int banyakKuePerToples;
     public static int banyakQuery;
 
+    // Method yang dipanggil saat Sofita menggeser conveyor ke kanan
     static int geserKanan() {
         // Queue method: https://www.codegrepper.com/code-examples/java/pop+in+queue+java
 
@@ -39,9 +39,8 @@ public class Lab02 {
         }
     }
 
+    // Method yang dipanggil saat Sofita ingin membeli rasa tertentu
     static int beliRasa(int rasa) {
-        // TODO : Implementasi fitur beli rasa, manfaatkan fitur geser kanan
-
         // STEP 1: Mengecek kue teratas di setiap toples yang ada dalam conveyor queue (maksimal sebanyak banyakToples)
         for(int i = 0; i < banyakToples; i++) {
             // Mengecek setiap toples yang ada lalu geser ke arah sebalik conveyor jalan (geser kiri) untuk
@@ -109,8 +108,12 @@ public class Lab02 {
             conveyorQueue.addLast(toples);
         }
 
+        // Mengambil banyak query
         for (int i = 0; i < banyakQuery; i++) {
+            // Mengambil query
             String perintah = in.next();
+            
+            // Sesuaikan query dengan pemanggilan method yang dibutuhkan
             if (perintah.equals("GESER_KANAN")) {
                 out.println(geserKanan());
             } else if (perintah.equals("BELI_RASA")) {
