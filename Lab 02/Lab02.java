@@ -19,26 +19,22 @@ public class Lab02 {
     public static int banyakQuery;
 
     static int geserKanan() {
-        // Konsep geser pointer: saat conveyor geserKanan maka sama saja pointer geser kiri
-
-        // // Jika pointer sudah dipojok kiri maka geser kekiri didapati pointer dengan index
-        // // terbesar dalam conveyorQueue
-        // if (pointer == 0) {
-        //     pointer = banyakToples-1;
-        // } else {
-        //     // Selain kasus pemindahan pada batas di atas maka lakukan pengurangan saja (geser kiri)
-        //     pointer -= 1;
-        // }
-
-        // Lakukan pengecekan kue teratas pada toples
-
         // Queue method: https://www.codegrepper.com/code-examples/java/pop+in+queue+java
 
-        // Meremove head of queue dan mengambil datanya untuk dimasukkan ke tail of queue lagi
+        // STEP 1: Meremove head of queue dan mengambil datanya untuk dimasukkan ke tail of queue lagi
         Stack<Integer> siToplesPalingKanan = conveyorQueue.remove(); 
         // Memasukkan data terkanan ke dalam tail of queue
         conveyorQueue.add(siToplesPalingKanan);
-        return -1;
+
+        // STEP 2: Mengecek kue teratas di siToplesPalingKanan
+        // stack.empty(): https://www.geeksforgeeks.org/stack-empty-method-in-java/
+        // Jika toples kosong maka return -1
+        if (siToplesPalingKanan.empty()) {
+            return -1;
+        } else {
+            // Jika masih ada isinya maka return kode kue paling atas dalam toples untuk dicetak
+            return siToplesPalingKanan.peek();
+        }
     }
 
     static int beliRasa(int rasa) {
