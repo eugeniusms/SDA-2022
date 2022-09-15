@@ -21,7 +21,7 @@ for toples in range(jml_toples):
 for query in range(jml_query):
     perintah = daftar_query[random.randint(0,1)]
     if perintah != "GESER_KANAN":
-        perintah += str(random.randint(0,5))
+        perintah += str(random.randint(0,3))
     isi_file += perintah + "\n"
 
 # Menulis text yang sudah dioperasikan ke dalam text output
