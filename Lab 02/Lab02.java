@@ -1,13 +1,43 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.*;
 
 public class Lab02 {
     // TODO : Silahkan menambahkan struktur data yang diperlukan
     private static InputReader in;
     private static PrintWriter out;
 
+    // Menginisiasikan conveyorQueue untuk mengantrikan daftar toples (Queue)
+    // yang mana toples adalah Stack<Integer>
+    public static Queue<Stack<Integer>> conveyorQueue = new LinkedList<> ();
+    // Inisiasi pointer untuk indexing queue (bukan menggeser queue)
+    public static int pointer = 0;
+
+    // Mengambil data statis masukan
+    public static int banyakToples;
+    public static int banyakKuePerToples;
+    public static int banyakQuery;
+
     static int geserKanan() {
-        // TODO : Implementasi fitur geser kanan conveyor belt
+        // Konsep geser pointer: saat conveyor geserKanan maka sama saja pointer geser kiri
+
+        // // Jika pointer sudah dipojok kiri maka geser kekiri didapati pointer dengan index
+        // // terbesar dalam conveyorQueue
+        // if (pointer == 0) {
+        //     pointer = banyakToples-1;
+        // } else {
+        //     // Selain kasus pemindahan pada batas di atas maka lakukan pengurangan saja (geser kiri)
+        //     pointer -= 1;
+        // }
+
+        // Lakukan pengecekan kue teratas pada toples
+
+        // Queue method: https://www.codegrepper.com/code-examples/java/pop+in+queue+java
+
+        // Meremove head of queue dan mengambil datanya untuk dimasukkan ke tail of queue lagi
+        Stack<Integer> siToplesPalingKanan = conveyorQueue.remove(); 
+        // Memasukkan data terkanan ke dalam tail of queue
+        conveyorQueue.add(siToplesPalingKanan);
         return -1;
     }
 
@@ -21,24 +51,30 @@ public class Lab02 {
         in = new InputReader(inputStream);
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
-        
-        int N = in.nextInt();
-        int X = in.nextInt();
-        int C = in.nextInt();
 
-        for (int i = 0; i < N; ++i) {
+        // Mengambil data statis masukan
+        banyakToples = in.nextInt();
+        banyakKuePerToples = in.nextInt();
+        banyakQuery = in.nextInt();
 
-            // TODO: Inisiasi toples ke-i
+        // Mendata setiap toples beserta isi kue di dalamnya
+        for (int i = 0; i < banyakToples; ++i) {
+            // Menginsiasikan toples untuk diisi kue-kue (Stack), kue berkodekan angka integer
+            Stack<Integer> toples = new Stack<Integer>();
 
-            for (int j = 0; j < X; j++) {
-
+            // Mengisi kue di dalam toples
+            for (int j = 0; j < banyakKuePerToples; j++) {
+                // Mengambil kode rasa kue
                 int rasaKeJ = in.nextInt();
-
-                // TODO: Inisiasi kue ke-j ke dalam toples ke-i
+                // Menambahkan kue sesuai rasa ke dalam toples (push)
+                toples.push(rasaKeJ);
             }
+
+            // Toples diqueue ke dalam conveyor belt (add)
+            conveyorQueue.add(toples);
         }
 
-        for (int i = 0; i < C; i++) {
+        for (int i = 0; i < banyakQuery; i++) {
             String perintah = in.next();
             if (perintah.equals("GESER_KANAN")) {
                 out.println(geserKanan());
