@@ -33,9 +33,6 @@ public class Lab02 {
         // Jika toples kosong maka return -1
         if (siToplesPalingKanan.empty()) {
             return -1;
-        } else if (siToplesPalingKanan.peek() >= 4 || siToplesPalingKanan.peek() < 0) {
-            // Ketika paling atas di atas kode 3 atau di bawah 0 maka return -1
-            return -1;
         } else {
             // Jika masih ada isinya maka return kode kue paling atas dalam toples untuk dicetak
             return siToplesPalingKanan.peek();
@@ -49,22 +46,17 @@ public class Lab02 {
             // Mengecek setiap toples yang ada lalu geser ke arah sebalik conveyor jalan (geser kiri) untuk
             // mendapati toples terdekat dari Dek Sofita
 
-            // CHECK 1: Rasa tidak dijual return -1 (yang dijual hanya 0,1,2,3)
-            if (rasa >= 4 || rasa < 0) {
-                return -1;
-            }
-
             // Mengambil toples paling kiri
             Stack<Integer> siToplesPalingKiri = conveyorQueue.removeLast(); 
 
-            // CHECK 2: Cek apakah toples kosong, jika kosong langsung continue ke pengecekan toples selanjutnya
+            // CHECK 1: Cek apakah toples kosong, jika kosong langsung continue ke pengecekan toples selanjutnya
             if (siToplesPalingKiri.empty()) {
                 // Geser toples palingKiri ke head (addFirst)
                 conveyorQueue.addFirst(siToplesPalingKiri);
                 continue;
             }
 
-            // CHECK 3: Cek top of stack (kue teratas) dari toples paling kiri
+            // CHECK 2: Cek top of stack (kue teratas) dari toples paling kiri
             if (siToplesPalingKiri.peek() == rasa) {
                 // Jika kue teratas sama dengan rasa diminta maka 
                 // Kembalikan siToplesPalingKiri ke asalnya (di tail) (dengan stack toples yang sudah dipop)
