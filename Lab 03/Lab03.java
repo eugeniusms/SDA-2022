@@ -9,7 +9,7 @@ public class Lab03 {
     public static char[] A;
     public static int N;
     // Memo yang digunakan untuk menyimpan redSaveNew dari kombinasi yang pernah ada
-    public static int[] memo = new int[1001];
+    public static int[] memo = new int[1069];
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -31,7 +31,7 @@ public class Lab03 {
         }
 
         // Run Solusi
-        int solution = getMaxRedVotes(0, N);
+        int solution = getMaxRedVotes(0, N-1);
         out.print(solution);
 
         // Tutup OutputStream
@@ -46,7 +46,7 @@ public class Lab03 {
         }
 
         // Saat start == end maka return 0
-        if (start == end) {
+        if (start >= end) {
             return 0;
         } else {
             // Inisiasi variabel
@@ -56,7 +56,7 @@ public class Lab03 {
             int maxRedVotes = 0;
 
             // Pada setiap cabang sequence
-            for (int i = start; i < end; i++) {
+            for (int i = start; i <= end; i++) {
                 // Lakukan pengambilan data 'R' atau 'B'
                 if (A[i] == 'R') {
                     red++;
