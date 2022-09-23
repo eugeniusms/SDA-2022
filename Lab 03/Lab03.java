@@ -42,6 +42,7 @@ public class Lab03 {
 
     // Fungsi untuk mendapatkan nilai maksimal red votes
     public static int getMaxRedVotes(int start, int end) {
+        out.println("end: " + end); // end pasti 1000 gaperlu dimemo
         // Melakukan cek ke dalam memo, jika sudah pernah ada hasil maka langsung return memo
         if (memo[start][end] != -1) {
             return memo[start][end];
