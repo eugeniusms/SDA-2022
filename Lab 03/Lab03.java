@@ -7,6 +7,7 @@ public class Lab03 {
 
     public static char[] A;
     public static int N;
+    public static int maxRedVotes = 0;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -24,19 +25,15 @@ public class Lab03 {
         }
 
         // Run Solusi
-        int solution = getMaxRedVotes(0, N, 0);
-        out.print(solution);
+        getMaxRedVotes(0, N, 0);
+        out.print("solusi : " + maxRedVotes);
 
         // Tutup OutputStream
         out.close();
     }
 
-    public static int getMaxRedVotes(int start, int end, int redSave) {
+    public static void getMaxRedVotes(int start, int end, int redSave) {
         // Jika start == end maka sudahi rekursi
-        if (start == end) {
-            return 0;
-        }
-
         int red = 0;
         int blue = 0;
         int redVotes = 0;
@@ -66,7 +63,10 @@ public class Lab03 {
         out.println("redsavenew: " + redSaveNew);
         out.println();
 
-        return redSaveNew;
+        // Mencatat nilia redSaveNew tertinggi
+        if (redSaveNew > maxRedVotes) {
+            maxRedVotes = redSaveNew;
+        }
     }
 
     // Fungsi digunakan untuk mengembalikan jumlah vote berdasarkan (red, blue) 
