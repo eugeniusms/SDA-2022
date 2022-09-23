@@ -24,14 +24,14 @@ public class Lab03 {
         }
 
         // Run Solusi
-        int solution = getMaxRedVotes(0, N);
+        int solution = getMaxRedVotes(0, N, 0);
         out.print(solution);
 
         // Tutup OutputStream
         out.close();
     }
 
-    public static int getMaxRedVotes(int start, int end) {
+    public static int getMaxRedVotes(int start, int end, int redSave) {
         // Jika start == end maka sudahi rekursi
         if (start == end) {
             return 0;
@@ -40,6 +40,7 @@ public class Lab03 {
         int red = 0;
         int blue = 0;
         int redVotes = 0;
+        int redSaveNew = 0; // redSaveNew digunakan untuk menyimpan nilai total vote red terbaru
         for (int i = start; i < end; i++) {
             if (A[i] == 'R') {
                 red++;
@@ -51,14 +52,21 @@ public class Lab03 {
             redVotes = getVotes(red, blue);
             out.println("redVotes: " + redVotes);
 
+            // Menyimpan nilai total redVote ditambah redSave sebelumnya
+            // Example: (R R B)(B) => redSave = 3 (redVote sebelum saat ini) + 0 (redVote saat ini)
+            redSaveNew = redSave + redVotes; 
+
             // Pecah lagi pada setiap perulangan menuju baris sequence masing-masing (sisa sequence)
             // Berdasarkan data setelah start terakhir = i + 1 sampai end
-            getMaxRedVotes(i+1, end);
+            getMaxRedVotes(i+1, end, redSaveNew);
         }
 
+        out.println("======================");
+        // redSaveNew adalah jumlah total vote red dalam satu subsequence 
+        out.println("redsavenew: " + redSaveNew);
         out.println();
 
-        return -1;
+        return redSaveNew;
     }
 
     // Fungsi digunakan untuk mengembalikan jumlah vote berdasarkan (red, blue) 
