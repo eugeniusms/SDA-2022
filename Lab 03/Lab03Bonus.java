@@ -65,8 +65,13 @@ public class Lab03Bonus {
                 }
 
                 // Mendapat nilai vote ke dalamnya 
+                if (red > blue) {
+                    redVotes = red + blue + getMaxRedVotes(i+1, end);
+                } else {
+                    redVotes = getMaxRedVotes(i+1, end);
+                }
+
                 // Kemudian cari redVote paling maksimal
-                redVotes = getVotes(red, blue) + getMaxRedVotes(i+1, end);
                 if (redVotes > maxRedVotes) {
                     maxRedVotes = redVotes;
                 }
@@ -77,15 +82,6 @@ public class Lab03Bonus {
 
             // Kembalikan nilai maksimal red votes yang ada
             return maxRedVotes;
-        }
-    }
-
-    // Fungsi digunakan untuk mengembalikan jumlah vote berdasarkan (red, blue) 
-    public static int getVotes(int red, int blue) {
-        if (red > blue) {
-            return red + blue;
-        } else {
-            return 0;
         }
     }
 
