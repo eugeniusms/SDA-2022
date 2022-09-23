@@ -9,7 +9,7 @@ public class Lab03 {
     public static char[] A;
     public static int N;
     // Memo yang digunakan untuk menyimpan redSaveNew dari kombinasi yang pernah ada
-    public static int[][] memo = new int[1001][1001];
+    public static int[] memo = new int[1001];
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -18,10 +18,8 @@ public class Lab03 {
         out = new PrintWriter(outputStream);
 
         // Inisiasi nilai memo
-        // Fill each row with -1
-        for (int[] row: memo) {
-            Arrays.fill(row, -1);
-        }
+        // Fill each index with -1
+        Arrays.fill(memo, -1);
 
         // Inisialisasi Array Input
         N = in.nextInt();
@@ -43,8 +41,8 @@ public class Lab03 {
     // Fungsi untuk mendapatkan nilai maksimal red votes
     public static int getMaxRedVotes(int start, int end) {
         // Melakukan cek ke dalam memo, jika sudah pernah ada hasil maka langsung return memo
-        if (memo[start][end] != -1) {
-            return memo[start][end];
+        if (memo[start] != -1) {
+            return memo[start];
         }
 
         // Saat start == end maka return 0
@@ -75,7 +73,7 @@ public class Lab03 {
             }
 
             // Menyimpan nilai maksimal red votes ke memo
-            memo[start][end] = maxRedVotes;
+            memo[start] = maxRedVotes;
 
             // Kembalikan nilai maksimal red votes yang ada
             return maxRedVotes;
