@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Arrays;
 
 public class Lab03 {
     private static InputReader in;
@@ -9,7 +8,7 @@ public class Lab03 {
     public static char[] A;
     public static int N;
     // Memo yang digunakan untuk menyimpan redSaveNew dari kombinasi yang pernah ada
-    public static int[][] memo = new int[1001][1001];
+    public static int[] memo = new int[1000];
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -17,10 +16,9 @@ public class Lab03 {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
-        // Inisiasi nilai memo
-        // Fill each row with -1
-        for (int[] row: memo) {
-            Arrays.fill(row, -1);
+        // Inisiasi nilai memo with -1
+        for (int i = 0; i < 1000; i++) {
+            memo[i] = -1;
         }
 
         // Inisialisasi Array Input
@@ -33,7 +31,7 @@ public class Lab03 {
         }
 
         // Run Solusi
-        int solution = getMaxRedVotes(0, N);
+        int solution = getMaxRedVotes(0, N-1);
         out.print(solution);
 
         // Tutup OutputStream
@@ -42,10 +40,9 @@ public class Lab03 {
 
     // Fungsi untuk mendapatkan nilai maksimal red votes
     public static int getMaxRedVotes(int start, int end) {
-        out.println("end: " + end); // end pasti 1000 gaperlu dimemo
         // Melakukan cek ke dalam memo, jika sudah pernah ada hasil maka langsung return memo
-        if (memo[start][end] != -1) {
-            return memo[start][end];
+        if (memo[start] != -1) {
+            return memo[start];
         }
 
         // Saat start == end maka return 0
@@ -76,7 +73,7 @@ public class Lab03 {
             }
 
             // Menyimpan nilai maksimal red votes ke memo
-            memo[start][end] = maxRedVotes;
+            memo[start] = maxRedVotes;
 
             // Kembalikan nilai maksimal red votes yang ada
             return maxRedVotes;
