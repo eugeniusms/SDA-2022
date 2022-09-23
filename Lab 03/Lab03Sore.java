@@ -40,9 +40,8 @@ public class Lab03Sore {
         out.close();
     }
 
+    // Fungsi untuk mendapatkan nilai maksimal red votes
     public static int getMaxRedVotes(int start, int end) {
-        // TODO : Implementasikan solusi rekursif untuk mendapatkan skor vote maksimal
-        // untuk RED pada subarray A[start ... end] (inklusif)
         // Melakukan cek ke dalam memo, jika sudah pernah ada hasil maka langsung return memo
         if (memo[start][end] != -1) {
             return memo[start][end];
@@ -52,6 +51,7 @@ public class Lab03Sore {
         if (start == end) {
             return 0;
         } else {
+            // Inisiasi variabel
             int red = 0;
             int blue = 0;
             int redVotes = 0;
@@ -59,22 +59,25 @@ public class Lab03Sore {
 
             // Pada setiap cabang sequence
             for (int i = start; i < end; i++) {
+                // Lakukan pengambilan data 'R' atau 'B'
                 if (A[i] == 'R') {
                     red++;
                 } else {
                     blue++;
                 }
 
-                // Mendapat nilai vote ke dalamnya (cari redVote paling maksimal)
+                // Mendapat nilai vote ke dalamnya 
+                // Kemudian cari redVote paling maksimal
                 redVotes = getVotes(red, blue) + getMaxRedVotes(i+1, end);
                 if (redVotes > maxRedVotes) {
                     maxRedVotes = redVotes;
                 }
             }
 
-            // Menyimpan nilai ke memo
+            // Menyimpan nilai maksimal red votes ke memo
             memo[start][end] = maxRedVotes;
 
+            // Kembalikan nilai maksimal red votes yang ada
             return maxRedVotes;
         }
     }
