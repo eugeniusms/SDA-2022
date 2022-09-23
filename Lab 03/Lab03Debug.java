@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Lab03 {
+public class Lab03Debug {
     private static InputReader in;
     private static PrintWriter out;
 
@@ -32,6 +32,7 @@ public class Lab03 {
     }
 
     public static int getMaxRedVotes(int start, int end) {
+        out.println("start: " + start + " | end: " + end); // TEST
         // Jika start == end maka sudahi rekursi
         if (start == end) {
             return 0;
@@ -60,6 +61,8 @@ public class Lab03 {
                 start = i;
             }
         }
+
+        out.println("max: " + maxVotes); // TEST
 
         // Terdapat 2 kasus lanjutan:
         // 1) Semua nilai berisikan 0, artinya start = posisi terdepan potongan array
