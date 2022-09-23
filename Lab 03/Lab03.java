@@ -53,12 +53,8 @@ public class Lab03 {
 
             // Mengambil data redVotes 
             redVotes = getVotes(red, blue);
-            // Mencatat nilai max dari vote yang ada
-            if (redVotes > maxVotes) {
-                maxVotes = redVotes;
-                // Mencatat nilai start letak perpotongan array pada nilai maxnya
-                start = i;
-            }
+            // Mengambil seluruh kombinasi dari data tersisa
+            out.println(redVotes);
         }
 
         // Terdapat 2 kasus lanjutan:
@@ -66,6 +62,7 @@ public class Lab03 {
         // 2) Ada satu nilai max, artinya start = posisi nilai maxnya
         // Namun keduanya memiliki pendekatan next yang sama
         // Sama-sama next pada start + 1 (sisa potongan array)
+        out.println();
         return maxVotes + getMaxRedVotes(start + 1, end);
     }
 
