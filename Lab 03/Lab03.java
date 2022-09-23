@@ -31,7 +31,7 @@ public class Lab03 {
         }
 
         // Run Solusi
-        int solution = getMaxRedVotes(0, N-1);
+        int solution = getMaxRedVotes(0, N);
         out.print(solution);
 
         // Tutup OutputStream
@@ -56,7 +56,7 @@ public class Lab03 {
             int maxRedVotes = 0;
 
             // Pada setiap cabang sequence
-            for (int i = start; i <= end; i++) {
+            for (int i = start; i < end; i++) {
                 // Lakukan pengambilan data 'R' atau 'B'
                 if (A[i] == 'R') {
                     red++;
