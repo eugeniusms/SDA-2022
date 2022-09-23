@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.Arrays;
 
 public class Lab03 {
     private static InputReader in;
@@ -7,13 +8,22 @@ public class Lab03 {
 
     public static char[] A;
     public static int N;
-    public static int maxRedVotes = 0;
+    public static int solution = 0;
+
+    // Memo yang digunakan untuk menyimpan redSaveNew dari kombinasi yang pernah ada
+    public static int[][] memo = new int[1001][1001];
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
+
+        // Inisiasi nilai memo
+        // Fill each row with -1
+        for (int[] row: memo) {
+            Arrays.fill(row, -1);
+        }
 
         // Inisialisasi Array Input
         N = in.nextInt();
@@ -26,36 +36,40 @@ public class Lab03 {
 
         // Run Solusi
         getMaxRedVotes(0, N, 0);
-        out.print("solusi : " + maxRedVotes);
+        out.print("solusi : " + solution);
 
         // Tutup OutputStream
         out.close();
     }
 
     public static void getMaxRedVotes(int start, int end, int redSave) {
-        // Jika start == end maka sudahi rekursi
-        int red = 0;
-        int blue = 0;
-        int redVotes = 0;
+        // Jika data sudah pernah ada dalam memo maka langsung munculkan saja (-1 : belum ada)
         int redSaveNew = 0; // redSaveNew digunakan untuk menyimpan nilai total vote red terbaru
-        for (int i = start; i < end; i++) {
-            if (A[i] == 'R') {
-                red++;
-            } else {
-                blue++;
+        if (memo[start][end] != -1) {
+            redSave = memo[start][end];
+        } else {
+            int red = 0;
+            int blue = 0;
+            int redVotes = 0;
+            for (int i = start; i < end; i++) {
+                if (A[i] == 'R') {
+                    red++;
+                } else {
+                    blue++;
+                }
+
+                // Mendapatkan redvotes di setiap perulangan dalam satu kolom
+                redVotes = getVotes(red, blue);
+                out.println("redVotes: " + redVotes);
+
+                // Menyimpan nilai total redVote ditambah redSave sebelumnya
+                // Example: (R R B)(B) => redSave = 3 (redVote sebelum saat ini) + 0 (redVote saat ini)
+                redSaveNew = redSave + redVotes; 
+
+                // Pecah lagi pada setiap perulangan menuju baris sequence masing-masing (sisa sequence)
+                // Berdasarkan data setelah start terakhir = i + 1 sampai end
+                getMaxRedVotes(i+1, end, redSaveNew);
             }
-
-            // Mendapatkan redvotes di setiap perulangan dalam satu kolom
-            redVotes = getVotes(red, blue);
-            out.println("redVotes: " + redVotes);
-
-            // Menyimpan nilai total redVote ditambah redSave sebelumnya
-            // Example: (R R B)(B) => redSave = 3 (redVote sebelum saat ini) + 0 (redVote saat ini)
-            redSaveNew = redSave + redVotes; 
-
-            // Pecah lagi pada setiap perulangan menuju baris sequence masing-masing (sisa sequence)
-            // Berdasarkan data setelah start terakhir = i + 1 sampai end
-            getMaxRedVotes(i+1, end, redSaveNew);
         }
 
         out.println("======================");
@@ -63,9 +77,12 @@ public class Lab03 {
         out.println("redsavenew: " + redSaveNew);
         out.println();
 
-        // Mencatat nilia redSaveNew tertinggi
-        if (redSaveNew > maxRedVotes) {
-            maxRedVotes = redSaveNew;
+        // Melakukan memoisasi memo[start][end] = redSaveNew (menyimpan semua redSave yang pernah ada)
+        memo[start][end] = redSaveNew;
+
+        // Mencatat nilia redSaveNew tertinggi => solusi
+        if (redSaveNew > solution) {
+            solution = redSaveNew;
         }
     }
 
