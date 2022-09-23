@@ -38,7 +38,6 @@ public class Lab03 {
         }
 
         // Inisiasi variabel
-        int maxVotes = 0;
         int red = 0;
         int blue = 0;
         int redVotes = 0;
@@ -63,7 +62,15 @@ public class Lab03 {
         // Namun keduanya memiliki pendekatan next yang sama
         // Sama-sama next pada start + 1 (sisa potongan array)
         out.println();
-        return maxVotes + getMaxRedVotes(start + 1, end);
+        
+        // Untuk setiap partisi lakukan pencarian maksimal
+        for (int i = start; i < end - 1; i++) {
+            getMaxRedVotes(start + 1, end);
+            out.println("TANDAIN");
+        }
+
+        // Menandai akhir dari panjang urutan (sequence)
+        return -1; 
     }
 
     // Fungsi digunakan untuk mengembalikan jumlah vote berdasarkan (red, blue) 
