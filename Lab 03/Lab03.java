@@ -37,40 +37,28 @@ public class Lab03 {
             return 0;
         }
 
-        // Inisiasi variabel
         int red = 0;
         int blue = 0;
         int redVotes = 0;
-        // Untuk setiap pecahan nilai iterasi from start -> i sampai end
         for (int i = start; i < end; i++) {
-            // Menghitung jumlah R, B pada setiap iterasi panjang A
             if (A[i] == 'R') {
-                red += 1;
+                red++;
             } else {
-                blue += 1;
+                blue++;
             }
 
-            // Mengambil data redVotes 
+            // Mendapatkan redvotes di setiap perulangan dalam satu kolom
             redVotes = getVotes(red, blue);
-            // Mengambil seluruh kombinasi dari data tersisa
-            out.println(redVotes);
+            out.println("redVotes: " + redVotes);
+
+            // Pecah lagi pada setiap perulangan menuju baris sequence masing-masing (sisa sequence)
+            // Berdasarkan data setelah start terakhir = i + 1 sampai end
+            getMaxRedVotes(i+1, end);
         }
 
-        // Terdapat 2 kasus lanjutan:
-        // 1) Semua nilai berisikan 0, artinya start = posisi terdepan potongan array
-        // 2) Ada satu nilai max, artinya start = posisi nilai maxnya
-        // Namun keduanya memiliki pendekatan next yang sama
-        // Sama-sama next pada start + 1 (sisa potongan array)
         out.println();
-        
-        // Untuk setiap partisi lakukan pencarian maksimal
-        for (int i = start; i < end - 1; i++) {
-            getMaxRedVotes(start + 1, end);
-            out.println("TANDAIN");
-        }
 
-        // Menandai akhir dari panjang urutan (sequence)
-        return -1; 
+        return -1;
     }
 
     // Fungsi digunakan untuk mengembalikan jumlah vote berdasarkan (red, blue) 
