@@ -6,7 +6,7 @@ lst = ['R', 'B']
 for i in range(jumlah):
     print(lst[random.randint(0,1)])
 
-masukan = input()
-masukan_banyak = input().split()
+# masukan = input()
+# masukan_banyak = input().split()
 
-print(len(masukan_banyak))
+# print(len(masukan_banyak))
