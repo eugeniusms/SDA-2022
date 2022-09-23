@@ -8,8 +8,6 @@ public class Lab03 {
 
     public static char[] A;
     public static int N;
-    public static int solution = 0;
-
     // Memo yang digunakan untuk menyimpan redSaveNew dari kombinasi yang pernah ada
     public static int[][] memo = new int[1001][1001];
 
@@ -35,54 +33,52 @@ public class Lab03 {
         }
 
         // Run Solusi
-        getMaxRedVotes(0, N, 0);
-        out.print("solusi : " + solution);
+        int solution = getMaxRedVotes(0, N);
+        out.print(solution);
 
         // Tutup OutputStream
         out.close();
     }
 
-    public static void getMaxRedVotes(int start, int end, int redSave) {
-        // Jika data sudah pernah ada dalam memo maka langsung munculkan saja (-1 : belum ada)
-        int redSaveNew = 0; // redSaveNew digunakan untuk menyimpan nilai total vote red terbaru
+    // Fungsi untuk mendapatkan nilai maksimal red votes
+    public static int getMaxRedVotes(int start, int end) {
+        // Melakukan cek ke dalam memo, jika sudah pernah ada hasil maka langsung return memo
         if (memo[start][end] != -1) {
-            redSave = memo[start][end];
+            return memo[start][end];
+        }
+
+        // Saat start == end maka return 0
+        if (start == end) {
+            return 0;
         } else {
+            // Inisiasi variabel
             int red = 0;
             int blue = 0;
             int redVotes = 0;
+            int maxRedVotes = 0;
+
+            // Pada setiap cabang sequence
             for (int i = start; i < end; i++) {
+                // Lakukan pengambilan data 'R' atau 'B'
                 if (A[i] == 'R') {
                     red++;
                 } else {
                     blue++;
                 }
 
-                // Mendapatkan redvotes di setiap perulangan dalam satu kolom
-                redVotes = getVotes(red, blue);
-                out.println("redVotes: " + redVotes);
-
-                // Menyimpan nilai total redVote ditambah redSave sebelumnya
-                // Example: (R R B)(B) => redSave = 3 (redVote sebelum saat ini) + 0 (redVote saat ini)
-                redSaveNew = redSave + redVotes; 
-
-                // Pecah lagi pada setiap perulangan menuju baris sequence masing-masing (sisa sequence)
-                // Berdasarkan data setelah start terakhir = i + 1 sampai end
-                getMaxRedVotes(i+1, end, redSaveNew);
+                // Mendapat nilai vote ke dalamnya 
+                // Kemudian cari redVote paling maksimal
+                redVotes = getVotes(red, blue) + getMaxRedVotes(i+1, end);
+                if (redVotes > maxRedVotes) {
+                    maxRedVotes = redVotes;
+                }
             }
-        }
 
-        out.println("======================");
-        // redSaveNew adalah jumlah total vote red dalam satu subsequence 
-        out.println("redsavenew: " + redSaveNew);
-        out.println();
+            // Menyimpan nilai maksimal red votes ke memo
+            memo[start][end] = maxRedVotes;
 
-        // Melakukan memoisasi memo[start][end] = redSaveNew (menyimpan semua redSave yang pernah ada)
-        memo[start][end] = redSaveNew;
-
-        // Mencatat nilia redSaveNew tertinggi => solusi
-        if (redSaveNew > solution) {
-            solution = redSaveNew;
+            // Kembalikan nilai maksimal red votes yang ada
+            return maxRedVotes;
         }
     }
 
