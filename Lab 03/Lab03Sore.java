@@ -71,6 +71,10 @@ public class Lab03Sore {
                     maxRedVotes = redVotes;
                 }
             }
+
+            // Menyimpan nilai ke memo
+            memo[start][end] = maxRedVotes;
+
             return maxRedVotes;
         }
     }
