@@ -5,14 +5,15 @@ public class TP01 {
     private static InputReader in;
     private static PrintWriter out;
 
+    // ----------------------------------- ALL ABOUT MENU -----------------------------------------
     // jumlah menu 1 <= M <= 50.000
     public static int jumlahMenu; 
-
     // array digunakan untuk menyimpan semua menu makanan [harga] dan [tipe] 
     // ukuran diinisiasikan 50.069 sesuai batas worstcase
     public static int[] makananHarga = new int[50069]; // harga makanan yang ada 
     public static char[] makananTipe = new char[50069]; // tipe makanan yang ada (S -> G -> A)
 
+    // ----------------------------------- ALL ABOUT KOKI -----------------------------------------
     // jumlah koki 1 <= V <= 1.000.000
     public static int jumlahKoki;
     // array digunakan untuk menyimpan index semua koki sesuai tipenya
@@ -20,12 +21,29 @@ public class TP01 {
     public static int[] kokiS = new int[1000069];
     public static int[] kokiG = new int[1000069];
     public static int[] kokiA = new int[1000069];
-    
 
-    public static char[] A;
-    public static int N;
-    // Memo yang digunakan untuk menyimpan redSaveNew dari kombinasi yang pernah ada
-    public static int[] memo = new int[1069];
+    // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
+    // jumlah pelanggan 1 <= P <= 100.000
+    public static int jumlahPelanggan;
+    // jumlah kursi tersedia pada restoran 1 <= N <= 50.000
+    public static int jumlahKursi;
+    // jumlah hari beroperasi 1 <= Y <= 5
+    public static int jumlahHari;
+
+    // -------------------------------- ALL ABOUT OPERASI ----------------------------------------
+    // jumlah pelanggan dalam suatu hari
+    public static int jumlahPelangganHarian;
+    // antrian pelanggan dalam suatu hari
+    public static int I; // id : 1 <= I <= 100.000
+    public static char K; // status kesehatan : {‘+’, ‘-’, ‘?’}
+    public static int U; // jumlah uang : 1 <= U <= 100.000
+    public static int R; // jumlah range advance screening : 1 <= R < j
+
+    // ------------------------------- ALL ABOUT PELAYANAN --------------------------------------
+    // jumlah pelayanan dalam suatu hari
+    public static int jumlahPelayananHarian;
+    // variabel penyimpan kode pelayanan
+    public static char kode; // kode pelayanan : {‘P’, ‘L’, ‘B’, ‘C’, ‘D’}
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -33,18 +51,23 @@ public class TP01 {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
-        jumlahMenu = in.nextInt();
+        // ---------------------------- AMBIL INPUT DEFAULT -------------------------------------
+        jumlahMenu = in.nextInt(); // mengambil jumlah menu
 
-
-
-        // Inisialisasi Array Input
-        N = in.nextInt();
-        A = new char[N];
-
-        // Membaca File Input
-        for (int i = 0; i < N; i++) {
-            A[i] = in.nextChar();
+        // Membaca input [harga] [tipe] menu makanan
+        for (int i = 0; i < jumlahMenu; i++) {
+            makananHarga[i] = in.nextInt();
+            makananTipe[i] = in.nextChar();
         }
+
+        jumlahKoki = in.nextInt(); // mengambil jumlah koki
+
+        // Membaca input [tipe] koki
+        
+
+
+
+        // --------------------------- AMBIL INPUT PELAYANAN -----------------------------------
 
         // Run Solusi
         int solution = 1;
