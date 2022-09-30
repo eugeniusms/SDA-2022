@@ -4,6 +4,10 @@ import java.util.StringTokenizer;
 public class TP01 {
     private static InputReader in;
     private static PrintWriter out;
+    
+    // Rules:
+    // *) Indexing data dalam array dimulai dari 1 (bukan 0)
+    // *) Isi default sebuah array adalah ??? <BELUM ADA>
 
     // ----------------------------------- ALL ABOUT MENU -----------------------------------------
     // jumlah menu 1 <= M <= 50.000
@@ -31,13 +35,18 @@ public class TP01 {
     public static int jumlahHari;
 
     // -------------------------------- ALL ABOUT OPERASI ----------------------------------------
-    // jumlah pelanggan dalam suatu hari
+    // jumlah pelanggan dalam suatu hari 1 <= pelanggan harian <= 100.000
     public static int jumlahPelangganHarian;
-    // antrian pelanggan dalam suatu hari
-    public static int I; // id : 1 <= I <= 100.000
-    public static char K; // status kesehatan : {‘+’, ‘-’, ‘?’}
-    public static int U; // jumlah uang : 1 <= U <= 100.000
-    public static int R; // jumlah range advance screening : 1 <= R < j
+    // total status pelanggan
+    public static int[] I = new int[100069]; // id : 1 <= I <= 100.000
+    public static char[] K = new char[100069]; // status kesehatan : {‘+’, ‘-’, ‘?’}
+    public static int[] U = new int[100069]; // jumlah uang : 1 <= U <= 100.000
+    public static int[] R = new int[100069]; // jumlah range advance screening : 1 <= R < j
+    // single status pelanggan
+    public static int i; // id : 1 <= I <= 100.000
+    public static char k; // status kesehatan : {‘+’, ‘-’, ‘?’}
+    public static int u; // jumlah uang : 1 <= U <= 100.000
+    public static int r; // jumlah range advance screening : 1 <= R < j
 
     // ------------------------------- ALL ABOUT PELAYANAN --------------------------------------
     // jumlah pelayanan dalam suatu hari
@@ -55,7 +64,7 @@ public class TP01 {
         jumlahMenu = in.nextInt(); // mengambil jumlah menu
 
         // Membaca input [harga] [tipe] menu makanan
-        for (int i = 0; i < jumlahMenu; i++) {
+        for (int i = 1; i <= jumlahMenu; i++) {
             makananHarga[i] = in.nextInt();
             makananTipe[i] = in.nextChar();
         }
@@ -63,15 +72,53 @@ public class TP01 {
         jumlahKoki = in.nextInt(); // mengambil jumlah koki
 
         // Membaca input [tipe] koki
-        
+        char inputTipe;
+        // Pointer digunakan untuk mendapatkan iterasi koki
+        // Hasil akhir pointer berupa jumlah koki pada tipe tersebut
+        int pointerS = 1; int pointerG = 1; int pointerA = 1;
+        for (int i = 1; i <= jumlahKoki; i++) {
+            inputTipe = in.nextChar();
+            if (inputTipe == 'S') {
+                kokiS[pointerS] = i;
+                pointerS++;
+            } else if (inputTipe == 'G') {
+                kokiG[pointerG] = i;
+                pointerG++;
+            } else {
+                kokiA[pointerA] = i;
+                pointerA++;
+            }
+        }
+        // Di sini pointer = jumlah koki pada tipe tersebut
+        pointerS--; pointerG--; pointerA--;
 
+        jumlahPelanggan = in.nextInt(); // jumlah pelanggan total
+        jumlahKursi = in.nextInt(); // jumlah kursi pada toko
 
+        // ----------------------- AMBIL INPUT PELANGGAN HARIAN --------------------------------
+        jumlahHari = in.nextInt(); // jumlah hari restoran beroperasi
+
+        // Melakukan iterasi harian
+        for (int i = 1; i <= jumlahHari; i++) { // hari ke-i
+            jumlahPelangganHarian = in.nextInt(); // jumlah pelanggan hari ke-i
+            for (int j = 1; j <= jumlahPelangganHarian; j++) { // pelanggan ke-j
+                // sebelah kiri mengambil data satuan [id] [status] [uang]
+                // sebelah kanan menyimpan pelanggan ke j di array I, K, U, R total
+                i = in.nextInt(); I[j] = i;
+                k = in.nextChar(); K[j] = k;
+                u = in.nextInt(); U[j] = u;
+                // if k == ? then add [range] => [id] [status] [uang] [range]
+                if (k == '?') {
+                    r = in.nextChar(); R[j] = r;
+                }
+            }
+        }
 
         // --------------------------- AMBIL INPUT PELAYANAN -----------------------------------
 
         // Run Solusi
-        int solution = 1;
-        out.print(solution);
+        // int solution = 1;
+        // out.print(solution);
 
         // Tutup OutputStream
         out.close();
@@ -107,7 +154,7 @@ public class TP01 {
         }
 
         public char nextChar() {
-            return next().equals("R") ? 'R' : 'B';
+            return next().charAt(0);
         }
     }
 }
