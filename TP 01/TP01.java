@@ -53,6 +53,8 @@ public class TP01 {
     public static int jumlahPelayananHarian;
     // variabel penyimpan kode pelayanan
     public static char kode; // kode pelayanan : {‘P’, ‘L’, ‘B’, ‘C’, ‘D’}
+    // variabel temporary arg1, arg2, arg3 dalam pelayanan
+    public static int arg1, arg2, arg3;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -84,7 +86,7 @@ public class TP01 {
             } else if (inputTipe == 'G') {
                 kokiG[pointerG] = i;
                 pointerG++;
-            } else {
+            } else { // inputTipe == 'A'
                 kokiA[pointerA] = i;
                 pointerA++;
             }
@@ -95,11 +97,13 @@ public class TP01 {
         jumlahPelanggan = in.nextInt(); // jumlah pelanggan total
         jumlahKursi = in.nextInt(); // jumlah kursi pada toko
 
-        // ----------------------- AMBIL INPUT PELANGGAN HARIAN --------------------------------
+        // -------------------------- AMBIL INPUT HARIAN -----------------------------------
         jumlahHari = in.nextInt(); // jumlah hari restoran beroperasi
 
         // Melakukan iterasi harian
         for (int i = 1; i <= jumlahHari; i++) { // hari ke-i
+
+            // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
             jumlahPelangganHarian = in.nextInt(); // jumlah pelanggan hari ke-i
             for (int j = 1; j <= jumlahPelangganHarian; j++) { // pelanggan ke-j
                 // sebelah kiri mengambil data satuan [id] [status] [uang]
@@ -112,9 +116,28 @@ public class TP01 {
                     r = in.nextChar(); R[j] = r;
                 }
             }
-        }
 
-        // --------------------------- AMBIL INPUT PELAYANAN -----------------------------------
+            // ----------------------- AMBIL INPUT PELAYANAN ------------------------------
+            jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari
+            
+            for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
+                kode = in.nextChar(); // mengambil kode pelayanan
+                if (kode == 'P') {
+                    arg1 = in.nextInt(); // [ID_PELANGGAN]
+                    arg2 = in.nextInt(); // [INDEX_MAKANAN]
+                } else if (kode == 'L') {
+                    
+                } else if (kode == 'B') {
+                    arg1 = in.nextInt(); // [ID_PELANGGAN]
+                } else if (kode == 'C') {
+                    arg1 = in.nextInt(); // [Q]
+                } else { // kode == 'D'
+                    arg1 = in.nextInt(); // [COST_A]
+                    arg2 = in.nextInt(); // [COST_G]
+                    arg3 = in.nextInt(); // [COST_S]
+                }
+            }
+        }
 
         // Run Solusi
         // int solution = 1;
