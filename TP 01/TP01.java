@@ -39,9 +39,8 @@ public class TP01 {
     public static int jumlahPelangganHarian;
     // total status pelanggan
     public static int[] I = new int[100069]; // id : 1 <= I <= 100.000
-    public static char[] K = new char[100069]; // status kesehatan : {‘+’, ‘-’, ‘?’}
+    public static int[] K = new int[100069]; // status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}
     public static int[] U = new int[100069]; // jumlah uang : 1 <= U <= 100.000
-    public static int[] R = new int[100069]; // jumlah range advance screening : 1 <= R < j
     // single status pelanggan
     public static int i; // id : 1 <= I <= 100.000
     public static char k; // status kesehatan : {‘+’, ‘-’, ‘?’}
@@ -109,11 +108,19 @@ public class TP01 {
                 // sebelah kiri mengambil data satuan [id] [status] [uang]
                 // sebelah kanan menyimpan pelanggan ke j di array I, K, U, R total
                 i = in.nextInt(); I[j] = i;
-                k = in.nextChar(); K[j] = k;
+                k = in.nextChar(); 
                 u = in.nextInt(); U[j] = u;
-                // if k == ? then add [range] => [id] [status] [uang] [range]
-                if (k == '?') {
-                    r = in.nextChar(); R[j] = r;
+
+                // "+" => +1 | "-" => -1
+                if (k == '+') {
+                    K[j] = 1;
+                } else if (k == '-') {
+                    K[j] = -1;
+                } else {
+                    // if k == ? then add [range] => [id] [status] [uang] [range]
+                    r = in.nextInt(); 
+                    // memasang K sesuai indeks pelanggan dalam array dan range
+                    getK(j, r); 
                 }
             }
 
@@ -139,12 +146,40 @@ public class TP01 {
             }
         }
 
+        printCheck();
+
         // Run Solusi
         // int solution = 1;
         // out.print(solution);
 
         // Tutup OutputStream
         out.close();
+    }
+
+    // Fungsi untuk memberi status pada pelanggan bertipe = "?"
+    public static void getK(int indeksPelanggan, int jarak) {
+        int sumStatus = 0;
+        int indeks = indeksPelanggan;
+        while (jarak > 0) {
+            indeks--; jarak--; 
+            sumStatus += K[indeks];
+            // out.println("CEK: "+ indeks + " | " + jarak + " | " + sumStatus); // TEST
+        }
+        // Memberi status pada pelanggan
+        if (sumStatus > 0) {
+            K[indeksPelanggan] = 1; // K = Positif
+        } else {
+            K[indeksPelanggan] = -1; // K = Negatif
+        }
+    }
+
+    // FUNGSI TESTING AJA
+    public static void printCheck() {
+        // NILAI
+        out.println("Keterangan Pelanggan: ");
+        for (int i = 1; i <= 4; i++) {
+            out.println(i + ") " + K[i]);
+        }
     }
 
     // taken from https://codeforces.com/submissions/Petr
