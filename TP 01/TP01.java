@@ -23,12 +23,18 @@ public class TP01 {
     public static int jumlahKoki;
     // array digunakan untuk menyimpan index semua koki sesuai tipenya
     // ukuran diinisiasikan 1.000.069 sesuai batas worstcase
-    // id koki SGA, default = 0 (tidak ada koki lagi back to depan)
+    // menyimpan id koki SGA, default = 0 (tidak ada koki lagi back to depan)
     public static int[] idKokiS = new int[1000069];
     public static int[] idKokiG = new int[1000069];
     public static int[] idKokiA = new int[1000069];
-    // pelayanan 
-
+    // sisa pelayanan yang pending pada koki
+    public static int[] pendingKokiS = new int[1000069];
+    public static int[] pendingKokiG = new int[1000069];
+    public static int[] pendingKokiA = new int[1000069];
+    // pelayanan saat ini pada koki
+    public static int[] pelayananKokiS = new int[1000069];
+    public static int[] pelayananKokiG = new int[1000069];
+    public static int[] pelayananKokiA = new int[1000069];
 
     // daftar urutan pesanan
     public static String combinedPesanan = "";
