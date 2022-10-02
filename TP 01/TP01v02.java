@@ -187,7 +187,12 @@ public class TP01v02 {
         // melakukan penyelesaian pesanan terdepan
         Pesanan pesananSelesai = pesanan.remove();
         char jenisMenu = menu[pesananSelesai.getIdMakanan()].getTipe();
+        int hargaMenu = menu[pesananSelesai.getIdMakanan()].getHarga();
         int idKokiPelayan = pesananSelesai.getIdKokiPelayan();
+
+        // uang pelanggan dikurangi
+        pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
+
         // menambahkan pelayanan koki pelayan
         if (jenisMenu == 'S') {
             while (true) {
@@ -229,7 +234,14 @@ public class TP01v02 {
     }
 
     public static void runB(int idPelanggan) {
-        
+        // cek uang pelanggan, jika minus maka blacklist pelanggan
+        // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
+        if (pelanggan[idPelanggan].getU() < 0) {
+            pelanggan[idPelanggan].setBlacklist();
+            out.println("B: 0"); // OUTPUT
+        } else {
+            out.println("B: 1"); // OUTPUT
+        }
     }
 
     public static void runC(int Q) {
@@ -408,6 +420,11 @@ class Pelanggan {
     // setter U : Uang
     public void setU(int U) {
         this.U = U;
+    }
+
+    // setter kurangi U : Uang
+    public void kurangiU(int harga) {
+        this.U -= harga;
     }
 
     // setter blacklist => mengubah pelanggan jadi blacklisted
