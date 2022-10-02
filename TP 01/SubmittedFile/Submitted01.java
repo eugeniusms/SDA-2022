@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 import java.util.Arrays;
 
-public class TP01 {
+public class Submitted01 {
     private static InputReader in;
     private static PrintWriter out;
     
@@ -90,8 +90,6 @@ public class TP01 {
 
         // ---------------------------- AMBIL INPUT DEFAULT -------------------------------------
         jumlahMenu = in.nextInt(); // mengambil jumlah menu
-
-        out.println("OUTPUT:"); // TEST
 
         // Membaca input [harga] [tipe] menu makanan
         for (int i = 1; i <= jumlahMenu; i++) {
@@ -223,21 +221,21 @@ public class TP01 {
                             pointerKokiS = 1;
                         }
                         pendingKokiS[pointerKokiS]++; // menambahkan ke pending koki S
-                        out.println("P: "+idKokiS[pointerKokiS]); // OUTPUT P
+                        out.println(idKokiS[pointerKokiS]); // OUTPUT P
                     } else if (jenisMakanan == 'G') {
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiG[pointerKokiG] == 0) {
                             pointerKokiG = 1;
                         }
                         pendingKokiG[pointerKokiG]++; // menambahkan ke pending koki G
-                        out.println("P: "+idKokiG[pointerKokiG]); // OUTPUT P
+                        out.println(idKokiG[pointerKokiG]); // OUTPUT P
                     } else { // jenisMakanan == 'A'
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiA[pointerKokiA] == 0) {
                             pointerKokiA = 1;
                         }
                         pendingKokiA[pointerKokiA]++; // menambahkan ke pending koki A
-                        out.println("P: "+idKokiA[pointerKokiA]); // OUTPUT P
+                        out.println(idKokiA[pointerKokiA]); // OUTPUT P
                     }
                     
                 // QUERY L (CLEAR)
@@ -282,7 +280,7 @@ public class TP01 {
                         }
                     }
 
-                    out.println("L : "+PidForL[sumOfL]); // print output id pelanggan // OUTPUT L
+                    out.println(PidForL[sumOfL]); // print output id pelanggan // OUTPUT L
                     sumOfL++; // menambah jumlah L dipanggil
             
                 // QUERY B
@@ -293,19 +291,15 @@ public class TP01 {
                     U[arg1] -= BON[arg1];
                     if (U[arg1] < 0) {
                         isBlacklist[arg1] = true;
-                        out.println("B: 0"); // uang pelanggan tidak mencukupi
+                        out.println("0"); // uang pelanggan tidak mencukupi
                     } else {
-                        out.println("B: 1"); // uang pelanggan mencukupi
+                        out.println("1"); // uang pelanggan mencukupi
                     }
-
-                    // VERSI 2: Mereset BON
-                    BON[arg1] = 0;
                 
                 // QUERY C
                 } else if (kode == 'C') {
                     arg1 = in.nextInt(); // [Q]
                 
-                    out.print("C: ");
                     // search Q koki dengan pelayanan paling sedikit lalu S > G > A lalu index
                     int searchPoin = 0;
                     int indexS = 1; int indexG = 1; int indexA = 1;
@@ -384,20 +378,7 @@ public class TP01 {
                     arg3 = in.nextInt(); // [COST_S]
                 }
             }
-
-            // TEST
-            for (int z = 0; z < 10; z++) {
-                out.println("CEK ID PEL SESUAI L: "+PidForL[z]);
-            }
-
-            printCheck();
         }
-
-        // printCheck();
-
-        // Run Solusi
-        // int solution = 1;
-        // out.print(solution);
 
         // Tutup OutputStream
         out.close();
@@ -417,30 +398,6 @@ public class TP01 {
             KbyQueue[indeksPelanggan] = 1; // K = Positif
         } else {
             KbyQueue[indeksPelanggan] = -1; // K = Negatif
-        }
-    }
-
-    // FUNGSI TESTING AJA
-    public static void printCheck() {
-        // NILAI
-        out.println("Keterangan Pelanggan: ");
-        for (int i = 1; i <= 4; i++) {
-            out.println(i + ") " + KbyQueue[i]);
-        }
-
-        // KOKI 
-        out.println("Koki: ");
-        out.println("Koki S: ");
-        for (int i = 1; i <= jumlahKokiS; i++) {
-            out.println(idKokiS[i]+") Pending: " + pendingKokiS[i] + " | Pelayanan: " + pelayananKokiS[i]);
-        }
-        out.println("Koki G: ");
-        for (int i = 1; i <= jumlahKokiG; i++) {
-            out.println(idKokiG[i]+") Pending: " + pendingKokiG[i] + " | Pelayanan: " + pelayananKokiG[i]);
-        }
-        out.println("Koki A: ");
-        for (int i = 1; i <= jumlahKokiA; i++) {
-            out.println(idKokiA[i]+") Pending: " + pendingKokiA[i] + " | Pelayanan: " + pelayananKokiA[i]);
         }
     }
 
