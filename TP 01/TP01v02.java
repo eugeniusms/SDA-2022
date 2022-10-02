@@ -79,6 +79,8 @@ public class TP01v02 {
             check2(i);
         }
 
+        check1();
+
         // Tutup OutputStream
         out.close();
     }
@@ -182,7 +184,48 @@ public class TP01v02 {
     }
     
     public static void runL() {
-        
+        // melakukan penyelesaian pesanan terdepan
+        Pesanan pesananSelesai = pesanan.remove();
+        char jenisMenu = menu[pesananSelesai.getIdMakanan()].getTipe();
+        int idKokiPelayan = pesananSelesai.getIdKokiPelayan();
+        // menambahkan pelayanan koki pelayan
+        if (jenisMenu == 'S') {
+            while (true) {
+                Koki head = kokiS.remove();
+                // jika didapati id sesuai maka tambah jumlah pelayanan
+                if (head.getId() == idKokiPelayan) {
+                    head.tambahJumlahPelayanan();
+                    kokiS.add(head); // taruh head ke tail
+                    break;
+                } else {
+                    kokiS.add(head); // taruh head ke tail
+                }
+            }
+        } else if (jenisMenu == 'G') {
+            while (true) {
+                Koki head = kokiG.remove();
+                // jika didapati id sesuai maka tambah jumlah pelayanan
+                if (head.getId() == idKokiPelayan) {
+                    head.tambahJumlahPelayanan();
+                    kokiG.add(head); // taruh head ke tail
+                    break;
+                } else {
+                    kokiG.add(head); // taruh head ke tail
+                }
+            }
+        } else { // jenisMenu == 'A'
+            while (true) {
+                Koki head = kokiA.remove();
+                // jika didapati id sesuai maka tambah jumlah pelayanan
+                if (head.getId() == idKokiPelayan) {
+                    head.tambahJumlahPelayanan();
+                    kokiA.add(head); // taruh head ke tail
+                    break;
+                } else {
+                    kokiA.add(head); // taruh head ke tail
+                }
+            }
+        }
     }
 
     public static void runB(int idPelanggan) {
@@ -323,9 +366,9 @@ class Koki {
         return this.jumlahPelayanan;
     }
 
-    // setter jumlahPelayanan
-    public void setJumlahPelayanan(int jumlahPelayanan) {
-        this.jumlahPelayanan = jumlahPelayanan;
+    // setter penambah jumlahPelayanan
+    public void tambahJumlahPelayanan() {
+        this.jumlahPelayanan += 1;
     }
 }
 
@@ -384,5 +427,20 @@ class Pesanan {
         this.idPelanggan = idPelanggan;
         this.idMakanan = idMakanan;
         this.idKokiPelayan = idKokiPelayan;
+    }
+
+    // getter idPelanggan
+    public int getIdPelanggan() {
+        return idPelanggan;
+    }
+
+    // getter idMakanan
+    public int getIdMakanan() {
+        return idMakanan;
+    }
+
+    // getter idKokiPelayan
+    public int getIdKokiPelayan() {
+        return idKokiPelayan;
     }
 }
