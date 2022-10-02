@@ -21,20 +21,24 @@ public class TP01 {
     // ----------------------------------- ALL ABOUT KOKI -----------------------------------------
     // jumlah koki 1 <= V <= 1.000.000
     public static int jumlahKoki;
+    public static int jumlahKokiS;
+    public static int jumlahKokiG;
+    public static int jumlahKokiA;
     // array digunakan untuk menyimpan index semua koki sesuai tipenya
-    // ukuran diinisiasikan 1.000.069 sesuai batas worstcase
+    // ukuran diinisiasikan disesuaikan jumlah koki pada saat input koki 
+    // starting with index 1
     // menyimpan id koki SGA, default = 0 (tidak ada koki lagi back to depan)
     public static int[] idKokiS = new int[1000069];
     public static int[] idKokiG = new int[1000069];
     public static int[] idKokiA = new int[1000069];
     // sisa pelayanan yang pending pada koki
-    public static int[] pendingKokiS = new int[1000069];
-    public static int[] pendingKokiG = new int[1000069];
-    public static int[] pendingKokiA = new int[1000069];
+    public static int[] pendingKokiS; 
+    public static int[] pendingKokiG; 
+    public static int[] pendingKokiA;
     // pelayanan saat ini pada koki
-    public static int[] pelayananKokiS = new int[1000069];
-    public static int[] pelayananKokiG = new int[1000069];
-    public static int[] pelayananKokiA = new int[1000069];
+    public static int[] pelayananKokiS;
+    public static int[] pelayananKokiG;
+    public static int[] pelayananKokiA;
 
     // PidForL digunakan untuk menyimpan ID Pelanggan sesuai urutan pelanggan memesan makanan
     public static int[] PidForL = new int[100069]; // dari index 0 -> ...
@@ -112,6 +116,16 @@ public class TP01 {
         }
         // Di sini pointer = jumlah koki pada tipe tersebut
         pointerS--; pointerG--; pointerA--;
+        jumlahKokiS = pointerS; jumlahKokiG = pointerG; jumlahKokiA = pointerA;
+
+        // ------------- INISIASI BESAR ARRAY KOKI --------------
+        pendingKokiS = new int[jumlahKokiS+1]; // karena index 0 tidak dipakai jadi +1
+        pendingKokiG = new int[jumlahKokiG+1];
+        pendingKokiA = new int[jumlahKokiA+1];
+        pelayananKokiS = new int[jumlahKokiS+1];
+        pelayananKokiG = new int[jumlahKokiG+1];
+        pelayananKokiA = new int[jumlahKokiA+1];
+        // ------------------------------------------------------
 
         jumlahPelanggan = in.nextInt(); // jumlah pelanggan total
         jumlahKursi = in.nextInt(); // jumlah kursi pada toko
@@ -179,6 +193,7 @@ public class TP01 {
 
             // inisiasi variabel pointer koki yang mengambil pesanan
             char jenisMakanan;
+            // starting with index 1
             int pointerKokiS = 1;
             int pointerKokiG = 1;
             int pointerKokiA = 1;
@@ -298,15 +313,15 @@ public class TP01 {
         // KOKI 
         out.println("Koki: ");
         out.println("Koki S: ");
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= jumlahKokiS; i++) {
             out.println(idKokiS[i]+") Pending: " + pendingKokiS[i] + " | Pelayanan: " + pelayananKokiS[i]);
         }
         out.println("Koki G: ");
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= jumlahKokiG; i++) {
             out.println(idKokiG[i]+") Pending: " + pendingKokiG[i] + " | Pelayanan: " + pelayananKokiG[i]);
         }
         out.println("Koki A: ");
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= jumlahKokiA; i++) {
             out.println(idKokiA[i]+") Pending: " + pendingKokiA[i] + " | Pelayanan: " + pelayananKokiA[i]);
         }
     }
