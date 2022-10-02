@@ -36,8 +36,6 @@ public class TP01 {
     public static int[] pelayananKokiG = new int[1000069];
     public static int[] pelayananKokiA = new int[1000069];
 
-    // daftar urutan pesanan
-    public static String combinedPesanan = "";
     // PidForL digunakan untuk menyimpan ID Pelanggan sesuai urutan pelanggan memesan makanan
     public static int[] PidForL = new int[100069]; // dari index 0 -> ...
     // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
@@ -176,19 +174,27 @@ public class TP01 {
 
             for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
                 kode = in.nextChar(); // mengambil kode pelayanan
+
+                // QUERY P
                 if (kode == 'P') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
 
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
-                    combinedPesanan += makananTipe[arg2]; // COMBINED COMMAND
                     
+                // QUERY L (CLEAR)
                 } else if (kode == 'L') {
                     out.println(PidForL[sumOfL]); sumOfL++; // print output id pelanggan
+                
+                // QUERY B
                 } else if (kode == 'B') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
+                
+                // QUERY C
                 } else if (kode == 'C') {
                     arg1 = in.nextInt(); // [Q]
+                
+                // QUERY D
                 } else { // kode == 'D'
                     arg1 = in.nextInt(); // [COST_A]
                     arg2 = in.nextInt(); // [COST_G]
@@ -200,7 +206,6 @@ public class TP01 {
             for (int z = 0; z < 10; z++) {
                 out.println("CEK ID PEL SESUAI L: "+PidForL[z]);
             }
-            out.println("COMBINED PESANAN: "+combinedPesanan); // TEST
         }
 
         printCheck();
