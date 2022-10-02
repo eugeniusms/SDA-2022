@@ -31,10 +31,6 @@ public class TP01 {
     public static int[] idKokiS = new int[1000069];
     public static int[] idKokiG = new int[1000069];
     public static int[] idKokiA = new int[1000069];
-    // sisa pelayanan yang pending pada koki (based on day)
-    public static int[] pendingKokiS; 
-    public static int[] pendingKokiG; 
-    public static int[] pendingKokiA;
     // pelayanan saat ini pada koki (all day)
     public static int[] pelayananKokiS;
     public static int[] pelayananKokiG;
@@ -127,9 +123,6 @@ public class TP01 {
 
         // ------------- INISIASI BESAR ARRAY KOKI --------------
         // isi tidak perlu direset karena tercatat sampai besok
-        pendingKokiS = new int[jumlahKokiS];
-        pendingKokiG = new int[jumlahKokiG];
-        pendingKokiA = new int[jumlahKokiA];
         pelayananKokiS = new int[jumlahKokiS];
         pelayananKokiG = new int[jumlahKokiG];
         pelayananKokiA = new int[jumlahKokiA];
@@ -150,10 +143,6 @@ public class TP01 {
             // reset U dan BONL pelanggan
             Arrays.fill(U, 0);
             Arrays.fill(BONL, 0);
-            // reset pemesanan pending
-            Arrays.fill(pendingKokiS, 0);
-            Arrays.fill(pendingKokiG, 0);
-            Arrays.fill(pendingKokiA, 0);
 
             int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
             // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
@@ -223,7 +212,6 @@ public class TP01 {
                     PtipeMakananForL[pointerPtipeMakananForL] = makananTipe[arg2]; pointerPtipeMakananForL++; // simpan jenis makanan pelanggan
                     PhargaMakananForL[pointerPhargaMakananForL] = makananHarga[arg2]; pointerPhargaMakananForL++;
 
-                    // menambahkan pending ke koki sesuai makanan terkait
                     // operasi disesuaikan jenis makanan
                     jenisMakanan = makananTipe[arg2];
                     if (jenisMakanan == 'S') {
@@ -231,21 +219,18 @@ public class TP01 {
                         if (idKokiS[pointerKokiS] == 0) {
                             pointerKokiS = 1;
                         }
-                        pendingKokiS[pointerKokiS]++; // menambahkan ke pending koki S
                         out.println("P: "+idKokiS[pointerKokiS]); // OUTPUT P
                     } else if (jenisMakanan == 'G') {
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiG[pointerKokiG] == 0) {
                             pointerKokiG = 1;
                         }
-                        pendingKokiG[pointerKokiG]++; // menambahkan ke pending koki G
                         out.println("P: "+idKokiG[pointerKokiG]); // OUTPUT P
                     } else { // jenisMakanan == 'A'
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiA[pointerKokiA] == 0) {
                             pointerKokiA = 1;
                         }
-                        pendingKokiA[pointerKokiA]++; // menambahkan ke pending koki A
                         out.println("P: "+idKokiA[pointerKokiA]); // OUTPUT P
                     }
                     
@@ -258,7 +243,6 @@ public class TP01 {
                     // kurangi pending dan tambah pelayanan pada koki sesuai jenisMakananDilayani
                     // lalu letakan pointer pada koki dengan pelayanan terkecil dari index terdepan 
                     if (jenisMakananDilayani == 'S') {
-                        pendingKokiS[pointerKokiS]--;
                         pelayananKokiS[pointerKokiS]++;
                         // searching minimum pelayanan koki s
                         int minim = 999999;
@@ -269,7 +253,6 @@ public class TP01 {
                             }
                         }
                     } else if (jenisMakananDilayani == 'G') {
-                        pendingKokiG[pointerKokiG]--;
                         pelayananKokiG[pointerKokiG]++;
                         // searching minimum pelayanan koki g
                         int minim = 999999;
@@ -280,7 +263,6 @@ public class TP01 {
                             }
                         }
                     } else {
-                        pendingKokiA[pointerKokiA]--;
                         pelayananKokiA[pointerKokiA]++;
                         // searching minimum pelayanan koki a
                         int minim = 999999;
@@ -437,17 +419,17 @@ public class TP01 {
 
         // KOKI 
         out.println("Koki: ");
-        out.println("Panjang Koki S: "+pendingKokiS.length);
+        out.println("Koki S: ");
         for (int i = 1; i < jumlahKokiS; i++) {
-            out.println(idKokiS[i]+") Pending: " + pendingKokiS[i] + " | Pelayanan: " + pelayananKokiS[i]);
+            out.println(idKokiS[i]+") Pelayanan: " + pelayananKokiS[i]);
         }
-        out.println("Panjang Koki G: "+pendingKokiG.length);
+        out.println("Koki G: ");
         for (int i = 1; i < jumlahKokiG; i++) {
-            out.println(idKokiG[i]+") Pending: " + pendingKokiG[i] + " | Pelayanan: " + pelayananKokiG[i]);
+            out.println(idKokiG[i]+") Pelayanan: " + pelayananKokiG[i]);
         }
-        out.println("Panjang Koki A: "+pendingKokiA.length);
+        out.println("Koki A: ");
         for (int i = 1; i < jumlahKokiA; i++) {
-            out.println(idKokiA[i]+") Pending: " + pendingKokiA[i] + " | Pelayanan: " + pelayananKokiA[i]);
+            out.println(idKokiA[i]+") Pelayanan: " + pelayananKokiA[i]);
         }
     }
 
