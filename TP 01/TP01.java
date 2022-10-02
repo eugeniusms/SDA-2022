@@ -239,7 +239,7 @@ public class TP01 {
                     jenisMakananDilayani = PtipeMakananForL[sumOfL];
                     
                     // kurangi pending dan tambah pelayanan pada koki sesuai jenisMakananDilayani
-                    // TODO: lalu letakan pointer pada koki dengan pelayanan terkecil dari index terdepan 
+                    // lalu letakan pointer pada koki dengan pelayanan terkecil dari index terdepan 
                     if (jenisMakananDilayani == 'S') {
                         pendingKokiS[pointerKokiS]--;
                         pelayananKokiS[pointerKokiS]++;
