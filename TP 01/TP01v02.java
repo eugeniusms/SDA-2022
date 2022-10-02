@@ -225,30 +225,6 @@ public class TP01v02 {
         // out.println("L: "+pesananSelesai.getIdPelanggan());
     }
 
-    // selection sort digunakan untuk sorting data hampir terurut (setiap perulangan diurutkan)
-    // urutkan berdasarkan jumlah pelayanan lalu id
-    // public static void selectionSort(ArrayList<Koki> arr)
-    // {
-    //     int n = arr.size();
- 
-    //     // sort berdasarkan jumlah pelayanan
-    //     // One by one move boundary of unsorted subarray
-    //     for (int i = 0; i < n-1; i++)
-    //     {
-    //         // Find the minimum element in unsorted array
-    //         int min_idx = i;
-    //         for (int j = i+1; j < n; j++)
-    //             if (arr.get(j).getJumlahPelayanan() < arr.get(min_idx).getJumlahPelayanan())
-    //                 min_idx = j;
- 
-    //         // Swap the found minimum element with the first
-    //         // element
-    //         Koki temp = arr.get(min_idx);
-    //         arr.set(min_idx, arr.get(i));
-    //         arr.set(i, temp);
-    //     }
-    // }
-
     public static void checkL() {
         out.println("\n-------------------------------------");
         out.println("CHECK L");
