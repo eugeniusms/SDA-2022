@@ -38,6 +38,8 @@ public class TP01 {
 
     // PidForL digunakan untuk menyimpan ID Pelanggan sesuai urutan pelanggan memesan makanan
     public static int[] PidForL = new int[100069]; // dari index 0 -> ...
+    // PtipeMakananForL digunakan untuk menyimpan tipe makanan pelanggan sesuai urutan memesan makanan
+    public static char[] PtipeMakananForL = new char[100069]; // dari index 0 -> ...
     // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
     // jumlah pelanggan 1 <= P <= 100.000
     public static int jumlahPelanggan;
@@ -171,7 +173,9 @@ public class TP01 {
             jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari 
             // inisiasi variabel query L
             int pointerPidForL = 0;
+            int pointerPtipeMakananForL = 0;
             int sumOfL = 0;
+            char jenisMakananDilayani;
 
             // inisiasi variabel pointer koki yang mengambil pesanan
             char jenisMakanan;
@@ -188,6 +192,7 @@ public class TP01 {
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
 
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
+                    PtipeMakananForL[pointerPtipeMakananForL] = makananTipe[arg2]; pointerPtipeMakananForL++; // simpan jenis makanan pelanggan
                     
                     // menambahkan pending ke koki sesuai makanan terkait
                     // operasi disesuaikan jenis makanan
@@ -195,28 +200,44 @@ public class TP01 {
                     if (jenisMakanan == 'S') {
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiS[pointerKokiS] == 0) {
-                            pointerS = 1;
+                            pointerKokiS = 1;
                         }
                         pendingKokiS[pointerKokiS]++; // menambahkan ke pending koki S
                     } else if (jenisMakanan == 'G') {
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiG[pointerKokiG] == 0) {
-                            pointerG = 1;
+                            pointerKokiG = 1;
                         }
                         pendingKokiG[pointerKokiG]++; // menambahkan ke pending koki G
                     } else { // jenisMakanan == 'A'
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiA[pointerKokiA] == 0) {
-                            pointerA = 1;
+                            pointerKokiA = 1;
                         }
                         pendingKokiA[pointerKokiA]++; // menambahkan ke pending koki A
                     }
                     
-
                 // QUERY L (CLEAR)
                 } else if (kode == 'L') {
-                    out.println(PidForL[sumOfL]); sumOfL++; // print output id pelanggan
-                
+                    // ambil tipe makanan pada L yang sesuai (sumOfL)
+                    jenisMakananDilayani = PtipeMakananForL[sumOfL];
+                    
+                    // kurangi pending dan tambah pelayanan pada koki sesuai jenisMakananDilayani
+                    // TODO: lalu letakan pointer pada koki dengan pelayanan terkecil dari index terdepan 
+                    if (jenisMakananDilayani == 'S') {
+                        pendingKokiS[pointerKokiS]--;
+                        pelayananKokiS[pointerKokiS]++;
+                    } else if (jenisMakananDilayani == 'G') {
+                        pendingKokiG[pointerKokiG]--;
+                        pelayananKokiG[pointerKokiG]++;
+                    } else {
+                        pendingKokiA[pointerKokiA]--;
+                        pelayananKokiA[pointerKokiA]++;
+                    }
+
+                    out.println(PidForL[sumOfL]); // print output id pelanggan
+                    sumOfL++; // menambah jumlah L dipanggil
+            
                 // QUERY B
                 } else if (kode == 'B') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
@@ -278,15 +299,15 @@ public class TP01 {
         out.println("Koki: ");
         out.println("Koki S: ");
         for (int i = 1; i <= 5; i++) {
-            out.println(idKokiS[i]);
+            out.println(idKokiS[i]+") Pending: " + pendingKokiS[i] + " | Pelayanan: " + pelayananKokiS[i]);
         }
         out.println("Koki G: ");
         for (int i = 1; i <= 5; i++) {
-            out.println(idKokiG[i]);
+            out.println(idKokiG[i]+") Pending: " + pendingKokiG[i] + " | Pelayanan: " + pelayananKokiG[i]);
         }
         out.println("Koki A: ");
         for (int i = 1; i <= 5; i++) {
-            out.println(idKokiA[i]);
+            out.println(idKokiA[i]+") Pending: " + pendingKokiA[i] + " | Pelayanan: " + pelayananKokiA[i]);
         }
     }
 
