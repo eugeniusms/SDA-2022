@@ -26,7 +26,8 @@ public class TP01 {
     public static int[] kokiS = new int[1000069];
     public static int[] kokiG = new int[1000069];
     public static int[] kokiA = new int[1000069];
-
+    // experiment: string slicing untuk mendapatkan koki terbanyak
+    public static String combinedCommand = "";
     // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
     // jumlah pelanggan 1 <= P <= 100.000
     public static int jumlahPelanggan;
@@ -164,8 +165,9 @@ public class TP01 {
                 if (kode == 'P') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
+                    combinedCommand += makananTipe[arg2]; // COMBINED COMMAND
                 } else if (kode == 'L') {
-                    
+                    combinedCommand += "L"; // COMBINED COMMAND
                 } else if (kode == 'B') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                 } else if (kode == 'C') {
@@ -176,6 +178,8 @@ public class TP01 {
                     arg3 = in.nextInt(); // [COST_S]
                 }
             }
+
+            out.println("COMBINED COMMAND: "+combinedCommand); // TEST
         }
 
         printCheck();
