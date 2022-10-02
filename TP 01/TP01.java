@@ -139,13 +139,17 @@ public class TP01 {
         // -------------------------- AMBIL INPUT HARIAN -----------------------------------
         jumlahHari = in.nextInt(); // jumlah hari restoran beroperasi
 
-        // Melakukan iterasi harian
+        // melakukan iterasi harian
         for (int i = 1; i <= jumlahHari; i++) { // hari ke-i
-            // Reset antrean ke default = 0
+            // 4eset antrean ke default = 0
             Arrays.fill(IbyQueue, 0);
             Arrays.fill(KbyQueue, 0); 
             Arrays.fill(UbyQueue, 0);
-            int jumlahKursiKosong = jumlahKursi;
+            // reset U dan BON pelanggan
+            Arrays.fill(U, 0);
+            Arrays.fill(BON, 0);
+
+            int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
             // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
             jumlahPelangganHarian = in.nextInt(); // jumlah pelanggan hari ke-i
             for (int j = 1; j <= jumlahPelangganHarian; j++) { // pelanggan ke-j
@@ -297,9 +301,6 @@ public class TP01 {
                     } else {
                         out.println("B: 1"); // uang pelanggan mencukupi
                     }
-
-                    // VERSI 2: Mereset BON
-                    BON[arg1] = 0;
                 
                 // QUERY C
                 } else if (kode == 'C') {

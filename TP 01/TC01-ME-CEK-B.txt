@@ -44,3 +44,22 @@ B 1
 P 1 1
 L
 B 1
+
+// RESULT: BAYAR GAGAL YG KE 2
+
+1
+10000 A
+1
+A
+1
+1
+1
+1
+1 - 10000
+6
+P 1 1
+L
+B 1
+P 1 1
+L
+B 1
