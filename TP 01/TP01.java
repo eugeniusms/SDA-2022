@@ -202,7 +202,7 @@ public class TP01 {
             for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
                 kode = in.nextChar(); // mengambil kode pelayanan
 
-                // QUERY P
+                // QUERY P (CLEAR)
                 if (kode == 'P') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
@@ -289,6 +289,78 @@ public class TP01 {
                 } else if (kode == 'C') {
                     arg1 = in.nextInt(); // [Q]
                 
+                    out.print("C: ");
+                    // search Q koki dengan pelayanan paling sedikit lalu S > G > A lalu index
+                    int searchPoin = 0;
+                    int indexS = 1; int indexG = 1; int indexA = 1;
+                    // memulai pencarian dengan koki poin 0
+                    while (arg1 > 0) {
+                        boolean gotIt = false; // var untuk mengecek apakah sudah didapati nilai score
+
+                        // cek S terkecil dahulu
+                        while (indexS <= jumlahKokiS) {
+                            if (pelayananKokiS[indexS] == searchPoin) {
+                                out.print(idKokiS[indexS] + " ");
+                                indexS++; gotIt = true;
+                                break;
+                            }
+                            indexS++;
+                        }
+
+                        // lanjutkan while saat didapati nilai poin yang sesuai
+                        if (gotIt) {
+                            arg1--;
+                            continue;
+                        }
+
+                        // cek G 
+                        while (indexG <= jumlahKokiG) {
+                            if (pelayananKokiG[indexG] == searchPoin) {
+                                out.print(idKokiG[indexG] + " ");
+                                indexG++; gotIt = true;
+                                break;
+                            }
+                            indexG++;
+                        }
+
+                        // lanjutkan while saat didapati nilai poin yang sesuai
+                        if (gotIt) {
+                            arg1--;
+                            continue;
+                        }
+
+                        // cek A
+                        while (indexA <= jumlahKokiA) {
+                            if (pelayananKokiA[indexA] == searchPoin) {
+                                out.print(idKokiA[indexA] + " ");
+                                indexA++; gotIt = true;
+                                break;
+                            }
+                            indexA++;
+                        }
+
+                        // lanjutkan while saat didapati nilai poin yang sesuai
+                        if (gotIt) {
+                            arg1--;
+                            continue;
+                        }
+
+                        // Mereset index ke depan kembali                        
+                        if (indexS > jumlahKokiS ) {
+                            indexS = 1;
+                        } 
+                        if (indexG > jumlahKokiG) {
+                            indexG = 1;
+                        }
+                        if (indexA > jumlahKokiA) {
+                            indexA = 1;
+                        }
+
+                        // Melanjutkan cari poin 1,2,3.. 
+                        searchPoin++; // saat tidak didapati satupun maka lanjut cari poin 1,2,3...
+                    }
+
+
                 // QUERY D
                 } else { // kode == 'D'
                     arg1 = in.nextInt(); // [COST_A]
