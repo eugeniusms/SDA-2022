@@ -66,6 +66,7 @@ public class TP01 {
     public static int[] UbyQueue = new int[100069]; // berdasarkan antrian (one day), jumlah uang : 1 <= U <= 100.000, default: 0
     // digunakan untuk melayani pelanggan (cuma perlu uang dan isBlacklist yang selalu updated)
     public static int[] U = new int[100069]; // berdasarkan id (all day), jumlah uang : 1 <= U <= 100.000, default: 0
+    public static int[] BON = new int[100069]; // berdasarkan id (all day), jumlah uang diperlukan untuk membayar, default: 0
     public static boolean[] isBlacklist = new boolean[100069]; // berdasarkan id (all day), default: false
     // SINGLE STATUS PELANGGAN
     public static int id; // id : 1 <= I <= 100.000
@@ -207,6 +208,9 @@ public class TP01 {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
 
+                    // pesanan ditambahkan ke bon pelanggan
+                    BON[arg1] += makananHarga[arg2];
+
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
                     PtipeMakananForL[pointerPtipeMakananForL] = makananTipe[arg2]; pointerPtipeMakananForL++; // simpan jenis makanan pelanggan
                     
@@ -284,6 +288,15 @@ public class TP01 {
                 // QUERY B
                 } else if (kode == 'B') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
+
+                    // jika uang pelanggan minus maka blacklist (bonnya > uangnya)
+                    U[arg1] -= BON[arg1];
+                    if (U[arg1] < 0) {
+                        isBlacklist[arg1] = true;
+                        out.println("B: 0"); // uang pelanggan tidak mencukupi
+                    } else {
+                        out.println("B: 1"); // uang pelanggan mencukupi
+                    }
                 
                 // QUERY C
                 } else if (kode == 'C') {
