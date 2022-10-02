@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.Arrays;
 
 public class TP01 {
     private static InputReader in;
@@ -37,14 +38,15 @@ public class TP01 {
     // -------------------------------- ALL ABOUT OPERASI ----------------------------------------
     // jumlah pelanggan dalam suatu hari 1 <= pelanggan harian <= 100.000
     public static int jumlahPelangganHarian;
-    // total status pelanggan
-    public static int[] I = new int[100069]; // id : 1 <= I <= 100.000
-    public static int[] KbyQueue = new int[100069]; // berdasarkan antrian, status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}
-    public static int[] UbyQueue = new int[100069]; // berdasarkan antrian, jumlah uang : 1 <= U <= 100.000
-    public static int[] K = new int[100069]; // berdasarkan id, status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}
-    public static int[] U = new int[100069]; // berdasarkan id, jumlah uang : 1 <= U <= 100.000
-    public static boolean[] isBlacklist = new boolean[100069]; // berdasarkan id, default: false
-    // single status pelanggan
+    // TOTAL STATUS PELANGGAN
+    // digunakan cuma saat awal dalam hari mengantri
+    public static int[] IbyQueue = new int[100069]; // berdasarkan antrian (one day), id : 1 <= I <= 100.000, default: 0
+    public static int[] KbyQueue = new int[100069]; // berdasarkan antrian (one day), status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}, default: 0
+    public static int[] UbyQueue = new int[100069]; // berdasarkan antrian (one day), jumlah uang : 1 <= U <= 100.000, default: 0
+    // digunakan untuk melayani pelanggan (cuma perlu uang dan isBlacklist yang selalu updated)
+    public static int[] U = new int[100069]; // berdasarkan id (all day), jumlah uang : 1 <= U <= 100.000, default: 0
+    public static boolean[] isBlacklist = new boolean[100069]; // berdasarkan id (all day), default: false
+    // SINGLE STATUS PELANGGAN
     public static int id; // id : 1 <= I <= 100.000
     public static char k; // status kesehatan : {‘+’, ‘-’, ‘?’}
     public static int u; // jumlah uang : 1 <= U <= 100.000
@@ -104,13 +106,16 @@ public class TP01 {
 
         // Melakukan iterasi harian
         for (int i = 1; i <= jumlahHari; i++) { // hari ke-i
-
+            // Reset antrean ke default = 0
+            Arrays.fill(IbyQueue, 0);
+            Arrays.fill(KbyQueue, 0); 
+            Arrays.fill(UbyQueue, 0);
             // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
             jumlahPelangganHarian = in.nextInt(); // jumlah pelanggan hari ke-i
             for (int j = 1; j <= jumlahPelangganHarian; j++) { // pelanggan ke-j
                 // sebelah kiri mengambil data satuan [id] [status] [uang]
                 // sebelah kanan menyimpan pelanggan ke j di array I, K, U, R total
-                id = in.nextInt(); I[j] = id;
+                id = in.nextInt(); IbyQueue[j] = id;
                 k = in.nextChar(); 
                 u = in.nextInt(); UbyQueue[j] = u;
 
@@ -125,7 +130,11 @@ public class TP01 {
                     // memasang K sesuai indeks pelanggan dalam array dan range
                     getK(j, r); 
                 }
-            }
+
+                // ------------ SIMPAN DATA PELANGGAN DALAM ARRAY BY ID --------------------
+                // hanya perlu menyimpan uang data pelanggann untuk pelayanan by id, blacklist kemudian
+                U[id] = u;
+            } 
 
             // ----------------------- AMBIL INPUT PELAYANAN ------------------------------
             jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari
