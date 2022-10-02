@@ -191,14 +191,20 @@ public class TP01v02 {
         out.println("CHECK P");
         out.println("-------------------------------------");
         // CHECK
-        for (Koki cs: kokiS) {
-            out.print("S: "+cs.getJumlahPelayanan()+" ");
+        for (int i = 0; i < kokiS.size(); i++) {
+            Koki head = kokiS.remove();
+            out.print("S["+head.getId()+"]: "+head.getJumlahPelayanan()+" ");
+            kokiS.add(head);
         }
-        for (Koki cg: kokiG) {
-            out.print("G: "+cg.getJumlahPelayanan()+" ");
+        for (int i = 0; i < kokiG.size(); i++) {
+            Koki head = kokiG.remove();
+            out.print("G["+head.getId()+"]: "+head.getJumlahPelayanan()+" ");
+            kokiG.add(head);
         }
-        for (Koki ca: kokiA) {
-            out.print("A: "+ca.getJumlahPelayanan()+" ");
+        for (int i = 0; i < kokiA.size(); i++) {
+            Koki head = kokiA.remove();
+            out.print("A["+head.getId()+"]: "+head.getJumlahPelayanan()+" ");
+            kokiA.add(head);
         }
     }
     
@@ -258,14 +264,20 @@ public class TP01v02 {
         out.println("CHECK L");
         out.println("-------------------------------------");
         // CHECK
-        for (Koki cs: kokiS) {
-            out.print("S: "+cs.getJumlahPelayanan()+" ");
+        for (int i = 0; i < kokiS.size(); i++) {
+            Koki head = kokiS.remove();
+            out.print("S["+head.getId()+"]: "+head.getJumlahPelayanan()+" ");
+            kokiS.add(head);
         }
-        for (Koki cg: kokiG) {
-            out.print("G: "+cg.getJumlahPelayanan()+" ");
+        for (int i = 0; i < kokiG.size(); i++) {
+            Koki head = kokiG.remove();
+            out.print("G["+head.getId()+"]: "+head.getJumlahPelayanan()+" ");
+            kokiG.add(head);
         }
-        for (Koki ca: kokiA) {
-            out.print("A: "+ca.getJumlahPelayanan()+" ");
+        for (int i = 0; i < kokiA.size(); i++) {
+            Koki head = kokiA.remove();
+            out.print("A["+head.getId()+"]: "+head.getJumlahPelayanan()+" ");
+            kokiA.add(head);
         }
     }
 
