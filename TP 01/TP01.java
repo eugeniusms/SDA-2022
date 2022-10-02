@@ -31,7 +31,7 @@ public class TP01 {
     public static int[] idKokiS = new int[1000069];
     public static int[] idKokiG = new int[1000069];
     public static int[] idKokiA = new int[1000069];
-    // sisa pelayanan yang pending pada koki
+    // sisa pelayanan yang pending pada koki (based on day)
     public static int[] pendingKokiS; 
     public static int[] pendingKokiG; 
     public static int[] pendingKokiA;
@@ -120,17 +120,16 @@ public class TP01 {
             }
         }
         // Di sini pointer = jumlah koki pada tipe tersebut
-        pointerS--; pointerG--; pointerA--;
         jumlahKokiS = pointerS; jumlahKokiG = pointerG; jumlahKokiA = pointerA;
 
         // ------------- INISIASI BESAR ARRAY KOKI --------------
         // isi tidak perlu direset karena tercatat sampai besok
-        pendingKokiS = new int[jumlahKokiS+1]; // karena index 0 tidak dipakai jadi +1
-        pendingKokiG = new int[jumlahKokiG+1];
-        pendingKokiA = new int[jumlahKokiA+1];
-        pelayananKokiS = new int[jumlahKokiS+1];
-        pelayananKokiG = new int[jumlahKokiG+1];
-        pelayananKokiA = new int[jumlahKokiA+1];
+        pendingKokiS = new int[jumlahKokiS];
+        pendingKokiG = new int[jumlahKokiG];
+        pendingKokiA = new int[jumlahKokiA];
+        pelayananKokiS = new int[jumlahKokiS];
+        pelayananKokiG = new int[jumlahKokiG];
+        pelayananKokiA = new int[jumlahKokiA];
         // ------------------------------------------------------
 
         jumlahPelanggan = in.nextInt(); // jumlah pelanggan total
@@ -256,7 +255,7 @@ public class TP01 {
                         pelayananKokiS[pointerKokiS]++;
                         // searching minimum pelayanan koki s
                         int minim = 999999;
-                        for (int sm = 1; sm <= jumlahKokiS; sm++) {
+                        for (int sm = 1; sm < jumlahKokiS; sm++) {
                             if (pelayananKokiS[sm] < minim) {
                                 minim = pelayananKokiS[sm];
                                 pointerKokiS = sm; // set pointer koki s ke sm (koki dengan id minim && pelayanan paling minimum)
@@ -267,7 +266,7 @@ public class TP01 {
                         pelayananKokiG[pointerKokiG]++;
                         // searching minimum pelayanan koki g
                         int minim = 999999;
-                        for (int sm = 1; sm <= jumlahKokiG; sm++) {
+                        for (int sm = 1; sm < jumlahKokiG; sm++) {
                             if (pelayananKokiG[sm] < minim) {
                                 minim = pelayananKokiG[sm];
                                 pointerKokiG = sm; // set pointer koki g ke sm (koki dengan id minim && pelayanan paling minimum)
@@ -278,7 +277,7 @@ public class TP01 {
                         pelayananKokiA[pointerKokiA]++;
                         // searching minimum pelayanan koki a
                         int minim = 999999;
-                        for (int sm = 1; sm <= jumlahKokiA; sm++) {
+                        for (int sm = 1; sm < jumlahKokiA; sm++) {
                             if (pelayananKokiA[sm] < minim) {
                                 minim = pelayananKokiA[sm];
                                 pointerKokiA = sm; // set pointer koki a ke sm (koki dengan id minim && pelayanan paling minimum)
@@ -315,7 +314,7 @@ public class TP01 {
                         boolean gotIt = false; // var untuk mengecek apakah sudah didapati nilai score
 
                         // cek S terkecil dahulu
-                        while (indexS <= jumlahKokiS) {
+                        while (indexS < jumlahKokiS) {
                             if (pelayananKokiS[indexS] == searchPoin) {
                                 out.print(idKokiS[indexS] + " ");
                                 indexS++; gotIt = true;
@@ -331,7 +330,7 @@ public class TP01 {
                         }
 
                         // cek G 
-                        while (indexG <= jumlahKokiG) {
+                        while (indexG < jumlahKokiG) {
                             if (pelayananKokiG[indexG] == searchPoin) {
                                 out.print(idKokiG[indexG] + " ");
                                 indexG++; gotIt = true;
@@ -347,7 +346,7 @@ public class TP01 {
                         }
 
                         // cek A
-                        while (indexA <= jumlahKokiA) {
+                        while (indexA < jumlahKokiA) {
                             if (pelayananKokiA[indexA] == searchPoin) {
                                 out.print(idKokiA[indexA] + " ");
                                 indexA++; gotIt = true;
@@ -363,13 +362,13 @@ public class TP01 {
                         }
 
                         // Mereset index ke depan kembali                        
-                        if (indexS > jumlahKokiS ) {
+                        if (indexS == jumlahKokiS ) {
                             indexS = 1;
                         } 
-                        if (indexG > jumlahKokiG) {
+                        if (indexG == jumlahKokiG) {
                             indexG = 1;
                         }
-                        if (indexA > jumlahKokiA) {
+                        if (indexA == jumlahKokiA) {
                             indexA = 1;
                         }
 
@@ -431,16 +430,16 @@ public class TP01 {
 
         // KOKI 
         out.println("Koki: ");
-        out.println("Koki S: ");
-        for (int i = 1; i <= jumlahKokiS; i++) {
+        out.println("Panjang Koki S: "+pendingKokiS.length);
+        for (int i = 1; i < jumlahKokiS; i++) {
             out.println(idKokiS[i]+") Pending: " + pendingKokiS[i] + " | Pelayanan: " + pelayananKokiS[i]);
         }
-        out.println("Koki G: ");
-        for (int i = 1; i <= jumlahKokiG; i++) {
+        out.println("Panjang Koki G: "+pendingKokiG.length);
+        for (int i = 1; i < jumlahKokiG; i++) {
             out.println(idKokiG[i]+") Pending: " + pendingKokiG[i] + " | Pelayanan: " + pelayananKokiG[i]);
         }
-        out.println("Koki A: ");
-        for (int i = 1; i <= jumlahKokiA; i++) {
+        out.println("Panjang Koki A: "+pendingKokiA.length);
+        for (int i = 1; i < jumlahKokiA; i++) {
             out.println(idKokiA[i]+") Pending: " + pendingKokiA[i] + " | Pelayanan: " + pelayananKokiA[i]);
         }
     }
