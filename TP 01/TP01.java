@@ -219,18 +219,21 @@ public class TP01 {
                             pointerKokiS = 1;
                         }
                         pendingKokiS[pointerKokiS]++; // menambahkan ke pending koki S
+                        out.println("P: "+idKokiS[pointerKokiS]); // OUTPUT P
                     } else if (jenisMakanan == 'G') {
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiG[pointerKokiG] == 0) {
                             pointerKokiG = 1;
                         }
                         pendingKokiG[pointerKokiG]++; // menambahkan ke pending koki G
+                        out.println("P: "+idKokiG[pointerKokiG]); // OUTPUT P
                     } else { // jenisMakanan == 'A'
                         // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
                         if (idKokiA[pointerKokiA] == 0) {
                             pointerKokiA = 1;
                         }
                         pendingKokiA[pointerKokiA]++; // menambahkan ke pending koki A
+                        out.println("P: "+idKokiA[pointerKokiA]); // OUTPUT P
                     }
                     
                 // QUERY L (CLEAR)
@@ -275,7 +278,7 @@ public class TP01 {
                         }
                     }
 
-                    out.println(PidForL[sumOfL]); // print output id pelanggan
+                    out.println("L : "+PidForL[sumOfL]); // print output id pelanggan // OUTPUT L
                     sumOfL++; // menambah jumlah L dipanggil
             
                 // QUERY B
