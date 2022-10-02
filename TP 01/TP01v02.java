@@ -181,6 +181,7 @@ public class TP01v02 {
             idKokiPelayan = kokiA.peek().getId();
         }
         pesanan.add(new Pesanan(idPelanggan, idMenu, idKokiPelayan));
+        out.println("P: "+idKokiPelayan); // OUTPUT
     }
     
     public static void runL() {
@@ -231,6 +232,7 @@ public class TP01v02 {
                 }
             }
         }
+        out.println("L: "+pesananSelesai.getIdPelanggan());
     }
 
     public static void runB(int idPelanggan) {
@@ -245,7 +247,47 @@ public class TP01v02 {
     }
 
     public static void runC(int Q) {
-        
+        // copy queue agar tidak mengganggu jalannya program 
+        // https://stackoverflow.com/questions/22982157/how-do-i-copy-or-clone-a-linkedlist-implemented-queue-in-java
+        Queue<Koki> copyKokiS = new LinkedList<>(kokiS); // kokiS (terurut minimal melayani)
+        Queue<Koki> copyKokiG = new LinkedList<>(kokiG); // kokiS (terurut minimal melayani)
+        Queue<Koki> copyKokiA = new LinkedList<>(kokiA); // kokiS (terurut minimal melayani)
+        // menampilkan Q data koki paling kecil (prioritas S > G > A)
+        out.print("C: ");
+        while (Q > 0) {
+            // susun array [Shead, Ghead, Ahead] berisi jumlah pelayanan pada head of SGA
+            int[] SGAhead = {copyKokiS.peek().getJumlahPelayanan(), copyKokiG.peek().getJumlahPelayanan(), copyKokiA.peek().getJumlahPelayanan()};
+            // mencari index yang paling minimum
+            int minimumPelayanan = 999999;
+            int indexMinimum = 0; // [0: S, 1: G, 2: A]
+            for (int i = 0; i < 3; i++) {
+                out.println("CEK: "+SGAhead[i]);
+                if (SGAhead[i] < minimumPelayanan) {
+                    minimumPelayanan = SGAhead[i];
+                    indexMinimum = i;
+                }
+            }
+            // maka S minimum
+            if (indexMinimum == 0) {
+                Koki head = copyKokiS.remove();
+                out.print(head.getId()+" "); // OUTPUT
+                copyKokiS.add(head); // kembalikan ke belakang
+
+            // maka G minimum
+            } else if (indexMinimum == 1) {
+                Koki head = copyKokiG.remove();
+                out.print(head.getId()+" "); // OUTPUT
+                copyKokiG.add(head); // kembalikan ke belakang
+
+            // maka A minimum
+            } else {
+                Koki head = copyKokiA.remove();
+                out.print(head.getId()+" "); // OUTPUT
+                copyKokiA.add(head); // kembalikan ke belakang
+            }
+
+            Q--; // counter
+        }
     }
 
     public static void runD(int costA, int costG, int costS) {
