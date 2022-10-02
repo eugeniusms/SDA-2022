@@ -71,15 +71,15 @@ public class TP01v02 {
         jumlahKursi = in.nextInt();
         int jumlahHari = in.nextInt();
 
-        check1();
+        // check1();
 
         // menjalankan hari yang dimasukkan
         for (int i = 1; i <= jumlahHari; i++) {
             jalaniHari();
-            check2(i);
+            // check2(i);
         }
 
-        check1();
+        // check1();
 
         // Tutup OutputStream
         out.close();
@@ -139,8 +139,10 @@ public class TP01v02 {
             // jalankan fungsi kueri
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
+                checkP();
             } else if (kueri == 'L') {
                 runL();
+                checkL();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
@@ -181,7 +183,23 @@ public class TP01v02 {
             idKokiPelayan = kokiA.peek().getId();
         }
         pesanan.add(new Pesanan(idPelanggan, idMenu, idKokiPelayan));
-        out.println("P: "+idKokiPelayan); // OUTPUT
+        // out.println("P: "+idKokiPelayan); // OUTPUT
+    }
+
+    public static void checkP() {
+        out.println("\n-------------------------------------");
+        out.println("CHECK P");
+        out.println("-------------------------------------");
+        // CHECK
+        for (Koki cs: kokiS) {
+            out.print("S: "+cs.getJumlahPelayanan()+" ");
+        }
+        for (Koki cg: kokiG) {
+            out.print("G: "+cg.getJumlahPelayanan()+" ");
+        }
+        for (Koki ca: kokiA) {
+            out.print("A: "+ca.getJumlahPelayanan()+" ");
+        }
     }
     
     public static void runL() {
@@ -232,7 +250,23 @@ public class TP01v02 {
                 }
             }
         }
-        out.println("L: "+pesananSelesai.getIdPelanggan());
+        // out.println("L: "+pesananSelesai.getIdPelanggan());
+    }
+
+    public static void checkL() {
+        out.println("\n-------------------------------------");
+        out.println("CHECK L");
+        out.println("-------------------------------------");
+        // CHECK
+        for (Koki cs: kokiS) {
+            out.print("S: "+cs.getJumlahPelayanan()+" ");
+        }
+        for (Koki cg: kokiG) {
+            out.print("G: "+cg.getJumlahPelayanan()+" ");
+        }
+        for (Koki ca: kokiA) {
+            out.print("A: "+ca.getJumlahPelayanan()+" ");
+        }
     }
 
     public static void runB(int idPelanggan) {
@@ -240,9 +274,9 @@ public class TP01v02 {
         // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
         if (pelanggan[idPelanggan].getU() < 0) {
             pelanggan[idPelanggan].setBlacklist();
-            out.println("B: 0"); // OUTPUT
+            // out.println("B: 0"); // OUTPUT
         } else {
-            out.println("B: 1"); // OUTPUT
+            // out.println("B: 1"); // OUTPUT
         }
     }
 
@@ -252,16 +286,31 @@ public class TP01v02 {
         Queue<Koki> copyKokiS = new LinkedList<>(kokiS); // kokiS (terurut minimal melayani)
         Queue<Koki> copyKokiG = new LinkedList<>(kokiG); // kokiS (terurut minimal melayani)
         Queue<Koki> copyKokiA = new LinkedList<>(kokiA); // kokiS (terurut minimal melayani)
+
+        // CHECK
+        // for (Koki cs: copyKokiS) {
+        //     out.print("S: "+cs.getJumlahPelayanan()+" ");
+        // }
+        // for (Koki cg: copyKokiG) {
+        //     out.print("G: "+cg.getJumlahPelayanan()+" ");
+        // }
+        // for (Koki ca: copyKokiA) {
+        //     out.print("A: "+ca.getJumlahPelayanan()+" ");
+        // }
+
         // menampilkan Q data koki paling kecil (prioritas S > G > A)
-        out.print("C: ");
+        // out.print("C: ");
         while (Q > 0) {
             // susun array [Shead, Ghead, Ahead] berisi jumlah pelayanan pada head of SGA
             int[] SGAhead = {copyKokiS.peek().getJumlahPelayanan(), copyKokiG.peek().getJumlahPelayanan(), copyKokiA.peek().getJumlahPelayanan()};
+            
+            // TODO: selesaikan isu indexing
+            // out.println("CEK: "+copyKokiS.peek().getJumlahPelayanan());
+
             // mencari index yang paling minimum
             int minimumPelayanan = 999999;
             int indexMinimum = 0; // [0: S, 1: G, 2: A]
             for (int i = 0; i < 3; i++) {
-                out.println("CEK: "+SGAhead[i]);
                 if (SGAhead[i] < minimumPelayanan) {
                     minimumPelayanan = SGAhead[i];
                     indexMinimum = i;
@@ -270,19 +319,19 @@ public class TP01v02 {
             // maka S minimum
             if (indexMinimum == 0) {
                 Koki head = copyKokiS.remove();
-                out.print(head.getId()+" "); // OUTPUT
+                // out.print(head.getId()+" "); // OUTPUT
                 copyKokiS.add(head); // kembalikan ke belakang
 
             // maka G minimum
             } else if (indexMinimum == 1) {
                 Koki head = copyKokiG.remove();
-                out.print(head.getId()+" "); // OUTPUT
+                // out.print(head.getId()+" "); // OUTPUT
                 copyKokiG.add(head); // kembalikan ke belakang
 
             // maka A minimum
             } else {
                 Koki head = copyKokiA.remove();
-                out.print(head.getId()+" "); // OUTPUT
+                // out.print(head.getId()+" "); // OUTPUT
                 copyKokiA.add(head); // kembalikan ke belakang
             }
 
