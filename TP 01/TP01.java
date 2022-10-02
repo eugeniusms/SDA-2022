@@ -44,6 +44,9 @@ public class TP01 {
     public static int[] PidForL = new int[100069]; // dari index 0 -> ...
     // PtipeMakananForL digunakan untuk menyimpan tipe makanan pelanggan sesuai urutan memesan makanan
     public static char[] PtipeMakananForL = new char[100069]; // dari index 0 -> ...
+    // PhargaMakananForL digunakan untuk menyimpan harga makanan pelanggan sesuai urutan memesan makanan
+    public static int[] PhargaMakananForL = new int[100069]; // dari index 0 -> ...
+
     // Pointer kokiS, starting with index 1
     public static int pointerKokiS = 1;
     public static int pointerKokiG = 1;
@@ -65,8 +68,8 @@ public class TP01 {
     public static int[] KbyQueue = new int[100069]; // berdasarkan antrian (one day), status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}, default: 0
     public static int[] UbyQueue = new int[100069]; // berdasarkan antrian (one day), jumlah uang : 1 <= U <= 100.000, default: 0
     // digunakan untuk melayani pelanggan (cuma perlu uang dan isBlacklist yang selalu updated)
-    public static int[] U = new int[100069]; // berdasarkan id (all day), jumlah uang : 1 <= U <= 100.000, default: 0
-    public static int[] BON = new int[100069]; // berdasarkan id (all day), jumlah uang diperlukan untuk membayar, default: 0
+    public static int[] U = new int[100069]; // berdasarkan antrian (one day), jumlah uang : 1 <= U <= 100.000, default: 0
+    public static int[] BONL = new int[100069]; // berdasarkan antrian (one day), jumlah uang membayar yang sudah dilayani, default: 0
     public static boolean[] isBlacklist = new boolean[100069]; // berdasarkan id (all day), default: false
     // SINGLE STATUS PELANGGAN
     public static int id; // id : 1 <= I <= 100.000
@@ -144,9 +147,9 @@ public class TP01 {
             Arrays.fill(IbyQueue, 0);
             Arrays.fill(KbyQueue, 0); 
             Arrays.fill(UbyQueue, 0);
-            // reset U dan BON pelanggan
+            // reset U dan BONL pelanggan
             Arrays.fill(U, 0);
-            Arrays.fill(BON, 0);
+            Arrays.fill(BONL, 0);
 
             int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
             // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
@@ -197,6 +200,7 @@ public class TP01 {
             // inisiasi variabel query L
             int pointerPidForL = 0;
             int pointerPtipeMakananForL = 0;
+            int pointerPhargaMakananForL = 0;
             int sumOfL = 0;
             char jenisMakananDilayani;
 
@@ -210,13 +214,11 @@ public class TP01 {
                 if (kode == 'P') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
-
-                    // pesanan ditambahkan ke bon pelanggan
-                    BON[arg1] += makananHarga[arg2];
-
+                    
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
                     PtipeMakananForL[pointerPtipeMakananForL] = makananTipe[arg2]; pointerPtipeMakananForL++; // simpan jenis makanan pelanggan
-                    
+                    PhargaMakananForL[pointerPhargaMakananForL] = makananHarga[arg2]; pointerPhargaMakananForL++;
+
                     // menambahkan pending ke koki sesuai makanan terkait
                     // operasi disesuaikan jenis makanan
                     jenisMakanan = makananTipe[arg2];
@@ -247,6 +249,7 @@ public class TP01 {
                 } else if (kode == 'L') {
                     // ambil tipe makanan pada L yang sesuai (sumOfL)
                     jenisMakananDilayani = PtipeMakananForL[sumOfL];
+                    BONL[PidForL[sumOfL]] += PhargaMakananForL[sumOfL];
                     
                     // kurangi pending dan tambah pelayanan pada koki sesuai jenisMakananDilayani
                     // lalu letakan pointer pada koki dengan pelayanan terkecil dari index terdepan 
@@ -293,7 +296,7 @@ public class TP01 {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
 
                     // jika uang pelanggan minus maka blacklist (bonnya > uangnya)
-                    U[arg1] -= BON[arg1];
+                    U[arg1] -= BONL[arg1];
                     if (U[arg1] < 0) {
                         isBlacklist[arg1] = true;
                         out.println("B: 0"); // uang pelanggan tidak mencukupi
