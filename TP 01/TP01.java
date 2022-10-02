@@ -35,7 +35,7 @@ public class TP01 {
     public static int[] pendingKokiS; 
     public static int[] pendingKokiG; 
     public static int[] pendingKokiA;
-    // pelayanan saat ini pada koki
+    // pelayanan saat ini pada koki (all day)
     public static int[] pelayananKokiS;
     public static int[] pelayananKokiG;
     public static int[] pelayananKokiA;
@@ -150,6 +150,10 @@ public class TP01 {
             // reset U dan BONL pelanggan
             Arrays.fill(U, 0);
             Arrays.fill(BONL, 0);
+            // reset pemesanan pending
+            Arrays.fill(pendingKokiS, 0);
+            Arrays.fill(pendingKokiG, 0);
+            Arrays.fill(pendingKokiA, 0);
 
             int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
             // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
@@ -214,7 +218,7 @@ public class TP01 {
                 if (kode == 'P') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
-                    
+
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
                     PtipeMakananForL[pointerPtipeMakananForL] = makananTipe[arg2]; pointerPtipeMakananForL++; // simpan jenis makanan pelanggan
                     PhargaMakananForL[pointerPhargaMakananForL] = makananHarga[arg2]; pointerPhargaMakananForL++;
