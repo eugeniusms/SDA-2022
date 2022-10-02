@@ -23,11 +23,15 @@ public class TP01 {
     public static int jumlahKoki;
     // array digunakan untuk menyimpan index semua koki sesuai tipenya
     // ukuran diinisiasikan 1.000.069 sesuai batas worstcase
+    // id koki SGA, default = 0 (tidak ada koki lagi back to depan)
     public static int[] idKokiS = new int[1000069];
     public static int[] idKokiG = new int[1000069];
     public static int[] idKokiA = new int[1000069];
-    // experiment: string slicing untuk mendapatkan koki terbanyak
-    public static String combinedCommand = "";
+    // pelayanan 
+
+
+    // daftar urutan pesanan
+    public static String combinedPesanan = "";
     // PidForL digunakan untuk menyimpan ID Pelanggan sesuai urutan pelanggan memesan makanan
     public static int[] PidForL = new int[100069]; // dari index 0 -> ...
     // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
@@ -171,11 +175,10 @@ public class TP01 {
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
 
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
-                    combinedCommand += makananTipe[arg2]; // COMBINED COMMAND
+                    combinedPesanan += makananTipe[arg2]; // COMBINED COMMAND
                     
                 } else if (kode == 'L') {
                     out.println(PidForL[sumOfL]); sumOfL++; // print output id pelanggan
-                    combinedCommand += "L"; // COMBINED COMMAND
                 } else if (kode == 'B') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                 } else if (kode == 'C') {
@@ -191,7 +194,7 @@ public class TP01 {
             for (int z = 0; z < 10; z++) {
                 out.println("CEK ID PEL SESUAI L: "+PidForL[z]);
             }
-            out.println("COMBINED COMMAND: "+combinedCommand); // TEST
+            out.println("COMBINED PESANAN: "+combinedPesanan); // TEST
         }
 
         printCheck();
