@@ -44,6 +44,10 @@ public class TP01 {
     public static int[] PidForL = new int[100069]; // dari index 0 -> ...
     // PtipeMakananForL digunakan untuk menyimpan tipe makanan pelanggan sesuai urutan memesan makanan
     public static char[] PtipeMakananForL = new char[100069]; // dari index 0 -> ...
+    // Pointer kokiS, starting with index 1
+    public static int pointerKokiS = 1;
+    public static int pointerKokiG = 1;
+    public static int pointerKokiA = 1;
     // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
     // jumlah pelanggan 1 <= P <= 100.000
     public static int jumlahPelanggan;
@@ -119,6 +123,7 @@ public class TP01 {
         jumlahKokiS = pointerS; jumlahKokiG = pointerG; jumlahKokiA = pointerA;
 
         // ------------- INISIASI BESAR ARRAY KOKI --------------
+        // isi tidak perlu direset karena tercatat sampai besok
         pendingKokiS = new int[jumlahKokiS+1]; // karena index 0 tidak dipakai jadi +1
         pendingKokiG = new int[jumlahKokiG+1];
         pendingKokiA = new int[jumlahKokiA+1];
@@ -193,10 +198,6 @@ public class TP01 {
 
             // inisiasi variabel pointer koki yang mengambil pesanan
             char jenisMakanan;
-            // starting with index 1
-            int pointerKokiS = 1;
-            int pointerKokiG = 1;
-            int pointerKokiA = 1;
 
             for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
                 kode = in.nextChar(); // mengambil kode pelayanan
@@ -242,12 +243,36 @@ public class TP01 {
                     if (jenisMakananDilayani == 'S') {
                         pendingKokiS[pointerKokiS]--;
                         pelayananKokiS[pointerKokiS]++;
+                        // searching minimum pelayanan koki s
+                        int minim = 999999;
+                        for (int sm = 1; sm <= jumlahKokiS; sm++) {
+                            if (pelayananKokiS[sm] < minim) {
+                                minim = pelayananKokiS[sm];
+                                pointerKokiS = sm; // set pointer koki s ke sm (koki dengan id minim && pelayanan paling minimum)
+                            }
+                        }
                     } else if (jenisMakananDilayani == 'G') {
                         pendingKokiG[pointerKokiG]--;
                         pelayananKokiG[pointerKokiG]++;
+                        // searching minimum pelayanan koki g
+                        int minim = 999999;
+                        for (int sm = 1; sm <= jumlahKokiG; sm++) {
+                            if (pelayananKokiG[sm] < minim) {
+                                minim = pelayananKokiG[sm];
+                                pointerKokiG = sm; // set pointer koki g ke sm (koki dengan id minim && pelayanan paling minimum)
+                            }
+                        }
                     } else {
                         pendingKokiA[pointerKokiA]--;
                         pelayananKokiA[pointerKokiA]++;
+                        // searching minimum pelayanan koki a
+                        int minim = 999999;
+                        for (int sm = 1; sm <= jumlahKokiA; sm++) {
+                            if (pelayananKokiA[sm] < minim) {
+                                minim = pelayananKokiA[sm];
+                                pointerKokiA = sm; // set pointer koki a ke sm (koki dengan id minim && pelayanan paling minimum)
+                            }
+                        }
                     }
 
                     out.println(PidForL[sumOfL]); // print output id pelanggan
@@ -273,9 +298,11 @@ public class TP01 {
             for (int z = 0; z < 10; z++) {
                 out.println("CEK ID PEL SESUAI L: "+PidForL[z]);
             }
+
+            printCheck();
         }
 
-        printCheck();
+        // printCheck();
 
         // Run Solusi
         // int solution = 1;
