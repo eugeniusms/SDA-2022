@@ -15,7 +15,7 @@ public class TP01v02 {
     public static Koki[] koki; // index => id koki
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
-    // get status by queue
+    // get status by queue (optimization step)
     public static int[] KbyQueue = new int[100069];
 
     public static void main(String[] args) {
@@ -66,6 +66,7 @@ public class TP01v02 {
 
     public static void jalaniHari() {
         // ---------------------------- AMBIL INPUT HARIAN -------------------------------------
+        // STEP 1: INISIASI PELANGGAN
         int jumlahPelangganHarian = in.nextInt();
         // membaca input pelanggan harian
         for (int i = 1; i <= jumlahPelangganHarian; i++) {
@@ -86,8 +87,24 @@ public class TP01v02 {
             }
         }
 
-        for (int i = 0; i < 10; i++) {
-            out.println("CEK: "+KbyQueue[i]);
+        // STEP 2: JALANKAN QUERY
+        int jumlahQuery = in.nextInt();
+        // membaca kueri
+        for (int i = 1; i <= jumlahQuery; i++) { // kueri ke-i
+            char kueri = in.nextChar(); 
+
+            // jalankan fungsi kueri
+            if (kueri == 'P') {
+                runP(in.nextInt(), in.nextInt());
+            } else if (kueri == 'L') {
+                runL();
+            } else if (kueri == 'B') {
+                runB(in.nextInt());
+            } else if (kueri == 'C') {
+                runC(in.nextInt());
+            } else { // kueri == 'D'
+                runD(in.nextInt(), in.nextInt(), in.nextInt());
+            }
         }
     }
 
@@ -98,7 +115,6 @@ public class TP01v02 {
         while (jarak > 0) {
             indeks--; jarak--; 
             sumStatus += KbyQueue[indeks];
-            // out.println("CEK: "+ indeks + " | " + jarak + " | " + sumStatus); // TEST
         }
         // Memberi status pada pelanggan
         if (sumStatus > 0) {
@@ -107,6 +123,28 @@ public class TP01v02 {
             KbyQueue[id] = -1; return -1; // K = Negatif
         }
     }
+
+    // Fungsi-fungsi kueri
+    public static void runP(int idPelanggan, int idMakanan) {
+
+    }
+    
+    public static void runL() {
+        
+    }
+
+    public static void runB(int idPelanggan) {
+        
+    }
+
+    public static void runC(int Q) {
+        
+    }
+
+    public static void runD(int costA, int costG, int costS) {
+        
+    }
+
 
     public static void check1() {
         int counter = 0;
