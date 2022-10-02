@@ -69,6 +69,8 @@ public class TP01 {
         // ---------------------------- AMBIL INPUT DEFAULT -------------------------------------
         jumlahMenu = in.nextInt(); // mengambil jumlah menu
 
+        out.println("OUTPUT:"); // TEST
+
         // Membaca input [harga] [tipe] menu makanan
         for (int i = 1; i <= jumlahMenu; i++) {
             makananHarga[i] = in.nextInt();
@@ -110,6 +112,7 @@ public class TP01 {
             Arrays.fill(IbyQueue, 0);
             Arrays.fill(KbyQueue, 0); 
             Arrays.fill(UbyQueue, 0);
+            int jumlahKursiKosong = jumlahKursi;
             // ----------------------- AMBIL INPUT PELANGGAN ------------------------------
             jumlahPelangganHarian = in.nextInt(); // jumlah pelanggan hari ke-i
             for (int j = 1; j <= jumlahPelangganHarian; j++) { // pelanggan ke-j
@@ -131,10 +134,27 @@ public class TP01 {
                     getK(j, r); 
                 }
 
+                // lakukan penyelesaian A: status pelanggan harian (0-1-2-3)
+                if (isBlacklist[id]) {
+                    out.print("3 "); // blacklisted
+                } else {
+                    if (KbyQueue[j] == 1) {
+                        out.print("0 "); // positive
+                    } else {
+                        if (jumlahKursiKosong <= 0) {
+                            out.print("2 "); // ruang lapar
+                        } else {
+                            out.print("1 "); // tidak ada masalah
+                            jumlahKursiKosong--; // kurangi karena pelanggan bisa masuk
+                        }
+                    }
+                }
+
                 // ------------ SIMPAN DATA PELANGGAN DALAM ARRAY BY ID --------------------
                 // hanya perlu menyimpan uang data pelanggann untuk pelayanan by id, blacklist kemudian
                 U[id] = u;
             } 
+            out.println(); // new line output setelah penyelesaian A
 
             // ----------------------- AMBIL INPUT PELAYANAN ------------------------------
             jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari
