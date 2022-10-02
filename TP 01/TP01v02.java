@@ -152,16 +152,16 @@ public class TP01v02 {
         out.println("-------------------------------------");
         out.println("CEK MENU: [harga] [tipe]");
         for (Makanan m: menu) {
-            counter++;
             out.println(counter + ") " + m.getHarga() + " | " + m.getTipe());
+            counter++;
         }
         // cek koki
         counter = 0;
         out.println("-------------------------------------");
         out.println("CEK KOKI: [tipe] [jumlah pelayanan]");
         for (Koki k: koki) {
-            counter++;
             out.println(counter + ") " + k.getTipe() + " | " + k.getJumlahPelayanan());
+            counter++;
         }
     }
 
@@ -174,8 +174,8 @@ public class TP01v02 {
         out.println("-------------------------------------");
         out.println("CEK PELANGGAN: [K] [U] [blacklist]");
         for (Pelanggan p: pelanggan) {
-            counter++;
             out.println(counter + ") " + p.getK() + " | " + p.getU() + " | " + p.isBlacklist());
+            counter++;
         }
     }
 
