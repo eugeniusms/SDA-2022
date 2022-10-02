@@ -169,8 +169,15 @@ public class TP01 {
 
             // ----------------------- AMBIL INPUT PELAYANAN ------------------------------
             jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari 
+            // inisiasi variabel query L
             int pointerPidForL = 0;
             int sumOfL = 0;
+
+            // inisiasi variabel pointer koki yang mengambil pesanan
+            char jenisMakanan;
+            int pointerKokiS = 1;
+            int pointerKokiG = 1;
+            int pointerKokiA = 1;
 
             for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
                 kode = in.nextChar(); // mengambil kode pelayanan
@@ -182,6 +189,30 @@ public class TP01 {
 
                     PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
                     
+                    // menambahkan pending ke koki sesuai makanan terkait
+                    // operasi disesuaikan jenis makanan
+                    jenisMakanan = makananTipe[arg2];
+                    if (jenisMakanan == 'S') {
+                        // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
+                        if (idKokiS[pointerKokiS] == 0) {
+                            pointerS = 1;
+                        }
+                        pendingKokiS[pointerKokiS]++; // menambahkan ke pending koki S
+                    } else if (jenisMakanan == 'G') {
+                        // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
+                        if (idKokiG[pointerKokiG] == 0) {
+                            pointerG = 1;
+                        }
+                        pendingKokiG[pointerKokiG]++; // menambahkan ke pending koki G
+                    } else { // jenisMakanan == 'A'
+                        // jika id koki tersebut == 0 maka reset kembali ke index pertama idKoki
+                        if (idKokiA[pointerKokiA] == 0) {
+                            pointerA = 1;
+                        }
+                        pendingKokiA[pointerKokiA]++; // menambahkan ke pending koki A
+                    }
+                    
+
                 // QUERY L (CLEAR)
                 } else if (kode == 'L') {
                     out.println(PidForL[sumOfL]); sumOfL++; // print output id pelanggan
