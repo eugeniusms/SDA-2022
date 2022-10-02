@@ -6,7 +6,8 @@ public class TP01v02 {
     private static InputReader in;
     private static PrintWriter out;
 
-    public static Makanan[] menu;
+    public static Makanan[] menu; // index => id makanan
+    public static Koki[] koki; // index => id koki
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -17,10 +18,17 @@ public class TP01v02 {
         // ambil jumlah menu makanan
         int jumlahMenu = in.nextInt();
         menu = new Makanan[jumlahMenu];
-
         // membaca input menu makanan
         for (int i = 0; i < jumlahMenu; i++) {
             menu[i] = new Makanan(in.nextInt(), in.nextChar());
+        }
+
+        // ambil jumlah koki
+        int jumlahKoki = in.nextInt();
+        koki = new Koki[jumlahKoki];
+        // membaca input koki
+        for (int i = 0; i < jumlahKoki; i++) {
+            koki[i] = new Koki(in.nextChar());
         }
 
         check();
@@ -30,10 +38,21 @@ public class TP01v02 {
     }
 
     public static void check() {
+        int counter = 0;
         // cek makanan
-        out.println("CEK MENU: ");
+        out.println("-------------------------------------");
+        out.println("CEK MENU: [harga] [tipe]");
         for (Makanan m: menu) {
-            out.println(m.getHarga() + " " + m.getTipe());
+            counter++;
+            out.println(counter + ") " + m.getHarga() + " | " + m.getTipe());
+        }
+        // cek koki
+        counter = 0;
+        out.println("-------------------------------------");
+        out.println("CEK KOKI: [tipe] [jumlah pelayanan]");
+        for (Koki k: koki) {
+            counter++;
+            out.println(counter + ") " + k.getTipe() + " | " + k.getJumlahPelayanan());
         }
     }
 
@@ -91,5 +110,32 @@ class Makanan {
     // getter tipe
     public char getTipe() {
         return this.tipe;
+    }
+}
+
+// class inisiator koki
+class Koki {
+    private char tipe;
+    private int jumlahPelayanan;
+
+    // construct makanan
+    Koki(char tipe) {
+        this.tipe = tipe;
+        this.jumlahPelayanan = 0; // default = 0
+    }
+   
+    // getter tipe
+    public char getTipe() {
+        return this.tipe;
+    }
+
+    // getter jumlahPelayanan
+    public int getJumlahPelayanan() {
+        return this.jumlahPelayanan;
+    }
+
+    // setter jumlahPelayanan
+    public void setJumlahPelayanan(int jumlahPelayanan) {
+        this.jumlahPelayanan = jumlahPelayanan;
     }
 }
