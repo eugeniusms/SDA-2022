@@ -142,10 +142,10 @@ public class TP01v02 {
             // jalankan fungsi kueri
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
-                checkP();
+                // checkP();
             } else if (kueri == 'L') {
                 runL();
-                checkL();
+                // checkL();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
@@ -186,7 +186,7 @@ public class TP01v02 {
             kokiPelayan = kokiA.get(0);
         }
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
-        // out.println("P: "+idKokiPelayan); // OUTPUT
+        out.println("P: "+kokiPelayan.getId()); // OUTPUT
     }
 
     public static void checkP() {
@@ -221,7 +221,7 @@ public class TP01v02 {
         Collections.sort(kokiG, new SortbyPelayananNId());
         Collections.sort(kokiA, new SortbyPelayananNId());
 
-        // out.println("L: "+pesananSelesai.getIdPelanggan());
+        out.println("L: "+pesananSelesai.getIdPelanggan());
     }
 
     public static void checkL() {
@@ -245,9 +245,9 @@ public class TP01v02 {
         // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
         if (pelanggan[idPelanggan].getU() < 0) {
             pelanggan[idPelanggan].setBlacklist();
-            // out.println("B: 0"); // OUTPUT
+            out.println("B: 0"); // OUTPUT
         } else {
-            // out.println("B: 1"); // OUTPUT
+            out.println("B: 1"); // OUTPUT
         }
     }
 
