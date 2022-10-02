@@ -41,6 +41,7 @@ public class TP01 {
     public static int[] I = new int[100069]; // id : 1 <= I <= 100.000
     public static int[] K = new int[100069]; // status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}
     public static int[] U = new int[100069]; // jumlah uang : 1 <= U <= 100.000
+    public static boolean[] isBlacklist = new boolean[100069]; // default: false
     // single status pelanggan
     public static int i; // id : 1 <= I <= 100.000
     public static char k; // status kesehatan : {‘+’, ‘-’, ‘?’}
