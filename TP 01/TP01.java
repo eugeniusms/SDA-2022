@@ -305,7 +305,11 @@ public class TP01 {
                         // cek S terkecil dahulu
                         while (indexS < jumlahKokiS) {
                             if (pelayananKokiS[indexS] == searchPoin) {
-                                out.print(idKokiS[indexS] + " ");
+                                if (arg1 == 1) {
+                                    out.print(idKokiS[indexS]);
+                                } else {
+                                    out.print(idKokiS[indexS] + " ");
+                                }
                                 indexS++; gotIt = true;
                                 break;
                             }
@@ -321,7 +325,11 @@ public class TP01 {
                         // cek G 
                         while (indexG < jumlahKokiG) {
                             if (pelayananKokiG[indexG] == searchPoin) {
-                                out.print(idKokiG[indexG] + " ");
+                                if (arg1 == 1) {
+                                    out.print(idKokiG[indexG]);
+                                } else {
+                                    out.print(idKokiG[indexG] + " ");
+                                }
                                 indexG++; gotIt = true;
                                 break;
                             }
@@ -337,7 +345,11 @@ public class TP01 {
                         // cek A
                         while (indexA < jumlahKokiA) {
                             if (pelayananKokiA[indexA] == searchPoin) {
-                                out.print(idKokiA[indexA] + " ");
+                                if (arg1 == 1) {
+                                    out.print(idKokiA[indexA]);
+                                } else {
+                                    out.print(idKokiA[indexA] + " ");
+                                }
                                 indexA++; gotIt = true;
                                 break;
                             }
