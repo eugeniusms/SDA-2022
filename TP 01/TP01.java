@@ -23,9 +23,9 @@ public class TP01 {
     public static int jumlahKoki;
     // array digunakan untuk menyimpan index semua koki sesuai tipenya
     // ukuran diinisiasikan 1.000.069 sesuai batas worstcase
-    public static int[] kokiS = new int[1000069];
-    public static int[] kokiG = new int[1000069];
-    public static int[] kokiA = new int[1000069];
+    public static int[] idKokiS = new int[1000069];
+    public static int[] idKokiG = new int[1000069];
+    public static int[] idKokiA = new int[1000069];
     // experiment: string slicing untuk mendapatkan koki terbanyak
     public static String combinedCommand = "";
     // PidForL digunakan untuk menyimpan ID Pelanggan sesuai urutan pelanggan memesan makanan
@@ -90,13 +90,13 @@ public class TP01 {
         for (int i = 1; i <= jumlahKoki; i++) {
             inputTipe = in.nextChar();
             if (inputTipe == 'S') {
-                kokiS[pointerS] = i;
+                idKokiS[pointerS] = i;
                 pointerS++;
             } else if (inputTipe == 'G') {
-                kokiG[pointerG] = i;
+                idKokiG[pointerG] = i;
                 pointerG++;
             } else { // inputTipe == 'A'
-                kokiA[pointerA] = i;
+                idKokiA[pointerA] = i;
                 pointerA++;
             }
         }
@@ -162,6 +162,7 @@ public class TP01 {
             // ----------------------- AMBIL INPUT PELAYANAN ------------------------------
             jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari 
             int pointerPidForL = 0;
+            int sumOfL = 0;
 
             for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
                 kode = in.nextChar(); // mengambil kode pelayanan
@@ -173,6 +174,7 @@ public class TP01 {
                     combinedCommand += makananTipe[arg2]; // COMBINED COMMAND
                     
                 } else if (kode == 'L') {
+                    out.println(PidForL[sumOfL]); sumOfL++; // print output id pelanggan
                     combinedCommand += "L"; // COMBINED COMMAND
                 } else if (kode == 'B') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
@@ -225,6 +227,21 @@ public class TP01 {
         out.println("Keterangan Pelanggan: ");
         for (int i = 1; i <= 4; i++) {
             out.println(i + ") " + KbyQueue[i]);
+        }
+
+        // KOKI 
+        out.println("Koki: ");
+        out.println("Koki S: ");
+        for (int i = 1; i <= 5; i++) {
+            out.println(idKokiS[i]);
+        }
+        out.println("Koki G: ");
+        for (int i = 1; i <= 5; i++) {
+            out.println(idKokiG[i]);
+        }
+        out.println("Koki A: ");
+        for (int i = 1; i <= 5; i++) {
+            out.println(idKokiA[i]);
         }
     }
 
