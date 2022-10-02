@@ -39,11 +39,12 @@ public class TP01 {
     public static int jumlahPelangganHarian;
     // total status pelanggan
     public static int[] I = new int[100069]; // id : 1 <= I <= 100.000
-    public static int[] K = new int[100069]; // status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}
-    public static int[] U = new int[100069]; // jumlah uang : 1 <= U <= 100.000
+    public static int[] KbyQueue = new int[100069]; // status kesehatan : {‘+’=+1, ‘-’=-1, ‘?’=ditentukan}
+    public static int[] UbyQueue = new int[100069]; // jumlah uang : 1 <= U <= 100.000
+   
     public static boolean[] isBlacklist = new boolean[100069]; // default: false
     // single status pelanggan
-    public static int i; // id : 1 <= I <= 100.000
+    public static int id; // id : 1 <= I <= 100.000
     public static char k; // status kesehatan : {‘+’, ‘-’, ‘?’}
     public static int u; // jumlah uang : 1 <= U <= 100.000
     public static int r; // jumlah range advance screening : 1 <= R < j
@@ -108,15 +109,15 @@ public class TP01 {
             for (int j = 1; j <= jumlahPelangganHarian; j++) { // pelanggan ke-j
                 // sebelah kiri mengambil data satuan [id] [status] [uang]
                 // sebelah kanan menyimpan pelanggan ke j di array I, K, U, R total
-                i = in.nextInt(); I[j] = i;
+                id = in.nextInt(); I[j] = id;
                 k = in.nextChar(); 
-                u = in.nextInt(); U[j] = u;
+                u = in.nextInt(); UbyQueue[j] = u;
 
                 // "+" => +1 | "-" => -1
                 if (k == '+') {
-                    K[j] = 1;
+                    KbyQueue[j] = 1;
                 } else if (k == '-') {
-                    K[j] = -1;
+                    KbyQueue[j] = -1;
                 } else {
                     // if k == ? then add [range] => [id] [status] [uang] [range]
                     r = in.nextInt(); 
@@ -163,14 +164,14 @@ public class TP01 {
         int indeks = indeksPelanggan;
         while (jarak > 0) {
             indeks--; jarak--; 
-            sumStatus += K[indeks];
+            sumStatus += KbyQueue[indeks];
             // out.println("CEK: "+ indeks + " | " + jarak + " | " + sumStatus); // TEST
         }
         // Memberi status pada pelanggan
         if (sumStatus > 0) {
-            K[indeksPelanggan] = 1; // K = Positif
+            KbyQueue[indeksPelanggan] = 1; // K = Positif
         } else {
-            K[indeksPelanggan] = -1; // K = Negatif
+            KbyQueue[indeksPelanggan] = -1; // K = Negatif
         }
     }
 
@@ -179,7 +180,7 @@ public class TP01 {
         // NILAI
         out.println("Keterangan Pelanggan: ");
         for (int i = 1; i <= 4; i++) {
-            out.println(i + ") " + K[i]);
+            out.println(i + ") " + KbyQueue[i]);
         }
     }
 
