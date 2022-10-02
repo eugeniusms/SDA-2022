@@ -15,6 +15,9 @@ public class TP01v02 {
     public static Koki[] koki; // index => id koki
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
+    // jumlah kursi
+    public static int jumlahKursi;
+
     // get status by queue (optimization step)
     public static int[] KbyQueue = new int[100069];
 
@@ -50,7 +53,7 @@ public class TP01v02 {
         }
 
         // ambil jumlah kursi dan jumlah hari
-        int jumlahKursi = in.nextInt();
+        jumlahKursi = in.nextInt();
         int jumlahHari = in.nextInt();
 
         check1();
@@ -68,26 +71,45 @@ public class TP01v02 {
         // ---------------------------- AMBIL INPUT HARIAN -------------------------------------
         // STEP 1: INISIASI PELANGGAN
         int jumlahPelangganHarian = in.nextInt();
+        int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
         // membaca input pelanggan harian
         for (int i = 1; i <= jumlahPelangganHarian; i++) {
 
             // ambil i, k, u, r (opsional)
             int id = in.nextInt();
-            char k = in.nextChar(); 
+            char k = in.nextChar(); int ket;
             int u = in.nextInt();  pelanggan[id].setU(u);
 
-            // memasukkan pelanggan sesuai idnya
+            // mendapatkan K untuk pelanggan
             if (k == '?') {
                 int r = in.nextInt(); 
-                pelanggan[id].setK(getKFromQueue(i, r));
+                ket = getKFromQueue(i, r);       
             } else {
-                int ket =  (k == '+' ? 1 : -1);  // jika + => 1, jika - => -1
+                ket =  (k == '+' ? 1 : -1);  // jika + => 1, jika - => -1
                 KbyQueue[i] = ket;
-                pelanggan[id].setK(ket);
+            }
+            pelanggan[id].setK(ket);
+
+            // STEP 2: CETAK STATUS PELANGGAN
+            // lakukan penyelesaian A: status pelanggan harian (0-1-2-3)
+            if (pelanggan[id].isBlacklist()) {
+                out.print("3 "); // blacklisted
+            } else {
+                if (ket == 1) {
+                    out.print("0 "); // positive
+                } else {
+                    if (jumlahKursiKosong <= 0) {
+                        out.print("2 "); // ruang lapar
+                    } else {
+                        out.print("1 "); // tidak ada masalah
+                        jumlahKursiKosong--; // kurangi karena pelanggan bisa masuk
+                    }
+                }
             }
         }
+        out.println();
 
-        // STEP 2: JALANKAN QUERY
+        // STEP 3: JALANKAN QUERY
         int jumlahQuery = in.nextInt();
         // membaca kueri
         for (int i = 1; i <= jumlahQuery; i++) { // kueri ke-i
