@@ -28,6 +28,8 @@ public class TP01 {
     public static int[] kokiA = new int[1000069];
     // experiment: string slicing untuk mendapatkan koki terbanyak
     public static String combinedCommand = "";
+    // PidForL digunakan untuk menyimpan ID Pelanggan sesuai urutan pelanggan memesan makanan
+    public static int[] PidForL = new int[100069]; // dari index 0 -> ...
     // -------------------------------- ALL ABOUT PELANGGAN ---------------------------------------
     // jumlah pelanggan 1 <= P <= 100.000
     public static int jumlahPelanggan;
@@ -158,14 +160,18 @@ public class TP01 {
             out.println(); // new line output setelah penyelesaian A
 
             // ----------------------- AMBIL INPUT PELAYANAN ------------------------------
-            jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari
-            
+            jumlahPelayananHarian = in.nextInt(); // jumlah pelayanan restoran dalam suatu hari 
+            int pointerPidForL = 0;
+
             for (int k = 1; k <= jumlahPelayananHarian; k++) { // pelayanan ke-k
                 kode = in.nextChar(); // mengambil kode pelayanan
                 if (kode == 'P') {
                     arg1 = in.nextInt(); // [ID_PELANGGAN]
                     arg2 = in.nextInt(); // [INDEX_MAKANAN]
+
+                    PidForL[pointerPidForL] = arg1; pointerPidForL++; // simpan urutan id pelanggan yang pesan
                     combinedCommand += makananTipe[arg2]; // COMBINED COMMAND
+                    
                 } else if (kode == 'L') {
                     combinedCommand += "L"; // COMBINED COMMAND
                 } else if (kode == 'B') {
@@ -179,6 +185,10 @@ public class TP01 {
                 }
             }
 
+            // TEST
+            for (int z = 0; z < 10; z++) {
+                out.println("CEK ID PEL SESUAI L: "+PidForL[z]);
+            }
             out.println("COMBINED COMMAND: "+combinedCommand); // TEST
         }
 
