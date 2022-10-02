@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Arrays;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class TP01v02 {
     private static InputReader in;
@@ -12,8 +13,14 @@ public class TP01v02 {
 
     // default arr[0] = kosong
     public static Makanan[] menu; // index => id makanan
-    public static Koki[] koki; // index => id koki
+
+    public static Queue<Koki> kokiS = new LinkedList<>(); // kokiS (terurut minimal melayani)
+    public static Queue<Koki> kokiG = new LinkedList<>(); // kokiG (terurut minimal melayani)
+    public static Queue<Koki> kokiA = new LinkedList<>(); // kokiA (terurut minimal melayani)
+
     public static Pelanggan[] pelanggan; // index => id pelanggan
+
+    public static Queue<Pesanan> pesanan = new LinkedList<>(); // menyimpan antrian pesanan
 
     // jumlah kursi
     public static int jumlahKursi;
@@ -38,10 +45,18 @@ public class TP01v02 {
 
         // ambil jumlah koki
         int jumlahKoki = in.nextInt();
-        koki = new Koki[jumlahKoki+1]; koki[0] = new Koki('O'); // set default
+        char tipeKoki;
         // membaca input koki
         for (int i = 1; i <= jumlahKoki; i++) {
-            koki[i] = new Koki(in.nextChar());
+            tipeKoki = in.nextChar();
+            // menambahkan koki sesuai tipenya
+            if (tipeKoki == 'S') {
+                kokiS.add(new Koki(i)); // inisiasi id koki
+            } else if (tipeKoki == 'G') {
+                kokiG.add(new Koki(i));
+            } else { // tipeKoki == 'A'
+                kokiA.add(new Koki(i));
+            }
         }
 
         // ambil jumlah pelanggan
@@ -58,6 +73,7 @@ public class TP01v02 {
 
         check1();
 
+        // menjalankan hari yang dimasukkan
         for (int i = 1; i <= jumlahHari; i++) {
             jalaniHari();
             check2(i);
@@ -69,9 +85,12 @@ public class TP01v02 {
 
     public static void jalaniHari() {
         // ---------------------------- AMBIL INPUT HARIAN -------------------------------------
-        // STEP 1: INISIASI PELANGGAN
+        // RESET ALL VALUE EVERYDAY
         int jumlahPelangganHarian = in.nextInt();
         int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
+        pesanan.clear(); // reset pesanan
+
+        // STEP 1: INISIASI PELANGGAN
         // membaca input pelanggan harian
         for (int i = 1; i <= jumlahPelangganHarian; i++) {
 
@@ -147,8 +166,19 @@ public class TP01v02 {
     }
 
     // Fungsi-fungsi kueri
-    public static void runP(int idPelanggan, int idMakanan) {
-
+    public static void runP(int idPelanggan, int idMenu) {
+        // mencari id koki pelayanan
+        char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
+        // PENTING: ambil koki terdepan = koki paling sedikit melayani & pastinya urut id
+        int idKokiPelayan;
+        if (tipeMakanan == 'S') {
+            idKokiPelayan = kokiS.peek().getId();
+        } else if (tipeMakanan == 'G') {
+            idKokiPelayan = kokiG.peek().getId();
+        } else { // tipe makanan A
+            idKokiPelayan = kokiA.peek().getId();
+        }
+        pesanan.add(new Pesanan(idPelanggan, idMenu, idKokiPelayan));
     }
     
     public static void runL() {
@@ -180,9 +210,23 @@ public class TP01v02 {
         // cek koki
         counter = 0;
         out.println("-------------------------------------");
-        out.println("CEK KOKI: [tipe] [jumlah pelayanan]");
-        for (Koki k: koki) {
-            out.println(counter + ") " + k.getTipe() + " | " + k.getJumlahPelayanan());
+        out.println("CEK KOKI S: [id] [jumlah pelayanan]");
+        for (Koki k: kokiS) {
+            out.println(counter + ") " + k.getId() + " | " + k.getJumlahPelayanan());
+            counter++;
+        }
+        counter = 0;
+        out.println("-------------------------------------");
+        out.println("CEK KOKI G: [id] [jumlah pelayanan]");
+        for (Koki k: kokiG) {
+            out.println(counter + ") " + k.getId() + " | " + k.getJumlahPelayanan());
+            counter++;
+        }
+        counter = 0;
+        out.println("-------------------------------------");
+        out.println("CEK KOKI A: [id] [jumlah pelayanan]");
+        for (Koki k: kokiA) {
+            out.println(counter + ") " + k.getId() + " | " + k.getJumlahPelayanan());
             counter++;
         }
     }
@@ -260,18 +304,18 @@ class Makanan {
 
 // class inisiator koki
 class Koki {
-    private char tipe;
+    private int id;
     private int jumlahPelayanan;
 
     // construct koki
-    Koki(char tipe) {
-        this.tipe = tipe;
+    Koki(int id) {
+        this.id = id;
         this.jumlahPelayanan = 0; // default = 0
     }
    
-    // getter tipe
-    public char getTipe() {
-        return this.tipe;
+    // getter id
+    public int getId() {
+        return this.id;
     }
 
     // getter jumlahPelayanan
@@ -326,5 +370,19 @@ class Pelanggan {
     // setter blacklist => mengubah pelanggan jadi blacklisted
     public void setBlacklist() {
         this.blacklist = true;
+    }
+}
+
+// class inisiator antrean
+class Pesanan {
+    private int idPelanggan; 
+    private int idMakanan;
+    private int idKokiPelayan;
+
+    // constructor pesanan
+    Pesanan(int idPelanggan, int idMakanan, int idKokiPelayan) {
+        this.idPelanggan = idPelanggan;
+        this.idMakanan = idMakanan;
+        this.idKokiPelayan = idKokiPelayan;
     }
 }
