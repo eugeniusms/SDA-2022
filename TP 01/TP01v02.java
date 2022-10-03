@@ -243,9 +243,9 @@ public class TP01v02 {
         pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
 
         // sorting setiap koki pada setiap query L dijalankan
-        Collections.sort(kokiS, new SortbyPelayananNId());
-        Collections.sort(kokiG, new SortbyPelayananNId());
-        Collections.sort(kokiA, new SortbyPelayananNId());
+        // Collections.sort(kokiS, new SortbyPelayananNId());
+        // Collections.sort(kokiG, new SortbyPelayananNId());
+        // Collections.sort(kokiA, new SortbyPelayananNId());
 
         out.println("L: "+pesananSelesai.getIdPelanggan());
     }
