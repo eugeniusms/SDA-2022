@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -17,9 +18,12 @@ public class TP01v02 {
     // default arr[0] = kosong
     public static Makanan[] menu; // index => id makanan
 
+    // Query P & L
     public static ArrayList<Koki> kokiS = new ArrayList<>(); // kokiS (terurut minimal melayani)
     public static ArrayList<Koki> kokiG = new ArrayList<>(); // kokiG (terurut minimal melayani)
     public static ArrayList<Koki> kokiA = new ArrayList<>(); // kokiA (terurut minimal melayani)
+    // Query C
+    public static Koki[] semuaKoki;
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
@@ -47,18 +51,25 @@ public class TP01v02 {
         }
 
         // ambil jumlah koki
-        int jumlahKoki = in.nextInt();
+        int jumlahKoki = in.nextInt(); semuaKoki = new Koki[jumlahKoki];
         char tipeKoki;
         // membaca input koki
         for (int i = 1; i <= jumlahKoki; i++) {
             tipeKoki = in.nextChar();
             // menambahkan koki sesuai tipenya
             if (tipeKoki == 'S') {
-                kokiS.add(new Koki(i)); // inisiasi id koki
+                Koki kokiBaru = new Koki(i, tipeKoki);
+                kokiS.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
             } else if (tipeKoki == 'G') {
-                kokiG.add(new Koki(i));
+                Koki kokiBaru = new Koki(i, tipeKoki);
+                kokiG.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
             } else { // tipeKoki == 'A'
-                kokiA.add(new Koki(i));
+                Koki kokiBaru = new Koki(i, tipeKoki);
+                kokiA.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
+                // CEK ADDRESS OF OBJECT
+                out.println("CEK ADDRESS 1: "+kokiBaru);
+                out.println("CEK ADDRESS 2: "+kokiA.get(kokiA.size()-1));
+                out.println("CEK ADDRESS 3: "+semuaKoki[i-1]);
             }
         }
 
@@ -291,49 +302,70 @@ public class TP01v02 {
         // }
 
         // set pointer
-        int pointerS = 0;
-        int pointerG = 0;
-        int pointerA = 0;
+        // int pointerS = 0;
+        // int pointerG = 0;
+        // int pointerA = 0;
         // menampilkan Q data koki paling kecil (prioritas S > G > A)
-        out.print("C: ");
-        while (Q > 0) {
-            // hati-hati RTE
-            // ambil elemen sesuai pointer, jika pointer sama dengan size array maka elemen = 999999 (ga akan masuk hitung)
-            int elemenS = (pointerS >= kokiS.size() ? 999999 : kokiS.get(pointerS).getJumlahPelayanan());
-            int elemenG = (pointerG >= kokiG.size() ? 999999 : kokiG.get(pointerG).getJumlahPelayanan());
-            int elemenA = (pointerA >= kokiA.size() ? 999999 : kokiA.get(pointerA).getJumlahPelayanan());
-            // susun array [Shead, Ghead, Ahead] berisi jumlah pelayanan pada head of SGA
-            int[] SGAhead = { elemenS, elemenG, elemenA};
+        out.println("C: ");
+        
+        // lakukan sorting untuk mendapati Q data terbawah
+        Arrays.sort(semuaKoki, new SortbyPelayananNtipeNId());
+
+        int counter = 0;
+        while (counter < Q) {
+            out.println(semuaKoki[counter].getId() + " | " + semuaKoki[counter].getJumlahPelayanan());
+            counter++;
+        }
+
+        checkC();
+
+        // while (Q > 0) {
+        //     // hati-hati RTE
+        //     // ambil elemen sesuai pointer, jika pointer sama dengan size array maka elemen = 999999 (ga akan masuk hitung)
+        //     int elemenS = (pointerS >= kokiS.size() ? 999999 : kokiS.get(pointerS).getJumlahPelayanan());
+        //     int elemenG = (pointerG >= kokiG.size() ? 999999 : kokiG.get(pointerG).getJumlahPelayanan());
+        //     int elemenA = (pointerA >= kokiA.size() ? 999999 : kokiA.get(pointerA).getJumlahPelayanan());
+        //     // susun array [Shead, Ghead, Ahead] berisi jumlah pelayanan pada head of SGA
+        //     int[] SGAhead = { elemenS, elemenG, elemenA};
             
-            // mencari index yang paling minimum
-            int minimumPelayanan = 999999;
-            int indexMinimum = 0; // [0: S, 1: G, 2: A]
-            for (int i = 0; i < 3; i++) {
-                if (SGAhead[i] < minimumPelayanan) {
-                    minimumPelayanan = SGAhead[i];
-                    indexMinimum = i;
-                }
-            }
+        //     // mencari index yang paling minimum
+        //     int minimumPelayanan = 999999;
+        //     int indexMinimum = 0; // [0: S, 1: G, 2: A]
+        //     for (int i = 0; i < 3; i++) {
+        //         if (SGAhead[i] < minimumPelayanan) {
+        //             minimumPelayanan = SGAhead[i];
+        //             indexMinimum = i;
+        //         }
+        //     }
 
-            // OUTPUT
-            String trailingSpace = (Q == 1 ? "" : " ");
-            // maka S minimum
-            if (indexMinimum == 0) {
-                out.print(kokiS.get(pointerS).getId()+trailingSpace); // OUTPUT
-                pointerS++;
+        //     // OUTPUT
+        //     String trailingSpace = (Q == 1 ? "" : " ");
+        //     // maka S minimum
+        //     if (indexMinimum == 0) {
+        //         out.print(kokiS.get(pointerS).getId()+trailingSpace); // OUTPUT
+        //         pointerS++;
 
-            // maka G minimum
-            } else if (indexMinimum == 1) {
-                out.print(kokiG.get(pointerG).getId()+trailingSpace); // OUTPUT
-                pointerG++;
+        //     // maka G minimum
+        //     } else if (indexMinimum == 1) {
+        //         out.print(kokiG.get(pointerG).getId()+trailingSpace); // OUTPUT
+        //         pointerG++;
 
-            // maka A minimum
-            } else {
-                out.print(kokiA.get(pointerA).getId()+trailingSpace); // OUTPUT
-                pointerA++;
-            }
+        //     // maka A minimum
+        //     } else {
+        //         out.print(kokiA.get(pointerA).getId()+trailingSpace); // OUTPUT
+        //         pointerA++;
+        //     }
 
-            Q--; // counter
+        //     Q--; // counter
+        // }
+    }
+
+    public static void checkC() {
+        out.println("CHECK QUERY C SORTED: ");
+        int counter = 0;
+        while (counter < semuaKoki.length) {
+            out.println("ID: "+semuaKoki[counter].getId() + " | Pelayanan: " + semuaKoki[counter].getJumlahPelayanan());
+            counter++;
         }
     }
 
@@ -450,11 +482,13 @@ class Makanan {
 class Koki {
     private int id;
     private int jumlahPelayanan;
+    private char tipe;
 
     // construct koki
-    Koki(int id) {
+    Koki(int id, char tipe) {
         this.id = id;
         this.jumlahPelayanan = 0; // default = 0
+        this.tipe = tipe;
     }
 
     // getter id
@@ -465,6 +499,11 @@ class Koki {
     // getter jumlahPelayanan
     public int getJumlahPelayanan() {
         return this.jumlahPelayanan;
+    }
+
+    // getter tipe
+    public char getTipe() {
+        return this.tipe;
     }
 
     // setter penambah jumlahPelayanan
@@ -551,17 +590,24 @@ class Pesanan {
     }
 }
 
-class SortbyPelayananNId implements Comparator<Koki>
+class SortbyPelayananNtipeNId implements Comparator<Koki>
 {
     // Used for sorting in ascending order of
     // roll number
     public int compare(Koki a, Koki b)
     {
-        // jika jumlah pelayanan sama maka sort by id
+        // CHECK COMPARE +/- NYA
+        // jika jumlah pelayanan sama maka sort by tipe
         if (a.getJumlahPelayanan() == b.getJumlahPelayanan()) {
-            return a.getId() - b.getId();
+            // jika tipe sama maka sort by id
+            if (a.getTipe() == b.getTipe()) {
+                return a.getId() - b.getId();
+            }
+            // jika jumlah pelayanan sama tapi tipe tidak sama maka sort by S > G > A 
+            // kuncinya adalah index S lebih besar dari index G dan index G lebih besar dari index A dalam ASCII
+            return b.getTipe() - a.getTipe(); // a musti kurang dari b
         }
-        // jika tidak maka sort langsung by jumlah pelayanan
+        // jika jumlah pelayanan tidak sama maka sort langsung by jumlah pelayanan
         return a.getJumlahPelayanan() - b.getJumlahPelayanan();
     }
 }
