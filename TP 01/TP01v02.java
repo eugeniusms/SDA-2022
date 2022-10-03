@@ -177,16 +177,42 @@ public class TP01v02 {
         // mencari id koki pelayanan
         char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
         // PENTING: ambil koki terdepan = koki paling sedikit melayani & pastinya urut id
-        Koki kokiPelayan;
-        if (tipeMakanan == 'S') {
-            kokiPelayan = kokiS.get(0);
-        } else if (tipeMakanan == 'G') {
-            kokiPelayan = kokiG.get(0);
-        } else { // tipe makanan A
-            kokiPelayan = kokiA.get(0);
-        }
+        Koki kokiPelayan = searchKokiMinimum(tipeMakanan); // O(n), n = jumlah koki pada suatu tipe
+        // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
         out.println("P: "+kokiPelayan.getId()); // OUTPUT
+    }
+
+    // method mengembalikan koki pelayan
+    public static Koki searchKokiMinimum(char tipe) {
+        // mencari koki minimum
+        Koki kokiPelayan = kokiS.get(0); int minim; // default
+        if (tipe == 'S') {
+            minim = 999999;
+            for (Koki k: kokiS) {
+                if (k.getJumlahPelayanan() < minim) {
+                    minim = k.getJumlahPelayanan();
+                    kokiPelayan = k;
+                }
+            }
+        } else if (tipe == 'G') {
+            minim = 999999;
+            for (Koki k: kokiG) {
+                if (k.getJumlahPelayanan() < minim) {
+                    minim = k.getJumlahPelayanan();
+                    kokiPelayan = k;
+                }
+            }
+        } else if (tipe == 'A') {
+            minim = 999999;
+            for (Koki k: kokiA) {
+                if (k.getJumlahPelayanan() < minim) {
+                    minim = k.getJumlahPelayanan();
+                    kokiPelayan = k;
+                }
+            }
+        }
+        return kokiPelayan;
     }
 
     public static void checkP() {
