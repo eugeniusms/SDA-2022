@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class TP01v02 {
@@ -67,9 +66,9 @@ public class TP01v02 {
                 Koki kokiBaru = new Koki(i, tipeKoki);
                 kokiA.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
                 // CEK ADDRESS OF OBJECT (OBJECT REFERENCE YANG DIMASUKKAN KE DALAM ARRAY)
-                out.println("CEK ADDRESS 1: "+kokiBaru);
-                out.println("CEK ADDRESS 2: "+kokiA.get(kokiA.size()-1));
-                out.println("CEK ADDRESS 3: "+semuaKoki[i-1]);
+                // out.println("CEK ADDRESS 1: "+kokiBaru);
+                // out.println("CEK ADDRESS 2: "+kokiA.get(kokiA.size()-1));
+                // out.println("CEK ADDRESS 3: "+semuaKoki[i-1]);
             }
         }
 
@@ -197,7 +196,7 @@ public class TP01v02 {
     // method mengembalikan koki pelayan
     public static Koki searchKokiMinimum(char tipe) {
         // mencari koki minimum
-        Koki kokiPelayan = kokiS.get(0); int minim; // default
+        Koki kokiPelayan = new Koki(0, 'S'); int minim; // default (tidak ada koki index 0 jadi aman)
         if (tipe == 'S') {
             minim = 999999;
             for (Koki k: kokiS) {
@@ -214,7 +213,7 @@ public class TP01v02 {
                     kokiPelayan = k;
                 }
             }
-        } else if (tipe == 'A') {
+        } else { // tipe == 'A'
             minim = 999999;
             for (Koki k: kokiA) {
                 if (k.getJumlahPelayanan() < minim) {
