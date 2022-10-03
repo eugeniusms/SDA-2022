@@ -66,7 +66,7 @@ public class TP01v02 {
             } else { // tipeKoki == 'A'
                 Koki kokiBaru = new Koki(i, tipeKoki);
                 kokiA.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
-                // CEK ADDRESS OF OBJECT
+                // CEK ADDRESS OF OBJECT (OBJECT REFERENCE YANG DIMASUKKAN KE DALAM ARRAY)
                 out.println("CEK ADDRESS 1: "+kokiBaru);
                 out.println("CEK ADDRESS 2: "+kokiA.get(kokiA.size()-1));
                 out.println("CEK ADDRESS 3: "+semuaKoki[i-1]);
@@ -253,11 +253,6 @@ public class TP01v02 {
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
 
-        // sorting setiap koki pada setiap query L dijalankan
-        // Collections.sort(kokiS, new SortbyPelayananNId());
-        // Collections.sort(kokiG, new SortbyPelayananNId());
-        // Collections.sort(kokiA, new SortbyPelayananNId());
-
         out.println("L: "+pesananSelesai.getIdPelanggan());
     }
 
@@ -289,22 +284,6 @@ public class TP01v02 {
     }
 
     public static void runC(int Q) {
-
-        // CHECK
-        // for (Koki cs: copyKokiS) {
-        //     out.print("S: "+cs.getJumlahPelayanan()+" ");
-        // }
-        // for (Koki cg: copyKokiG) {
-        //     out.print("G: "+cg.getJumlahPelayanan()+" ");
-        // }
-        // for (Koki ca: copyKokiA) {
-        //     out.print("A: "+ca.getJumlahPelayanan()+" ");
-        // }
-
-        // set pointer
-        // int pointerS = 0;
-        // int pointerG = 0;
-        // int pointerA = 0;
         // menampilkan Q data koki paling kecil (prioritas S > G > A)
         out.println("C: ");
         
@@ -318,46 +297,6 @@ public class TP01v02 {
         }
 
         checkC();
-
-        // while (Q > 0) {
-        //     // hati-hati RTE
-        //     // ambil elemen sesuai pointer, jika pointer sama dengan size array maka elemen = 999999 (ga akan masuk hitung)
-        //     int elemenS = (pointerS >= kokiS.size() ? 999999 : kokiS.get(pointerS).getJumlahPelayanan());
-        //     int elemenG = (pointerG >= kokiG.size() ? 999999 : kokiG.get(pointerG).getJumlahPelayanan());
-        //     int elemenA = (pointerA >= kokiA.size() ? 999999 : kokiA.get(pointerA).getJumlahPelayanan());
-        //     // susun array [Shead, Ghead, Ahead] berisi jumlah pelayanan pada head of SGA
-        //     int[] SGAhead = { elemenS, elemenG, elemenA};
-            
-        //     // mencari index yang paling minimum
-        //     int minimumPelayanan = 999999;
-        //     int indexMinimum = 0; // [0: S, 1: G, 2: A]
-        //     for (int i = 0; i < 3; i++) {
-        //         if (SGAhead[i] < minimumPelayanan) {
-        //             minimumPelayanan = SGAhead[i];
-        //             indexMinimum = i;
-        //         }
-        //     }
-
-        //     // OUTPUT
-        //     String trailingSpace = (Q == 1 ? "" : " ");
-        //     // maka S minimum
-        //     if (indexMinimum == 0) {
-        //         out.print(kokiS.get(pointerS).getId()+trailingSpace); // OUTPUT
-        //         pointerS++;
-
-        //     // maka G minimum
-        //     } else if (indexMinimum == 1) {
-        //         out.print(kokiG.get(pointerG).getId()+trailingSpace); // OUTPUT
-        //         pointerG++;
-
-        //     // maka A minimum
-        //     } else {
-        //         out.print(kokiA.get(pointerA).getId()+trailingSpace); // OUTPUT
-        //         pointerA++;
-        //     }
-
-        //     Q--; // counter
-        // }
     }
 
     public static void checkC() {
