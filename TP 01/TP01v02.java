@@ -1,8 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 public class TP01v02 {
     private static InputReader in;
@@ -16,9 +16,9 @@ public class TP01v02 {
     public static Makanan[] menu; // index => id makanan
 
     // Query P, L, C
-    public static PriorityQueue<Koki> kokiS = new PriorityQueue<>(); // kokiS (terurut minimal melayani)
-    public static PriorityQueue<Koki> kokiG = new PriorityQueue<>(); // kokiG (terurut minimal melayani)
-    public static PriorityQueue<Koki> kokiA = new PriorityQueue<>(); // kokiA (terurut minimal melayani)
+    public static TreeMap<Koki, Integer> kokiS = new TreeMap<Koki, Integer>(); // kokiS (terurut minimal melayani)
+    public static TreeMap<Koki, Integer> kokiG = new TreeMap<Koki, Integer>(); // kokiG (terurut minimal melayani)
+    public static TreeMap<Koki, Integer> kokiA = new TreeMap<Koki, Integer>(); // kokiA (terurut minimal melayani)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
@@ -52,11 +52,11 @@ public class TP01v02 {
             tipeKoki = in.nextChar();
             // menambahkan koki sesuai tipenya
             if (tipeKoki == 'S') {
-                kokiS.add(new Koki(i, tipeKoki)); 
+                kokiS.put(new Koki(i, tipeKoki), 0); 
             } else if (tipeKoki == 'G') {
-                kokiG.add(new Koki(i, tipeKoki)); 
+                kokiG.put(new Koki(i, tipeKoki), 0); 
             } else { // tipeKoki == 'A'
-                kokiA.add(new Koki(i, tipeKoki));
+                kokiA.put(new Koki(i, tipeKoki), 0);
             }
         }
 
@@ -182,11 +182,11 @@ public class TP01v02 {
     public static Koki getKokiMinimum(char tipe) {
         // mencari koki minimum
         if (tipe == 'S') {
-            return kokiS.peek();
+            return kokiS.firstKey();
         } else if (tipe == 'G') {
-            return kokiG.peek();
+            return kokiG.firstKey();
         } else { // tipe == 'A'
-            return kokiA.peek();
+            return kokiA.firstKey();
         }
     }
     
@@ -201,13 +201,13 @@ public class TP01v02 {
         // fix drawback priority queue java (remove dulu lalu add kembali for prioritizing)
         if (menu[pesananSelesai.getIdMakanan()].getTipe() == 'S') {
             kokiS.remove(kokiPelayan); // hapus kokiPelayan dari kokiS
-            kokiS.add(kokiPelayan);
+            kokiS.put(kokiPelayan, 0);
         } else if (menu[pesananSelesai.getIdMakanan()].getTipe() == 'G') {
             kokiG.remove(kokiPelayan); // hapus kokiPelayan dari kokiG
-            kokiG.add(kokiPelayan);
+            kokiG.put(kokiPelayan, 0);
         } else { // menu[pesananSelesai.getIdMakanan()].getTipe() == 'A'
             kokiA.remove(kokiPelayan); // hapus kokiPelayan dari kokiA
-            kokiA.add(kokiPelayan);
+            kokiA.put(kokiPelayan, 0);
         }
 
         // uang pelanggan dikurangi
@@ -231,9 +231,9 @@ public class TP01v02 {
         // checkC();
         // keluarkan by jumlahPelayanan
         // copy priority queue
-        PriorityQueue<Koki> cloneS = new PriorityQueue<>(kokiS);
-        PriorityQueue<Koki> cloneG = new PriorityQueue<>(kokiG);
-        PriorityQueue<Koki> cloneA = new PriorityQueue<>(kokiA);
+        TreeMap<Koki, Integer> cloneS = new TreeMap<Koki, Integer>(kokiS);
+        TreeMap<Koki, Integer> cloneG = new TreeMap<Koki, Integer>(kokiG); 
+        TreeMap<Koki, Integer> cloneA = new TreeMap<Koki, Integer>(kokiA);
         int jumlahPelayananDicari = 0;
         String trailingSpace = " ";
         while (Q > 0) {
@@ -241,12 +241,18 @@ public class TP01v02 {
             if (Q == 1) { trailingSpace = ""; }
 
             // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
-            if (!cloneS.isEmpty() && cloneS.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiS tidak kosong
-                out.print(cloneS.poll().getId() + trailingSpace); // OUTPUT
-            } else if (!cloneG.isEmpty() && cloneG.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiG tidak kosong
-                out.print(cloneG.poll().getId() + trailingSpace); // OUTPUT
-            } else if (!cloneA.isEmpty() && cloneA.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiA tidak kosong
-                out.print(cloneA.poll().getId() + trailingSpace); // OUTPUT
+            if (!cloneS.isEmpty() && cloneS.firstKey().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiS tidak kosong
+                Koki kokiSekarang = cloneS.firstKey();
+                cloneS.remove(kokiSekarang);
+                out.print(kokiSekarang.getId() + trailingSpace); // OUTPUT
+            } else if (!cloneG.isEmpty() && cloneG.firstKey().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiG tidak kosong
+                Koki kokiSekarang = cloneG.firstKey();
+                cloneG.remove(kokiSekarang);
+                out.print(kokiSekarang.getId() + trailingSpace); // OUTPUT
+            } else if (!cloneA.isEmpty() && cloneA.firstKey().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiA tidak kosong
+                Koki kokiSekarang = cloneA.firstKey();
+                cloneA.remove(kokiSekarang);
+                out.print(kokiSekarang.getId() + trailingSpace); // OUTPUT
             } else {
                 // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
                 jumlahPelayananDicari++;
@@ -260,32 +266,6 @@ public class TP01v02 {
     public static void runD(int costA, int costG, int costS) {
         
     }
-
-    public static void checkC() {
-        PriorityQueue<Koki> cloneS = new PriorityQueue<>(kokiS);
-        PriorityQueue<Koki> cloneG = new PriorityQueue<>(kokiG);
-        PriorityQueue<Koki> cloneA = new PriorityQueue<>(kokiA);
-
-        out.println("\nCHECK QUERY C SORTED: ");
-        out.println("===== KOKI S =====");
-        while (cloneS.size() > 0) {
-            out.print(cloneS.peek().getId()+"("+cloneS.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
-            cloneS.poll();
-        }
-        out.println("\n===== KOKI G =====");
-        while (cloneG.size() > 0) {
-            out.print(cloneG.peek().getId()+"("+cloneG.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
-            cloneG.poll();
-        }
-        out.println("\n===== KOKI A =====");
-        while (cloneA.size() > 0) {
-            out.print(cloneA.peek().getId()+"("+cloneA.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
-            cloneA.poll();
-        }
-
-        out.println("\n\n");
-    }
-
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
     // usual Scanner(System.in) and System.out
