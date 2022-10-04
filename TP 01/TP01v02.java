@@ -100,7 +100,7 @@ public class TP01v02 {
             // ambil i, k, u, r (opsional)
             int id = in.nextInt();
             char k = in.nextChar();
-            int u = in.nextInt();  pelanggan[id].setU(u);
+            int u = in.nextInt();  pelanggan[id].U = u;
 
             // mendapatkan K untuk pelanggan CLEAR: O(1)
             // jika ? maka cek dulu + atau -
@@ -125,7 +125,7 @@ public class TP01v02 {
 
             // STEP 2: CETAK STATUS PELANGGAN
             // lakukan penyelesaian A: status pelanggan harian (0-1-2-3)
-            if (pelanggan[id].isBlacklist()) {
+            if (pelanggan[id].blacklist) {
                 out.print("3 "); // blacklisted
             } else {
                 if (sumOfPos[i] > sumOfPos[i-1]) { // terdapat perubahan -> ada tambah positif 1
@@ -170,12 +170,12 @@ public class TP01v02 {
     // Fungsi-fungsi kueri
     public static void runP(int idPelanggan, int idMenu) {
         // mencari id koki pelayanan
-        char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
+        char tipeMakanan = menu[idMenu].tipe;// tipe makanan dicari
         // PENTING: ambil koki terdepan = koki paling sedikit melayani & pastinya urut id
         Koki kokiPelayan = getKokiMinimum(tipeMakanan); // O(1)
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
-        out.println("P: "+kokiPelayan.getId()); // OUTPUT
+        out.println("P: "+kokiPelayan.id); // OUTPUT
     }
 
     // method mengembalikan koki pelayan
@@ -193,16 +193,16 @@ public class TP01v02 {
     public static void runL() {
         // melakukan penyelesaian pesanan terdepan
         Pesanan pesananSelesai = pesanan.remove();
-        int hargaMenu = menu[pesananSelesai.getIdMakanan()].getHarga();
+        int hargaMenu = menu[pesananSelesai.idMakanan].harga;
 
-        Koki kokiPelayan = pesananSelesai.getkokiPelayan(); 
-        kokiPelayan.tambahJumlahPelayanan(); // menambah jumlah pelayanan kokiPelayan
+        Koki kokiPelayan = pesananSelesai.kokiPelayan; 
+        kokiPelayan.jumlahPelayanan += 1; // menambah jumlah pelayanan kokiPelayan
 
         // fix drawback priority queue java (remove dulu lalu add kembali for prioritizing)
-        if (menu[pesananSelesai.getIdMakanan()].getTipe() == 'S') {
+        if (menu[pesananSelesai.idMakanan].tipe == 'S') {
             kokiS.remove(kokiPelayan); // hapus kokiPelayan dari kokiS
             kokiS.put(kokiPelayan, 0);
-        } else if (menu[pesananSelesai.getIdMakanan()].getTipe() == 'G') {
+        } else if (menu[pesananSelesai.idMakanan].tipe == 'G') {
             kokiG.remove(kokiPelayan); // hapus kokiPelayan dari kokiG
             kokiG.put(kokiPelayan, 0);
         } else { // menu[pesananSelesai.getIdMakanan()].getTipe() == 'A'
@@ -211,16 +211,16 @@ public class TP01v02 {
         }
 
         // uang pelanggan dikurangi
-        pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
+        pelanggan[pesananSelesai.idPelanggan].U -= hargaMenu;
 
-        out.println("L: "+pesananSelesai.getIdPelanggan());
+        out.println("L: "+pesananSelesai.idPelanggan);
     }
 
     public static void runB(int idPelanggan) {
         // cek uang pelanggan, jika minus maka blacklist pelanggan
         // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
-        if (pelanggan[idPelanggan].getU() < 0) {
-            pelanggan[idPelanggan].setBlacklist();
+        if (pelanggan[idPelanggan].U < 0) {
+            pelanggan[idPelanggan].blacklist = true;
             out.println("B: 0"); // OUTPUT
         } else {
             out.println("B: 1"); // OUTPUT
@@ -231,6 +231,7 @@ public class TP01v02 {
         // checkC();
         // keluarkan by jumlahPelayanan
         // copy priority queue
+        // TODO: Create New Sorted DS vs Copying Like This
         TreeMap<Koki, Integer> cloneS = new TreeMap<Koki, Integer>(kokiS);
         TreeMap<Koki, Integer> cloneG = new TreeMap<Koki, Integer>(kokiG); 
         TreeMap<Koki, Integer> cloneA = new TreeMap<Koki, Integer>(kokiA);
@@ -241,18 +242,18 @@ public class TP01v02 {
             if (Q == 1) { trailingSpace = ""; }
 
             // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
-            if (!cloneS.isEmpty() && cloneS.firstKey().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiS tidak kosong
+            if (!cloneS.isEmpty() && cloneS.firstKey().jumlahPelayanan == jumlahPelayananDicari) { // jika kokiS tidak kosong
                 Koki kokiSekarang = cloneS.firstKey();
                 cloneS.remove(kokiSekarang);
-                out.print(kokiSekarang.getId() + trailingSpace); // OUTPUT
-            } else if (!cloneG.isEmpty() && cloneG.firstKey().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiG tidak kosong
+                out.print(kokiSekarang.id + trailingSpace); // OUTPUT
+            } else if (!cloneG.isEmpty() && cloneG.firstKey().jumlahPelayanan == jumlahPelayananDicari) { // jika kokiG tidak kosong
                 Koki kokiSekarang = cloneG.firstKey();
                 cloneG.remove(kokiSekarang);
-                out.print(kokiSekarang.getId() + trailingSpace); // OUTPUT
-            } else if (!cloneA.isEmpty() && cloneA.firstKey().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiA tidak kosong
+                out.print(kokiSekarang.id + trailingSpace); // OUTPUT
+            } else if (!cloneA.isEmpty() && cloneA.firstKey().jumlahPelayanan == jumlahPelayananDicari) { // jika kokiA tidak kosong
                 Koki kokiSekarang = cloneA.firstKey();
                 cloneA.remove(kokiSekarang);
-                out.print(kokiSekarang.getId() + trailingSpace); // OUTPUT
+                out.print(kokiSekarang.id + trailingSpace); // OUTPUT
             } else {
                 // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
                 jumlahPelayananDicari++;
@@ -303,31 +304,18 @@ public class TP01v02 {
 
 // class inisiator makanan
 class Makanan {
-    private int harga;
-    private char tipe;
+    int harga; char tipe;
 
     // construct makanan
     Makanan(int harga, char tipe) {
         this.harga = harga;
         this.tipe = tipe;
     }
-   
-    // getter harga
-    public int getHarga() {
-        return this.harga;
-    }
-
-    // getter tipe
-    public char getTipe() {
-        return this.tipe;
-    }
 }
 
 // class inisiator koki
 class Koki implements Comparable<Koki> {
-    private int id;
-    private int jumlahPelayanan;
-    private char tipe;
+    int id; int jumlahPelayanan; char tipe;
 
     // construct koki
     Koki(int id, char tipe) {
@@ -340,96 +328,33 @@ class Koki implements Comparable<Koki> {
     @Override
     public int compareTo(Koki other) {
         // jika jumlah pelayanan sama maka urutkan by id
-        if (this.getJumlahPelayanan() == other.getJumlahPelayanan()) {
-            return this.getId() - other.getId();
+        if (this.jumlahPelayanan == other.jumlahPelayanan) {
+            return this.id - other.id;
         }
         // jika beda urutkan by jumlah pelayanan
-        return this.getJumlahPelayanan() - other.getJumlahPelayanan();
-    }
-
-    // getter id
-    public int getId() {
-        return this.id;
-    }
-
-    // getter jumlahPelayanan
-    public int getJumlahPelayanan() {
-        return this.jumlahPelayanan;
-    }
-
-    // getter tipe
-    public char getTipe() {
-        return this.tipe;
-    }
-
-    // setter penambah jumlahPelayanan
-    public void tambahJumlahPelayanan() {
-        this.jumlahPelayanan += 1;
+        return this.jumlahPelayanan - other.jumlahPelayanan;
     }
 }
 
 // class inisiator pelanggan
 class Pelanggan {
-    private long U;
-    private boolean blacklist;
+    long U; boolean blacklist;
 
     // construct pelanggan default
     Pelanggan() {
         this.U = 0; // default 0
         this.blacklist = false; // default = false
     }
-
-    // getter U : Uang
-    public long getU() {
-        return this.U;
-    }
-
-    // getter blacklist
-    public boolean isBlacklist() {
-        return this.blacklist;
-    }
-
-    // setter U : Uang
-    public void setU(int U) {
-        this.U = U;
-    }
-
-    // setter kurangi U : Uang
-    public void kurangiU(int harga) {
-        this.U -= harga;
-    }
-
-    // setter blacklist => mengubah pelanggan jadi blacklisted
-    public void setBlacklist() {
-        this.blacklist = true;
-    }
 }
 
 // class inisiator antrean
 class Pesanan {
-    private int idPelanggan; 
-    private int idMakanan;
-    private Koki kokiPelayan;
+    int idPelanggan; int idMakanan; Koki kokiPelayan;
 
     // constructor pesanan
     Pesanan(int idPelanggan, int idMakanan, Koki kokiPelayan) {
         this.idPelanggan = idPelanggan;
         this.idMakanan = idMakanan;
         this.kokiPelayan = kokiPelayan;
-    }
-
-    // getter idPelanggan
-    public int getIdPelanggan() {
-        return idPelanggan;
-    }
-
-    // getter idMakanan
-    public int getIdMakanan() {
-        return idMakanan;
-    }
-
-    // getter idKokiPelayan
-    public Koki getkokiPelayan() {
-        return this.kokiPelayan;
     }
 }
