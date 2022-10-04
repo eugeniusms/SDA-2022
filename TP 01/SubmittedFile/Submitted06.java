@@ -37,7 +37,7 @@ public class Submitted06 {
     public static Queue<Pesanan> pesanan = new LinkedList<>(); // menyimpan antrian pesanan
 
     // jumlah kursi
-    public static int jumlahKursi;
+    public static int jumlahKursi = 0;
 
     // get status by queue (optimization step)
     public static int[] KbyQueue = new int[100069];
