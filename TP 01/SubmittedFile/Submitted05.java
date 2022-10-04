@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.StringTokenizer;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Comparator;
 
 public class Submitted05 {
     private static InputReader in;
@@ -454,26 +453,3 @@ class Pesanan {
         return this.kokiPelayan;
     }
 }
-
-class SortbyPelayananNtipeNId implements Comparator<Koki>
-{
-    // Used for sorting in ascending order of
-    // roll number
-    public int compare(Koki a, Koki b)
-    {
-        // CHECK COMPARE +/- NYA
-        // jika jumlah pelayanan sama maka sort by tipe
-        if (a.getJumlahPelayanan() == b.getJumlahPelayanan()) {
-            // jika tipe sama maka sort by id
-            if (a.getTipe() == b.getTipe()) {
-                return a.getId() - b.getId();
-            }
-            // jika jumlah pelayanan sama tapi tipe tidak sama maka sort by S > G > A 
-            // kuncinya adalah index S lebih besar dari index G dan index G lebih besar dari index A dalam ASCII
-            return b.getTipe() - a.getTipe(); // a musti kurang dari b
-        }
-        // jika jumlah pelayanan tidak sama maka sort langsung by jumlah pelayanan
-        return a.getJumlahPelayanan() - b.getJumlahPelayanan();
-    }
-}
- 
