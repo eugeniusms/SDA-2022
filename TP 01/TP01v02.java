@@ -150,10 +150,10 @@ public class TP01v02 {
 
             // jalankan fungsi kueri
             if (kueri == 'P') {
-                runPalter(in.nextInt(), in.nextInt());
+                runP(in.nextInt(), in.nextInt());
                 // checkP();
             } else if (kueri == 'L') {
-                runLalter();
+                runL();
                 // checkC();
                 // checkListKoki();
             } else if (kueri == 'B') {
@@ -183,18 +183,8 @@ public class TP01v02 {
     }
 
     // Fungsi-fungsi kueri
-    public static void runP(int idPelanggan, int idMenu) {
-        // mencari id koki pelayanan
-        char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
-        // PENTING: ambil koki terdepan = koki paling sedikit melayani & pastinya urut id
-        Koki kokiPelayan = searchKokiMinimum(tipeMakanan); // O(n), n = jumlah koki pada suatu tipe
-        // menambahkan pesanan baru ke pesanan
-        pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
-        out.println("P: "+kokiPelayan.getId()); // OUTPUT
-    }
-
     // menampilkan id koki pelayan
-    public static void runPalter(int idPelanggan, int idMenu) { // CLEAR
+    public static void runP(int idPelanggan, int idMenu) { // CLEAR
         char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
         // mendapatkan koki pelayan
         Koki kokiPelayan = new Koki(0, 'S'); // default (tidak ada koki index 0 jadi aman)
@@ -204,38 +194,6 @@ public class TP01v02 {
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
         out.println("P: "+kokiPelayan.getId()); // OUTPUT
-    }
-
-    // method mengembalikan koki pelayan
-    public static Koki searchKokiMinimum(char tipe) {
-        // mencari koki minimum
-        Koki kokiPelayan = new Koki(0, 'S'); int minim; // default (tidak ada koki index 0 jadi aman)
-        if (tipe == 'S') {
-            minim = 999999;
-            for (Koki k: kokiS) {
-                if (k.getJumlahPelayanan() < minim) {
-                    minim = k.getJumlahPelayanan();
-                    kokiPelayan = k;
-                }
-            }
-        } else if (tipe == 'G') {
-            minim = 999999;
-            for (Koki k: kokiG) {
-                if (k.getJumlahPelayanan() < minim) {
-                    minim = k.getJumlahPelayanan();
-                    kokiPelayan = k;
-                }
-            }
-        } else { // tipe == 'A'
-            minim = 999999;
-            for (Koki k: kokiA) {
-                if (k.getJumlahPelayanan() < minim) {
-                    minim = k.getJumlahPelayanan();
-                    kokiPelayan = k;
-                }
-            }
-        }
-        return kokiPelayan;
     }
 
     public static void checkP() {
@@ -254,24 +212,12 @@ public class TP01v02 {
         }
     }
     
-    public static void runL() {
-        // melakukan penyelesaian pesanan terdepan
-        Pesanan pesananSelesai = pesanan.remove();
-        int hargaMenu = menu[pesananSelesai.getIdMakanan()].getHarga();
 
-        Koki kokiPelayan = pesananSelesai.getkokiPelayan(); 
-        kokiPelayan.tambahJumlahPelayanan(); // menambah jumlah pelayanan kokiPelayan
-
-        // uang pelanggan dikurangi
-        pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
-
-        out.println("L: "+pesananSelesai.getIdPelanggan());
-    }
-
+    // menampilkan id koki yang melayani
     // references:
     // linkedlist: https://www.w3schools.com/java/java_linkedlist.asp
     // insert element in the middle of array: https://www.geeksforgeeks.org/how-to-insert-an-element-at-a-specific-position-in-an-array-in-java/
-    public static void runLalter() {
+    public static void runL() {
         // melakukan penyelesaian pesanan terdepan
         Pesanan pesananSelesai = pesanan.remove();
         int hargaMenu = menu[pesananSelesai.getIdMakanan()].getHarga();
@@ -310,8 +256,7 @@ public class TP01v02 {
     }
 
     // function to find insert position of kokiPelayan
-    public static int findInsertIndex(LinkedList<Koki> koki, int n, Koki kokiPelayan)
-    {
+    public static int findInsertIndex(LinkedList<Koki> koki, int n, Koki kokiPelayan) {
         // Base cases
         if (n == 0)
             return 0;
