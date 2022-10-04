@@ -161,6 +161,7 @@ public class TP01v02 {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
                 runC(in.nextInt());
+                out.println(); // jan dihapus, mencetak batas untuk bawahnya agar bisa masuk tc new line
             } else { // kueri == 'D'
                 runD(in.nextInt(), in.nextInt(), in.nextInt());
             }
