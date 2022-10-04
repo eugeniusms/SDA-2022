@@ -1,9 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Comparator;
 
 public class TP01v02 {
@@ -17,15 +16,14 @@ public class TP01v02 {
     // default arr[0] = kosong
     public static Makanan[] menu; // index => id makanan
 
-    // Query P & L
-    public static ArrayList<Koki> kokiS = new ArrayList<>(); // kokiS (terurut minimal melayani)
-    public static ArrayList<Koki> kokiG = new ArrayList<>(); // kokiG (terurut minimal melayani)
-    public static ArrayList<Koki> kokiA = new ArrayList<>(); // kokiA (terurut minimal melayani)
-    // Query C
-    public static Koki[] semuaKoki;
+    // Query P, L, C
+    public static PriorityQueue<Koki> kokiS = new PriorityQueue<>(new SortbyPelayananNId()); // kokiS (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiG = new PriorityQueue<>(new SortbyPelayananNId()); // kokiG (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiA = new PriorityQueue<>(new SortbyPelayananNId()); // kokiA (terurut minimal melayani)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
+    // Query B
     public static Queue<Pesanan> pesanan = new LinkedList<>(); // menyimpan antrian pesanan
 
     // jumlah kursi
@@ -50,7 +48,8 @@ public class TP01v02 {
         }
 
         // ambil jumlah koki
-        int jumlahKoki = in.nextInt(); semuaKoki = new Koki[jumlahKoki];
+        int jumlahKoki = in.nextInt();
+
         char tipeKoki;
         // membaca input koki
         for (int i = 1; i <= jumlahKoki; i++) {
@@ -58,13 +57,13 @@ public class TP01v02 {
             // menambahkan koki sesuai tipenya
             if (tipeKoki == 'S') {
                 Koki kokiBaru = new Koki(i, tipeKoki);
-                kokiS.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
+                kokiS.add(kokiBaru); 
             } else if (tipeKoki == 'G') {
                 Koki kokiBaru = new Koki(i, tipeKoki);
-                kokiG.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
+                kokiG.add(kokiBaru); 
             } else { // tipeKoki == 'A'
                 Koki kokiBaru = new Koki(i, tipeKoki);
-                kokiA.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
+                kokiA.add(kokiBaru);
             }
         }
 
@@ -240,15 +239,7 @@ public class TP01v02 {
     }
 
     public static void runC(int Q) {
-        // menampilkan Q data koki paling kecil (prioritas S > G > A)
-        // lakukan sorting untuk mendapati Q data terbawah
-        Arrays.sort(semuaKoki, new SortbyPelayananNtipeNId());
-
-        int counter = 0;
-        while (counter < Q) {
-            out.print(semuaKoki[counter].getId()+" ");
-            counter++;
-        }
+        
     }
 
     public static void runD(int costA, int costG, int costS) {
@@ -424,22 +415,17 @@ class Pesanan {
     }
 }
 
-class SortbyPelayananNtipeNId implements Comparator<Koki>
+class SortbyPelayananNId implements Comparator<Koki>
 {
     // Used for sorting in ascending order of
     // roll number
     public int compare(Koki a, Koki b)
     {
         // CHECK COMPARE +/- NYA
-        // jika jumlah pelayanan sama maka sort by tipe
+        // jika jumlah pelayanan sama maka sort by id
         if (a.getJumlahPelayanan() == b.getJumlahPelayanan()) {
             // jika tipe sama maka sort by id
-            if (a.getTipe() == b.getTipe()) {
-                return a.getId() - b.getId();
-            }
-            // jika jumlah pelayanan sama tapi tipe tidak sama maka sort by S > G > A 
-            // kuncinya adalah index S lebih besar dari index G dan index G lebih besar dari index A dalam ASCII
-            return b.getTipe() - a.getTipe(); // a musti kurang dari b
+            return a.getId() - b.getId();
         }
         // jika jumlah pelayanan tidak sama maka sort langsung by jumlah pelayanan
         return a.getJumlahPelayanan() - b.getJumlahPelayanan();
