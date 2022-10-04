@@ -152,9 +152,12 @@ public class TP01v02 {
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
                 // checkP();
+                out.println("=== COMMAND: P ===");
+                checkListKoki();
             } else if (kueri == 'L') {
                 runL();
                 // checkC();
+                out.println("=== COMMAND: L ===");
                 checkListKoki();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
@@ -188,9 +191,11 @@ public class TP01v02 {
         char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
         // mendapatkan koki pelayan
         Koki kokiPelayan = new Koki(0, 'S'); // default (tidak ada koki index 0 jadi aman)
-        if (tipeMakanan == 'S') { kokiPelayan = kokiS.getFirst(); }
+        if (tipeMakanan == 'S') { kokiPelayan = kokiS.getFirst(); } // getFirst by pelayanan (bukan jumlah pending)
         else if (tipeMakanan == 'G') { kokiPelayan = kokiG.getFirst(); }
         else { kokiPelayan = kokiA.getFirst(); } // tipeMakanan = 'A'
+        // menambahkan jumlah pending pada koki pelayan
+        kokiPelayan.tambahJumlahPending();
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
         out.println("P: "+kokiPelayan.getId()); // OUTPUT
@@ -225,9 +230,10 @@ public class TP01v02 {
 
         Koki kokiPelayan = pesananSelesai.getkokiPelayan(); 
         kokiPelayan.tambahJumlahPelayanan(); // menambah jumlah pelayanan kokiPelayan
+        kokiPelayan.kurangJumlahPending();
 
         // binary search insertion untuk memindah kokiPelayanan sesuai urutan dalam koki (linkedlist)
-        moveKoki(kokiPelayan, tipeMenu);
+        moveKoki(kokiPelayan, tipeMenu); // urutkan by pelayanan => refer ke getFirst di P
 
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);   
@@ -393,7 +399,7 @@ public class TP01v02 {
         // }
         out.println("CEK KOKI A:");
         for (Koki k: kokiA) {
-            out.println(k.getId()+" | "+k.getJumlahPelayanan());
+            out.println("A["+k.getId()+"] PELAYANAN: "+k.getJumlahPelayanan() + "| PENDING: "+k.getJumlahPending());
         }
     }
 
@@ -457,12 +463,14 @@ class Makanan {
 // class inisiator koki
 class Koki {
     private int id;
+    private int jumlahPending;
     private int jumlahPelayanan;
     private char tipe;
 
     // construct koki
     Koki(int id, char tipe) {
         this.id = id;
+        this.jumlahPending = 0; // default = 0
         this.jumlahPelayanan = 0; // default = 0
         this.tipe = tipe;
     }
@@ -470,6 +478,11 @@ class Koki {
     // getter id
     public int getId() {
         return this.id;
+    }
+
+    // getter jumlahPending
+    public int getJumlahPending() {
+        return this.jumlahPending;
     }
 
     // getter jumlahPelayanan
@@ -480,6 +493,16 @@ class Koki {
     // getter tipe
     public char getTipe() {
         return this.tipe;
+    }
+
+    // setter penambah jumlahPending() 
+    public void tambahJumlahPending() {
+        this.jumlahPending += 1;
+    }
+
+    // setter pengurang jumlahPending()
+    public void kurangJumlahPending() {
+        this.jumlahPending -= 1;
     }
 
     // setter penambah jumlahPelayanan
