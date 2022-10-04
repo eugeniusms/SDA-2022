@@ -2,7 +2,9 @@ import java.io.*;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Queue;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Collections;
 
 public class TP01v02 {
     private static InputReader in;
@@ -19,6 +21,7 @@ public class TP01v02 {
     public static TreeMap<Koki, Integer> kokiS = new TreeMap<Koki, Integer>(); // kokiS (terurut minimal melayani)
     public static TreeMap<Koki, Integer> kokiG = new TreeMap<Koki, Integer>(); // kokiG (terurut minimal melayani)
     public static TreeMap<Koki, Integer> kokiA = new TreeMap<Koki, Integer>(); // kokiA (terurut minimal melayani)
+    public static ArrayList<Koki> kokiAll= new ArrayList<Koki>(); // koki (terurut minimal melayani)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
@@ -52,11 +55,14 @@ public class TP01v02 {
             tipeKoki = in.nextChar();
             // menambahkan koki sesuai tipenya
             if (tipeKoki == 'S') {
-                kokiS.put(new Koki(i, tipeKoki), 0); 
+                Koki baru = new Koki(i, tipeKoki);
+                kokiS.put(baru, 0); kokiAll.add(baru);
             } else if (tipeKoki == 'G') {
-                kokiG.put(new Koki(i, tipeKoki), 0); 
-            } else { // tipeKoki == 'A'
-                kokiA.put(new Koki(i, tipeKoki), 0);
+                Koki baru = new Koki(i, tipeKoki);
+                kokiG.put(baru, 0); kokiAll.add(baru);
+            } else {
+                Koki baru = new Koki(i, tipeKoki);
+                kokiA.put(baru, 0); kokiAll.add(baru);
             }
         }
 
@@ -233,35 +239,9 @@ public class TP01v02 {
         // keluarkan by jumlahPelayanan
         // copy priority queue
         // TODO: Create New Sorted DS vs Copying Like This
-        TreeMap<Koki, Integer> cloneS = new TreeMap<Koki, Integer>(kokiS);
-        TreeMap<Koki, Integer> cloneG = new TreeMap<Koki, Integer>(kokiG); 
-        TreeMap<Koki, Integer> cloneA = new TreeMap<Koki, Integer>(kokiA);
-        int jumlahPelayananDicari = 0;
-        String trailingSpace = " ";
-        while (Q > 0) {
-            // set trailing space
-            if (Q == 1) { trailingSpace = ""; }
-
-            // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
-            if (!cloneS.isEmpty() && cloneS.firstKey().jumlahPelayanan == jumlahPelayananDicari) { // jika kokiS tidak kosong
-                Koki kokiSekarang = cloneS.firstKey();
-                cloneS.remove(kokiSekarang);
-                out.print(kokiSekarang.id + trailingSpace); // OUTPUT
-            } else if (!cloneG.isEmpty() && cloneG.firstKey().jumlahPelayanan == jumlahPelayananDicari) { // jika kokiG tidak kosong
-                Koki kokiSekarang = cloneG.firstKey();
-                cloneG.remove(kokiSekarang);
-                out.print(kokiSekarang.id + trailingSpace); // OUTPUT
-            } else if (!cloneA.isEmpty() && cloneA.firstKey().jumlahPelayanan == jumlahPelayananDicari) { // jika kokiA tidak kosong
-                Koki kokiSekarang = cloneA.firstKey();
-                cloneA.remove(kokiSekarang);
-                out.print(kokiSekarang.id + trailingSpace); // OUTPUT
-            } else {
-                // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
-                jumlahPelayananDicari++;
-                continue;
-            }
-            // counter
-            Q--;
+        Collections.sort(kokiAll);
+        for (Koki k: kokiAll) {
+            out.print(k.id+" ");
         }
     }
 
@@ -328,9 +308,15 @@ class Koki implements Comparable<Koki> {
     // compareTo
     @Override
     public int compareTo(Koki other) {
-        // jika jumlah pelayanan sama maka urutkan by id
+        // jika jumlah pelayanan sama maka urutkan by tipe
         if (this.jumlahPelayanan == other.jumlahPelayanan) {
-            return this.id - other.id;
+            // jika tipe sama maka urutkan by id
+            if (this.tipe == other.tipe) {
+                return this.id - other.id;
+            }
+            // jika tipe beda maka urutkan by tipe (index S > G > A dalam alphabet)
+            // jadi dibalik biar urut S < G < A
+            return other.tipe - this.tipe;
         }
         // jika beda urutkan by jumlah pelayanan
         return this.jumlahPelayanan - other.jumlahPelayanan;
