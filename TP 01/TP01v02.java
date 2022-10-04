@@ -242,11 +242,11 @@ public class TP01v02 {
 
             // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
             if (!cloneS.isEmpty() && cloneS.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiS tidak kosong
-                out.print(cloneS.remove().getId() + trailingSpace); // OUTPUT
+                out.print(cloneS.poll().getId() + trailingSpace); // OUTPUT
             } else if (!cloneG.isEmpty() && cloneG.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiG tidak kosong
-                out.print(cloneG.remove().getId() + trailingSpace); // OUTPUT
+                out.print(cloneG.poll().getId() + trailingSpace); // OUTPUT
             } else if (!cloneA.isEmpty() && cloneA.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiA tidak kosong
-                out.print(cloneA.remove().getId() + trailingSpace); // OUTPUT
+                out.print(cloneA.poll().getId() + trailingSpace); // OUTPUT
             } else {
                 // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
                 jumlahPelayananDicari++;
