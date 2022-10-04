@@ -39,9 +39,6 @@ public class TP01v02 {
     // jumlah kursi
     public static int jumlahKursi = 0;
 
-    // get status by queue (optimization step)
-    public static int[] KbyQueue = new int[100069];
-
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -102,8 +99,13 @@ public class TP01v02 {
         int jumlahKursiKosong = jumlahKursi; // reset ke jumlah kursi toko
         pesanan.clear(); // reset pesanan
 
+        // MEMOIZATION sumOfPOs
+        // K[id_pelanggan] = K[id_pelanggan-1] - K[id_pelanggan-r]
+        int sumPos = 0;
+        int[] sumOfPos = new int[jumlahPelangganHarian+1];
+        sumOfPos[0] = 0; // default batas
+
         // STEP 1: INISIASI PELANGGAN
-        // membaca input pelanggan harian
         for (int i = 1; i <= jumlahPelangganHarian; i++) {
 
             // ambil i, k, u, r (opsional)
@@ -112,14 +114,30 @@ public class TP01v02 {
             int u = in.nextInt();  pelanggan[id].setU(u);
 
             // mendapatkan K untuk pelanggan
+            // jika ? maka cek dulu + atau -
             if (k == '?') {
+                // GET: k
                 int r = in.nextInt(); 
-                ket = getKFromQueue(i, r);       
+                // hitung banyak positif dan negatif dalam range
+                int sumPositifinRange = sumOfPos[i-1] - sumOfPos[i-r-1];
+                int sumNegatifinRange = r - sumPositifinRange;
+                // tambah keterangan yang sesuai
+                if (sumNegatifinRange < sumPositifinRange) { // saat jumlah (+) > jumlah (-)
+                    ket = 1; sumPos++; 
+                } else {
+                    ket = -1;
+                }
             } else {
-                ket =  (k == '+' ? 1 : -1);  // jika + => 1, jika - => -1
-                KbyQueue[i] = ket;
+                // jika positif maka tambah sumPos dan masukkan ke index yang baru
+                if (k == '+') {
+                    ket = 1;
+                    sumPos++; 
+                } else { // jika tidak cuma set keterangan aja
+                    ket = -1;
+                }
             }
-            pelanggan[id].setK(ket);
+            // sesuaikan dengan jumlah sumPos saat ini
+            sumOfPos[i] = sumPos;
 
             // STEP 2: CETAK STATUS PELANGGAN
             // lakukan penyelesaian A: status pelanggan harian (0-1-2-3)
@@ -162,22 +180,6 @@ public class TP01v02 {
             } else { // kueri == 'D'
                 runD(in.nextInt(), in.nextInt(), in.nextInt());
             }
-        }
-    }
-
-    // Fungsi untuk memberi status pada pelanggan bertipe = "?"
-    public static int getKFromQueue(int id, int jarak) {
-        int sumStatus = 0;
-        int indeks = id;
-        while (jarak > 0) {
-            indeks--; jarak--; 
-            sumStatus += KbyQueue[indeks];
-        }
-        // Memberi status pada pelanggan
-        if (sumStatus > 0) {
-            KbyQueue[id] = 1; return 1; // K = positif
-        } else {
-            KbyQueue[id] = -1; return -1; // K = Negatif
         }
     }
 
@@ -393,20 +395,13 @@ class Koki {
 
 // class inisiator pelanggan
 class Pelanggan {
-    private int K; // K > 0 (positif), K <= 0 (negatif)
     private long U;
     private boolean blacklist;
 
     // construct pelanggan default
     Pelanggan() {
-        this.K = 0; // default 0
         this.U = 0; // default 0
         this.blacklist = false; // default = false
-    }
-   
-    // getter K : Keterangan
-    public int getK() {
-        return this.K;
     }
 
     // getter U : Uang
@@ -417,11 +412,6 @@ class Pelanggan {
     // getter blacklist
     public boolean isBlacklist() {
         return this.blacklist;
-    }
-
-    // setter K : Keterangan
-    public void setK(int K) {
-        this.K = K;
     }
 
     // setter U : Uang
