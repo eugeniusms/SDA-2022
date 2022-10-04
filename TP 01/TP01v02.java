@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Comparator;
@@ -20,8 +19,6 @@ public class TP01v02 {
     public static LinkedList<Koki> kokiS = new LinkedList<>(); // kokiS (terurut minimal melayani)
     public static LinkedList<Koki> kokiG = new LinkedList<>();  // kokiG (terurut minimal melayani)
     public static LinkedList<Koki> kokiA = new LinkedList<>();  // kokiA (terurut minimal melayani)
-    // Query C
-    public static Koki[] semuaKoki; // bentar lagi didelete sih (kalau ga perlu)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
@@ -49,7 +46,7 @@ public class TP01v02 {
         }
 
         // ambil jumlah koki
-        int jumlahKoki = in.nextInt(); semuaKoki = new Koki[jumlahKoki];
+        int jumlahKoki = in.nextInt(); 
         char tipeKoki;
         // membaca input koki
         for (int i = 1; i <= jumlahKoki; i++) {
@@ -57,17 +54,13 @@ public class TP01v02 {
             // menambahkan koki sesuai tipenya
             if (tipeKoki == 'S') {
                 Koki kokiBaru = new Koki(i, tipeKoki);
-                kokiS.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
+                kokiS.add(kokiBaru);
             } else if (tipeKoki == 'G') {
                 Koki kokiBaru = new Koki(i, tipeKoki);
-                kokiG.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
+                kokiG.add(kokiBaru); 
             } else { // tipeKoki == 'A'
                 Koki kokiBaru = new Koki(i, tipeKoki);
-                kokiA.add(kokiBaru); semuaKoki[i-1] = kokiBaru;
-                // CEK ADDRESS OF OBJECT (OBJECT REFERENCE YANG DIMASUKKAN KE DALAM ARRAY)
-                // out.println("CEK ADDRESS 1: "+kokiBaru);
-                // out.println("CEK ADDRESS 2: "+kokiA.get(kokiA.size()-1));
-                // out.println("CEK ADDRESS 3: "+semuaKoki[i-1]);
+                kokiA.add(kokiBaru);
             }
         }
 
@@ -83,15 +76,10 @@ public class TP01v02 {
         jumlahKursi = in.nextInt();
         int jumlahHari = in.nextInt();
 
-        // check1();
-
         // menjalankan hari yang dimasukkan
         for (int i = 1; i <= jumlahHari; i++) {
             jalaniHari();
-            // check2(i);
         }
-
-        // check1();
 
         // Tutup OutputStream
         out.close();
@@ -152,17 +140,17 @@ public class TP01v02 {
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
                 // checkP();
-                out.println("=== COMMAND: P ===");
-                checkListKoki();
+                // out.println("=== COMMAND: P ===");
+                // checkListKoki();
             } else if (kueri == 'L') {
                 runL();
                 // checkC();
-                out.println("=== COMMAND: L ===");
-                checkListKoki();
+                // out.println("=== COMMAND: L ===");
+                // checkListKoki();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
-                runCalter(in.nextInt());
+                runC(in.nextInt());
             } else { // kueri == 'D'
                 runD(in.nextInt(), in.nextInt(), in.nextInt());
             }
@@ -310,37 +298,21 @@ public class TP01v02 {
         }
     }
 
-    public static void runC(int Q) {
-        // menampilkan Q data koki paling kecil (prioritas S > G > A)
-        out.println("C: ");
-        
-        // lakukan sorting untuk mendapati Q data terbawah
-        Arrays.sort(semuaKoki, new SortbyPelayananNtipeNId());
-
-        int counter = 0;
-        while (counter < Q) {
-            out.println(semuaKoki[counter].getId() + " | " + semuaKoki[counter].getJumlahPelayanan());
-            counter++;
-        }
-
-        checkC();
-    }
-
-    public static void runCalter(int Q) {
+    public static void runC(int Q) { // CLEAR O(n)
         // keluarkan by jumlahPelayanan
         int jumlahPelayananDicari = 0;
         int pointerS = 0; int pointerG = 0; int pointerA = 0;
-        out.println("CEK C GAN: ");
+        out.print("C : ");
         while (Q > 0) {
             // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
             if (kokiS.size() > pointerS && kokiS.get(pointerS).getJumlahPelayanan() == jumlahPelayananDicari) {
-                out.print(kokiS.get(pointerS).getId()+" ");
+                out.print(kokiS.get(pointerS).getId()+" "); // OUTPUT
                 pointerS++;
             } else if (kokiG.size() > pointerG && kokiG.get(pointerG).getJumlahPelayanan() == jumlahPelayananDicari) {
-                out.print(kokiG.get(pointerG).getId()+" ");
+                out.print(kokiG.get(pointerG).getId()+" "); // OUTPUT
                 pointerG++;
             } else if (kokiA.size() > pointerA && kokiA.get(pointerA).getJumlahPelayanan() == jumlahPelayananDicari) {
-                out.print(kokiA.get(pointerA).getId()+" ");
+                out.print(kokiA.get(pointerA).getId()+" "); // OUTPUT
                 pointerA++;
             } else {
                 // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
@@ -351,7 +323,7 @@ public class TP01v02 {
             Q--;
         }
 
-        checkC();
+        // checkC();
     }
 
     public static void checkC() {
