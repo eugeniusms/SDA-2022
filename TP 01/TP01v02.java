@@ -280,7 +280,7 @@ public class TP01v02 {
           return 0;
         /* if a char at start index matches char at end index
         count it and recur for more cases */
-        if(s.charAt(start) == s.charAt(end)) {
+        if(s.charAt(start) == s.charAt(end) && start != end) {
             out.println("POTONG: "+s.substring(start, end+1));
           return 1 + substringSES(s, start, end + 1);
         } else {
