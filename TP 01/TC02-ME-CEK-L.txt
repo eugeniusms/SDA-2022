@@ -52,3 +52,88 @@ P 2 2
 L
 P 3 3
 L
+
+// EDGE CASE LINKEDLIST HANCUR (SOLUSI: JANGAN REMOVE FIRST ELEMEN LANGSUNG)
+
+1
+10 A
+7
+A A A A A A A
+1
+1
+1
+1
+1 - 90000
+28
+P 1 1
+P 1 1
+L
+P 1 1
+P 1 1
+P 1 1
+L
+P 1 1
+L
+P 1 1
+P 1 1
+L
+P 1 1
+L
+P 1 1
+P 1 1
+P 1 1
+L
+P 1 1
+P 1 1
+L
+L
+L
+L
+L
+L
+L
+L
+
+// SATU JENIS KOKI ADA 7 KOKI
+// SUSUN L YANG MANA ada kondisi pelayanan koki 2 3 1 2 1 3 2
+// RESULT BENAR: 
+// MENDAPATI SUSUNAN DI ATAS
+1
+10 A
+7
+A A A A A A A
+1
+1
+1
+1
+1 - 90000
+28
+P 1 1
+P 1 1
+L
+P 1 1
+P 1 1
+P 1 1
+L
+P 1 1
+L
+P 1 1
+P 1 1
+L
+P 1 1
+L
+P 1 1
+P 1 1
+P 1 1
+L
+P 1 1
+P 1 1
+L
+L
+L
+L
+L
+L
+L
+L
+// ACAK-ACAK
