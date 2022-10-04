@@ -21,7 +21,7 @@ public class TP01v02 {
     public static LinkedList<Koki> kokiG = new LinkedList<>();  // kokiG (terurut minimal melayani)
     public static LinkedList<Koki> kokiA = new LinkedList<>();  // kokiA (terurut minimal melayani)
     // Query C
-    public static Koki[] semuaKoki;
+    public static Koki[] semuaKoki; // bentar lagi didelete sih (kalau ga perlu)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
@@ -162,7 +162,7 @@ public class TP01v02 {
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
-                runC(in.nextInt());
+                runCalter(in.nextInt());
             } else { // kueri == 'D'
                 runD(in.nextInt(), in.nextInt(), in.nextInt());
             }
@@ -326,12 +326,50 @@ public class TP01v02 {
         checkC();
     }
 
+    public static void runCalter(int Q) {
+        // keluarkan by jumlahPelayanan
+        int jumlahPelayananDicari = 0;
+        int pointerS = 0; int pointerG = 0; int pointerA = 0;
+        out.println("CEK C GAN: ");
+        while (Q > 0) {
+            // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
+            if (kokiS.size() > pointerS && kokiS.get(pointerS).getJumlahPelayanan() == jumlahPelayananDicari) {
+                out.print(kokiS.get(pointerS).getId()+" ");
+                pointerS++;
+            } else if (kokiG.size() > pointerG && kokiG.get(pointerG).getJumlahPelayanan() == jumlahPelayananDicari) {
+                out.print(kokiG.get(pointerG).getId()+" ");
+                pointerG++;
+            } else if (kokiA.size() > pointerA && kokiA.get(pointerA).getJumlahPelayanan() == jumlahPelayananDicari) {
+                out.print(kokiA.get(pointerA).getId()+" ");
+                pointerA++;
+            } else {
+                // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
+                jumlahPelayananDicari++;
+                continue;
+            }
+            // counter
+            Q--;
+        }
+
+        checkC();
+    }
+
     public static void checkC() {
-        out.println("CHECK QUERY C SORTED: ");
-        int counter = 0;
-        while (counter < semuaKoki.length) {
-            out.println("ID: "+semuaKoki[counter].getId() + " | Pelayanan: " + semuaKoki[counter].getJumlahPelayanan());
-            counter++;
+        out.println("\nCHECK QUERY C SORTED: ");
+        out.println("===== KOKI S =====");
+        while (kokiS.size() > 0) {
+            out.print(kokiS.get(0).getId()+"("+kokiS.get(0).getJumlahPelayanan()+") "); // (jumlah pelayanan)
+            kokiS.remove(0);
+        }
+        out.println("\n===== KOKI G =====");
+        while (kokiG.size() > 0) {
+            out.print(kokiG.get(0).getId()+"("+kokiG.get(0).getJumlahPelayanan()+") "); // (jumlah pelayanan)
+            kokiG.remove(0);
+        }
+        out.println("\n===== KOKI A =====");
+        while (kokiA.size() > 0) {
+            out.print(kokiA.get(0).getId()+"("+kokiA.get(0).getJumlahPelayanan()+") "); // (jumlah pelayanan)
+            kokiA.remove(0);
         }
     }
 
