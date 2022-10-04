@@ -3,7 +3,6 @@ import java.util.StringTokenizer;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Comparator;
 
 public class TP01v02 {
     private static InputReader in;
