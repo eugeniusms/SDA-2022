@@ -16,6 +16,7 @@ public class TP01v02 {
 
     // default arr[0] = kosong
     public static Makanan[] menu; // index => id makanan
+    public static String strMenu = "Z"; // index 0 dari strMenu tidak dipakai
 
     // Query P, L, C
     public static PriorityQueue<Koki> kokiS = new PriorityQueue<>(); // kokiS (terurut minimal melayani)
@@ -43,7 +44,11 @@ public class TP01v02 {
         menu = new Makanan[jumlahMenu+1]; menu[0] = new Makanan(0, 'O'); // set default
         // membaca input menu makanan
         for (int i = 1; i <=jumlahMenu; i++) {
-            menu[i] = new Makanan(in.nextInt(), in.nextChar());
+            int harga = in.nextInt();
+            char tipe = in.nextChar();
+            menu[i] = new Makanan(harga, tipe);
+            // ambil versi string panjang dari menu restoran
+            strMenu += tipe;
         }
 
         // ambil jumlah koki
@@ -216,7 +221,7 @@ public class TP01v02 {
             kokiA.remove(kokiPelayan); // hapus kokiPelayan dari kokiA
             kokiA.add(kokiPelayan);
         }
-        
+
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.idPelanggan].U -= hargaMenu;
 
@@ -249,9 +254,42 @@ public class TP01v02 {
         }
     }
 
+    // A S G S G A G
+    // A S G S G A G
+    // A (S G S) (G A G)
+    // A (S G S) G A G
+    // (A S G S G A) G
+    // A S (G S G) A G
+    // A S (G S G A G)
+
+    // find combination of substring with start and end same
     public static void runD(int costA, int costG, int costS) {
-        
+        out.println("CEK D: "+substringSES(strMenu, 1,1));
     }
+
+    public static int substringSES(String s,int start,int end) {
+        /* when end reaches at the end of the string 
+        still recur for some more cases if present */ 
+        if(end == s.length()){
+          start++;
+          end = start;
+        }
+        /* when end reaches at the end of the string 
+        and all cases are covered */
+        if(end == s.length())
+          return 0;
+        /* if a char at start index matches char at end index
+        count it and recur for more cases */
+        if(s.charAt(start) == s.charAt(end)) {
+            out.println("POTONG: "+s.substring(start, end+1));
+          return 1 + substringSES(s, start, end + 1);
+        } else {
+        /* if char at both index does'nt matches skip it 
+        and recur for more cases */
+          return substringSES(s, start, end + 1); 
+        }
+      }
+
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
     // usual Scanner(System.in) and System.out
