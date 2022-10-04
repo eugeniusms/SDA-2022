@@ -110,7 +110,7 @@ public class TP01v02 {
 
             // ambil i, k, u, r (opsional)
             int id = in.nextInt();
-            char k = in.nextChar(); int ket;
+            char k = in.nextChar();
             int u = in.nextInt();  pelanggan[id].setU(u);
 
             // mendapatkan K untuk pelanggan
@@ -123,17 +123,12 @@ public class TP01v02 {
                 int sumNegatifinRange = r - sumPositifinRange;
                 // tambah keterangan yang sesuai
                 if (sumNegatifinRange < sumPositifinRange) { // saat jumlah (+) > jumlah (-)
-                    ket = 1; sumPos++; 
-                } else {
-                    ket = -1;
+                    sumPos++; 
                 }
             } else {
                 // jika positif maka tambah sumPos dan masukkan ke index yang baru
                 if (k == '+') {
-                    ket = 1;
                     sumPos++; 
-                } else { // jika tidak cuma set keterangan aja
-                    ket = -1;
                 }
             }
             // sesuaikan dengan jumlah sumPos saat ini
@@ -144,7 +139,7 @@ public class TP01v02 {
             if (pelanggan[id].isBlacklist()) {
                 out.print("3 "); // blacklisted
             } else {
-                if (ket == 1) {
+                if (sumOfPos[i] > sumOfPos[i-1]) { // terdapat perubahan -> ada tambah positif 1
                     out.print("0 "); // positive
                 } else {
                     if (jumlahKursiKosong <= 0) {
