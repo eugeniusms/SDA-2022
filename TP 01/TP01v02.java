@@ -17,19 +17,9 @@ public class TP01v02 {
     public static Makanan[] menu; // index => id makanan
 
     // Query P, L, C
-    public static PriorityQueue<Koki> kokiS = new PriorityQueue<>(new SortbyPelayananNId()); // kokiS (terurut minimal melayani)
-    public static PriorityQueue<Koki> kokiG = new PriorityQueue<>(new SortbyPelayananNId()); // kokiG (terurut minimal melayani)
-    public static PriorityQueue<Koki> kokiA = new PriorityQueue<>(new SortbyPelayananNId()); // kokiA (terurut minimal melayani)
-
-    // priority queue with comparator
-    public static class SortbyPelayananNId implements Comparator<Koki> {
-        public int compare(Koki a, Koki b) {
-            if (a.getJumlahPelayanan() == b.getJumlahPelayanan()) {
-                return a.getId() - b.getId();
-            }
-            return a.getJumlahPelayanan() - b.getJumlahPelayanan();
-        }
-    }
+    public static PriorityQueue<Koki> kokiS = new PriorityQueue<>(); // kokiS (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiG = new PriorityQueue<>(); // kokiG (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiA = new PriorityQueue<>(); // kokiA (terurut minimal melayani)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
@@ -113,7 +103,7 @@ public class TP01v02 {
             char k = in.nextChar();
             int u = in.nextInt();  pelanggan[id].setU(u);
 
-            // mendapatkan K untuk pelanggan
+            // mendapatkan K untuk pelanggan CLEAR: O(1)
             // jika ? maka cek dulu + atau -
             if (k == '?') {
                 // GET: k
@@ -355,7 +345,7 @@ class Makanan {
 }
 
 // class inisiator koki
-class Koki {
+class Koki implements Comparable<Koki> {
     private int id;
     private int jumlahPelayanan;
     private char tipe;
@@ -365,6 +355,17 @@ class Koki {
         this.id = id;
         this.jumlahPelayanan = 0; // default = 0
         this.tipe = tipe;
+    }
+
+    // compareTo
+    @Override
+    public int compareTo(Koki other) {
+        // jika jumlah pelayanan sama maka urutkan by id
+        if (this.getJumlahPelayanan() == other.getJumlahPelayanan()) {
+            return this.getId() - other.getId();
+        }
+        // jika beda urutkan by jumlah pelayanan
+        return this.getJumlahPelayanan() - other.getJumlahPelayanan();
     }
 
     // getter id
