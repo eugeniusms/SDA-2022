@@ -21,6 +21,16 @@ public class TP01v02 {
     public static PriorityQueue<Koki> kokiG = new PriorityQueue<>(new SortbyPelayananNId()); // kokiG (terurut minimal melayani)
     public static PriorityQueue<Koki> kokiA = new PriorityQueue<>(new SortbyPelayananNId()); // kokiA (terurut minimal melayani)
 
+    // priority queue with comparator
+    public static class SortbyPelayananNId implements Comparator<Koki> {
+        public int compare(Koki a, Koki b) {
+            if (a.getJumlahPelayanan() == b.getJumlahPelayanan()) {
+                return a.getId() - b.getId();
+            }
+            return a.getJumlahPelayanan() - b.getJumlahPelayanan();
+        }
+    }
+
     public static Pelanggan[] pelanggan; // index => id pelanggan
 
     // Query B
@@ -142,8 +152,12 @@ public class TP01v02 {
             // jalankan fungsi kueri
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
+                out.println("===== COMMAND P =====");
+                checkC();
             } else if (kueri == 'L') {
                 runL();
+                out.println("===== COMMAND L =====");
+                checkC();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
@@ -175,42 +189,22 @@ public class TP01v02 {
         // mencari id koki pelayanan
         char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
         // PENTING: ambil koki terdepan = koki paling sedikit melayani & pastinya urut id
-        Koki kokiPelayan = searchKokiMinimum(tipeMakanan); // O(n), n = jumlah koki pada suatu tipe
+        Koki kokiPelayan = getKokiMinimum(tipeMakanan); // O(1)
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
         out.println(kokiPelayan.getId()); // OUTPUT
     }
 
     // method mengembalikan koki pelayan
-    public static Koki searchKokiMinimum(char tipe) {
+    public static Koki getKokiMinimum(char tipe) {
         // mencari koki minimum
-        Koki kokiPelayan = new Koki(0, 'S'); int minim; // default (tidak ada koki index 0 jadi aman)
         if (tipe == 'S') {
-            minim = 999999;
-            for (Koki k: kokiS) {
-                if (k.getJumlahPelayanan() < minim) {
-                    minim = k.getJumlahPelayanan();
-                    kokiPelayan = k;
-                }
-            }
+            return kokiS.peek();
         } else if (tipe == 'G') {
-            minim = 999999;
-            for (Koki k: kokiG) {
-                if (k.getJumlahPelayanan() < minim) {
-                    minim = k.getJumlahPelayanan();
-                    kokiPelayan = k;
-                }
-            }
+            return kokiG.peek();
         } else { // tipe == 'A'
-            minim = 999999;
-            for (Koki k: kokiA) {
-                if (k.getJumlahPelayanan() < minim) {
-                    minim = k.getJumlahPelayanan();
-                    kokiPelayan = k;
-                }
-            }
+            return kokiA.peek();
         }
-        return kokiPelayan;
     }
     
     public static void runL() {
@@ -220,6 +214,18 @@ public class TP01v02 {
 
         Koki kokiPelayan = pesananSelesai.getkokiPelayan(); 
         kokiPelayan.tambahJumlahPelayanan(); // menambah jumlah pelayanan kokiPelayan
+
+        // fix drawback priority queue java (remove dulu lalu add kembali for prioritizing)
+        if (menu[pesananSelesai.getIdMakanan()].getTipe() == 'S') {
+            kokiS.remove(kokiPelayan); // hapus kokiPelayan dari kokiS
+            kokiS.add(kokiPelayan);
+        } else if (menu[pesananSelesai.getIdMakanan()].getTipe() == 'G') {
+            kokiG.remove(kokiPelayan); // hapus kokiPelayan dari kokiG
+            kokiG.add(kokiPelayan);
+        } else { // menu[pesananSelesai.getIdMakanan()].getTipe() == 'A'
+            kokiA.remove(kokiPelayan); // hapus kokiPelayan dari kokiA
+            kokiA.add(kokiPelayan);
+        }
 
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
@@ -239,11 +245,36 @@ public class TP01v02 {
     }
 
     public static void runC(int Q) {
-        
+        checkC();
     }
 
     public static void runD(int costA, int costG, int costS) {
         
+    }
+
+    public static void checkC() {
+        PriorityQueue<Koki> cloneS = new PriorityQueue<>(kokiS);
+        PriorityQueue<Koki> cloneG = new PriorityQueue<>(kokiG);
+        PriorityQueue<Koki> cloneA = new PriorityQueue<>(kokiA);
+
+        out.println("\nCHECK QUERY C SORTED: ");
+        out.println("===== KOKI S =====");
+        while (cloneS.size() > 0) {
+            out.print(cloneS.peek().getId()+"("+cloneS.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
+            cloneS.poll();
+        }
+        out.println("\n===== KOKI G =====");
+        while (cloneG.size() > 0) {
+            out.print(cloneG.peek().getId()+"("+cloneG.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
+            cloneG.poll();
+        }
+        out.println("\n===== KOKI A =====");
+        while (cloneA.size() > 0) {
+            out.print(cloneA.peek().getId()+"("+cloneA.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
+            cloneA.poll();
+        }
+
+        out.println("\n\n");
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -415,12 +446,9 @@ class Pesanan {
     }
 }
 
-class SortbyPelayananNId implements Comparator<Koki>
-{
+class SortbyPelayananNId implements Comparator<Koki> {
     // Used for sorting in ascending order of
-    // roll number
-    public int compare(Koki a, Koki b)
-    {
+    public int compare(Koki a, Koki b) {
         // CHECK COMPARE +/- NYA
         // jika jumlah pelayanan sama maka sort by id
         if (a.getJumlahPelayanan() == b.getJumlahPelayanan()) {
