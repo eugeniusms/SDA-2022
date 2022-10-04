@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,9 +18,9 @@ public class TP01v02 {
     public static Makanan[] menu; // index => id makanan
 
     // Query P, L, C
-    public static TreeMap<Koki, Integer> kokiS = new TreeMap<Koki, Integer>(); // kokiS (terurut minimal melayani)
-    public static TreeMap<Koki, Integer> kokiG = new TreeMap<Koki, Integer>(); // kokiG (terurut minimal melayani)
-    public static TreeMap<Koki, Integer> kokiA = new TreeMap<Koki, Integer>(); // kokiA (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiS = new PriorityQueue<>(); // kokiS (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiG = new PriorityQueue<>(); // kokiG (terurut minimal melayani)
+    public static PriorityQueue<Koki> kokiA = new PriorityQueue<>(); // kokiA (terurut minimal melayani)
     public static ArrayList<Koki> kokiAll= new ArrayList<Koki>(); // koki (terurut minimal melayani)
 
     public static Pelanggan[] pelanggan; // index => id pelanggan
@@ -56,13 +56,13 @@ public class TP01v02 {
             // menambahkan koki sesuai tipenya
             if (tipeKoki == 'S') {
                 Koki baru = new Koki(i, tipeKoki);
-                kokiS.put(baru, 0); kokiAll.add(baru);
+                kokiS.add(baru); kokiAll.add(baru);
             } else if (tipeKoki == 'G') {
                 Koki baru = new Koki(i, tipeKoki);
-                kokiG.put(baru, 0); kokiAll.add(baru);
-            } else {
+                kokiG.add(baru); kokiAll.add(baru);
+            } else if (tipeKoki == 'A') {
                 Koki baru = new Koki(i, tipeKoki);
-                kokiA.put(baru, 0); kokiAll.add(baru);
+                kokiA.add(baru); kokiAll.add(baru);
             }
         }
 
@@ -189,11 +189,11 @@ public class TP01v02 {
     public static Koki getKokiMinimum(char tipe) {
         // mencari koki minimum
         if (tipe == 'S') {
-            return kokiS.firstKey();
+            return kokiS.peek();
         } else if (tipe == 'G') {
-            return kokiG.firstKey();
+            return kokiG.peek();
         } else { // tipe == 'A'
-            return kokiA.firstKey();
+            return kokiA.peek();
         }
     }
     
@@ -208,15 +208,15 @@ public class TP01v02 {
         // fix drawback priority queue java (remove dulu lalu add kembali for prioritizing)
         if (menu[pesananSelesai.idMakanan].tipe == 'S') {
             kokiS.remove(kokiPelayan); // hapus kokiPelayan dari kokiS
-            kokiS.put(kokiPelayan, 0);
+            kokiS.add(kokiPelayan);
         } else if (menu[pesananSelesai.idMakanan].tipe == 'G') {
             kokiG.remove(kokiPelayan); // hapus kokiPelayan dari kokiG
-            kokiG.put(kokiPelayan, 0);
-        } else { // menu[pesananSelesai.getIdMakanan()].getTipe() == 'A'
+            kokiG.add(kokiPelayan);
+        } else { // menu[pesananSelesai.idMakanan].tipe == 'A'
             kokiA.remove(kokiPelayan); // hapus kokiPelayan dari kokiA
-            kokiA.put(kokiPelayan, 0);
+            kokiA.add(kokiPelayan);
         }
-
+        
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.idPelanggan].U -= hargaMenu;
 
@@ -241,7 +241,11 @@ public class TP01v02 {
         // TODO: Create New Sorted DS vs Copying Like This
         Collections.sort(kokiAll);
         for (Koki k: kokiAll) {
+            if (Q == 0) {
+                break;
+            }
             out.print(k.id+" ");
+            Q--;
         }
     }
 
