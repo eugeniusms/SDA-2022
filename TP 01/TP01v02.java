@@ -245,17 +245,17 @@ public class TP01v02 {
     public static void moveKoki(Koki kokiPelayan, char tipeKoki) {
         if (tipeKoki == 'S') {
             // menghapus elemen pertama dari linkedlist (koki pelayan) // JANGAN FIRST
-            kokiS.removeFirst();
+            kokiS.remove(kokiPelayan);
             // binary search digunakan untuk mencari index yang tepat untuk memasukkan kokiPelayan
             int indeks = findInsertIndex(kokiS, kokiS.size(), kokiPelayan);
             // memindahkan kokiPelayan ke indeks yang tepat
             kokiS.add(indeks, kokiPelayan);
         } else if (tipeKoki == 'G') {
-            kokiG.removeFirst();
+            kokiG.remove(kokiPelayan);
             int indeks = findInsertIndex(kokiG, kokiG.size(), kokiPelayan);
             kokiG.add(indeks, kokiPelayan);
         } else { // tipeKoki == 'A'
-            kokiA.removeFirst();
+            kokiA.remove(kokiPelayan);
             int indeks = findInsertIndex(kokiA, kokiA.size(), kokiPelayan);
             kokiA.add(indeks, kokiPelayan);
         }
