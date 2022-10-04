@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
-public class TP01v02 {
+public class Submitted06 {
     private static InputReader in;
     private static PrintWriter out;
 
@@ -189,7 +189,7 @@ public class TP01v02 {
         Koki kokiPelayan = getKokiMinimum(tipeMakanan); // O(1)
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
-        out.println("P: "+kokiPelayan.getId()); // OUTPUT
+        out.println(kokiPelayan.getId()); // OUTPUT
     }
 
     // method mengembalikan koki pelayan
@@ -227,7 +227,7 @@ public class TP01v02 {
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.getIdPelanggan()].kurangiU(hargaMenu);
 
-        out.println("L: "+pesananSelesai.getIdPelanggan());
+        out.println(pesananSelesai.getIdPelanggan());
     }
 
     public static void runB(int idPelanggan) {
@@ -235,9 +235,9 @@ public class TP01v02 {
         // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
         if (pelanggan[idPelanggan].getU() < 0) {
             pelanggan[idPelanggan].setBlacklist();
-            out.println("B: 0"); // OUTPUT
+            out.println("0"); // OUTPUT
         } else {
-            out.println("B: 1"); // OUTPUT
+            out.println("1"); // OUTPUT
         }
     }
 
@@ -273,31 +273,6 @@ public class TP01v02 {
 
     public static void runD(int costA, int costG, int costS) {
         
-    }
-
-    public static void checkC() {
-        PriorityQueue<Koki> cloneS = new PriorityQueue<>(kokiS);
-        PriorityQueue<Koki> cloneG = new PriorityQueue<>(kokiG);
-        PriorityQueue<Koki> cloneA = new PriorityQueue<>(kokiA);
-
-        out.println("\nCHECK QUERY C SORTED: ");
-        out.println("===== KOKI S =====");
-        while (cloneS.size() > 0) {
-            out.print(cloneS.peek().getId()+"("+cloneS.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
-            cloneS.poll();
-        }
-        out.println("\n===== KOKI G =====");
-        while (cloneG.size() > 0) {
-            out.print(cloneG.peek().getId()+"("+cloneG.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
-            cloneG.poll();
-        }
-        out.println("\n===== KOKI A =====");
-        while (cloneA.size() > 0) {
-            out.print(cloneA.peek().getId()+"("+cloneA.peek().getJumlahPelayanan()+") "); // (jumlah pelayanan)
-            cloneA.poll();
-        }
-
-        out.println("\n\n");
     }
 
     // taken from https://codeforces.com/submissions/Petr
