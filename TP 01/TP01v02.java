@@ -155,7 +155,7 @@ public class TP01v02 {
             } else if (kueri == 'L') {
                 runL();
                 // checkC();
-                // checkListKoki();
+                checkListKoki();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
@@ -184,7 +184,7 @@ public class TP01v02 {
 
     // Fungsi-fungsi kueri
     // menampilkan id koki pelayan
-    public static void runP(int idPelanggan, int idMenu) { // CLEAR
+    public static void runP(int idPelanggan, int idMenu) { // CLEAR O(1)
         char tipeMakanan = menu[idMenu].getTipe(); // tipe makanan dicari
         // mendapatkan koki pelayan
         Koki kokiPelayan = new Koki(0, 'S'); // default (tidak ada koki index 0 jadi aman)
@@ -217,7 +217,7 @@ public class TP01v02 {
     // references:
     // linkedlist: https://www.w3schools.com/java/java_linkedlist.asp
     // insert element in the middle of array: https://www.geeksforgeeks.org/how-to-insert-an-element-at-a-specific-position-in-an-array-in-java/
-    public static void runL() {
+    public static void runL() { // CLEAR O(log n)
         // melakukan penyelesaian pesanan terdepan
         Pesanan pesananSelesai = pesanan.remove();
         int hargaMenu = menu[pesananSelesai.getIdMakanan()].getHarga();
@@ -238,7 +238,7 @@ public class TP01v02 {
     // method move koki algo binary search insertion with sorted linkedlist
     public static void moveKoki(Koki kokiPelayan, char tipeKoki) {
         if (tipeKoki == 'S') {
-            // menghapus elemen pertama dari linkedlist (koki pelayan)
+            // menghapus elemen pertama dari linkedlist (koki pelayan) // JANGAN FIRST
             kokiS.removeFirst();
             // binary search digunakan untuk mencari index yang tepat untuk memasukkan kokiPelayan
             int indeks = findInsertIndex(kokiS, kokiS.size(), kokiPelayan);
