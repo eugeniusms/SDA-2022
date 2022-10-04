@@ -152,12 +152,12 @@ public class TP01v02 {
             // jalankan fungsi kueri
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
-                out.println("===== COMMAND P =====");
-                checkC();
+                // out.println("===== COMMAND P =====");
+                // checkC();
             } else if (kueri == 'L') {
                 runL();
-                out.println("===== COMMAND L =====");
-                checkC();
+                // out.println("===== COMMAND L =====");
+                // checkC();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
@@ -245,7 +245,33 @@ public class TP01v02 {
     }
 
     public static void runC(int Q) {
-        checkC();
+        // checkC();
+        // keluarkan by jumlahPelayanan
+        // copy priority queue
+        PriorityQueue<Koki> cloneS = new PriorityQueue<>(kokiS);
+        PriorityQueue<Koki> cloneG = new PriorityQueue<>(kokiG);
+        PriorityQueue<Koki> cloneA = new PriorityQueue<>(kokiA);
+        int jumlahPelayananDicari = 0;
+        String trailingSpace = " ";
+        while (Q > 0) {
+            // set trailing space
+            if (Q == 1) { trailingSpace = ""; }
+
+            // jika elemen masih sama dengan jumlah pelayanan dicari maka langsung print aja
+            if (!cloneS.isEmpty() && cloneS.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiS tidak kosong
+                out.print(cloneS.remove().getId() + trailingSpace); // OUTPUT
+            } else if (!cloneG.isEmpty() && cloneG.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiG tidak kosong
+                out.print(cloneG.remove().getId() + trailingSpace); // OUTPUT
+            } else if (!cloneA.isEmpty() && cloneA.peek().getJumlahPelayanan() == jumlahPelayananDicari) { // jika kokiA tidak kosong
+                out.print(cloneA.remove().getId() + trailingSpace); // OUTPUT
+            } else {
+                // jika sudah tidak ada yg sama maka tambahkan jumlah pelayanan dicari
+                jumlahPelayananDicari++;
+                continue;
+            }
+            // counter
+            Q--;
+        }
     }
 
     public static void runD(int costA, int costG, int costS) {
