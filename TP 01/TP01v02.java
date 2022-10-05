@@ -38,10 +38,10 @@ public class TP01v02 {
     public static boolean runDFirst = false;
     public static int costA; public static int costG; public static int costS;
     // just first time
-    public static TreeMap<Node, Character> memo = new TreeMap<Node, Character>(); // node save start,end | string save format char saat itu
-    // all time
-    public static TreeMap<Node, Integer> memoCostbySequence = new TreeMap<Node, Integer>(); // node save start,end | integer total cost
-    public static TreeMap<Node, Integer> memoMinCost = new TreeMap<Node, Integer>(); // node save start,end | integer min cost on sequence start,end
+    public static TreeMap<Node, Character> memoAllSequence = new TreeMap<Node, Character>(); // node save start,end | string save format char saat itu
+    // all time map: {key:start > key:end > value}
+    public static TreeMap<Integer, TreeMap<Integer, Integer>> memoCostbySequence = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer total cost
+    public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -307,7 +307,7 @@ public class TP01v02 {
             
             // simpan ke memo
             // memo key=(start,end), val=(char format)
-            memo.put(new Node(start, end), strMenu.charAt(start));
+            memoAllSequence.put(new Node(start, end), strMenu.charAt(start));
 
             // cari lagi sequence dengan start dan end huruf sama
             return findAllSequence(start, end + 1);
@@ -319,7 +319,7 @@ public class TP01v02 {
     }
 
     public static void computeCostbySequence() {
-        for (Map.Entry<Node, Character> entry : memo.entrySet()) {
+        for (Map.Entry<Node, Character> entry : memoAllSequence.entrySet()) {
             Node key = entry.getKey();
             Character val = entry.getValue();
             int totalCost = 0;
@@ -339,8 +339,10 @@ public class TP01v02 {
 
             out.println("MAP: ("+key.start+","+key.end+"): "+totalCost); // TEST
         
-            // simpan ke memo key=Node(start,end), val=totalCost
-            memoCostbySequence.put(key, totalCost);
+            // simpan ke memo key=start, val=map(key:end, val:totalCost)
+            TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (totalCost)
+            endVal.put(key.end, totalCost);
+            memoCostbySequence.put(key.start, endVal);
         }
     }
 
@@ -348,8 +350,11 @@ public class TP01v02 {
     // dynamic programming find optimal solution
     public static int findMinimumCost(int start, int end) {
         // jika sudah ada dalam memo tinggal ambil aja
-        if (memoMinCost.containsKey(new Node(start, end))) {
-            return memoMinCost.get(new Node(start, end));
+        if (memoMinCost.containsKey(start)) { // jika ada key start di memo
+            if (memoMinCost.get(start).containsKey(end)) { // jika ada key end di memo
+                // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                return memoMinCost.get(start).get(end);
+            }
         }
 
         // jika belum ada maka cari yg minimum
@@ -358,25 +363,36 @@ public class TP01v02 {
         } else {
             // inisiasi variabel
             int cost = 0;
+            int costSequence = 0;
             int minCost = Integer.MAX_VALUE;
 
             // pada setiap percabangan sequence
             for (int i = start; i < end; i++) {
                 // cari cost dari sequence
                 Node key = new Node(start, i);
-                cost = memoCostbySequence.get(key) + findMinimumCost(i+1, end);
+                if (memoCostbySequence.containsKey(key.start)) { // jika ada key start di memo
+                    if (memoCostbySequence.get(key.start).containsKey(key.end)) { // jika ada key end di memo
+                        // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                        costSequence = memoCostbySequence.get(key.start).get(key.end);
+                        cost = costSequence + findMinimumCost(i+1, end);
+                    }
+                } else {
+                    // jika tidak ada start end di memoCostbySequence
+                    cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
+                }
                 // jika lebih kecil maka gunakan yang itu
                 if (cost < minCost) {
                     minCost = cost;
                 }
             }
 
-            // simpan ke memo minimal cost pada suatu sequence
-            memoMinCost.put(new Node(start, end), minCost);
+            // minimal cost pada suatu sequence disimpan ke memo 
+            TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (minCost)
+            endVal.put(end, minCost);
+            memoMinCost.put(start, endVal); // key:start, val:map(key:end, val:minCost)
             return minCost;
         }
-    }
-    
+    }    
 
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
