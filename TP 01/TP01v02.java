@@ -36,9 +36,10 @@ public class TP01v02 {
 
     // Query D 
     public static boolean runDFirst = false;
-    public static int costA; public static int costG; public static int costS;
+    public static int costA; public static int costG; public static int costS; // cost @ paket
+    public static int chanceA; public static int chanceG; public static int chanceS; // chance paket diambil
     // just first time
-    public static TreeMap<Node, Character> memoAllSequence = new TreeMap<Node, Character>(); // node save start,end | string save format char saat itu
+    public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
     // all time map: {key:start > key:end > value}
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoCostbySequence = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer total cost
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
@@ -281,6 +282,8 @@ public class TP01v02 {
 
     // find combination of substring with start and end same
     public static void runD() {
+        // SET DULU
+        chanceA = 1; chanceG = 1; chanceS = 1;
         if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
             out.println("FIND ALL SEQUENCE");
             findAllSequence(1,1);
@@ -311,7 +314,9 @@ public class TP01v02 {
             
             // simpan ke memo
             // memo key=(start,end), val=(char format)
-            memoAllSequence.put(new Node(start, end), strMenu.charAt(start));
+            TreeMap<Integer, Character> endVal = new TreeMap<Integer, Character>(); // end : val (totalCost)
+            endVal.put(end, strMenu.charAt(start)); // end : val (charAt)
+            memoAllSequence.put(start, endVal);
 
             // cari lagi sequence dengan start dan end huruf sama
             return findAllSequence(start, end + 1);
@@ -323,30 +328,58 @@ public class TP01v02 {
     }
 
     public static void computeCostbySequence() {
-        for (Map.Entry<Node, Character> entry : memoAllSequence.entrySet()) {
-            Node key = entry.getKey();
-            Character val = entry.getValue();
+        // for (Map.Entry<Node, Character> entry : memoAllSequence.entrySet()) {
+        //     Node key = entry.getKey();
+        //     Character val = entry.getValue();
+        //     int totalCost = 0;
+        //     // cari cost dari sequence
+        //     if (key.start == key.end) { // artinya cuma sehuruf doang gausa pake paket 
+        //         totalCost = menu[key.start].harga; // sesuai harga menu
+        //     } else {
+        //         // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
+        //         if (val == 'A') {
+        //             totalCost += (key.end-key.start+1)*costA; 
+        //         } else if (val == 'G') {
+        //             totalCost += (key.end-key.start+1)*costG;
+        //         } else { // val == 'S'
+        //             totalCost += (key.end-key.start+1)*costS;
+        //         }
+        //     }
+
+        //     out.println("MAP: ("+key.start+","+key.end+"): "+totalCost); // TEST
+        
+        //     // simpan ke memo key=start, val=map(key:end, val:totalCost)
+        //     TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (totalCost)
+        //     endVal.put(key.end, totalCost);
+        //     memoCostbySequence.put(key.start, endVal);
+        // }
+
+        for (Map.Entry<Integer, TreeMap<Integer, Character>> entry : memoAllSequence.entrySet()) {
+            Integer start = entry.getKey();
+            TreeMap<Integer, Character> endVal = entry.getValue();
+            Integer end = endVal.firstKey();
+            Character val = endVal.get(end);
             int totalCost = 0;
             // cari cost dari sequence
-            if (key.start == key.end) { // artinya cuma sehuruf doang gausa pake paket 
-                totalCost = menu[key.start].harga; // sesuai harga menu
+            if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
+                totalCost = menu[start].harga; // sesuai harga menu
             } else {
                 // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
                 if (val == 'A') {
-                    totalCost += (key.end-key.start+1)*costA; 
+                    totalCost += (end-start+1)*costA; 
                 } else if (val == 'G') {
-                    totalCost += (key.end-key.start+1)*costG;
+                    totalCost += (end-start+1)*costG;
                 } else { // val == 'S'
-                    totalCost += (key.end-key.start+1)*costS;
+                    totalCost += (end-start+1)*costS;
                 }
             }
 
-            out.println("MAP: ("+key.start+","+key.end+"): "+totalCost); // TEST
+            out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
         
             // simpan ke memo key=start, val=map(key:end, val:totalCost)
-            TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (totalCost)
-            endVal.put(key.end, totalCost);
-            memoCostbySequence.put(key.start, endVal);
+            TreeMap<Integer, Integer> endValue = new TreeMap<Integer, Integer>(); // end : val (totalCost)
+            endValue.put(end, totalCost);
+            memoCostbySequence.put(start, endValue);
         }
     }
 
@@ -358,6 +391,9 @@ public class TP01v02 {
         if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
             if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
                 // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                // perlu cek apakah chance masih ada
+                // memoAllSequence.get(start, end);
+                
                 return memoCostbySequence.get(start).get(end);
             }
         }
