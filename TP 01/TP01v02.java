@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Collections;
 
@@ -34,8 +35,12 @@ public class TP01v02 {
     public static int jumlahKursi = 0;
 
     // Query D 
+    public static boolean runDFirst = false;
     public static int costA; public static int costG; public static int costS;
-    public static TreeMap<Node, Integer> memo = new TreeMap<Node, Integer>(); // node save start,end | integer save harga total
+    // just first time
+    public static TreeMap<Node, Character> memo = new TreeMap<Node, Character>(); // node save start,end | string save format char saat itu
+    // all time
+    public static TreeMap<Node, Integer> memoCostbySequence = new TreeMap<Node, Integer>(); // node save start,end | integer total cost
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -182,6 +187,10 @@ public class TP01v02 {
                 // set value of costs
                 costA = in.nextInt(); costG = in.nextInt(); costS = in.nextInt();
                 runD();
+                // untuk set D pernah dijalankan setidaknya sekali
+                if (!runDFirst) {
+                    runDFirst = true;
+                }
             }
         }
     }
@@ -271,7 +280,12 @@ public class TP01v02 {
 
     // find combination of substring with start and end same
     public static void runD() {
-        out.println("CEK D: "+findAllSequence(1,1));
+        if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
+            findAllSequence(1,1);
+        }
+        // cari totalCost dari sequence lalu generate ke TreeMap
+        memoCostbySequence.clear(); // clear memo dulu
+        computeCostbySequence();
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -288,34 +302,60 @@ public class TP01v02 {
         if(strMenu.charAt(start) == strMenu.charAt(end)) {
             out.println("POTONG: "+strMenu.substring(start, end+1)); // TEST
             
-            // cari totalcostnya
-            int totalCost = 0;
-            if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
-                totalCost = menu[start].harga; // sesuai harga menu
-            } else {
-                // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
-                if (strMenu.charAt(start) == 'A') {
-                    totalCost += (end-start+1)*costA; 
-                } else if (strMenu.charAt(start) == 'G') {
-                    totalCost += (end-start+1)*costG;
-                } else { // s.charAt(start) == 'S'
-                    totalCost += (end-start+1)*costS;
-                }
-            }
-            // simpan
-            // memo key=(start,end), val=(total cost)
-            memo.put(new Node(start, end), totalCost);
-
-            out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
+            // simpan ke memo
+            // memo key=(start,end), val=(char format)
+            memo.put(new Node(start, end), strMenu.charAt(start));
 
             // cari lagi sequence dengan start dan end huruf sama
-            return 1 + findAllSequence(start, end + 1);
+            return findAllSequence(start, end + 1);
 
         // jika char di index itu tidak sama maka skip dulu gan
         } else {
             return findAllSequence(start, end + 1); 
         }
-      }
+    }
+
+    public static void computeCostbySequence() {
+        for (Map.Entry<Node, Character> entry : memo.entrySet()) {
+            Node key = entry.getKey();
+            Character val = entry.getValue();
+            int totalCost = 0;
+            // cari cost dari sequence
+            if (key.start == key.end) { // artinya cuma sehuruf doang gausa pake paket 
+                totalCost = menu[key.start].harga; // sesuai harga menu
+            } else {
+                // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
+                if (val == 'A') {
+                    totalCost += (key.end-key.start+1)*costA; 
+                } else if (val == 'G') {
+                    totalCost += (key.end-key.start+1)*costG;
+                } else { // val == 'S'
+                    totalCost += (key.end-key.start+1)*costS;
+                }
+            }
+
+            out.println("MAP: ("+key.start+","+key.end+"): "+totalCost); // TEST
+        
+            // simpan ke memo key=Node(start,end), val=totalCost
+            memoCostbySequence.put(key, totalCost);
+        }
+    }
+    
+
+    //    // cari totalcostnya
+    //    int totalCost = 0;
+    //    if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
+    //        totalCost = menu[start].harga; // sesuai harga menu
+    //    } else {
+    //        // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
+    //        if (strMenu.charAt(start) == 'A') {
+    //            totalCost += (end-start+1)*costA; 
+    //        } else if (strMenu.charAt(start) == 'G') {
+    //            totalCost += (end-start+1)*costG;
+    //        } else { // s.charAt(start) == 'S'
+    //            totalCost += (end-start+1)*costS;
+    //        }
+    //    }
 
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
