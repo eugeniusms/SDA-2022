@@ -271,24 +271,22 @@ public class TP01v02 {
 
     // find combination of substring with start and end same
     public static void runD() {
-        out.println("CEK D: "+substringSES(strMenu, 1,1));
+        out.println("CEK D: "+findAllSequence(1,1));
     }
 
-    public static int substringSES(String s,int start,int end) {
-        /* when end reaches at the end of the string 
-        still recur for some more cases if present */ 
-        if(end == s.length()){
-          start++;
-          end = start;
+    // method mengumpulkan sequence(substring) dengan char start == char end
+    public static int findAllSequence(int start,int end) {
+        // saat sudah mencapai end tapi start == end
+        if(end == strMenu.length()){
+          start++; end = start;
         }
-        /* when end reaches at the end of the string 
-        and all cases are covered */
-        if(end == s.length())
+        // saat iterasi telah mencapai panjang string maka sudahi
+        if(end == strMenu.length())
           return 0;
-        /* if a char at start index matches char at end index
-        count it and recur for more cases */
-        if(s.charAt(start) == s.charAt(end)) {
-            out.println("POTONG: "+s.substring(start, end+1)); // TEST
+
+        // jika char start dan end sama maka tambahkan ke memo
+        if(strMenu.charAt(start) == strMenu.charAt(end)) {
+            out.println("POTONG: "+strMenu.substring(start, end+1)); // TEST
             
             // cari totalcostnya
             int totalCost = 0;
@@ -296,9 +294,9 @@ public class TP01v02 {
                 totalCost = menu[start].harga; // sesuai harga menu
             } else {
                 // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
-                if (s.charAt(start) == 'A') {
+                if (strMenu.charAt(start) == 'A') {
                     totalCost += (end-start+1)*costA; 
-                } else if (s.charAt(start) == 'G') {
+                } else if (strMenu.charAt(start) == 'G') {
                     totalCost += (end-start+1)*costG;
                 } else { // s.charAt(start) == 'S'
                     totalCost += (end-start+1)*costS;
@@ -311,12 +309,11 @@ public class TP01v02 {
             out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
 
             // cari lagi sequence dengan start dan end huruf sama
-            return 1 + substringSES(s, start, end + 1);
+            return 1 + findAllSequence(start, end + 1);
 
+        // jika char di index itu tidak sama maka skip dulu gan
         } else {
-        /* if char at both index does'nt matches skip it 
-        and recur for more cases */
-          return substringSES(s, start, end + 1); 
+            return findAllSequence(start, end + 1); 
         }
       }
 
