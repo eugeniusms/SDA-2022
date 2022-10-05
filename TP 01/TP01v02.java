@@ -41,6 +41,7 @@ public class TP01v02 {
     public static TreeMap<Node, Character> memo = new TreeMap<Node, Character>(); // node save start,end | string save format char saat itu
     // all time
     public static TreeMap<Node, Integer> memoCostbySequence = new TreeMap<Node, Integer>(); // node save start,end | integer total cost
+    public static TreeMap<Node, Integer> memoMinCost = new TreeMap<Node, Integer>(); // node save start,end | integer min cost on sequence start,end
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -286,6 +287,8 @@ public class TP01v02 {
         // cari totalCost dari sequence lalu generate ke TreeMap
         memoCostbySequence.clear(); // clear memo dulu
         computeCostbySequence();
+        // cari harga paling minimum dari kombinasi sequence
+        out.println("CHECK D: "+findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -340,22 +343,40 @@ public class TP01v02 {
             memoCostbySequence.put(key, totalCost);
         }
     }
-    
 
-    //    // cari totalcostnya
-    //    int totalCost = 0;
-    //    if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
-    //        totalCost = menu[start].harga; // sesuai harga menu
-    //    } else {
-    //        // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
-    //        if (strMenu.charAt(start) == 'A') {
-    //            totalCost += (end-start+1)*costA; 
-    //        } else if (strMenu.charAt(start) == 'G') {
-    //            totalCost += (end-start+1)*costG;
-    //        } else { // s.charAt(start) == 'S'
-    //            totalCost += (end-start+1)*costS;
-    //        }
-    //    }
+    // find optimal solution = minimum cost of sequence combination
+    // dynamic programming find optimal solution
+    public static int findMinimumCost(int start, int end) {
+        // jika sudah ada dalam memo tinggal ambil aja
+        if (memoMinCost.containsKey(new Node(start, end))) {
+            return memoMinCost.get(new Node(start, end));
+        }
+
+        // jika belum ada maka cari yg minimum
+        if (start >= end) { // saat hurufnya sama
+            return 0;
+        } else {
+            // inisiasi variabel
+            int cost = 0;
+            int minCost = Integer.MAX_VALUE;
+
+            // pada setiap percabangan sequence
+            for (int i = start; i < end; i++) {
+                // cari cost dari sequence
+                Node key = new Node(start, i);
+                cost = memoCostbySequence.get(key) + findMinimumCost(i+1, end);
+                // jika lebih kecil maka gunakan yang itu
+                if (cost < minCost) {
+                    minCost = cost;
+                }
+            }
+
+            // simpan ke memo minimal cost pada suatu sequence
+            memoMinCost.put(new Node(start, end), minCost);
+            return minCost;
+        }
+    }
+    
 
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
