@@ -396,42 +396,6 @@ public class TP01v02 {
             memoMinCost.put(start, endVal); 
             return minCost;
         }
-
-        // } else {
-        //     // inisiasi variabel
-        //     int cost = 0;
-        //     int costSequence = 0;
-        //     int minCost = Integer.MAX_VALUE;
-
-        //     // pada setiap percabangan sequence
-        //     for (int i = start; i < end; i++) {
-
-        //         // cari cost dari sequence
-        //         if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
-        //             if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
-        //                 // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
-        //                 costSequence = memoCostbySequence.get(start).get(end);
-        //                 cost = costSequence + findMinimumCost(i+1, end);
-        //             } else {
-        //                 // jika tidak ada end di memoCostbySequence
-        //                 cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
-        //             }
-        //         } else {
-        //             // jika tidak ada start di memoCostbySequence
-        //             cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
-        //         }
-        //         out.println("CEK MIN COST("+start+","+end+"): "+cost); // TEST
-        //         // jika lebih kecil maka gunakan yang itu
-        //         if (cost < minCost) {
-        //             minCost = cost;
-        //         }
-        //     }
-
-            // minimal cost pada suatu sequence disimpan ke memo 
-            // TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (minCost)
-            // endVal.put(end, minCost);
-            // memoMinCost.put(start, endVal); // key:start, val:map(key:end, val:minCost)
-            // return minCost;
     }    
 
     // taken from https://codeforces.com/submissions/Petr
