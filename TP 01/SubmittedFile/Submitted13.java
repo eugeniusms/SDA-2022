@@ -249,6 +249,7 @@ public class Submitted13 {
     }
 
     public static void runD(int costA, int costG, int costS) {
+        // out.println(totalHargaMenu);
         out.println(costA*jumlahMenu); // harga jika A...A dengan A paling kecil
     }
 
