@@ -209,7 +209,7 @@ public class Submitted10 {
         Koki kokiPelayan = getKokiMinimum(tipeMakanan); // O(1)
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
-        out.println("P: "+kokiPelayan.id); // OUTPUT
+        out.println(kokiPelayan.id); // OUTPUT
     }
 
     // method mengembalikan koki pelayan
@@ -247,7 +247,7 @@ public class Submitted10 {
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.idPelanggan].U -= hargaMenu;
 
-        out.println("L: "+pesananSelesai.idPelanggan);
+        out.println(pesananSelesai.idPelanggan);
     }
 
     public static void runB(int idPelanggan) {
@@ -255,9 +255,9 @@ public class Submitted10 {
         // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
         if (pelanggan[idPelanggan].U < 0) {
             pelanggan[idPelanggan].blacklist = true;
-            out.println("B: 0"); // OUTPUT
+            out.println("0"); // OUTPUT
         } else {
-            out.println("B: 1"); // OUTPUT
+            out.println("1"); // OUTPUT
         }
     }
 
@@ -286,17 +286,14 @@ public class Submitted10 {
         // SET DULU
         chanceA = 1; chanceG = 1; chanceS = 1; counterPaket = 0;
         if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
-            out.println("FIND ALL SEQUENCE");
             findAllSequence(1,1);
         }
         // cari totalCost dari sequence lalu generate ke TreeMap
-        out.println("COMPUTE COST BY SEQUENCE");
         memoCostbySequence.clear(); // clear memo dulu
         computeCostbySequence();
         memoMinCost.clear(); // clear memo dulu
         // cari harga paling minimum dari kombinasi sequence
-        out.println("FIND MINIMUM COST");
-        out.println("CHECK D: "+findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
+        findMinimumCost(1,memoCostbySequence.size()); 
         // menyusun harga yang sesuai dengan lastPackage pada A, G, dan S (pada tiap paket maksimal 1)
         printMinPrice();
     }
@@ -313,7 +310,6 @@ public class Submitted10 {
 
         // jika char start dan end sama maka tambahkan ke memo
         if(strMenu.charAt(start) == strMenu.charAt(end)) {
-            out.println("POTONG: "+strMenu.substring(start, end+1)); // TEST
             
             // simpan ke memo
             // memo key=(start,end), val=(char format)
@@ -351,8 +347,6 @@ public class Submitted10 {
                     totalCost += (end-start+1)*costS;
                 }
             }
-
-            out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
         
             // simpan ke memo key=start, val:end,paket,harga,mask = 0 (default: belum dipaketkan sama sekali)
             Node node = new Node(start, end, val, totalCost, 0);
@@ -395,7 +389,6 @@ public class Submitted10 {
         if (start > end) { // (base case) // di sini udah selesai (bisa dipaketkan semua)
             return 0;
         } else if (start == end) { // saat hurufnya sama (base case)
-            out.println("CEK MIN COST("+start+","+end+"): "+menu[start].harga); // TEST TEST
             return menu[start].harga;
         } else {
             // check apakah sudah ada nilainya dalam memo min cost
@@ -421,7 +414,6 @@ public class Submitted10 {
 
                             // set mask ke 1 (sequence baru dipaketkan)
                             memoCostbySequence.get(start).mask = 1;
-                            out.println("MASUK GAN: "+memoCostbySequence.get(start).start+","+memoCostbySequence.get(start).end+","+memoCostbySequence.get(start).paket+","+memoCostbySequence.get(start).harga+","+memoCostbySequence.get(start).mask); // TEST
 
                             // simpan sequence ke last package (paket)
                             if (memoCostbySequence.get(start).paket == 'A') {
@@ -435,13 +427,8 @@ public class Submitted10 {
                             // menggunakan method baru susun harga baru yg sesuai dengan paket terakhir pada A,G,S
                         }
                     }
-                    // catat juga sequence yang dipakai (dihitung)
-                    counterPaket++; out.println("PERUBAHAN PAKET KE-"+counterPaket);
-                    out.println("SEQUENCE TERPAKAI: START["+start+"] END["+end+"] PAKET["+menu[start].tipe+"]"); // TEST
                 }
             }
-
-            out.println("CEK MIN COST("+start+","+end+"): "+minCost); // TEST
 
             // minimal cost pada suatu sequence disimpan ke memo 
             TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (minCost)
@@ -463,27 +450,22 @@ public class Submitted10 {
         int startS = lastPackageS != null ? lastPackageS.start : 0;
         int endS = lastPackageS != null ? lastPackageS.end : 0;
 
-        out.println("CEKS: "+startA+" "+endA+" "+startG+" "+endG+" "+startS+" "+endS); // TEST
         while (step < strMenu.length()) {
             if (step == startA && lastPackageA.start-lastPackageA.end != 0) { // jika step sama start loop dan package tidak hanya berisi satu
-                out.println("PAKET DIGUNAKAN START["+startA+"]-END["+endA+"] ");
                 hargaTotal += lastPackageA.harga;
                 step = endA+1; // pindahkan step
             } else if (step == startG && lastPackageG.start-lastPackageG.end != 0) {
-                out.println("PAKET DIGUNAKAN START["+startG+"]-END["+endG+"] ");
                 hargaTotal += lastPackageG.harga;
                 step = endG+1; // pindahkan step
             } else if (step == startS && lastPackageS.start-lastPackageS.end != 0) {
-                out.println("PAKET DIGUNAKAN START["+startS+"]-END["+endS+"] ");
                 hargaTotal += lastPackageS.harga;
                 step = endS+1; // pindahkan step
             } else {
-                out.println(strMenu.charAt(step)+" ");
                 hargaTotal += menu[step].harga;
                 step++;
             }
         }
-        out.println("HARGA TOTAL: "+hargaTotal);
+        out.println(hargaTotal);
     }
 
     // taken from https://codeforces.com/submissions/Petr
