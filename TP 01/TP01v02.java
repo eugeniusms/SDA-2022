@@ -369,6 +369,17 @@ public class TP01v02 {
         if (memoCostbySequence.containsKey(start)) {
             if (memoCostbySequence.get(start).end == end
                 && memoCostbySequence.get(start).mask == 0) { 
+                    // jika yg paling besar udah optimal maka langsung saja ambil jadi last package of start.tipe (ga perlu handle gapapa si sebenernya)
+                    if (start == 1 && end == memoCostbySequence.size()) {
+                        if (strMenu.charAt(start) == 'A') {
+                            lastPackageA = memoCostbySequence.get(start);
+                        } else if (strMenu.charAt(start) == 'G') {
+                            lastPackageG = memoCostbySequence.get(start);
+                        } else { // val == 'S'
+                            lastPackageS = memoCostbySequence.get(start);
+                        }
+                    }
+                    // kembalikan sequence
                     return memoCostbySequence.get(start).harga; // ambil totalCost
                 }
         }
@@ -410,6 +421,7 @@ public class TP01v02 {
 
                             // set mask ke 1 (sequence baru dipaketkan)
                             memoCostbySequence.get(start).mask = 1;
+                            out.println("MASUK GAN: "+memoCostbySequence.get(start).start+","+memoCostbySequence.get(start).end+","+memoCostbySequence.get(start).paket+","+memoCostbySequence.get(start).harga+","+memoCostbySequence.get(start).mask); // TEST
 
                             // simpan sequence ke last package (paket)
                             if (memoCostbySequence.get(start).paket == 'A') {
