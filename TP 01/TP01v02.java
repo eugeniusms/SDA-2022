@@ -4,10 +4,9 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Collections;
-
-// TAR PALING AKHIR COBA DP[tipe][mask], sementara greedy (kejar AC)
 
 public class TP01v02 {
     private static InputReader in;
@@ -36,16 +35,13 @@ public class TP01v02 {
     public static int jumlahKursi = 0;
 
     // Query D 
+    public static boolean runDFirst = false;
     public static int costA; public static int costG; public static int costS; // cost @ paket
     // just first time
-    // map key:start > val:[end1, end2,...], search by key for loop to get end (then run like solusi yg palingmaju)
-    public static TreeMap<Integer, ArrayList<Integer>> allPath = new TreeMap<Integer, ArrayList<Integer>>();
-    // all time map: {key:start > val:end,paket,harga,mask}
-    // masking:
-    // 0 -> tipe i belum dipaketkan sama sekali (default mask)
-    // 1 -> tipe i sudah dipaketkan (tidak bisa diambil lagi - ubah mask), lalu simpan ke lastPackage untuk diupdate ke 0 lagi jika ada paket baru di tipenya
-
-    public static int counterD = 1; // counter untuk query D
+    public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
+    // all time map: {key:start > key:end > value}
+    public static TreeMap<Integer, TreeMap<Integer, Integer>> memoCostbySequence = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer total cost
+    public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -188,7 +184,10 @@ public class TP01v02 {
                 // set value of costs
                 costA = in.nextInt(); costG = in.nextInt(); costS = in.nextInt();
                 runD();
-                counterD++;
+                // untuk set D pernah dijalankan setidaknya sekali
+                if (!runDFirst) {
+                    runDFirst = true;
+                }
             }
         }
     }
@@ -201,7 +200,7 @@ public class TP01v02 {
         Koki kokiPelayan = getKokiMinimum(tipeMakanan); // O(1)
         // menambahkan pesanan baru ke pesanan
         pesanan.add(new Pesanan(idPelanggan, idMenu, kokiPelayan));
-        out.println("P: "+kokiPelayan.id); // OUTPUT
+        out.println(kokiPelayan.id); // OUTPUT
     }
 
     // method mengembalikan koki pelayan
@@ -239,7 +238,7 @@ public class TP01v02 {
         // uang pelanggan dikurangi
         pelanggan[pesananSelesai.idPelanggan].U -= hargaMenu;
 
-        out.println("L: "+pesananSelesai.idPelanggan);
+        out.println(pesananSelesai.idPelanggan);
     }
 
     public static void runB(int idPelanggan) {
@@ -247,13 +246,12 @@ public class TP01v02 {
         // lalu cetak pembayaran (0 jika tidak mampu bayar, 1 jika mampu bayar)
         if (pelanggan[idPelanggan].U < 0) {
             pelanggan[idPelanggan].blacklist = true;
-            out.println("B: 0"); // OUTPUT
+            out.println("0"); // OUTPUT
         } else {
-            out.println("B: 1"); // OUTPUT
+            out.println("1"); // OUTPUT
         }
     }
 
-    // sort koki berdasarkan jumlah pelayanan > tipe > id
     public static void runC(int Q) {
         Collections.sort(kokiAll);
         for (Koki k: kokiAll) {
@@ -265,21 +263,18 @@ public class TP01v02 {
         }
     }
 
-    // A S G S G A G
-    // A S G S G A G
-    // A (S G S) (G A G)
-    // A (S G S) G A G
-    // (A S G S G A) G
-    // A S (G S G) A G
-    // A S (G S G A G)
-
     // find combination of substring with start and end same
     public static void runD() {
-        if (counterD == 1) { // hanya di run ketika awal untuk mencari path potongan
+        // SET DULU
+        if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
             findAllSequence(1,1);
         }
-        // mencocokkan harga sesuai path yang ada dari depan
-        countingCost();
+        // cari totalCost dari sequence lalu generate ke TreeMap
+        memoCostbySequence.clear(); // clear memo dulu
+        computeCostbySequence();
+        memoMinCost.clear(); // clear memo dulu
+        // cari harga paling minimum dari kombinasi sequence
+        out.println(findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -294,68 +289,94 @@ public class TP01v02 {
 
         // jika char start dan end sama maka tambahkan ke memo
         if(strMenu.charAt(start) == strMenu.charAt(end)) {
-            out.println("POTONG: "+strMenu.substring(start, end+1)); // TEST
-
-            // menambahkan end ke start sesuai path dalam map
-            if (!allPath.containsKey(start)) {
-                allPath.put(start, new ArrayList<>());
-            }
-            allPath.get(start).add(end);
+            // simpan ke memo
+            // memo key=(start,end), val=(char format)
+            TreeMap<Integer, Character> endVal = new TreeMap<Integer, Character>(); // end : val (totalCost)
+            endVal.put(end, strMenu.charAt(start)); // end : val (charAt)
+            memoAllSequence.put(start, endVal);
 
             // cari lagi sequence dengan start dan end huruf sama
             return findAllSequence(start, end + 1);
+
+        // jika char di index itu tidak sama maka skip dulu gan
         } else {
-            // jika char di index itu tidak sama maka skip dulu gan
             return findAllSequence(start, end + 1); 
         }
     }
 
-    // PENDEKATAN GREEDY AJA HEHE :D
-    public static void countingCost() {
-        long allCost = 0;
-        int start = 1;
-        while (start < strMenu.length()+1) {
-            ArrayList<Integer> allEnd = allPath.get(start);
-
-            // simpan end paling baik (paling minimum harganya)
-            int bestEnd = 0;
-            int minimCost = Integer.MAX_VALUE;
-            // mencari end yg menghasilkan cost paling minim
-            for (int end: allEnd) {
-                // hitung harga
-                int harga = hitungHargaSequence(start, end);
-                out.println("CEK ADA APA AJA: START["+start+"]+ END["+end+"]");
-                if (harga < minimCost) {
-                    minimCost = harga;
-                    bestEnd = end;
+    public static void computeCostbySequence() {
+        // cari totalCost dari sequence lalu generate ke TreeMap
+        for (Map.Entry<Integer, TreeMap<Integer, Character>> entry : memoAllSequence.entrySet()) {
+            Integer start = entry.getKey();
+            TreeMap<Integer, Character> endVal = entry.getValue();
+            Integer end = endVal.firstKey();
+            Character val = endVal.get(end);
+            int totalCost = 0;
+            // cari cost dari sequence
+            if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
+                totalCost = menu[start].harga; // sesuai harga menu
+            } else {
+                // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
+                if (val == 'A') {
+                    totalCost += (end-start+1)*costA; 
+                } else if (val == 'G') {
+                    totalCost += (end-start+1)*costG;
+                } else { // val == 'S'
+                    totalCost += (end-start+1)*costS;
                 }
             }
-            
-            allCost += minimCost; // minimCost ditotalkan
-            out.println(allCost);
-
-            // tambah nilai start dengan bestEnd - 1 (meloncat ke start selanjutnya)
-            start += bestEnd;
+        
+            // simpan ke memo key=start, val=map(key:end, val:totalCost)
+            TreeMap<Integer, Integer> endValue = new TreeMap<Integer, Integer>(); // end : val (totalCost)
+            endValue.put(end, totalCost);
+            memoCostbySequence.put(start, endValue);
         }
-        out.println(allCost);
     }
 
-    // method menghitung harga sequence
-    public static int hitungHargaSequence(int start, int end) {
-        int totalCost = menu[start].harga; // default satuan
-        if (start == end) { // jika satuan langsung return harga
-            return totalCost; 
+    // find optimal solution = minimum cost of sequence combination
+    // dynamic programming find optimal solution
+    public static int findMinimumCost(int start, int end) {
+        // jika sudah ada dalam memo tinggal ambil aja
+        // memo1
+        if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
+            if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
+                // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                return memoCostbySequence.get(start).get(end);
+            }
         }
-        // jika tidak satuan maka return paketan
-        if (menu[start].tipe == 'S') {
-            totalCost = (end-start+1)*costS;
-        } else if (menu[start].tipe == 'G') {
-            totalCost = (end-start+1)*costG;
-        } else { // menu[start].tipe == 'A'
-            totalCost = (end-start+1)*costA;
+        // memo2
+        if (memoMinCost.containsKey(start)) { // jika ada key start di memo
+            if (memoMinCost.get(start).containsKey(end)) { // jika ada key end di memo
+                // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                return memoMinCost.get(start).get(end);
+            }
         }
-        return totalCost;
-    }
+
+        // jika belum ada maka cari yg minimum
+        if (start > end) { // (base case)
+            return 0;
+        } else if (start == end) { // saat hurufnya sama (base case)
+            return menu[start].harga;
+        } else {
+            // check apakah sudah ada nilainya dalam memo min cost
+            int minCost = Integer.MAX_VALUE;
+
+            // cari minimum cost dari kombinasi sequence
+            for (int i = start; i < end; i++) {
+                // cari minimum cost dari kombinasi sequence
+                int cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
+                if (cost < minCost) {
+                    minCost = cost;
+                }
+            }
+
+            // minimal cost pada suatu sequence disimpan ke memo 
+            TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (minCost)
+            endVal.put(end, minCost);
+            memoMinCost.put(start, endVal); 
+            return minCost;
+        }
+    }    
 
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
