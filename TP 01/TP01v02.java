@@ -299,7 +299,6 @@ public class TP01v02 {
         out.println("CHECK D: "+findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
         // menyusun harga yang sesuai dengan lastPackage pada A, G, dan S (pada tiap paket maksimal 1)
         printMinPrice();
-        checkPaketD(); // CHECK
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -467,41 +466,6 @@ public class TP01v02 {
             }
         }
         // out.println("CEK PAKET A: "+lastPackageA.start);
-    }
-
-    public static void checkPaketD() {
-        out.println("CEK PAKET D: ");
-        int step = 1;
-        while (step < strMenu.length()+1) {
-            if (lastPackageA != null) {
-                if (lastPackageA.start == step) {
-                    out.print("A"); 
-                    step = lastPackageA.end+1;
-                } else {
-                    out.print(strMenu.charAt(step-1));
-                    step++;
-                }
-            } else if (lastPackageG != null) {
-                if (lastPackageG.start == step) {
-                    out.print("G");
-                    step = lastPackageG.end+1;
-                } else {
-                    out.print(strMenu.charAt(step-1));
-                    step++;
-                }
-            } else if (lastPackageS != null) {
-                if (lastPackageS.start == step) {
-                    out.print("S");
-                    step = lastPackageS.end+1;
-                } else {
-                    out.print(strMenu.charAt(step-1));
-                    step++;
-                }
-            } else {
-                out.print(strMenu.charAt(step-1));
-                step++;
-            }
-        }
     }
 
     // taken from https://codeforces.com/submissions/Petr
