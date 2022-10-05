@@ -282,10 +282,13 @@ public class TP01v02 {
     // find combination of substring with start and end same
     public static void runD() {
         if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
+            out.println("FIND ALL SEQUENCE");
             findAllSequence(1,1);
         }
         // cari totalCost dari sequence lalu generate ke TreeMap
+        out.println("COMPUTE COST BY SEQUENCE");
         memoCostbySequence.clear(); // clear memo dulu
+        out.println("FIND MINIMUM COST");
         computeCostbySequence();
         // cari harga paling minimum dari kombinasi sequence
         out.println("CHECK D: "+findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
@@ -358,8 +361,10 @@ public class TP01v02 {
         }
 
         // jika belum ada maka cari yg minimum
-        if (start >= end) { // saat hurufnya sama
+        if (start > end) { // (base case)
             return 0;
+        } else if (start == end) { // saat hurufnya sama (base case)
+            return menu[start].harga;
         } else {
             // inisiasi variabel
             int cost = 0;
@@ -368,17 +373,22 @@ public class TP01v02 {
 
             // pada setiap percabangan sequence
             for (int i = start; i < end; i++) {
+
                 // cari cost dari sequence
                 if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
                     if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
                         // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
                         costSequence = memoCostbySequence.get(start).get(end);
                         cost = costSequence + findMinimumCost(i+1, end);
+                    } else {
+                        // jika tidak ada end di memoCostbySequence
+                        cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
                     }
                 } else {
-                    // jika tidak ada start end di memoCostbySequence
+                    // jika tidak ada start di memoCostbySequence
                     cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
                 }
+                out.println("CEK MIN COST("+start+","+end+"): "+cost); // TEST
                 // jika lebih kecil maka gunakan yang itu
                 if (cost < minCost) {
                     minCost = cost;
