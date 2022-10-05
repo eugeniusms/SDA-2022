@@ -38,11 +38,14 @@ public class TP01v02 {
     // Query D 
     public static int costA; public static int costG; public static int costS; // cost @ paket
     // just first time
-    public static TreeMap<Integer, Node> memoAllSequence = new TreeMap<Integer, Node>(); // node save start,end | string save format char saat itu
+    // map key:start > val:[end1, end2,...], search by key for loop to get end (then run like solusi yg palingmaju)
+    public static TreeMap<Integer, ArrayList<Integer>> allPath = new TreeMap<Integer, ArrayList<Integer>>();
     // all time map: {key:start > val:end,paket,harga,mask}
     // masking:
     // 0 -> tipe i belum dipaketkan sama sekali (default mask)
     // 1 -> tipe i sudah dipaketkan (tidak bisa diambil lagi - ubah mask), lalu simpan ke lastPackage untuk diupdate ke 0 lagi jika ada paket baru di tipenya
+
+    public static int counterD = 1; // counter untuk query D
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -185,6 +188,7 @@ public class TP01v02 {
                 // set value of costs
                 costA = in.nextInt(); costG = in.nextInt(); costS = in.nextInt();
                 runD();
+                counterD++;
             }
         }
     }
@@ -271,7 +275,11 @@ public class TP01v02 {
 
     // find combination of substring with start and end same
     public static void runD() {
-        findAllSequence(1,1);
+        if (counterD == 1) { // hanya di run ketika awal untuk mencari path potongan
+            findAllSequence(1,1);
+        }
+        // mencocokkan harga sesuai path yang ada dari depan
+        countingCost();
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -287,29 +295,66 @@ public class TP01v02 {
         // jika char start dan end sama maka tambahkan ke memo
         if(strMenu.charAt(start) == strMenu.charAt(end)) {
             out.println("POTONG: "+strMenu.substring(start, end+1)); // TEST
-            
-            // simpan ke memo
-            // memo key=(start) val= Node(int start, int end, char paket, int harga sequence, int mask) {
-            if (start == end) { // cuma satu
-                memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), menu[start].harga, 1));
-            } else { // lebih dari satu
-                // disesuaikan dengan jenis paket
-                if (strMenu.charAt(start) == 'S') {
-                    memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), (end-start+1)*costS, 1));
-                } else if (strMenu.charAt(start) == 'G') {
-                    memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), (end-start+1)*costG, 1));
-                } else { // strMenu.charAt(start) == 'A'
-                    memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), (end-start+1)*costA, 1));
-                }
+
+            // menambahkan end ke start sesuai path dalam map
+            if (!allPath.containsKey(start)) {
+                allPath.put(start, new ArrayList<>());
             }
+            allPath.get(start).add(end);
 
             // cari lagi sequence dengan start dan end huruf sama
             return findAllSequence(start, end + 1);
-
-        // jika char di index itu tidak sama maka skip dulu gan
         } else {
+            // jika char di index itu tidak sama maka skip dulu gan
             return findAllSequence(start, end + 1); 
         }
+    }
+
+    // PENDEKATAN GREEDY AJA HEHE :D
+    public static void countingCost() {
+        long allCost = 0;
+        int start = 1;
+        while (start < strMenu.length()+1) {
+            ArrayList<Integer> allEnd = allPath.get(start);
+
+            // simpan end paling baik (paling minimum harganya)
+            int bestEnd = 0;
+            int minimCost = Integer.MAX_VALUE;
+            // mencari end yg menghasilkan cost paling minim
+            for (int end: allEnd) {
+                // hitung harga
+                int harga = hitungHargaSequence(start, end);
+                out.println("CEK ADA APA AJA: START["+start+"]+ END["+end+"]");
+                if (harga < minimCost) {
+                    minimCost = harga;
+                    bestEnd = end;
+                }
+            }
+            
+            allCost += minimCost; // minimCost ditotalkan
+            out.println(allCost);
+
+            // tambah nilai start dengan bestEnd - 1 (meloncat ke start selanjutnya)
+            start += bestEnd;
+        }
+        out.println(allCost);
+    }
+
+    // method menghitung harga sequence
+    public static int hitungHargaSequence(int start, int end) {
+        int totalCost = menu[start].harga; // default satuan
+        if (start == end) { // jika satuan langsung return harga
+            return totalCost; 
+        }
+        // jika tidak satuan maka return paketan
+        if (menu[start].tipe == 'S') {
+            totalCost = (end-start+1)*costS;
+        } else if (menu[start].tipe == 'G') {
+            totalCost = (end-start+1)*costG;
+        } else { // menu[start].tipe == 'A'
+            totalCost = (end-start+1)*costA;
+        }
+        return totalCost;
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -407,24 +452,5 @@ class Pesanan {
         this.idPelanggan = idPelanggan;
         this.idMakanan = idMakanan;
         this.kokiPelayan = kokiPelayan;
-    }
-}
-
-// class inisiator node (untuk mencatat sequence yang ada)
-class Node {
-    int start; // start dari node (digunakan untuk printMinPrice aja)
-    int end; // end dari node (sequence), startnya jadi key di treemap
-    int harga; // harga dari sequence
-    char paket; // S, G, A
-    int mask; // 0 -> belum dipakai, 1 -> sudah dipakai
-
-    // key of treemap = start sorted
-    // constructor node (simpan end, paket, harga sequence, dan mask sequence) untuk 
-    Node(int start, int end, char paket, int harga, int mask) {
-        this.start = start;
-        this.end = end;
-        this.paket = paket;
-        this.harga = harga;
-        this.mask = mask;
     }
 }
