@@ -43,6 +43,8 @@ public class TP01v02 {
     // all time map: {key:start > key:end > value}
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoCostbySequence = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer total cost
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
+    // counter berapa kali pergantian paket
+    public static int counterPaket = 0;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -283,7 +285,7 @@ public class TP01v02 {
     // find combination of substring with start and end same
     public static void runD() {
         // SET DULU
-        chanceA = 1; chanceG = 1; chanceS = 1;
+        chanceA = 1; chanceG = 1; chanceS = 1; counterPaket = 0;
         if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
             out.println("FIND ALL SEQUENCE");
             findAllSequence(1,1);
@@ -408,6 +410,7 @@ public class TP01v02 {
                 if (cost < minCost) {
                     minCost = cost;
                     // catat juga sequence yang dipakai (dihitung)
+                    counterPaket++; out.println("PERUBAHAN PAKET KE-"+counterPaket);
                     out.println("SEQUENCE TERPAKAI: START["+start+"] END["+end+"] PAKET["+menu[start].tipe+"]"); // TEST
                 }
             }
