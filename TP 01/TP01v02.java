@@ -41,6 +41,10 @@ public class TP01v02 {
     // just first time
     public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
     // all time map: {key:start > val:end,paket,harga,mask}
+    // masking:
+    // 0 -> tipe i belum dipaketkan sama sekali (default mask)
+    // 1 -> tipe i sedang dalam proses pemaketan
+    // 2 -> tipe i sudah ditutup paketnya
     public static TreeMap<Integer, Node> memoCostbySequence = new TreeMap<Integer, Node>(); // integer: start sequence | node: end, paket, harga, mask
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
     // counter berapa kali pergantian paket
@@ -346,7 +350,7 @@ public class TP01v02 {
 
             out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
         
-            // simpan ke memo key=start, val:end,paket,harga,mask
+            // simpan ke memo key=start, val:end,paket,harga,mask = 0 (default: belum dipaketkan sama sekali)
             Node node = new Node(end, val, totalCost, 0);
             memoCostbySequence.put(start, node);
         }
@@ -388,6 +392,12 @@ public class TP01v02 {
                 int cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
                 if (cost < minCost) {
                     minCost = cost;
+                    // ubah mask dari sequence yg sudah dipakai (HARUSNYA BUKAN PER SEQUENCE TAPI PER S/G/A)
+                    if (memoCostbySequence.containsKey(start)) {
+                        if (memoCostbySequence.get(start).end == i) {
+                            memoCostbySequence.get(start).mask = 1;
+                        }
+                    }
                     // catat juga sequence yang dipakai (dihitung)
                     counterPaket++; out.println("PERUBAHAN PAKET KE-"+counterPaket);
                     out.println("SEQUENCE TERPAKAI: START["+start+"] END["+end+"] PAKET["+menu[start].tipe+"]"); // TEST
