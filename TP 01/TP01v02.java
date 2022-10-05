@@ -367,9 +367,19 @@ public class TP01v02 {
             if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
                 // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
                 // perlu cek apakah chance masih ada
-                // memoAllSequence.get(start, end);
-                
-                return memoCostbySequence.get(start).get(end);
+                char paket = memoAllSequence.get(start).get(end);
+                if (paket == 'S' && chanceS != 0) {
+                    // saat chance pakai paket belum habis maka bisa digunakan
+                    chanceS--;
+                    return memoCostbySequence.get(start).get(end);
+                } else if (paket == 'G' && chanceG != 0) {
+                    chanceG--;
+                    return memoCostbySequence.get(start).get(end);
+                } else if (paket == 'A' && chanceA != 0) {
+                    chanceA--;
+                    return memoCostbySequence.get(start).get(end);
+                } 
+                // jika sudah tidak ada chance ya tidak bisa dipakai lagi paketnya
             }
         }
         // memo2
