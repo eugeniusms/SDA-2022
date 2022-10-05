@@ -4,9 +4,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.Collections;
+
+// TAR PALING AKHIR COBA DP[tipe][mask], sementara greedy (kejar AC)
 
 public class TP01v02 {
     private static InputReader in;
@@ -35,17 +36,13 @@ public class TP01v02 {
     public static int jumlahKursi = 0;
 
     // Query D 
-    public static boolean runDFirst = false;
     public static int costA; public static int costG; public static int costS; // cost @ paket
     // just first time
-    public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
+    public static TreeMap<Integer, Node> memoAllSequence = new TreeMap<Integer, Node>(); // node save start,end | string save format char saat itu
     // all time map: {key:start > val:end,paket,harga,mask}
     // masking:
     // 0 -> tipe i belum dipaketkan sama sekali (default mask)
     // 1 -> tipe i sudah dipaketkan (tidak bisa diambil lagi - ubah mask), lalu simpan ke lastPackage untuk diupdate ke 0 lagi jika ada paket baru di tipenya
-   
-    // counter berapa kali pergantian paket
-    public static int counterPaket = 0;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -188,10 +185,6 @@ public class TP01v02 {
                 // set value of costs
                 costA = in.nextInt(); costG = in.nextInt(); costS = in.nextInt();
                 runD();
-                // untuk set D pernah dijalankan setidaknya sekali
-                if (!runDFirst) {
-                    runDFirst = true;
-                }
             }
         }
     }
@@ -278,12 +271,7 @@ public class TP01v02 {
 
     // find combination of substring with start and end same
     public static void runD() {
-        // SET DULU
-        counterPaket = 0;
-        if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
-            out.println("FIND ALL SEQUENCE");
-            findAllSequence(1,1);
-        }
+        findAllSequence(1,1);
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -301,10 +289,19 @@ public class TP01v02 {
             out.println("POTONG: "+strMenu.substring(start, end+1)); // TEST
             
             // simpan ke memo
-            // memo key=(start,end), val=(char format)
-            TreeMap<Integer, Character> endVal = new TreeMap<Integer, Character>(); // end : val (totalCost)
-            endVal.put(end, strMenu.charAt(start)); // end : val (charAt)
-            memoAllSequence.put(start, endVal);
+            // memo key=(start) val= Node(int start, int end, char paket, int harga sequence, int mask) {
+            if (start == end) { // cuma satu
+                memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), menu[start].harga, 1));
+            } else { // lebih dari satu
+                // disesuaikan dengan jenis paket
+                if (strMenu.charAt(start) == 'S') {
+                    memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), (end-start+1)*costS, 1));
+                } else if (strMenu.charAt(start) == 'G') {
+                    memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), (end-start+1)*costG, 1));
+                } else { // strMenu.charAt(start) == 'A'
+                    memoAllSequence.put(start, new Node(start, end, strMenu.charAt(start), (end-start+1)*costA, 1));
+                }
+            }
 
             // cari lagi sequence dengan start dan end huruf sama
             return findAllSequence(start, end + 1);
@@ -314,8 +311,6 @@ public class TP01v02 {
             return findAllSequence(start, end + 1); 
         }
     }
-
-    
 
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
