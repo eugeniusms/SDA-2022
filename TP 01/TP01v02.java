@@ -328,32 +328,7 @@ public class TP01v02 {
     }
 
     public static void computeCostbySequence() {
-        // for (Map.Entry<Node, Character> entry : memoAllSequence.entrySet()) {
-        //     Node key = entry.getKey();
-        //     Character val = entry.getValue();
-        //     int totalCost = 0;
-        //     // cari cost dari sequence
-        //     if (key.start == key.end) { // artinya cuma sehuruf doang gausa pake paket 
-        //         totalCost = menu[key.start].harga; // sesuai harga menu
-        //     } else {
-        //         // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
-        //         if (val == 'A') {
-        //             totalCost += (key.end-key.start+1)*costA; 
-        //         } else if (val == 'G') {
-        //             totalCost += (key.end-key.start+1)*costG;
-        //         } else { // val == 'S'
-        //             totalCost += (key.end-key.start+1)*costS;
-        //         }
-        //     }
-
-        //     out.println("MAP: ("+key.start+","+key.end+"): "+totalCost); // TEST
-        
-        //     // simpan ke memo key=start, val=map(key:end, val:totalCost)
-        //     TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (totalCost)
-        //     endVal.put(key.end, totalCost);
-        //     memoCostbySequence.put(key.start, endVal);
-        // }
-
+        // cari totalCost dari sequence lalu generate ke TreeMap
         for (Map.Entry<Integer, TreeMap<Integer, Character>> entry : memoAllSequence.entrySet()) {
             Integer start = entry.getKey();
             TreeMap<Integer, Character> endVal = entry.getValue();
