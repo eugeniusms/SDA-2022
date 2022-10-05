@@ -41,7 +41,7 @@ public class TP01v02 {
     // just first time
     public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
     // all time map: {key:start > val:end,paket,harga,mask}
-    public static TreeMap<Integer, Node> memoCostbySequence = new TreeMap<Integer, Node>(); // node save start,end | integer total cost
+    public static TreeMap<Integer, Node> memoCostbySequence = new TreeMap<Integer, Node>(); // integer: start sequence | node: end, paket, harga, mask
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
     // counter berapa kali pergantian paket
     public static int counterPaket = 0;
@@ -176,12 +176,8 @@ public class TP01v02 {
             // jalankan fungsi kueri
             if (kueri == 'P') {
                 runP(in.nextInt(), in.nextInt());
-                // out.println("===== COMMAND P =====");
-                // checkC();
             } else if (kueri == 'L') {
                 runL();
-                // out.println("===== COMMAND L =====");
-                // checkC();
             } else if (kueri == 'B') {
                 runB(in.nextInt());
             } else if (kueri == 'C') {
@@ -259,11 +255,8 @@ public class TP01v02 {
         }
     }
 
+    // sort koki berdasarkan jumlah pelayanan > tipe > id
     public static void runC(int Q) {
-        // checkC();
-        // keluarkan by jumlahPelayanan
-        // copy priority queue
-        // TODO: Create New Sorted DS vs Copying Like This
         Collections.sort(kokiAll);
         for (Koki k: kokiAll) {
             if (Q == 0) {
@@ -363,31 +356,15 @@ public class TP01v02 {
     // dynamic programming find optimal solution
     public static int findMinimumCost(int start, int end) {
         // jika sudah ada dalam memo tinggal ambil aja
-        // memo1
-        if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
-            if (memoCostbySequence.get(start).end == end) { // jika end di memo sama dengan end yang dicari
-                return memoCostbySequence.get(start).harga; // ambil totalCost
-            }
-            // if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
-            //     // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
-            //     // perlu cek apakah chance masih ada
-            //     // char paket = memoAllSequence.get(start).get(end);
-            //     // if (paket == 'S' && chanceS != 0) {
-            //     //     // saat chance pakai paket belum habis maka bisa digunakan
-            //     //     chanceS--;
-            //     //     return memoCostbySequence.get(start).get(end);
-            //     // } else if (paket == 'G' && chanceG != 0) {
-            //     //     chanceG--;
-            //     //     return memoCostbySequence.get(start).get(end);
-            //     // } else if (paket == 'A' && chanceA != 0) {
-            //     //     chanceA--;
-            //     //     return memoCostbySequence.get(start).get(end);
-            //     // } 
-            //     // jika sudah tidak ada chance ya tidak bisa dipakai lagi paketnya
-            //     return memoCostbySequence.get(start).get(end);
-            // }
+        // memo1: isi sequence dari semua string (hanya diambil jika mask == 0 => belum jadi yg maksimal)
+        // kalau sudah jadi yg maksimal => sudah pernah dipakai maka lanjutkan ke perhitungan selanjutnya
+        if (memoCostbySequence.containsKey(start)) {
+            if (memoCostbySequence.get(start).end == end
+                && memoCostbySequence.get(start).mask == 0) { 
+                    return memoCostbySequence.get(start).harga; // ambil totalCost
+                }
         }
-        // memo2
+        // memo2: isi start & end paling minimum dari semua sequence yg ada dalam string
         if (memoMinCost.containsKey(start)) { // jika ada key start di memo
             if (memoMinCost.get(start).containsKey(end)) { // jika ada key end di memo
                 // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
