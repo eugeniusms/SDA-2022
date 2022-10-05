@@ -369,11 +369,10 @@ public class TP01v02 {
             // pada setiap percabangan sequence
             for (int i = start; i < end; i++) {
                 // cari cost dari sequence
-                Node key = new Node(start, i);
-                if (memoCostbySequence.containsKey(key.start)) { // jika ada key start di memo
-                    if (memoCostbySequence.get(key.start).containsKey(key.end)) { // jika ada key end di memo
+                if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
+                    if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
                         // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
-                        costSequence = memoCostbySequence.get(key.start).get(key.end);
+                        costSequence = memoCostbySequence.get(start).get(end);
                         cost = costSequence + findMinimumCost(i+1, end);
                     }
                 } else {
