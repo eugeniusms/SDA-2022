@@ -395,7 +395,7 @@ public class TP01v02 {
         if (start > end) { // (base case)
             return 0;
         } else if (start == end) { // saat hurufnya sama (base case)
-            out.println("CEK MIN COST("+start+","+end+"): "+menu[start].harga); // TEST
+            out.println("CEK MIN COST("+start+","+end+"): "+menu[start].harga); // TEST TEST
             return menu[start].harga;
         } else {
             // check apakah sudah ada nilainya dalam memo min cost
@@ -407,6 +407,8 @@ public class TP01v02 {
                 int cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
                 if (cost < minCost) {
                     minCost = cost;
+                    // catat juga sequence yang dipakai (dihitung)
+                    out.println("SEQUENCE TERPAKAI: START["+start+"] END["+end+"] PAKET["+menu[start].tipe+"]"); // TEST
                 }
             }
 
