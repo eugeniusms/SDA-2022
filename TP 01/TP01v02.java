@@ -291,10 +291,10 @@ public class TP01v02 {
         // cari totalCost dari sequence lalu generate ke TreeMap
         out.println("COMPUTE COST BY SEQUENCE");
         memoCostbySequence.clear(); // clear memo dulu
-        out.println("FIND MINIMUM COST");
         computeCostbySequence();
         memoMinCost.clear(); // clear memo dulu
         // cari harga paling minimum dari kombinasi sequence
+        out.println("FIND MINIMUM COST");
         out.println("CHECK D: "+findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
     }
 
@@ -367,19 +367,20 @@ public class TP01v02 {
             if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
                 // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
                 // perlu cek apakah chance masih ada
-                char paket = memoAllSequence.get(start).get(end);
-                if (paket == 'S' && chanceS != 0) {
-                    // saat chance pakai paket belum habis maka bisa digunakan
-                    chanceS--;
-                    return memoCostbySequence.get(start).get(end);
-                } else if (paket == 'G' && chanceG != 0) {
-                    chanceG--;
-                    return memoCostbySequence.get(start).get(end);
-                } else if (paket == 'A' && chanceA != 0) {
-                    chanceA--;
-                    return memoCostbySequence.get(start).get(end);
-                } 
+                // char paket = memoAllSequence.get(start).get(end);
+                // if (paket == 'S' && chanceS != 0) {
+                //     // saat chance pakai paket belum habis maka bisa digunakan
+                //     chanceS--;
+                //     return memoCostbySequence.get(start).get(end);
+                // } else if (paket == 'G' && chanceG != 0) {
+                //     chanceG--;
+                //     return memoCostbySequence.get(start).get(end);
+                // } else if (paket == 'A' && chanceA != 0) {
+                //     chanceA--;
+                //     return memoCostbySequence.get(start).get(end);
+                // } 
                 // jika sudah tidak ada chance ya tidak bisa dipakai lagi paketnya
+                return memoCostbySequence.get(start).get(end);
             }
         }
         // memo2
