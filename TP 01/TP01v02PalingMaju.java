@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Collections;
 
-public class TP01v02 {
+public class TP01v02PalingMaju {
     private static InputReader in;
     private static PrintWriter out;
 
@@ -37,13 +37,18 @@ public class TP01v02 {
     // Query D 
     public static boolean runDFirst = false;
     public static int costA; public static int costG; public static int costS; // cost @ paket
+    public static int chanceA; public static int chanceG; public static int chanceS; // chance paket diambil
     // just first time
     public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
     // all time map: {key:start > val:end,paket,harga,mask}
     // masking:
     // 0 -> tipe i belum dipaketkan sama sekali (default mask)
     // 1 -> tipe i sudah dipaketkan (tidak bisa diambil lagi - ubah mask), lalu simpan ke lastPackage untuk diupdate ke 0 lagi jika ada paket baru di tipenya
-   
+    public static Node lastPackageA = null; // last paket G yang diambil (dipaketin)
+    public static Node lastPackageG = null; // last paket S yang diambil (dipaketin)
+    public static Node lastPackageS = null; // last paket A yang diambil (dipaketin)
+    public static TreeMap<Integer, Node> memoCostbySequence = new TreeMap<Integer, Node>(); // integer: start sequence | node: end, paket, harga, mask
+    public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
     // counter berapa kali pergantian paket
     public static int counterPaket = 0;
 
@@ -279,11 +284,21 @@ public class TP01v02 {
     // find combination of substring with start and end same
     public static void runD() {
         // SET DULU
-        counterPaket = 0;
+        chanceA = 1; chanceG = 1; chanceS = 1; counterPaket = 0;
         if (!runDFirst) { // jika D baru pertama kali dijalankan maka findAllSequence to memo
             out.println("FIND ALL SEQUENCE");
             findAllSequence(1,1);
         }
+        // cari totalCost dari sequence lalu generate ke TreeMap
+        out.println("COMPUTE COST BY SEQUENCE");
+        memoCostbySequence.clear(); // clear memo dulu
+        computeCostbySequence();
+        memoMinCost.clear(); // clear memo dulu
+        // cari harga paling minimum dari kombinasi sequence
+        out.println("FIND MINIMUM COST");
+        out.println("CHECK D: "+findMinimumCost(1,memoCostbySequence.size())); // CHECK APAKAH SIZE ATAU SIZE+1
+        // menyusun harga yang sesuai dengan lastPackage pada A, G, dan S (pada tiap paket maksimal 1)
+        printMinPrice();
     }
 
     // method mengumpulkan sequence(substring) dengan char start == char end
@@ -315,7 +330,157 @@ public class TP01v02 {
         }
     }
 
-    
+    public static void computeCostbySequence() {
+        // cari totalCost dari sequence lalu generate ke TreeMap
+        for (Map.Entry<Integer, TreeMap<Integer, Character>> entry : memoAllSequence.entrySet()) {
+            Integer start = entry.getKey();
+            TreeMap<Integer, Character> endVal = entry.getValue();
+            Integer end = endVal.firstKey();
+            Character val = endVal.get(end);
+            int totalCost = 0;
+            // cari cost dari sequence
+            if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
+                totalCost = menu[start].harga; // sesuai harga menu
+            } else {
+                // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
+                if (val == 'A') {
+                    totalCost += (end-start+1)*costA; 
+                } else if (val == 'G') {
+                    totalCost += (end-start+1)*costG;
+                } else { // val == 'S'
+                    totalCost += (end-start+1)*costS;
+                }
+            }
+
+            out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
+        
+            // simpan ke memo key=start, val:end,paket,harga,mask = 0 (default: belum dipaketkan sama sekali)
+            Node node = new Node(start, end, val, totalCost, 0);
+            memoCostbySequence.put(start, node);
+        }
+    }
+
+    // find optimal solution = minimum cost of sequence combination
+    // dynamic programming find optimal solution
+    public static int findMinimumCost(int start, int end) {
+        // jika sudah ada dalam memo tinggal ambil aja
+        // memo1: isi sequence dari semua string (hanya diambil jika mask == 0 => belum jadi yg maksimal)
+        // kalau sudah jadi yg maksimal => sudah pernah dipakai maka lanjutkan ke perhitungan selanjutnya
+        if (memoCostbySequence.containsKey(start)) {
+            if (memoCostbySequence.get(start).end == end
+                && memoCostbySequence.get(start).mask == 0) { 
+                    // jika yg paling besar udah optimal maka langsung saja ambil jadi last package of start.tipe (ga perlu handle gapapa si sebenernya)
+                    if (start == 1 && end == memoCostbySequence.size()) {
+                        if (strMenu.charAt(start) == 'A') {
+                            lastPackageA = memoCostbySequence.get(start);
+                        } else if (strMenu.charAt(start) == 'G') {
+                            lastPackageG = memoCostbySequence.get(start);
+                        } else { // val == 'S'
+                            lastPackageS = memoCostbySequence.get(start);
+                        }
+                    }
+                    // kembalikan sequence
+                    return memoCostbySequence.get(start).harga; // ambil totalCost
+                }
+        }
+        // memo2: isi start & end paling minimum dari semua sequence yg ada dalam string
+        if (memoMinCost.containsKey(start)) { // jika ada key start di memo
+            if (memoMinCost.get(start).containsKey(end)) { // jika ada key end di memo
+                // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                return memoMinCost.get(start).get(end);
+            }
+        }
+
+        // jika belum ada maka cari yg minimum
+        if (start > end) { // (base case) // di sini udah selesai (bisa dipaketkan semua)
+            return 0;
+        } else if (start == end) { // saat hurufnya sama (base case)
+            out.println("CEK MIN COST("+start+","+end+"): "+menu[start].harga); // TEST TEST
+            return menu[start].harga;
+        } else {
+            // check apakah sudah ada nilainya dalam memo min cost
+            int minCost = Integer.MAX_VALUE;
+
+            // cari minimum cost dari kombinasi sequence
+            for (int i = start; i < end; i++) {
+                // cari minimum cost dari kombinasi sequence
+                int cost = findMinimumCost(start, i) + findMinimumCost(i+1, end);
+                if (cost < minCost) {
+                    minCost = cost;
+                    // ubah mask dari sequence yg sudah dipakai (HARUSNYA BUKAN PER SEQUENCE TAPI PER S/G/A)
+                    if (memoCostbySequence.containsKey(start)) {
+                        if (memoCostbySequence.get(start).end == i) {
+                            // ubah lastPackage menjadi mask == 0 (artinya ada paket yg lebih murah)
+                            if (memoCostbySequence.get(start).paket == 'A' && lastPackageA != null) {
+                                lastPackageA.mask = 0;
+                            } else if (memoCostbySequence.get(start).paket == 'G' && lastPackageG != null) {
+                                lastPackageG.mask = 0;
+                            } else if (memoCostbySequence.get(start).paket == 'S' && lastPackageS != null) {
+                                lastPackageS.mask = 0;
+                            }
+
+                            // set mask ke 1 (sequence baru dipaketkan)
+                            memoCostbySequence.get(start).mask = 1;
+                            out.println("MASUK GAN: "+memoCostbySequence.get(start).start+","+memoCostbySequence.get(start).end+","+memoCostbySequence.get(start).paket+","+memoCostbySequence.get(start).harga+","+memoCostbySequence.get(start).mask); // TEST
+
+                            // simpan sequence ke last package (paket)
+                            if (memoCostbySequence.get(start).paket == 'A') {
+                                lastPackageA = memoCostbySequence.get(start);
+                            } else if (memoCostbySequence.get(start).paket == 'G') {
+                                lastPackageG = memoCostbySequence.get(start);
+                            } else { // paket == 'S'
+                                lastPackageS = memoCostbySequence.get(start);
+                            }
+                            // di akhir dp didapati lastPackage adalah paket terakhir yang ada
+                            // menggunakan method baru susun harga baru yg sesuai dengan paket terakhir pada A,G,S
+                        }
+                    }
+                    // catat juga sequence yang dipakai (dihitung)
+                    counterPaket++; out.println("PERUBAHAN PAKET KE-"+counterPaket);
+                    out.println("SEQUENCE TERPAKAI: START["+start+"] END["+end+"] PAKET["+menu[start].tipe+"]"); // TEST
+                }
+            }
+
+            out.println("CEK MIN COST("+start+","+end+"): "+minCost); // TEST
+
+            // minimal cost pada suatu sequence disimpan ke memo 
+            TreeMap<Integer, Integer> endVal = new TreeMap<Integer, Integer>(); // end : val (minCost)
+            endVal.put(end, minCost);
+            memoMinCost.put(start, endVal); 
+            return minCost;
+        }
+    }    
+
+    // susun harga baru sesuai dengan paket terakhir pada A,G,S
+    public static void printMinPrice() {
+        out.println("CEK PAKET PAKET PAKET OYYY: ");
+        int step = 1;
+        // ambil (start,end dari lastPackage)
+        int startA = lastPackageA != null ? lastPackageA.start : 0; // default 0 karena tidak ada step 0
+        int endA = lastPackageA != null ? lastPackageA.end : 0;
+        int startG = lastPackageG != null ? lastPackageG.start : 0;
+        int endG = lastPackageG != null ? lastPackageG.end : 0;
+        int startS = lastPackageS != null ? lastPackageS.start : 0;
+        int endS = lastPackageS != null ? lastPackageS.end : 0;
+
+        out.println("CEKS: "+startA+" "+endA+" "+startG+" "+endG+" "+startS+" "+endS); // TEST
+        while (step < strMenu.length()) {
+            if (step == startA && lastPackageA.start-lastPackageA.end != 0) { // jika step sama start loop dan package tidak hanya berisi satu
+                out.println("PAKET DIGUNAKAN START["+startA+"]-END["+endA+"] ");
+                step = endA+1; // pindahkan step
+            } else if (step == startG && lastPackageG.start-lastPackageG.end != 0) {
+                out.println("PAKET DIGUNAKAN START["+startG+"]-END["+endG+"] ");
+                step = endG+1; // pindahkan step
+            } else if (step == startS && lastPackageS.start-lastPackageS.end != 0) {
+                out.println("PAKET DIGUNAKAN START["+startS+"]-END["+endS+"] ");
+                step = endS+1; // pindahkan step
+            } else {
+                out.println(strMenu.charAt(step)+" ");
+                step++;
+            }
+        }
+        // out.println("CEK PAKET A: "+lastPackageA.start);
+    }
 
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
