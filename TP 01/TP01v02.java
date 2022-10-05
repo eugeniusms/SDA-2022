@@ -40,8 +40,8 @@ public class TP01v02 {
     public static int chanceA; public static int chanceG; public static int chanceS; // chance paket diambil
     // just first time
     public static TreeMap<Integer, TreeMap<Integer, Character>> memoAllSequence = new TreeMap<Integer, TreeMap<Integer, Character>>(); // node save start,end | string save format char saat itu
-    // all time map: {key:start > key:end > value}
-    public static TreeMap<Integer, TreeMap<Integer, Integer>> memoCostbySequence = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer total cost
+    // all time map: {key:start > val:end,paket,harga,mask}
+    public static TreeMap<Integer, Node> memoCostbySequence = new TreeMap<Integer, Node>(); // node save start,end | integer total cost
     public static TreeMap<Integer, TreeMap<Integer, Integer>> memoMinCost = new TreeMap<Integer, TreeMap<Integer, Integer>>(); // node save start,end | integer min cost on sequence start,end
     // counter berapa kali pergantian paket
     public static int counterPaket = 0;
@@ -353,10 +353,9 @@ public class TP01v02 {
 
             out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
         
-            // simpan ke memo key=start, val=map(key:end, val:totalCost)
-            TreeMap<Integer, Integer> endValue = new TreeMap<Integer, Integer>(); // end : val (totalCost)
-            endValue.put(end, totalCost);
-            memoCostbySequence.put(start, endValue);
+            // simpan ke memo key=start, val:end,paket,harga,mask
+            Node node = new Node(end, val, totalCost, 0);
+            memoCostbySequence.put(start, node);
         }
     }
 
@@ -366,24 +365,27 @@ public class TP01v02 {
         // jika sudah ada dalam memo tinggal ambil aja
         // memo1
         if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
-            if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
-                // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
-                // perlu cek apakah chance masih ada
-                // char paket = memoAllSequence.get(start).get(end);
-                // if (paket == 'S' && chanceS != 0) {
-                //     // saat chance pakai paket belum habis maka bisa digunakan
-                //     chanceS--;
-                //     return memoCostbySequence.get(start).get(end);
-                // } else if (paket == 'G' && chanceG != 0) {
-                //     chanceG--;
-                //     return memoCostbySequence.get(start).get(end);
-                // } else if (paket == 'A' && chanceA != 0) {
-                //     chanceA--;
-                //     return memoCostbySequence.get(start).get(end);
-                // } 
-                // jika sudah tidak ada chance ya tidak bisa dipakai lagi paketnya
-                return memoCostbySequence.get(start).get(end);
+            if (memoCostbySequence.get(start).end == end) { // jika end di memo sama dengan end yang dicari
+                return memoCostbySequence.get(start).harga; // ambil totalCost
             }
+            // if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
+            //     // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+            //     // perlu cek apakah chance masih ada
+            //     // char paket = memoAllSequence.get(start).get(end);
+            //     // if (paket == 'S' && chanceS != 0) {
+            //     //     // saat chance pakai paket belum habis maka bisa digunakan
+            //     //     chanceS--;
+            //     //     return memoCostbySequence.get(start).get(end);
+            //     // } else if (paket == 'G' && chanceG != 0) {
+            //     //     chanceG--;
+            //     //     return memoCostbySequence.get(start).get(end);
+            //     // } else if (paket == 'A' && chanceA != 0) {
+            //     //     chanceA--;
+            //     //     return memoCostbySequence.get(start).get(end);
+            //     // } 
+            //     // jika sudah tidak ada chance ya tidak bisa dipakai lagi paketnya
+            //     return memoCostbySequence.get(start).get(end);
+            // }
         }
         // memo2
         if (memoMinCost.containsKey(start)) { // jika ada key start di memo
@@ -523,24 +525,19 @@ class Pesanan {
     }
 }
 
-// class inisiator node
-class Node implements Comparable<Node> {
-    int start; int end;
+// class inisiator node (untuk mencatat sequence yang ada)
+class Node {
+    int end; // end dari node (sequence), startnya jadi key di treemap
+    int harga; // harga dari sequence
+    char paket; // S, G, A
+    int mask; // 0 -> belum dipakai, 1 -> sudah dipakai
 
-    // constructor node
-    Node(int start, int end) {
-        this.start = start;
+    // key of treemap = start sorted
+    // constructor node (simpan end, paket, harga sequence, dan mask sequence) untuk 
+    Node(int end, char paket, int harga, int mask) {
         this.end = end;
-    }
-
-    // compareTo
-    @Override
-    public int compareTo(Node other) {
-        // jika start sama maka urutkan by end
-        if (this.start == other.start) {
-            return this.end - other.end;
-        }
-        // jika beda urutkan by start
-        return this.start - other.start;
+        this.paket = paket;
+        this.harga = harga;
+        this.mask = mask;
     }
 }
