@@ -451,13 +451,13 @@ public class TP01v02 {
         int startS = lastPackageS != null ? lastPackageS.start : 0;
         int endS = lastPackageS != null ? lastPackageS.end : 0;
         while (step < strMenu.length()) {
-            if (step == startA) {
+            if (step == startA && lastPackageA.start-lastPackageA.end != 0) { // jika step sama start loop dan package tidak hanya berisi satu
                 out.println("PAKET DIGUNAKAN START["+startA+"]-END["+endA+"] ");
                 step = endA+1; // pindahkan step
-            } else if (step == startG) {
+            } else if (step == startG && lastPackageG.start-lastPackageG.end != 0) {
                 out.println("PAKET DIGUNAKAN START["+startG+"]-END["+endG+"] ");
                 step = endG+1; // pindahkan step
-            } else if (step == startS) {
+            } else if (step == startS && lastPackageS.start-lastPackageS.end != 0) {
                 out.println("PAKET DIGUNAKAN START["+startS+"]-END["+endS+"] ");
                 step = endS+1; // pindahkan step
             } else {
