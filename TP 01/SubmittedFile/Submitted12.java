@@ -31,6 +31,9 @@ public class Submitted12 {
     // jumlah kursi
     public static int jumlahKursi = 0;
 
+    // Query D
+    public static long totalHargaMenu = 0;
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -43,7 +46,9 @@ public class Submitted12 {
         menu = new Makanan[jumlahMenu+1]; menu[0] = new Makanan(0, 'O'); // set default
         // membaca input menu makanan
         for (int i = 1; i <=jumlahMenu; i++) {
-            menu[i] = new Makanan(in.nextInt(), in.nextChar());
+            int hargaMenu = in.nextInt();
+            menu[i] = new Makanan(hargaMenu, in.nextChar());
+            totalHargaMenu += hargaMenu;
         }
 
         // ambil jumlah koki
@@ -243,8 +248,9 @@ public class Submitted12 {
     }
 
     public static void runD(int costA, int costG, int costS) {
-        
+        out.println(totalHargaMenu);
     }
+
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
     // usual Scanner(System.in) and System.out
