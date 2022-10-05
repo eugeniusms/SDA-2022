@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.TreeMap;
 import java.util.Collections;
 
 public class TP01v02 {
@@ -31,6 +32,10 @@ public class TP01v02 {
 
     // jumlah kursi
     public static int jumlahKursi = 0;
+
+    // Query D 
+    public static int costA; public static int costG; public static int costS;
+    public static TreeMap<Node, Integer> memo = new TreeMap<Node, Integer>(); // node save start,end | integer save harga total
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -174,7 +179,9 @@ public class TP01v02 {
                 runC(in.nextInt());
                 out.println(); // jan dihapus, mencetak batas untuk bawahnya agar bisa masuk tc new line
             } else { // kueri == 'D'
-                runD(in.nextInt(), in.nextInt(), in.nextInt());
+                // set value of costs
+                costA = in.nextInt(); costG = in.nextInt(); costS = in.nextInt();
+                runD();
             }
         }
     }
@@ -263,7 +270,7 @@ public class TP01v02 {
     // A S (G S G A G)
 
     // find combination of substring with start and end same
-    public static void runD(int costA, int costG, int costS) {
+    public static void runD() {
         out.println("CEK D: "+substringSES(strMenu, 1,1));
     }
 
@@ -280,9 +287,32 @@ public class TP01v02 {
           return 0;
         /* if a char at start index matches char at end index
         count it and recur for more cases */
-        if(s.charAt(start) == s.charAt(end) && start != end) {
-            out.println("POTONG: "+s.substring(start, end+1));
-          return 1 + substringSES(s, start, end + 1);
+        if(s.charAt(start) == s.charAt(end)) {
+            out.println("POTONG: "+s.substring(start, end+1)); // TEST
+            
+            // cari totalcostnya
+            int totalCost = 0;
+            if (start == end) { // artinya cuma sehuruf doang gausa pake paket 
+                totalCost = menu[start].harga; // sesuai harga menu
+            } else {
+                // hitung harga berdasarkan kalkulasi soal (per A, G, S) paketan
+                if (s.charAt(start) == 'A') {
+                    totalCost += (end-start+1)*costA; 
+                } else if (s.charAt(start) == 'G') {
+                    totalCost += (end-start+1)*costG;
+                } else { // s.charAt(start) == 'S'
+                    totalCost += (end-start+1)*costS;
+                }
+            }
+            // simpan
+            // memo key=(start,end), val=(total cost)
+            memo.put(new Node(start, end), totalCost);
+
+            out.println("MAP: ("+start+","+end+"): "+totalCost); // TEST
+
+            // cari lagi sequence dengan start dan end huruf sama
+            return 1 + substringSES(s, start, end + 1);
+
         } else {
         /* if char at both index does'nt matches skip it 
         and recur for more cases */
@@ -385,5 +415,27 @@ class Pesanan {
         this.idPelanggan = idPelanggan;
         this.idMakanan = idMakanan;
         this.kokiPelayan = kokiPelayan;
+    }
+}
+
+// class inisiator node
+class Node implements Comparable<Node> {
+    int start; int end;
+
+    // constructor node
+    Node(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    // compareTo
+    @Override
+    public int compareTo(Node other) {
+        // jika start sama maka urutkan by end
+        if (this.start == other.start) {
+            return this.end - other.end;
+        }
+        // jika beda urutkan by start
+        return this.start - other.start;
     }
 }
