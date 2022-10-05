@@ -453,8 +453,8 @@ public class Submitted10 {
 
     // susun harga baru sesuai dengan paket terakhir pada A,G,S
     public static void printMinPrice() {
-        out.println("CEK PAKET PAKET PAKET OYYY: ");
         int step = 1;
+        int hargaTotal = 0;
         // ambil (start,end dari lastPackage)
         int startA = lastPackageA != null ? lastPackageA.start : 0; // default 0 karena tidak ada step 0
         int endA = lastPackageA != null ? lastPackageA.end : 0;
@@ -467,19 +467,23 @@ public class Submitted10 {
         while (step < strMenu.length()) {
             if (step == startA && lastPackageA.start-lastPackageA.end != 0) { // jika step sama start loop dan package tidak hanya berisi satu
                 out.println("PAKET DIGUNAKAN START["+startA+"]-END["+endA+"] ");
+                hargaTotal += lastPackageA.harga;
                 step = endA+1; // pindahkan step
             } else if (step == startG && lastPackageG.start-lastPackageG.end != 0) {
                 out.println("PAKET DIGUNAKAN START["+startG+"]-END["+endG+"] ");
+                hargaTotal += lastPackageG.harga;
                 step = endG+1; // pindahkan step
             } else if (step == startS && lastPackageS.start-lastPackageS.end != 0) {
                 out.println("PAKET DIGUNAKAN START["+startS+"]-END["+endS+"] ");
+                hargaTotal += lastPackageS.harga;
                 step = endS+1; // pindahkan step
             } else {
                 out.println(strMenu.charAt(step)+" ");
+                hargaTotal += menu[step].harga;
                 step++;
             }
         }
-        // out.println("CEK PAKET A: "+lastPackageA.start);
+        out.println("HARGA TOTAL: "+hargaTotal);
     }
 
     // taken from https://codeforces.com/submissions/Petr
