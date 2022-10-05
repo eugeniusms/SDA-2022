@@ -354,6 +354,14 @@ public class TP01v02 {
     // dynamic programming find optimal solution
     public static int findMinimumCost(int start, int end) {
         // jika sudah ada dalam memo tinggal ambil aja
+        // memo1
+        if (memoCostbySequence.containsKey(start)) { // jika ada key start di memo
+            if (memoCostbySequence.get(start).containsKey(end)) { // jika ada key end di memo
+                // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
+                return memoCostbySequence.get(start).get(end);
+            }
+        }
+        // memo2
         if (memoMinCost.containsKey(start)) { // jika ada key start di memo
             if (memoMinCost.get(start).containsKey(end)) { // jika ada key end di memo
                 // jika didapati start,end yang sudah ada maka ambil aja valuenya langsung
