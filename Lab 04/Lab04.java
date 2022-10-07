@@ -36,21 +36,18 @@ public class Lab04 {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
-        // inisiasi kompleks gedung
+        // ===== INISIASI KOMPLEKS GEDUNG =====
         int jumlahGedung = in.nextInt(); kompleks = new Gedung[jumlahGedung];
-
         for (int i = 0; i < jumlahGedung; i++) {
             String namaGedung = in.next();
             int jumlahLantai = in.nextInt();
-            // TODO: Inisiasi gedung pada kondisi awal
             inisiasiGedung(i, namaGedung, jumlahLantai);
             checkGedung(kompleks[i]);
         }
 
+        // ===== MENCARI GEDUNG [LANTAI] DENJI =====
         String gedungDenji = in.next();
         int lantaiDenji = in.nextInt(); counterLantaiDenji = lantaiDenji;
-        // TODO: Tetapkan kondisi awal Denji
-        // mencari gedung Denji
         Gedung gedungNow = null;
         for (Gedung g: kompleks) {
             if (g.getNama().equals(gedungDenji)) {
@@ -64,12 +61,12 @@ public class Lab04 {
             lantai = lantai.getNext();
             counterLantai++;
         }   
-        // Pada awalnya Denji bergerak naik
+        // pada awalnya Denji bergerak naik
         denji = new Karakter(gedungNow, lantai, true);
 
+        // ===== MENCARI GEDUNG [LANTAI] IBLIS =====
         String gedungIblis = in.next();
         int lantaiIblis = in.nextInt(); counterLantaiIblis = lantaiIblis;
-        // TODO: Tetapkan kondisi awal Iblis
         // mencari gedung Iblis
         for (Gedung g: kompleks) {
             if (g.getNama().equals(gedungIblis)) {
@@ -83,9 +80,12 @@ public class Lab04 {
             lantai = lantai.getNext();
             counterLantai++;
         }   
-        // Pada awalnya Iblis bergerak turun (false)
+        // pada awalnya Iblis bergerak turun (false)
         iblis = new Karakter(gedungNow, lantai, false);
 
+        checkPemain();
+
+        // ===== MEMBERI PERINTAH =====
         int Q = in.nextInt();
 
         for (int i = 0; i < Q; i++) {
@@ -162,8 +162,10 @@ public class Lab04 {
         // - Ketinggian lantai tempat Iblis berada
         // - Jumlah pertemuan keduanya
         gerakDenji();
+        gerakIblis(); gerakIblis(); // iblis gerak dua kali
         checkGerak();
-        // gerakIblis();
+
+        // check pertemuan setelah selesai bergerak
     }
 
     // GERAK PADA DENJI
@@ -224,13 +226,70 @@ public class Lab04 {
         }
     }
 
+    // GERAK PADA iblis
+    static void gerakIblis() {
+        // menentukan lantai yang dipakai untuk pindah iblis
+        // jika sebelumnya lantai puncak maka pindah ke lantai puncak juga (1)
+        // jika sebelumnya lantai dasar maka pindah ke lantai dasar juga (2)
+  
+        // (1) SAAT LANGKAH MENAIK
+        if (iblis.getIsNaik()) { // jika naik == null (di puncak)
+            // cek apakah lantai selanjutnya null (puncak) atau tidak 
+            if (iblis.getLantaiNow().getNext() != null) {
+                // ===== SET STATUS =====
+                iblis.setLantaiNow(iblis.getLantaiNow().getNext()); // naik
+                counterLantaiIblis++; // iblis naik dua lantai
+
+            } else { // pindah gedung
+                // menentukkan gedung yang dipakai untuk pindah iblis
+
+                // jika id == kompleks.length-1 maka balik ke gedung 0 lagi
+                // jika tidak maka lanjut ke gedung selanjutnya
+                int idGedung = iblis.getGedungNow().getId();
+                int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
+
+                // ===== SET STATUS =====
+                // berhubung saat iblis naik next == null artinya dia berada di puncak
+                // oleh karena itu pindah iblis ke puncak gedung selanjutnya
+                iblis.setLantaiNow(kompleks[moveIdGedung].getLast()); // pindah ke puncak
+                iblis.setGedungNow(kompleks[moveIdGedung]); // pindah gedung
+                iblis.setIsNaik(false);; // balik arah (jadi turun)
+                counterLantaiIblis = kompleks[moveIdGedung].getJumlahLantai(); // pindah counter jadi ke lantai puncak = sesuai jumlah lantai
+            }
+        }
+        // (2) SAAT LANGKAH MENURUN
+        else {
+            // cek apakah lantai sebelumnya null (dasar) atau tidak
+            if (iblis.getLantaiNow().getPrev() != null) {
+                // ===== SET STATUS =====
+                iblis.setLantaiNow(iblis.getLantaiNow().getPrev()); // turun
+                counterLantaiIblis--; // iblis turun satu lantai
+                out.println("MASUK 2");
+
+            } else { // pindah gedung
+                // menentukkan gedung yang dipakai untuk pindah iblis
+
+                // jika id == kompleks.length-1 maka balik ke gedung 0 lagi
+                // jika tidak maka lanjut ke gedung selanjutnya
+                int idGedung = iblis.getGedungNow().getId();
+                int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
+                out.println("MASUK 3: "+moveIdGedung);
+
+                // ===== SET STATUS =====
+                // berhubung saat iblis turun prev == null artinya dia berada di dasar
+                // oleh karena itu pindah iblis ke dasar gedung selanjutnya
+                iblis.setLantaiNow(kompleks[moveIdGedung].getFirst()); // pindah ke lantai dasar    
+                iblis.setGedungNow(kompleks[moveIdGedung]); // pindah gedung
+                iblis.setIsNaik(true);; // balik arah (jadi naik)
+                counterLantaiIblis = 1; // pindah counter jadi ke lantai 1 lagi
+            }
+        }
+    }
+
     static void checkGerak() {
         out.println("===== CEK GERAK =====");
         out.println("DENJI: "+denji.getGedungNow().getNama()+" | "+counterLantaiDenji);
-    }
-
-    static void gerakIblis() {
-
+        out.println("IBLIS: "+iblis.getGedungNow().getNama()+" | "+counterLantaiIblis);
     }
 
     // TODO: Implemen perintah HANCUR
