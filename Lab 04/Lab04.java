@@ -15,7 +15,20 @@ public class Lab04 {
     public static Gedung[] kompleks;
     // ex: (gedung A => menyimpan first and last)
     // first: lantai 1, .next: lantai 2 dst
-    public static Karakter[] pemain = new Karakter[2]; // [0]: Denji, [1]: Iblis
+    // public static Karakter[] pemain = new Karakter[2]; // [0]: Denji, [1]: Iblis
+    public static Karakter denji;
+    public static Karakter iblis;
+
+    // counter untuk menghitung secara matematis letak lantai
+    // menghindari O(n) by linkedlist search menjadi math O(1)
+    // DENJI (GERAK) => +1 / -1
+    // DENJI (HANCUR) => -1
+    // IBLIS (GERAK) => +2 / -2
+    // IBLIS (HANCUR) => TETAP (TAPI DENJI NAIK KALAU DENJI SEGEDUNG DENGAN IBLIS)
+    public static int counterLantaiDenji;
+    public static int counterLantaiIblis;
+    public static int counterPertemuan = 0;
+
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -35,7 +48,7 @@ public class Lab04 {
         }
 
         String gedungDenji = in.next();
-        int lantaiDenji = in.nextInt();
+        int lantaiDenji = in.nextInt(); counterLantaiDenji = lantaiDenji;
         // TODO: Tetapkan kondisi awal Denji
         // mencari gedung Denji
         Gedung gedungNow = null;
@@ -52,10 +65,10 @@ public class Lab04 {
             counterLantai++;
         }   
         // Pada awalnya Denji bergerak naik
-        pemain[0] = new Karakter(gedungNow, lantai, true);
+        denji = new Karakter(gedungNow, lantai, true);
 
         String gedungIblis = in.next();
-        int lantaiIblis = in.nextInt();
+        int lantaiIblis = in.nextInt(); counterLantaiIblis = lantaiIblis;
         // TODO: Tetapkan kondisi awal Iblis
         // mencari gedung Iblis
         for (Gedung g: kompleks) {
@@ -71,7 +84,7 @@ public class Lab04 {
             counterLantai++;
         }   
         // Pada awalnya Iblis bergerak turun (false)
-        pemain[1] = new Karakter(gedungNow, lantai, false);
+        iblis = new Karakter(gedungNow, lantai, false);
 
         int Q = in.nextInt();
 
@@ -114,7 +127,7 @@ public class Lab04 {
         puncak.setPrev(savePrev); // mengeset prev puncak adalah lantai n-1
 
         // simpan lantai-lantai di atas masuk ke dalam gedung
-        Gedung gedung = new Gedung(namaGedung, dasar, puncak);
+        Gedung gedung = new Gedung(gedungKe, namaGedung, dasar, puncak, jumlahLantai);
         // simpan gedung ke dalam kompleks
         kompleks[gedungKe] = gedung;
     }
@@ -124,22 +137,99 @@ public class Lab04 {
         Lantai lantai = gedung.getFirst();
         Lantai puncak = gedung.getLast();
         // saat next belum null (yg last maka diiterasi terus)
+        int countLantai = 1;
         while (lantai.getNext() != null) {
-            out.println("["+lantai.getNomor()+ "] | ADDR: " + lantai + " | PREV: "+lantai.getPrev()+" | NEXT: "+lantai.getNext());
+            out.println("["+countLantai+ "] | ADDR: " + lantai + " | PREV: "+lantai.getPrev()+" | NEXT: "+lantai.getNext());
             lantai = lantai.getNext();
+            countLantai++;
         }
         // print the last
-        out.println("["+puncak.getNomor()+ "] | ADDR: "+puncak+" | PREV: "+puncak.getPrev()+" | NEXT: "+puncak.getNext());
+        out.println("["+countLantai+ "] | ADDR: "+puncak+" | PREV: "+puncak.getPrev()+" | NEXT: "+puncak.getNext());
     }
 
     public static void checkPemain() {
         out.println("===== CEK LANTAI PEMAIN =====");
-        out.println("LANTAI DENJI: "+pemain[0].getLantaiNow());
-        out.println("LANTAI IBLIS: "+pemain[1].getLantaiNow());
+        out.println("LANTAI DENJI: "+denji.getLantaiNow());
+        out.println("LANTAI IBLIS: "+iblis.getLantaiNow());
     }
 
     // TODO: Implemen perintah GERAK
     static void gerak() {
+        // OUTPUT:
+        // - Nama gedung tempat Denji berada
+        // - Ketinggian lantai tempat Denji berada
+        // - Nama gedung tempat Iblis berada
+        // - Ketinggian lantai tempat Iblis berada
+        // - Jumlah pertemuan keduanya
+        gerakDenji();
+        checkGerak();
+        // gerakIblis();
+    }
+
+    // GERAK PADA DENJI
+    static void gerakDenji() {
+        // menentukan lantai yang dipakai untuk pindah denji
+        // jika sebelumnya lantai puncak maka pindah ke lantai puncak juga (1)
+        // jika sebelumnya lantai dasar maka pindah ke lantai dasar juga (2)
+
+        // (1) SAAT LANGKAH MENAIK
+        if (denji.getIsNaik()) { // jika naik == null (di puncak)
+            // cek apakah lantai selanjutnya null (puncak) atau tidak 
+            if (denji.getLantaiNow().getNext() != null) {
+                // ===== SET STATUS =====
+                denji.setLantaiNow(denji.getLantaiNow().getNext()); // naik
+                counterLantaiDenji++; // denji naik satu lantai
+
+            } else { // pindah gedung
+                // menentukkan gedung yang dipakai untuk pindah denji
+
+                // jika id == kompleks.length-1 maka balik ke gedung 0 lagi
+                // jika tidak maka lanjut ke gedung selanjutnya
+                int idGedung = denji.getGedungNow().getId();
+                int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
+
+                // ===== SET STATUS =====
+                // berhubung saat denji naik next == null artinya dia berada di puncak
+                // oleh karena itu pindah denji ke puncak gedung selanjutnya
+                denji.setLantaiNow(kompleks[moveIdGedung].getLast()); // pindah ke puncak
+                denji.setGedungNow(kompleks[moveIdGedung]); // pindah gedung
+                denji.setIsNaik(false);; // balik arah (jadi turun)
+                counterLantaiDenji = kompleks[moveIdGedung].getJumlahLantai(); // pindah counter jadi ke lantai puncak = sesuai jumlah lantai
+            }
+        }
+        // (2) SAAT LANGKAH MENURUN
+        else {
+            // cek apakah lantai sebelumnya null (dasar) atau tidak
+            if (denji.getLantaiNow().getPrev() != null) {
+                // ===== SET STATUS =====
+                denji.setLantaiNow(denji.getLantaiNow().getPrev()); // turun
+                counterLantaiDenji--; // denji turun satu lantai
+
+            } else { // pindah gedung
+                // menentukkan gedung yang dipakai untuk pindah denji
+
+                // jika id == kompleks.length-1 maka balik ke gedung 0 lagi
+                // jika tidak maka lanjut ke gedung selanjutnya
+                int idGedung = denji.getGedungNow().getId();
+                int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
+
+                // ===== SET STATUS =====
+                // berhubung saat denji turun prev == null artinya dia berada di dasar
+                // oleh karena itu pindah denji ke dasar gedung selanjutnya
+                denji.setLantaiNow(kompleks[moveIdGedung].getFirst()); // pindah ke lantai dasar    
+                denji.setGedungNow(kompleks[moveIdGedung]); // pindah gedung
+                denji.setIsNaik(true);; // balik arah (jadi naik)
+                counterLantaiDenji = 1; // pindah counter jadi ke lantai 1 lagi
+            }
+        }
+    }
+
+    static void checkGerak() {
+        out.println("===== CEK GERAK =====");
+        out.println("DENJI: "+denji.getGedungNow().getNama()+" | "+counterLantaiDenji);
+    }
+
+    static void gerakIblis() {
 
     }
 
@@ -188,14 +278,12 @@ public class Lab04 {
 class Lantai {
     private boolean isDenjiExist; 
     private boolean isIblisExist;
-    private int nomor;
     private Lantai prev; // refer ke index lantai sebelumnya
     private Lantai next; // refer ke index lantai selanjutnya 
 
     Lantai (boolean isDenjiExist, boolean isIblisExist, int nomor, Lantai prev, Lantai next) {
         this.isDenjiExist = isDenjiExist;
         this.isIblisExist = isIblisExist;
-        this.nomor = nomor;
         this.prev = prev;
         this.next = next;
     }
@@ -203,11 +291,6 @@ class Lantai {
     // method mengembalikan denji iblis selantai atau tidak
     boolean isDenjiIblisSelantai() {
         return (this.isDenjiExist == true) && (this.isIblisExist == true);
-    }
-
-    // getter nomor lantai
-    int getNomor() {
-        return this.nomor;
     }
 
     // getter prev
@@ -243,14 +326,23 @@ class Lantai {
 
 // gedung untuk mengidentifikasikan gedung
 class Gedung {
+    private int id; // menandai id gedung berdasarkan kompleks array
     private String nama; // nama gedung
     private Lantai first; // lantai dasar
     private Lantai last; // lantai teratas
+    private int jumlahLantai;
 
-    Gedung (String nama, Lantai first, Lantai last) {
+    Gedung (int id, String nama, Lantai first, Lantai last, int jumlahLantai) {
+        this.id = id;
         this.nama = nama;
         this.first = first;
         this.last = last;
+        this.jumlahLantai = jumlahLantai;
+    }
+
+    // getter id
+    int getId() {
+        return this.id;
     }
 
     // getter nama
@@ -266,6 +358,14 @@ class Gedung {
     // getter last
     Lantai getLast() {
         return this.last;
+    }
+
+    int getJumlahLantai() {
+        return this.jumlahLantai;
+    }
+
+    void setJumlahLantai(int jumlahLantai) {
+        this.jumlahLantai = jumlahLantai;
     }
 }
 
@@ -292,5 +392,17 @@ class Karakter {
 
     boolean getIsNaik() {
         return this.isNaik;
+    }
+
+    void setGedungNow(Gedung gedungNow) {
+        this.gedungNow = gedungNow;
+    }
+
+    void setLantaiNow(Lantai lantaiNow) {
+        this.lantaiNow = lantaiNow;
+    }
+
+    void setIsNaik(boolean isNaik) {
+        this.isNaik = isNaik;
     }
 }
