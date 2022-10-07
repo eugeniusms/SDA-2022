@@ -94,23 +94,23 @@ public class Lab04 {
 
             if (command.equals("GERAK")) {
                 
-                // checkPosisi("GERAK");
+                checkPosisi("GERAK");
                 gerak();
             } else if (command.equals("HANCUR")) {
                 // checkGedung(kompleks[0]);
                 // checkGedung(kompleks[1]);
-                // checkPosisi("HANCUR");
+                checkPosisi("HANCUR");
                 hancur();
             } else if (command.equals("TAMBAH")) {
-                // checkPosisi("TAMBAH");
+                checkPosisi("TAMBAH");
                 tambah();
             } else if (command.equals("PINDAH")) {
-                // checkPosisi("PINDAH");
+                checkPosisi("PINDAH");
                 pindah();
             }
         }
 
-        // checkPosisi("TERAKHIR");
+        checkPosisi("TERAKHIR");
         // checkPemain();
 
         out.close();
@@ -181,6 +181,7 @@ public class Lab04 {
     }
 
     static void gerak() {
+        out.println("POSISI LANTAI DENJI: "+denji.getLantaiNow()+" | IBLIS: "+iblis.getLantaiNow());
         // OUTPUT:
         // - Nama gedung tempat Denji berada
         // - Ketinggian lantai tempat Denji berada
