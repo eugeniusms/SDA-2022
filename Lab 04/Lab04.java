@@ -31,17 +31,47 @@ public class Lab04 {
             int jumlahLantai = in.nextInt();
             // TODO: Inisiasi gedung pada kondisi awal
             inisiasiGedung(i, namaGedung, jumlahLantai);
+            checkGedung(kompleks[i]);
         }
 
         String gedungDenji = in.next();
         int lantaiDenji = in.nextInt();
         // TODO: Tetapkan kondisi awal Denji
-        pemain[0] = new Karakter(gedungDenji, lantaiDenji);
+        // mencari gedung Denji
+        Gedung gedungNow = null;
+        for (Gedung g: kompleks) {
+            if (g.getNama().equals(gedungDenji)) {
+                gedungNow = g;
+            }
+        }
+        // mencari address lantai Denji berdasarkan gedung
+        Lantai lantai = gedungNow.getFirst();
+        int counterLantai = 1; // counter lantai
+        while (counterLantai != lantaiDenji) {
+            lantai = lantai.getNext();
+            counterLantai++;
+        }   
+        // Pada awalnya Denji bergerak naik
+        pemain[0] = new Karakter(gedungNow, lantai, true);
 
         String gedungIblis = in.next();
         int lantaiIblis = in.nextInt();
         // TODO: Tetapkan kondisi awal Iblis
-        pemain[1] = new Karakter(gedungIblis, lantaiIblis);
+        // mencari gedung Iblis
+        for (Gedung g: kompleks) {
+            if (g.getNama().equals(gedungIblis)) {
+                gedungNow = g;
+            }
+        }
+        // mencari address lantai Iblis berdasarkan gedung
+        lantai = gedungNow.getFirst(); // set ke first lagi
+        counterLantai = 1; // set ke 1 lagi
+        while (counterLantai != lantaiIblis) {
+            lantai = lantai.getNext();
+            counterLantai++;
+        }   
+        // Pada awalnya Iblis bergerak turun (false)
+        pemain[1] = new Karakter(gedungNow, lantai, false);
 
         int Q = in.nextInt();
 
@@ -60,7 +90,7 @@ public class Lab04 {
             }
         }
 
-        checkGedung(kompleks[0]);
+        checkPemain();
 
         out.close();
     }
@@ -90,6 +120,7 @@ public class Lab04 {
     }
 
     public static void checkGedung(Gedung gedung) {
+        out.println("===== GEDUNG "+gedung.getNama()+" =====");
         Lantai lantai = gedung.getFirst();
         Lantai puncak = gedung.getLast();
         // saat next belum null (yg last maka diiterasi terus)
@@ -99,6 +130,12 @@ public class Lab04 {
         }
         // print the last
         out.println("["+puncak.getNomor()+ "] | ADDR: "+puncak+" | PREV: "+puncak.getPrev()+" | NEXT: "+puncak.getNext());
+    }
+
+    public static void checkPemain() {
+        out.println("===== CEK LANTAI PEMAIN =====");
+        out.println("LANTAI DENJI: "+pemain[0].getLantaiNow());
+        out.println("LANTAI IBLIS: "+pemain[1].getLantaiNow());
     }
 
     // TODO: Implemen perintah GERAK
@@ -234,19 +271,26 @@ class Gedung {
 
 // karakter untuk mengidentifikasikan karakter
 class Karakter {
-    private String gedungNow;
-    private int lantaiNow;
+    private Gedung gedungNow;
+    private Lantai lantaiNow;
+    // isNaik ada saat Karakter bergerak naik
+    private boolean isNaik; 
 
-    Karakter (String gedungNow, int lantaiNow) {
+    Karakter (Gedung gedungNow, Lantai lantaiNow, boolean isNaik) {
         this.gedungNow = gedungNow;
         this.lantaiNow = lantaiNow;
+        this.isNaik= isNaik;
     }
 
-    String getGedungNow() {
+    Gedung getGedungNow() {
         return this.gedungNow;
     } 
 
-    int getLantaiNow() {
+    Lantai getLantaiNow() {
         return this.lantaiNow;
+    }
+
+    boolean getIsNaik() {
+        return this.isNaik;
     }
 }
