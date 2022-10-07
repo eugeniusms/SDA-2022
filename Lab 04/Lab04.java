@@ -13,7 +13,7 @@ public class Lab04 {
 
     // [(gedung A),(gedung B),...]
     public static Gedung[] kompleks;
-    // ex: (gedung A)
+    // ex: (gedung A => menyimpan first and last)
     // first: lantai 1, .next: lantai 2 dst
 
     public static void main(String[] args) {
@@ -28,6 +28,8 @@ public class Lab04 {
             int jumlahLantai = in.nextInt();
 
             // TODO: Inisiasi gedung pada kondisi awal
+            inisiasiGedung(namaGedung, jumlahLantai);
+                
 
 
         }
@@ -58,6 +60,21 @@ public class Lab04 {
         }
 
         out.close();
+    }
+
+    // method untuk menginisiasikan gedung
+    public static void inisiasiGedung(String namaGedung, int jumlahLantai) {
+        Lantai dasar = new Lantai(false, false, null, null);
+        Lantai puncak = new Lantai(false, false, null, null);
+        // mengisi prev pada setiap node lantai
+        // variabel menyimpan lantai sebelum iterasi saat ini
+        Lantai savePrev = dasar;
+        for (int i = 2; i < jumlahLantai; i++) { // inisiasi lantai 2 sampai puncak-1
+            Lantai lantai = new Lantai(false, false, savePrev, null);  
+            savePrev = lantai; // menyimpan lantai sebelumnya
+        } 
+        // menyusun next pada setiap node lantai
+        Lantai saveNext = puncak;
     }
 
     // TODO: Implemen perintah GERAK
