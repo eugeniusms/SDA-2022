@@ -292,73 +292,42 @@ public class Su {
         }
     }
 
-    // OPERASI DALAM SATU GEDUNG (TIDAK PERLU ADA SET GEDUNG)
-    // menghancurkan lantai tepat 1 di bawah denji
-    // jika lantai bawah denji: dasar/ada iblis maka return ke 2), jika aman return ke 1)
-    // 1) return nama gedung dan ketinggian lantai dihancurkan
-    // 2) return nama gedung dan -1
     static void hancur() { 
-        // ambil nama gedung Denji saat ini (gedung yang lantainya akan dihancurkan)
-        Gedung gedungDihancurkan = denji.getGedungNow();
+        Gedung gedungDenjiNow = denji.getGedungNow();
 
-        if (gedungDihancurkan.getJumlahLantai() <= 1) {
-            // maka lantai gedung tidak bisa dihancurkan
+        // TODO: LANTAI 1
+        if (counterLantaiDenji == 1) {
             // OUTPUT
-            out.println(gedungDihancurkan.getNama()+" -1");
-        } else {
-
-            // GAGAL HANCURKAN
-            // cek apakah lantai paling bawah
-            if (counterLantaiDenji == 1) { // saat tidak ada lantai di bawahnya (dasar)
-                // OUTPUT
-                out.println(gedungDihancurkan.getNama()+" -1");
-            } else if (iblis.getGedungNow().equals(gedungDihancurkan) && counterLantaiIblis == counterLantaiDenji-1) { // ada iblis di lantainya
-                // OUTPUT
-                out.println(gedungDihancurkan.getNama()+" -1");
-            
-            // SUCCESS HANCURKAN
-            } else if (counterLantaiDenji == 2) { // jika lantai yang dihancurkan denji adalah lantai 1 maka hapus prevnya denji aja
-                Lantai denjiSekarang = denji.getLantaiNow();
-                denjiSekarang.setPrev(null);
-
-                // set counter lantai karakter
-                // iblis 
-                if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji <= counterLantaiIblis) { 
-                    // jika gedung iblis sama dengan gedung dihancurkan denji 
-                    // dan lantai denji dibawah atau sama dengan lantai iblis maka iblis ikut turun 
-                    counterLantaiIblis--; 
-                }
-                // denji
-                counterLantaiDenji--; 
-
-                // kurang jumlah lantai gedung
-                gedungDihancurkan.setJumlahLantai(gedungDihancurkan.getJumlahLantai()-1);
-
-            } else { // saat bisa dihancurkan dan bukan lantai 1 yg dihancurkan
-                // lantai di bawahnya dihancurkan
-                // IMPORTANT (HATI-HATI!)
-                Lantai dibawahDihancurkan = denji.getLantaiNow().getPrev().getPrev();
-                Lantai denjiSekarang = denji.getLantaiNow();
-                dibawahDihancurkan.setNext(denji.getLantaiNow()); // set next lantai di bawahnya lantai dihancurkan ke lantai denji
-                denjiSekarang.setPrev(dibawahDihancurkan); // set prev lantai di saat ini ke lantai di bawahnya lantai dihancurkan
-                
-                // set counter lantai karakter  
-                // iblis 
-                if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji <= counterLantaiIblis) { 
-                    // jika gedung iblis sama dengan gedung dihancurkan denji 
-                    // dan lantai denji dibawah atau sama dengan lantai iblis maka iblis ikut turun
-                    counterLantaiIblis--; 
-                }
-                // denji
-                counterLantaiDenji--; 
-
-                // kurang jumlah lantai gedung
-                gedungDihancurkan.setJumlahLantai(gedungDihancurkan.getJumlahLantai()-1);
-
-                // OUTPUT
-                out.println(gedungDihancurkan.getNama()+" "+counterLantaiDenji); // lantai denji saat ini == lantai gedung dihancurkan barusan
-                // TODO: HANDLE GA? JIKA DENJI SELANTAI DENGAN IBLIS => GIMANA COUNTER PERTEMUANNYA?
+            out.println(gedungDenjiNow.getNama()+" -1");
+        } else if (denji.getLantaiNow().getPrev() == null){
+            // OUTPUT
+            out.println(gedungDenjiNow.getNama()+" -1");
+        } else if (denji.getLantaiNow().getPrev().getPrev() == null){
+            // OUTPUT
+            out.println(gedungDenjiNow.getNama()+" -1");
+        } else if (denji.getLantaiNow().getPrev().equals(iblis.getLantaiNow())) {
+            // OUTPUT
+            out.println(gedungDenjiNow.getNama()+" -1");
+        } else if (counterLantaiDenji == 2) {
+            denji.getLantaiNow().setPrev(null);
+            // pada turun
+            if (counterLantaiIblis >= counterLantaiDenji) {
+                counterLantaiIblis--;
             }
+            counterLantaiDenji--;
+            gedungDenjiNow.setJumlahLantai(gedungDenjiNow.getJumlahLantai()-1);
+            // OUTPUT
+            out.println(gedungDenjiNow.getNama()+" "+(counterLantaiDenji));
+        } else {
+            denji.getLantaiNow().getPrev().getPrev().setNext(denji.getLantaiNow());
+            denji.getLantaiNow().setPrev(denji.getLantaiNow().getPrev().getPrev());
+            if (counterLantaiIblis >= counterLantaiDenji) {
+                counterLantaiIblis--;
+            }
+            counterLantaiDenji--;
+            gedungDenjiNow.setJumlahLantai(gedungDenjiNow.getJumlahLantai()-1);
+            // OUTPUT
+            out.println(gedungDenjiNow.getNama()+" "+(counterLantaiDenji));
         }
     }
     
