@@ -22,16 +22,14 @@ public class Lab04 {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
-        int jumlahGedung = in.nextInt();
+        // inisiasi kompleks gedung
+        int jumlahGedung = in.nextInt(); kompleks = new Gedung[jumlahGedung];
+
         for (int i = 0; i < jumlahGedung; i++) {
             String namaGedung = in.next();
             int jumlahLantai = in.nextInt();
-
             // TODO: Inisiasi gedung pada kondisi awal
-            inisiasiGedung(namaGedung, jumlahLantai);
-                
-
-
+            inisiasiGedung(i, namaGedung, jumlahLantai);
         }
 
         String gedungDenji = in.next();
@@ -59,22 +57,45 @@ public class Lab04 {
             }
         }
 
+        checkGedung(kompleks[0]);
+
         out.close();
     }
 
     // method untuk menginisiasikan gedung
-    public static void inisiasiGedung(String namaGedung, int jumlahLantai) {
-        Lantai dasar = new Lantai(false, false, null, null);
-        Lantai puncak = new Lantai(false, false, null, null);
-        // mengisi prev pada setiap node lantai
+    public static void inisiasiGedung(int gedungKe, String namaGedung, int jumlahLantai) {
+        Lantai dasar = new Lantai(false, false, 1, null, null); 
+        Lantai puncak = new Lantai(false, false, jumlahLantai, null, null);
+        
+        // mengisi prev dan next pada setiap node lantai
         // variabel menyimpan lantai sebelum iterasi saat ini
         Lantai savePrev = dasar;
-        for (int i = 2; i < jumlahLantai; i++) { // inisiasi lantai 2 sampai puncak-1
-            Lantai lantai = new Lantai(false, false, savePrev, null);  
+        for (int j = 2; j < jumlahLantai; j++) { // inisiasi lantai 2 sampai puncak-1
+            // set prev adalah savePrev
+            Lantai lantai = new Lantai(false, false, j, savePrev, null);  
+            savePrev.setNext(lantai); // set next nya prev lantai saat ini
             savePrev = lantai; // menyimpan lantai sebelumnya
-        } 
-        // menyusun next pada setiap node lantai
-        Lantai saveNext = puncak;
+        }
+        // set puncak & n-1
+        savePrev.setNext(puncak); // mengeset lantai n-1 nextnya ke puncak
+        puncak.setPrev(savePrev); // mengeset prev puncak adalah lantai n-1
+
+        // simpan lantai-lantai di atas masuk ke dalam gedung
+        Gedung gedung = new Gedung(namaGedung, dasar, puncak);
+        // simpan gedung ke dalam kompleks
+        kompleks[gedungKe] = gedung;
+    }
+
+    public static void checkGedung(Gedung gedung) {
+        Lantai lantai = gedung.getFirst();
+        Lantai puncak = gedung.getLast();
+        // saat next belum null (yg last maka diiterasi terus)
+        while (lantai.getNext() != null) {
+            out.println("["+lantai.getNomor()+ "] | ADDR: " + lantai + " | PREV: "+lantai.getPrev()+" | NEXT: "+lantai.getNext());
+            lantai = lantai.getNext();
+        }
+        // print the last
+        out.println("["+puncak.getNomor()+ "] | ADDR: "+puncak+" | PREV: "+puncak.getPrev()+" | NEXT: "+puncak.getNext());
     }
 
     // TODO: Implemen perintah GERAK
@@ -127,12 +148,14 @@ public class Lab04 {
 class Lantai {
     boolean isDenjiExist; 
     boolean isIblisExist;
+    int nomor;
     Lantai prev; // refer ke index lantai sebelumnya
     Lantai next; // refer ke index lantai selanjutnya 
 
-    Lantai (boolean isDenjiExist, boolean isIblisExist, Lantai prev, Lantai next) {
+    Lantai (boolean isDenjiExist, boolean isIblisExist, int nomor, Lantai prev, Lantai next) {
         this.isDenjiExist = isDenjiExist;
         this.isIblisExist = isIblisExist;
+        this.nomor = nomor;
         this.prev = prev;
         this.next = next;
     }
@@ -140,6 +163,11 @@ class Lantai {
     // method mengembalikan denji iblis selantai atau tidak
     boolean isDenjiIblisSelantai() {
         return (this.isDenjiExist == true) && (this.isIblisExist == true);
+    }
+
+    // getter nomor lantai
+    int getNomor() {
+        return this.nomor;
     }
 
     // getter prev
