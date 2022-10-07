@@ -300,8 +300,42 @@ public class Lab04 {
     }
 
     // TODO: Implemen perintah HANCUR
+    // menghancurkan lantai tepat 1 di bawah denji
+    // jika lantai bawah denji: dasar/ada iblis maka return ke 2), jika aman return ke 1)
+    // 1) return nama gedung dan ketinggian lantai dihancurkan
+    // 2) return nama gedung dan -1
     static void hancur() {
+        // ambil nama gedung Denji saat ini (gedung yang lantainya akan dihancurkan)
+        Gedung gedungDihancurkan = denji.getGedungNow();
 
+        // cek apakah lantai paling bawah
+        if (denji.getLantaiNow().getPrev() == null) { // saat tidak ada lantai di bawahnya (dasar)
+            // OUTPUT
+            out.println(gedungDihancurkan.getNama()+" -1");
+        } else if (denji.getLantaiNow().getPrev().equals(iblis.getLantaiNow())) { // ada iblis di lantainya
+            // OUTPUT
+            out.println(gedungDihancurkan.getNama()+" -1");
+        } else { // saat bisa dihancurkan
+            // lantai di bawahnya dihancurkan
+            // IMPORTANT (HATI-HATI!)
+            Lantai dibawahDihancurkan = denji.getLantaiNow().getPrev().getPrev();
+            Lantai denjiSekarang = denji.getLantaiNow();
+            dibawahDihancurkan.setNext(denji.getLantaiNow()); // set next lantai di bawahnya lantai dihancurkan ke lantai denji
+            denjiSekarang.setPrev(dibawahDihancurkan); // set prev lantai di saat ini ke lantai di bawahnya lantai dihancurkan
+            
+            // set counter lantai karakter
+            // denji
+            counterLantaiDenji--; 
+            // iblis 
+            if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji < counterLantaiIblis) { 
+                // jika gedung iblis sama dengan gedung dihancurkan denji 
+                // dan lantai denji dibawah lantai iblis maka iblis ikut turun 
+                counterLantaiIblis--; 
+            }
+            // OUTPUT
+            out.println(gedungDihancurkan.getNama()+" "+counterLantaiDenji); // lantai denji saat ini == lantai gedung dihancurkan barusan
+            // TODO: HANDLE GA? JIKA DENJI SELANTAI DENGAN IBLIS => GIMANA COUNTER PERTEMUANNYA?
+        }
     }
 
     // TODO: Implemen perintah TAMBAH
