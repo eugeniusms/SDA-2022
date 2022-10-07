@@ -331,9 +331,7 @@ public class Su {
         }
     }
     
-    // OPERASI DALAM SATU GEDUNG (TIDAK PERLU ADA SET GEDUNG)
-    // menambahkan lantai di bawah lantai iblis saat ini
-    // return nama gedung dan ketinggian lantai yang ditambahkan iblis
+
     static void tambah() {
         // ambil nama gedung Iblis saat ini (gedung yang lantainya akan ditambahkan)
         Gedung gedungDitambahkan = iblis.getGedungNow();
@@ -386,29 +384,37 @@ public class Su {
         // maka denji akan bergerak dari lantai paling atas dengan isNaik yg sama
     // jika ada pertemuan dengan iblis maka tambahkan counterPertemuan
     static void pindah() {
-        // ambil gedung denji sekarang, jika gedung terakhir maka balik ke depan
-        int idGedung = denji.getGedungNow().getId();
-        int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
-        // pindahkan gedung denji
-        denji.setGedungNow(kompleks[moveIdGedung]);
-
-        if (denji.getIsNaik()) {
-            // lakukan pemindahan lantai denji ke dasar gedung selanjutnya
-            denji.setLantaiNow(kompleks[moveIdGedung].getFirst());
-            counterLantaiDenji = 1;
+        // ambil gedung denji saat ini
+        Gedung gedungDenjiNow = denji.getGedungNow();
+        Gedung baru = null;
+        
+        // cek apakah gedung denji saat ini adalah gedung terakhir
+        if (gedungDenjiNow.getId() == kompleks.length-1) { // jika gedung terakhir
+            baru = kompleks[0]; // maka gedung selanjutnya adalah gedung pertama
         } else {
-            // lakukan pemindahan lantai denji ke paling atas gedung selanjutnya
-            denji.setLantaiNow(kompleks[moveIdGedung].getLast());
-            counterLantaiDenji = kompleks[moveIdGedung].getJumlahLantai();
+            baru = kompleks[gedungDenjiNow.getId()+1]; // jika bukan gedung terakhir maka gedung selanjutnya adalah gedung berikutnya
         }
 
-        // jika bertemu dengan iblis maka counterPertemuan
+        if (denji.getIsNaik()) {
+            // jika denji bergerak ke atas pada gedung sebelumnya
+            // maka denji akan bergerak dari lantai dasar dengan isNaik yg sama
+            denji.setGedungNow(baru);
+            denji.setLantaiNow(baru.getFirst());
+            counterLantaiDenji = 1;
+        } else {
+            // jika sebaliknya
+            // maka denji akan bergerak dari lantai paling atas dengan isNaik yg sama
+            denji.setGedungNow(baru);
+            denji.setLantaiNow(baru.getLast());
+            counterLantaiDenji = baru.getJumlahLantai();
+        }
+
         if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
             counterPertemuan++;
         }
 
         // OUTPUT
-        out.println(kompleks[moveIdGedung].getNama()+" "+counterLantaiDenji); // nama gedung dan lantai denji saat ini
+        out.println(baru.getNama()+" "+(counterLantaiDenji));
     }
 
     static class InputReader {
