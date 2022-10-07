@@ -112,15 +112,15 @@ public class Lab04 {
 
     // method untuk menginisiasikan gedung
     public static void inisiasiGedung(int gedungKe, String namaGedung, int jumlahLantai) {
-        Lantai dasar = new Lantai(false, false, 1, null, null); 
-        Lantai puncak = new Lantai(false, false, jumlahLantai, null, null);
+        Lantai dasar = new Lantai(null, null); 
+        Lantai puncak = new Lantai(null, null);
         
         // mengisi prev dan next pada setiap node lantai
         // variabel menyimpan lantai sebelum iterasi saat ini
         Lantai savePrev = dasar;
         for (int j = 2; j < jumlahLantai; j++) { // inisiasi lantai 2 sampai puncak-1
             // set prev adalah savePrev
-            Lantai lantai = new Lantai(false, false, j, savePrev, null);  
+            Lantai lantai = new Lantai(savePrev, null);  
             savePrev.setNext(lantai); // set next nya prev lantai saat ini
             savePrev = lantai; // menyimpan lantai sebelumnya
         }
@@ -155,7 +155,6 @@ public class Lab04 {
         out.println("LANTAI IBLIS: "+iblis.getLantaiNow());
     }
 
-    // TODO: Implemen perintah GERAK
     static void gerak() {
         // OUTPUT:
         // - Nama gedung tempat Denji berada
@@ -273,7 +272,6 @@ public class Lab04 {
                 // ===== SET STATUS =====
                 iblis.setLantaiNow(iblis.getLantaiNow().getPrev()); // turun
                 counterLantaiIblis--; // iblis turun satu lantai
-                out.println("MASUK 2");
 
             } else { // pindah gedung
                 // menentukkan gedung yang dipakai untuk pindah iblis
@@ -282,7 +280,6 @@ public class Lab04 {
                 // jika tidak maka lanjut ke gedung selanjutnya
                 int idGedung = iblis.getGedungNow().getId();
                 int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
-                out.println("MASUK 3: "+moveIdGedung);
 
                 // ===== SET STATUS =====
                 // berhubung saat iblis turun prev == null artinya dia berada di dasar
@@ -301,7 +298,6 @@ public class Lab04 {
         out.println("IBLIS: "+iblis.getGedungNow().getNama()+" | "+counterLantaiIblis);
     }
 
-    // TODO: Implemen perintah HANCUR
     // menghancurkan lantai tepat 1 di bawah denji
     // jika lantai bawah denji: dasar/ada iblis maka return ke 2), jika aman return ke 1)
     // 1) return nama gedung dan ketinggian lantai dihancurkan
@@ -342,10 +338,44 @@ public class Lab04 {
             // TODO: HANDLE GA? JIKA DENJI SELANTAI DENGAN IBLIS => GIMANA COUNTER PERTEMUANNYA?
         }
     }
-
-    // TODO: Implemen perintah TAMBAH
+    
+    // menambahkan lantai di bawah lantai iblis saat ini
+    // return nama gedung dan ketinggian lantai yang ditambahkan iblis
     static void tambah() {
+        // ambil nama gedung Iblis saat ini (gedung yang lantainya akan ditambahkan)
+        Gedung gedungDitambahkan = iblis.getGedungNow();
 
+        // cek apakah lantai paling bawah
+        if (iblis.getLantaiNow().getPrev() == null) { // saat tidak ada lantai di bawahnya (dasar)
+            // maka set next lantai baru ke lantai iblis
+            // dan set prev lantai iblis ke lantai baru
+            Lantai lantaiBaru = new Lantai(null, iblis.getLantaiNow());
+            iblis.getLantaiNow().setPrev(lantaiBaru);
+
+            counterLantaiIblis++; // tambah counter lantai iblis
+
+        } else { // saat ada lantai di bawahnya
+            // maka set next lantai baru ke lantai iblis
+            // dan set prev lantai iblis ke lantai baru
+            Lantai lantaiBaru = new Lantai(null, iblis.getLantaiNow());
+            iblis.getLantaiNow().setPrev(lantaiBaru);
+
+            // lalu, set next lantai di bawahnya ke lantai baru
+            // dan set prev lantai baru ke lantai di bawahnya
+            Lantai dibawahDitambahkan = iblis.getLantaiNow().getPrev();
+            dibawahDitambahkan.setNext(lantaiBaru);
+            lantaiBaru.setPrev(dibawahDitambahkan);
+
+            counterLantaiIblis++; // tambah counter lantai iblis
+        }
+
+        // jika denji segedung dengan iblis dan denji berada di atas iblis maka dia ikut naik counternya
+        if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji > counterLantaiIblis) {
+            counterLantaiDenji++;
+        }
+
+        // OUTPUT
+        out.println(gedungDitambahkan.getNama()+" "+(counterLantaiIblis-1)); // lantai iblis sebelumnya == lantai gedung ditambahkan barusan
     }
 
     // TODO: Implemen perintah PINDAH
@@ -381,21 +411,12 @@ public class Lab04 {
 
 // lantai adalah sebuah node dalam doubly linkedlist gedung
 class Lantai {
-    private boolean isDenjiExist; 
-    private boolean isIblisExist;
     private Lantai prev; // refer ke index lantai sebelumnya
     private Lantai next; // refer ke index lantai selanjutnya 
 
-    Lantai (boolean isDenjiExist, boolean isIblisExist, int nomor, Lantai prev, Lantai next) {
-        this.isDenjiExist = isDenjiExist;
-        this.isIblisExist = isIblisExist;
+    Lantai (Lantai prev, Lantai next) {
         this.prev = prev;
         this.next = next;
-    }
-    
-    // method mengembalikan denji iblis selantai atau tidak
-    boolean isDenjiIblisSelantai() {
-        return (this.isDenjiExist == true) && (this.isIblisExist == true);
     }
 
     // getter prev
@@ -406,16 +427,6 @@ class Lantai {
     // getter next
     Lantai getNext() {
         return this.next;
-    }
-
-    // setter denji exist
-    void setDenjiExist(boolean isDenjiExist) {
-        this.isDenjiExist = isDenjiExist;
-    }
-
-    // setter iblis exist
-    void setIblisExist(boolean isIblisExist) {
-        this.isIblisExist = isIblisExist;
     }
 
     // setter prev
