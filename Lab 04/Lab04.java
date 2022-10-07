@@ -83,7 +83,7 @@ public class Lab04 {
         // pada awalnya Iblis bergerak turun (false)
         iblis = new Karakter(gedungNow, lantai, false);
 
-        checkPemain();
+        // checkPemain();
 
         // ===== MEMBERI PERINTAH =====
         int Q = in.nextInt();
@@ -94,18 +94,22 @@ public class Lab04 {
 
             if (command.equals("GERAK")) {
                 gerak();
+                checkPosisi("GERAK");
             } else if (command.equals("HANCUR")) {
                 hancur();
-                checkGedung(kompleks[0]);
-                checkGedung(kompleks[1]);
+                // checkGedung(kompleks[0]);
+                // checkGedung(kompleks[1]);
+                checkPosisi("HANCUR");
             } else if (command.equals("TAMBAH")) {
                 tambah();
+                checkPosisi("TAMBAH");
             } else if (command.equals("PINDAH")) {
                 pindah();
+                checkPosisi("PINDAH");
             }
         }
 
-        checkPemain();
+        // checkPemain();
 
         out.close();
     }
@@ -164,11 +168,11 @@ public class Lab04 {
         // - Jumlah pertemuan keduanya
         gerakDenji();
         gerakIblis(); gerakIblis(); // iblis gerak dua kali
-        checkGerak();
 
-        // check pertemuan hanya setelah selesai bergerak
+        // catat pertemuan hanya setelah selesai bergerak
         // apabila lantai mereka sama maka hitung jumlah pertemuan
         if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+            out.println("MASUK MASUK GAN");
             counterPertemuan++;
         }
 
@@ -292,8 +296,8 @@ public class Lab04 {
         }
     }
 
-    static void checkGerak() {
-        out.println("===== CEK GERAK =====");
+    static void checkPosisi(String comm) {
+        out.println("===== COMMAND: "+comm+" =====");
         out.println("DENJI: "+denji.getGedungNow().getNama()+" | "+counterLantaiDenji);
         out.println("IBLIS: "+iblis.getGedungNow().getNama()+" | "+counterLantaiIblis);
     }
@@ -303,7 +307,7 @@ public class Lab04 {
     // jika lantai bawah denji: dasar/ada iblis maka return ke 2), jika aman return ke 1)
     // 1) return nama gedung dan ketinggian lantai dihancurkan
     // 2) return nama gedung dan -1
-    static void hancur() {
+    static void hancur() { 
         // ambil nama gedung Denji saat ini (gedung yang lantainya akan dihancurkan)
         Gedung gedungDihancurkan = denji.getGedungNow();
 
@@ -321,6 +325,16 @@ public class Lab04 {
             Lantai denjiSekarang = denji.getLantaiNow();
             denjiSekarang.setPrev(null);
 
+            // set counter lantai karakter
+            // iblis 
+            if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji <= counterLantaiIblis) { 
+                // jika gedung iblis sama dengan gedung dihancurkan denji 
+                // dan lantai denji dibawah atau sama dengan lantai iblis maka iblis ikut turun 
+                counterLantaiIblis--; 
+            }
+            // denji
+            counterLantaiDenji--; 
+
             // kurang jumlah lantai gedung
             gedungDihancurkan.setJumlahLantai(gedungDihancurkan.getJumlahLantai()-1);
 
@@ -332,15 +346,15 @@ public class Lab04 {
             dibawahDihancurkan.setNext(denji.getLantaiNow()); // set next lantai di bawahnya lantai dihancurkan ke lantai denji
             denjiSekarang.setPrev(dibawahDihancurkan); // set prev lantai di saat ini ke lantai di bawahnya lantai dihancurkan
             
-            // set counter lantai karakter
-            // denji
-            counterLantaiDenji--; 
+            // set counter lantai karakter  
             // iblis 
-            if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji < counterLantaiIblis) { 
+            if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji <= counterLantaiIblis) { 
                 // jika gedung iblis sama dengan gedung dihancurkan denji 
-                // dan lantai denji dibawah lantai iblis maka iblis ikut turun 
+                // dan lantai denji dibawah atau sama dengan lantai iblis maka iblis ikut turun 
                 counterLantaiIblis--; 
             }
+            // denji
+            counterLantaiDenji--; 
 
             // kurang jumlah lantai gedung
             gedungDihancurkan.setJumlahLantai(gedungDihancurkan.getJumlahLantai()-1);
@@ -367,6 +381,11 @@ public class Lab04 {
             Lantai lantaiBaru = new Lantai(null, iblis.getLantaiNow());
             iblis.getLantaiNow().setPrev(lantaiBaru);
 
+            // jika denji segedung dengan iblis dan denji berada di atas atau selantai dengan iblis maka dia ikut naik counternya
+            if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji >= counterLantaiIblis) {
+                counterLantaiDenji++;
+            }
+
             counterLantaiIblis++; // tambah counter lantai iblis
 
         } else { // saat ada lantai di bawahnya
@@ -381,12 +400,12 @@ public class Lab04 {
             dibawahDitambahkan.setNext(lantaiBaru);
             lantaiBaru.setPrev(dibawahDitambahkan);
 
-            counterLantaiIblis++; // tambah counter lantai iblis
-        }
+            // jika denji segedung dengan iblis dan denji berada di atas atau selantai dengan iblis maka dia ikut naik counternya
+            if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji >= counterLantaiIblis) {
+                counterLantaiDenji++;
+            }
 
-        // jika denji segedung dengan iblis dan denji berada di atas iblis maka dia ikut naik counternya
-        if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji > counterLantaiIblis) {
-            counterLantaiDenji++;
+            counterLantaiIblis++; // tambah counter lantai iblis
         }
 
         // OUTPUT
