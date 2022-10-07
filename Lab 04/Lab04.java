@@ -165,7 +165,14 @@ public class Lab04 {
         gerakIblis(); gerakIblis(); // iblis gerak dua kali
         checkGerak();
 
-        // check pertemuan setelah selesai bergerak
+        // check pertemuan hanya setelah selesai bergerak
+        // apabila lantai mereka sama maka hitung jumlah pertemuan
+        if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+            counterPertemuan++;
+        }
+
+        // OUTPUT
+        out.println(denji.getGedungNow().getNama()+" "+counterLantaiDenji+" "+iblis.getGedungNow().getNama()+" "+counterLantaiIblis+" "+counterPertemuan);
     }
 
     // GERAK PADA DENJI
