@@ -379,6 +379,12 @@ public class Lab04 {
     }
 
     // TODO: Implemen perintah PINDAH
+    // memindahkan denji ke gedung selanjutnya
+    // jika denji bergerak ke atas pada gedung sebelumnya (isNaik == true)
+        // maka denji akan bergerak dari lantai dasar dengan isNaik yg sama
+    // jika sebaliknya
+        // maka denji akan bergerak dari lantai paling atas dengan isNaik yg sama
+    // jika ada pertemuan dengan iblis maka tambahkan counterPertemuan
     static void pindah() {
 
     }
