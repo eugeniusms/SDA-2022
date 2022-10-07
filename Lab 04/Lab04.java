@@ -110,6 +110,7 @@ public class Lab04 {
             }
         }
 
+        checkPosisi("TERAKHIR");
         // checkPemain();
 
         out.close();
@@ -120,23 +121,42 @@ public class Lab04 {
         Lantai dasar = new Lantai(null, null); 
         Lantai puncak = new Lantai(null, null);
         
-        // mengisi prev dan next pada setiap node lantai
-        // variabel menyimpan lantai sebelum iterasi saat ini
-        Lantai savePrev = dasar;
-        for (int j = 2; j < jumlahLantai; j++) { // inisiasi lantai 2 sampai puncak-1
-            // set prev adalah savePrev
-            Lantai lantai = new Lantai(savePrev, null);  
-            savePrev.setNext(lantai); // set next nya prev lantai saat ini
-            savePrev = lantai; // menyimpan lantai sebelumnya
-        }
-        // set puncak & n-1
-        savePrev.setNext(puncak); // mengeset lantai n-1 nextnya ke puncak
-        puncak.setPrev(savePrev); // mengeset prev puncak adalah lantai n-1
+        // jika jumlah lantai cuma satu
+        if (jumlahLantai == 1) {
+            // simpan lantai-lantai di atas masuk ke dalam gedung
+            Gedung gedung = new Gedung(gedungKe, namaGedung, dasar, dasar, jumlahLantai);
+            // simpan gedung ke dalam kompleks
+            kompleks[gedungKe] = gedung;
 
-        // simpan lantai-lantai di atas masuk ke dalam gedung
-        Gedung gedung = new Gedung(gedungKe, namaGedung, dasar, puncak, jumlahLantai);
-        // simpan gedung ke dalam kompleks
-        kompleks[gedungKe] = gedung;
+        // jika jumlah lantai == 2
+        } else if (jumlahLantai == 2) {
+            dasar.setNext(puncak);
+            puncak.setPrev(dasar);
+            // simpan lantai-lantai di atas masuk ke dalam gedung
+            Gedung gedung = new Gedung(gedungKe, namaGedung, dasar, puncak, jumlahLantai);
+            // simpan gedung ke dalam kompleks
+            kompleks[gedungKe] = gedung;
+
+        // jika jumlah lantai lebih dari 2    
+        } else { 
+            // mengisi prev dan next pada setiap node lantai
+            // variabel menyimpan lantai sebelum iterasi saat ini
+            Lantai savePrev = dasar;
+            for (int j = 2; j < jumlahLantai; j++) { // inisiasi lantai 2 sampai puncak-1
+                // set prev adalah savePrev
+                Lantai lantai = new Lantai(savePrev, null);  
+                savePrev.setNext(lantai); // set next nya prev lantai saat ini
+                savePrev = lantai; // menyimpan lantai sebelumnya
+            }
+            // set puncak & n-1
+            savePrev.setNext(puncak); // mengeset lantai n-1 nextnya ke puncak
+            puncak.setPrev(savePrev); // mengeset prev puncak adalah lantai n-1
+
+            // simpan lantai-lantai di atas masuk ke dalam gedung
+            Gedung gedung = new Gedung(gedungKe, namaGedung, dasar, puncak, jumlahLantai);
+            // simpan gedung ke dalam kompleks
+            kompleks[gedungKe] = gedung;
+        }
     }
 
     public static void checkGedung(Gedung gedung) {
@@ -168,13 +188,20 @@ public class Lab04 {
         // - Ketinggian lantai tempat Iblis berada
         // - Jumlah pertemuan keduanya
         gerakDenji();
+
+        // catat pertemuan hanya setelah selesai bergerak
+        // apabila lantai mereka sama maka hitung jumlah pertemuan
+        if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+            counterPertemuan++; // DENJI MENCATAT
+        }
+
         gerakIblis(); gerakIblis(); // iblis gerak dua kali
 
         // catat pertemuan hanya setelah selesai bergerak
         // apabila lantai mereka sama maka hitung jumlah pertemuan
         if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
-            out.println("MASUK MASUK GAN");
             counterPertemuan++;
+            // IBLIS MENCATAT
         }
 
         // OUTPUT
