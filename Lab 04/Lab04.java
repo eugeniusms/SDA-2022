@@ -94,23 +94,23 @@ public class Lab04 {
 
             if (command.equals("GERAK")) {
                 
-                checkPosisi("GERAK");
+                // checkPosisi("GERAK");
                 gerak();
             } else if (command.equals("HANCUR")) {
                 // checkGedung(kompleks[0]);
                 // checkGedung(kompleks[1]);
-                checkPosisi("HANCUR");
+                // checkPosisi("HANCUR");
                 hancur();
             } else if (command.equals("TAMBAH")) {
-                checkPosisi("TAMBAH");
+                // checkPosisi("TAMBAH");
                 tambah();
             } else if (command.equals("PINDAH")) {
-                checkPosisi("PINDAH");
+                // checkPosisi("PINDAH");
                 pindah();
             }
         }
 
-        checkPosisi("TERAKHIR");
+        // checkPosisi("TERAKHIR");
         // checkPemain();
 
         out.close();
@@ -187,21 +187,34 @@ public class Lab04 {
         // - Nama gedung tempat Iblis berada
         // - Ketinggian lantai tempat Iblis berada
         // - Jumlah pertemuan keduanya
+
+        // catat pertemuan hanya setelah selesai bergerak
+        // apabila lantai mereka sama maka hitung jumlah pertemuan
         gerakDenji();
 
         // catat pertemuan hanya setelah selesai bergerak
         // apabila lantai mereka sama maka hitung jumlah pertemuan
-        if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
-            counterPertemuan++; // DENJI MENCATAT
+        // if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+        //     out.println("DENJI MENCATAT");
+        //     counterPertemuan++; // DENJI MENCATAT
+        // }
+
+        if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji == counterLantaiIblis) {
+            counterPertemuan++;
         }
 
         gerakIblis(); gerakIblis(); // iblis gerak dua kali
 
-        // catat pertemuan hanya setelah selesai bergerak
-        // apabila lantai mereka sama maka hitung jumlah pertemuan
-        if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+        // // catat pertemuan hanya setelah selesai bergerak
+        // // apabila lantai mereka sama maka hitung jumlah pertemuan
+        // if (iblis.getLantaiNow().equals(denji.getLantaiNow())) {
+        //     out.println("IBLIS MENCATAT");
+        //     counterPertemuan++;
+        //     // IBLIS MENCATAT
+        // }
+
+        if (iblis.getGedungNow().equals(denji.getGedungNow()) && counterLantaiIblis == counterLantaiDenji) {
             counterPertemuan++;
-            // IBLIS MENCATAT
         }
 
         // OUTPUT
@@ -218,7 +231,6 @@ public class Lab04 {
         if (denji.getIsNaik()) { // jika naik == null (di puncak)
             // cek apakah lantai selanjutnya null (puncak) atau tidak 
             if (denji.getLantaiNow().getNext() != null) {
-                out.println("MASUKKKKK");
                 // ===== SET STATUS =====
                 denji.setLantaiNow(denji.getLantaiNow().getNext()); // naik
                 counterLantaiDenji++; // denji naik satu lantai
@@ -379,7 +391,7 @@ public class Lab04 {
             // iblis 
             if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji <= counterLantaiIblis) { 
                 // jika gedung iblis sama dengan gedung dihancurkan denji 
-                // dan lantai denji dibawah atau sama dengan lantai iblis maka iblis ikut turun 
+                // dan lantai denji dibawah atau sama dengan lantai iblis maka iblis ikut turun
                 counterLantaiIblis--; 
             }
             // denji
@@ -467,6 +479,7 @@ public class Lab04 {
 
         // jika bertemu dengan iblis maka counterPertemuan
         if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+            out.println("DENJI MENCATAT");
             counterPertemuan++;
         }
 
