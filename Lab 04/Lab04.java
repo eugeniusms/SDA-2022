@@ -96,6 +96,8 @@ public class Lab04 {
                 gerak();
             } else if (command.equals("HANCUR")) {
                 hancur();
+                checkGedung(kompleks[0]);
+                checkGedung(kompleks[1]);
             } else if (command.equals("TAMBAH")) {
                 tambah();
             } else if (command.equals("PINDAH")) {
@@ -315,7 +317,10 @@ public class Lab04 {
         } else if (denji.getLantaiNow().getPrev().equals(iblis.getLantaiNow())) { // ada iblis di lantainya
             // OUTPUT
             out.println(gedungDihancurkan.getNama()+" -1");
-        } else { // saat bisa dihancurkan
+        } else if (counterLantaiDenji == 2) { // jika lantai yang dihancurkan denji adalah lantai 1 maka hapus prevnya denji aja
+            Lantai denjiSekarang = denji.getLantaiNow();
+            denjiSekarang.setPrev(null);
+        } else { // saat bisa dihancurkan dan bukan lantai 1 yg dihancurkan
             // lantai di bawahnya dihancurkan
             // IMPORTANT (HATI-HATI!)
             Lantai dibawahDihancurkan = denji.getLantaiNow().getPrev().getPrev();
