@@ -94,7 +94,6 @@ public class Lab04v02 {
         out.close();
     }
 
-    // TODO: Implemen perintah GERAK
     static void gerak() {
         gerakKarakter(denji);
         if (denji.gedungNow.id == iblis.gedungNow.id) {
@@ -147,13 +146,31 @@ public class Lab04v02 {
         }
     }
 
-    static void gerakIblis() {
-        
-    }
-
     // TODO: Implemen perintah HANCUR
     static void hancur() {
+        Gedung gedungDenjiNow = denji.gedungNow;
 
+        if (gedungDenjiNow.lantai.size() == 1) {
+            // OUTPUT
+            out.println(gedungDenjiNow.nama+" -1");
+        } else if (gedungDenjiNow.lantai.get(denji.tingkat - 1) == iblis.lantaiNow) {
+            // OUTPUT
+            out.println(gedungDenjiNow.nama+" -1");
+        } else {
+            out.println(gedungDenjiNow.nama+" "+(gedungDenjiNow.lantai.get(denji.tingkat-1)));
+            gedungDenjiNow.lantai.remove(denji.tingkat - 1); 
+            denji.tingkat--;
+
+            if (denji.gedungNow.equals(iblis.gedungNow)) {
+                if (denji.tingkat <= iblis.tingkat) {
+                    iblis.tingkat--;
+                }
+            }
+            denji.tingkat--;
+
+            // OUTPUT
+            out.println(gedungDenjiNow.nama+" "+denji.tingkat);
+        }
     }
 
     // TODO: Implemen perintah TAMBAH
