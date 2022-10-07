@@ -29,6 +29,7 @@ public class Lab04 {
 
             // TODO: Inisiasi gedung pada kondisi awal
 
+
         }
 
         String gedungDenji = in.next();
@@ -117,7 +118,42 @@ class Lantai {
         this.isIblisExist = isIblisExist;
         this.prev = prev;
         this.next = next;
-    } 
+    }
+    
+    // method mengembalikan denji iblis selantai atau tidak
+    boolean isDenjiIblisSelantai() {
+        return (this.isDenjiExist == true) && (this.isIblisExist == true);
+    }
+
+    // getter prev
+    Lantai getPrev() {
+        return this.prev;
+    }
+
+    // getter next
+    Lantai getNext() {
+        return this.next;
+    }
+
+    // setter denji exist
+    void setDenjiExist(boolean isDenjiExist) {
+        this.isDenjiExist = isDenjiExist;
+    }
+
+    // setter iblis exist
+    void setIblisExist(boolean isIblisExist) {
+        this.isIblisExist = isIblisExist;
+    }
+
+    // setter prev
+    void setPrev(Lantai prev) {
+        this.prev = prev;
+    }
+
+    // setter next
+    void setNext(Lantai next) {
+        this.next = next;
+    }
 }
 
 class Gedung {
@@ -129,5 +165,20 @@ class Gedung {
         this.nama = nama;
         this.first = first;
         this.last = last;
+    }
+
+    // getter nama
+    String getNama() {
+        return this.nama;
+    }
+
+    // getter first
+    Lantai getFirst() {
+        return this.first;
+    }
+
+    // getter last
+    Lantai getLast() {
+        return this.last;
     }
 }
