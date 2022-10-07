@@ -94,18 +94,18 @@ public class Lab04 {
 
             if (command.equals("GERAK")) {
                 
-                // checkPosisi("GERAK");
+                checkPosisi("GERAK");
                 gerak();
             } else if (command.equals("HANCUR")) {
                 // checkGedung(kompleks[0]);
                 // checkGedung(kompleks[1]);
-                // checkPosisi("HANCUR");
+                checkPosisi("HANCUR");
                 hancur();
             } else if (command.equals("TAMBAH")) {
-                // checkPosisi("TAMBAH");
+                checkPosisi("TAMBAH");
                 tambah();
             } else if (command.equals("PINDAH")) {
-                // checkPosisi("PINDAH");
+                checkPosisi("PINDAH");
                 pindah();
             }
         }
@@ -191,6 +191,7 @@ public class Lab04 {
         if (denji.getIsNaik()) { // jika naik == null (di puncak)
             // cek apakah lantai selanjutnya null (puncak) atau tidak 
             if (denji.getLantaiNow().getNext() != null) {
+                out.println("MASUKKKKK");
                 // ===== SET STATUS =====
                 denji.setLantaiNow(denji.getLantaiNow().getNext()); // naik
                 counterLantaiDenji++; // denji naik satu lantai
