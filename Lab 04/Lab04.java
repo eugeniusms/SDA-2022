@@ -15,6 +15,7 @@ public class Lab04 {
     public static Gedung[] kompleks;
     // ex: (gedung A => menyimpan first and last)
     // first: lantai 1, .next: lantai 2 dst
+    public static Karakter[] pemain = new Karakter[2]; // [0]: Denji, [1]: Iblis
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -35,10 +36,12 @@ public class Lab04 {
         String gedungDenji = in.next();
         int lantaiDenji = in.nextInt();
         // TODO: Tetapkan kondisi awal Denji
+        pemain[0] = new Karakter(gedungDenji, lantaiDenji);
 
         String gedungIblis = in.next();
         int lantaiIblis = in.nextInt();
         // TODO: Tetapkan kondisi awal Iblis
+        pemain[1] = new Karakter(gedungIblis, lantaiIblis);
 
         int Q = in.nextInt();
 
@@ -146,11 +149,11 @@ public class Lab04 {
 
 // lantai adalah sebuah node dalam doubly linkedlist gedung
 class Lantai {
-    boolean isDenjiExist; 
-    boolean isIblisExist;
-    int nomor;
-    Lantai prev; // refer ke index lantai sebelumnya
-    Lantai next; // refer ke index lantai selanjutnya 
+    private boolean isDenjiExist; 
+    private boolean isIblisExist;
+    private int nomor;
+    private Lantai prev; // refer ke index lantai sebelumnya
+    private Lantai next; // refer ke index lantai selanjutnya 
 
     Lantai (boolean isDenjiExist, boolean isIblisExist, int nomor, Lantai prev, Lantai next) {
         this.isDenjiExist = isDenjiExist;
@@ -201,10 +204,11 @@ class Lantai {
     }
 }
 
+// gedung untuk mengidentifikasikan gedung
 class Gedung {
-    String nama; // nama gedung
-    Lantai first; // lantai dasar
-    Lantai last; // lantai teratas
+    private String nama; // nama gedung
+    private Lantai first; // lantai dasar
+    private Lantai last; // lantai teratas
 
     Gedung (String nama, Lantai first, Lantai last) {
         this.nama = nama;
@@ -225,5 +229,24 @@ class Gedung {
     // getter last
     Lantai getLast() {
         return this.last;
+    }
+}
+
+// karakter untuk mengidentifikasikan karakter
+class Karakter {
+    private String gedungNow;
+    private int lantaiNow;
+
+    Karakter (String gedungNow, int lantaiNow) {
+        this.gedungNow = gedungNow;
+        this.lantaiNow = lantaiNow;
+    }
+
+    String getGedungNow() {
+        return this.gedungNow;
+    } 
+
+    int getLantaiNow() {
+        return this.lantaiNow;
     }
 }
