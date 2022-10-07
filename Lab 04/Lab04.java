@@ -298,6 +298,7 @@ public class Lab04 {
         out.println("IBLIS: "+iblis.getGedungNow().getNama()+" | "+counterLantaiIblis);
     }
 
+    // OPERASI DALAM SATU GEDUNG (TIDAK PERLU ADA SET GEDUNG)
     // menghancurkan lantai tepat 1 di bawah denji
     // jika lantai bawah denji: dasar/ada iblis maka return ke 2), jika aman return ke 1)
     // 1) return nama gedung dan ketinggian lantai dihancurkan
@@ -306,6 +307,7 @@ public class Lab04 {
         // ambil nama gedung Denji saat ini (gedung yang lantainya akan dihancurkan)
         Gedung gedungDihancurkan = denji.getGedungNow();
 
+        // GAGAL HANCURKAN
         // cek apakah lantai paling bawah
         if (denji.getLantaiNow().getPrev() == null) { // saat tidak ada lantai di bawahnya (dasar)
             // OUTPUT
@@ -313,9 +315,15 @@ public class Lab04 {
         } else if (denji.getLantaiNow().getPrev().equals(iblis.getLantaiNow())) { // ada iblis di lantainya
             // OUTPUT
             out.println(gedungDihancurkan.getNama()+" -1");
+        
+        // SUCCESS HANCURKAN
         } else if (counterLantaiDenji == 2) { // jika lantai yang dihancurkan denji adalah lantai 1 maka hapus prevnya denji aja
             Lantai denjiSekarang = denji.getLantaiNow();
             denjiSekarang.setPrev(null);
+
+            // kurang jumlah lantai gedung
+            gedungDihancurkan.setJumlahLantai(gedungDihancurkan.getJumlahLantai()-1);
+
         } else { // saat bisa dihancurkan dan bukan lantai 1 yg dihancurkan
             // lantai di bawahnya dihancurkan
             // IMPORTANT (HATI-HATI!)
@@ -333,17 +341,24 @@ public class Lab04 {
                 // dan lantai denji dibawah lantai iblis maka iblis ikut turun 
                 counterLantaiIblis--; 
             }
+
+            // kurang jumlah lantai gedung
+            gedungDihancurkan.setJumlahLantai(gedungDihancurkan.getJumlahLantai()-1);
+
             // OUTPUT
             out.println(gedungDihancurkan.getNama()+" "+counterLantaiDenji); // lantai denji saat ini == lantai gedung dihancurkan barusan
             // TODO: HANDLE GA? JIKA DENJI SELANTAI DENGAN IBLIS => GIMANA COUNTER PERTEMUANNYA?
         }
     }
     
+    // OPERASI DALAM SATU GEDUNG (TIDAK PERLU ADA SET GEDUNG)
     // menambahkan lantai di bawah lantai iblis saat ini
     // return nama gedung dan ketinggian lantai yang ditambahkan iblis
     static void tambah() {
         // ambil nama gedung Iblis saat ini (gedung yang lantainya akan ditambahkan)
         Gedung gedungDitambahkan = iblis.getGedungNow();
+        // tambah jumlah lantai gedung
+        gedungDitambahkan.setJumlahLantai(gedungDitambahkan.getJumlahLantai()+1);
 
         // cek apakah lantai paling bawah
         if (iblis.getLantaiNow().getPrev() == null) { // saat tidak ada lantai di bawahnya (dasar)
@@ -386,7 +401,29 @@ public class Lab04 {
         // maka denji akan bergerak dari lantai paling atas dengan isNaik yg sama
     // jika ada pertemuan dengan iblis maka tambahkan counterPertemuan
     static void pindah() {
+        // ambil gedung denji sekarang, jika gedung terakhir maka balik ke depan
+        int idGedung = denji.getGedungNow().getId();
+        int moveIdGedung = (idGedung == kompleks.length-1) ? 0 : idGedung+1;
+        // pindahkan gedung denji
+        denji.setGedungNow(kompleks[moveIdGedung]);
 
+        if (denji.getIsNaik()) {
+            // lakukan pemindahan lantai denji ke dasar gedung selanjutnya
+            denji.setLantaiNow(kompleks[moveIdGedung].getFirst());
+            counterLantaiDenji = 1;
+        } else {
+            // lakukan pemindahan lantai denji ke paling atas gedung selanjutnya
+            denji.setLantaiNow(kompleks[moveIdGedung].getLast());
+            counterLantaiDenji = kompleks[moveIdGedung].getJumlahLantai();
+        }
+
+        // jika bertemu dengan iblis maka counterPertemuan
+        if (denji.getLantaiNow().equals(iblis.getLantaiNow())) {
+            counterPertemuan++;
+        }
+
+        // OUTPUT
+        out.println(kompleks[moveIdGedung].getNama()+" "+counterLantaiDenji); // nama gedung dan lantai denji saat ini
     }
 
     static class InputReader {
