@@ -93,19 +93,20 @@ public class Lab04 {
             String command = in.next();
 
             if (command.equals("GERAK")) {
+                
+                // checkPosisi("GERAK");
                 gerak();
-                checkPosisi("GERAK");
             } else if (command.equals("HANCUR")) {
-                hancur();
                 // checkGedung(kompleks[0]);
                 // checkGedung(kompleks[1]);
-                checkPosisi("HANCUR");
+                // checkPosisi("HANCUR");
+                hancur();
             } else if (command.equals("TAMBAH")) {
+                // checkPosisi("TAMBAH");
                 tambah();
-                checkPosisi("TAMBAH");
             } else if (command.equals("PINDAH")) {
+                // checkPosisi("PINDAH");
                 pindah();
-                checkPosisi("PINDAH");
             }
         }
 
@@ -389,16 +390,16 @@ public class Lab04 {
             counterLantaiIblis++; // tambah counter lantai iblis
 
         } else { // saat ada lantai di bawahnya
-            // maka set next lantai baru ke lantai iblis
-            // dan set prev lantai iblis ke lantai baru
-            Lantai lantaiBaru = new Lantai(null, iblis.getLantaiNow());
-            iblis.getLantaiNow().setPrev(lantaiBaru);
-
-            // lalu, set next lantai di bawahnya ke lantai baru
-            // dan set prev lantai baru ke lantai di bawahnya
-            Lantai dibawahDitambahkan = iblis.getLantaiNow().getPrev();
-            dibawahDitambahkan.setNext(lantaiBaru);
-            lantaiBaru.setPrev(dibawahDitambahkan);
+            // ambil lantai iblis saat ini
+            Lantai lantaiIblisSekarang = iblis.getLantaiNow();
+            // ambil lantai di bawahnya
+            Lantai lantaiDiBawahIblis = lantaiIblisSekarang.getPrev();
+            // susun lantai baru di antara lantai iblis dan bawahnya
+            Lantai lantaiBaru = new Lantai(lantaiDiBawahIblis, lantaiIblisSekarang);
+            // ubah .next lantai di bawahnya
+            lantaiDiBawahIblis.setNext(lantaiBaru);
+            // ubah .prev lantai iblis
+            lantaiIblisSekarang.setPrev(lantaiBaru);
 
             // jika denji segedung dengan iblis dan denji berada di atas atau selantai dengan iblis maka dia ikut naik counternya
             if (denji.getGedungNow().equals(iblis.getGedungNow()) && counterLantaiDenji >= counterLantaiIblis) {
