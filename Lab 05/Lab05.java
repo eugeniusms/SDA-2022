@@ -104,9 +104,20 @@ class AVLTree {
         return x;
     }
 
-    Node leftRotate(Node node) {
-        // TODO: implement left rotate
-        return null;
+    Node leftRotate(Node x) {
+        Node y = x.right;
+        Node T2 = y.left;
+  
+        // Rotasikan
+        y.left = x;
+        x.right = T2;
+  
+        // Update tingginya
+        x.height = max(getHeight(x.left), getHeight(x.right)) + 1;
+        y.height = max(getHeight(y.left), getHeight(y.right)) + 1;
+  
+        // Return root baru
+        return y;
     }
 
     Node insertNode(Node node, int key, String playerName) {
