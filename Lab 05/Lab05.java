@@ -88,9 +88,20 @@ class AVLTree {
 
     Node root;
 
-    Node rightRotate(Node node) {
-        // TODO: implement right rotate
-        return null;
+    Node rightRotate(Node y) {
+        Node x = y.left;
+        Node T2 = x.right;
+  
+        // Rotasikan
+        x.right = y;
+        y.left = T2;
+  
+        // Update tingginya
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+  
+        // Return root baru
+        return x;
     }
 
     Node leftRotate(Node node) {
@@ -134,3 +145,6 @@ class AVLTree {
         return getHeight(node.left) - getHeight(node.right);
     }
 }
+
+// REFERENCES:
+// 1) https://www.geeksforgeeks.org/insertion-in-an-avl-tree/
