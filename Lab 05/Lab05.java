@@ -211,7 +211,7 @@ class AVLTree {
   
                 // node with two children: Get the inorder 
                 // successor (smallest in the right subtree) 
-                Node temp = minValueNode(root.right); 
+                Node temp = lowerBound(root.right); 
   
                 // Copy the inorder successor's data to this node 
                 root.key = temp.key; 
@@ -258,9 +258,18 @@ class AVLTree {
         return root; 
     }
 
+    /* Given a non-empty binary search tree, return the 
+    node with minimum key value found in that tree. 
+    Note that the entire tree does not need to be 
+    searched. */
     Node lowerBound(Node node, int value) {
-        // TODO: return node with the lowest key that is >= value
-        return null;
+        Node current = node; 
+  
+        /* loop down to find the leftmost leaf */
+        while (current.left != null) 
+        current = current.left; 
+  
+        return current; 
     }
 
     Node upperBound(Node node, int value) {
