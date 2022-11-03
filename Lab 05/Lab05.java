@@ -22,10 +22,12 @@ public class Lab05 {
         for (int i = 0; i < numOfInitialPlayers; i++) {
             String playerName = in.next();
             int powerLevel = in.nextInt();
-            tree.root = tree.insertNode(tree.root, powerLevel, playerName);
+            Node node = new Node(powerLevel, playerName);
+            tree.root = tree.insertNode(tree.root, node);
         }
 
         tree.preOrder(tree.root);
+        tree.inOrder(tree.root);
 
         // int numOfQueries = in.nextInt();
         // for (int i = 0; i < numOfQueries; i++) {
@@ -42,10 +44,18 @@ public class Lab05 {
 
     static void handleQueryMasuk() {
         // TODO
+        String playerName = in.next();
+        int powerLevel = in.nextInt();
+        Node node = new Node(powerLevel, playerName);
+        tree.root = tree.insertNode(tree.root, node);
+
+
     }
 
     static void handleQueryDuo() {
         // TODO
+        int powerLevel1 = in.nextInt();
+        int powerLevel2 = in.nextInt();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -127,51 +137,51 @@ class AVLTree {
         return y;
     }
 
-    Node insertNode(Node node, int key, String playerName) {
+    Node insertNode(Node rootNode, Node node) {
         /* 1.  Perform the normal BST insertion */
-        if (node == null)
-            return (new Node(key, playerName));
+        if (rootNode == null)
+            return node;
   
-        if (key < node.key)
-            node.left = insertNode(node.left, key, playerName);
-        else if (key > node.key)
-            node.right = insertNode(node.right, key, playerName);
+        if (node.key < rootNode.key)
+            rootNode.left = insertNode(rootNode.left, node);
+        else if (node.key > rootNode.key)
+            rootNode.right = insertNode(rootNode.right, node);
         else 
             // Jika nilai sama maka insert node ke right childnya karena pasti urutan daftar lebih besar
-            node.right = insertNode(node.right, key, playerName);
+            rootNode.right = insertNode(rootNode.right, node);
   
         /* 2. Update height of this ancestor node */
-        node.height = 1 + max(getHeight(node.left),
-                              getHeight(node.right));
+        rootNode.height = 1 + max(getHeight(rootNode.left),
+                              getHeight(rootNode.right));
   
         /* 3. Get the balance factor of this ancestor
               node to check whether this node became
               unbalanced */
-        int balance = getBalance(node);
+        int balance = getBalance(rootNode);
   
         // If this node becomes unbalanced, then there
         // are 4 cases Left Left Case
-        if (balance > 1 && key < node.left.key)
-            return rightRotate(node);
+        if (balance > 1 && node.key < rootNode.left.key)
+            return rightRotate(rootNode);
   
         // Right Right Case
-        if (balance < -1 && key > node.right.key)
-            return leftRotate(node);
+        if (balance < -1 && node.key > rootNode.right.key)
+            return leftRotate(rootNode);
   
         // Left Right Case
-        if (balance > 1 && key > node.left.key) {
-            node.left = leftRotate(node.left);
-            return rightRotate(node);
+        if (balance > 1 && node.key > rootNode.left.key) {
+            rootNode.left = leftRotate(rootNode.left);
+            return rightRotate(rootNode);
         }
   
         // Right Left Case
-        if (balance < -1 && key < node.right.key) {
-            node.right = rightRotate(node.right);
-            return leftRotate(node);
+        if (balance < -1 && node.key < rootNode.right.key) {
+            rootNode.right = rightRotate(rootNode.right);
+            return leftRotate(rootNode);
         }
   
         /* return the (unchanged) node pointer */
-        return node;
+        return rootNode;
     }
 
     Node deleteNode(Node node, int key) {
@@ -324,8 +334,52 @@ class AVLTree {
             preOrder(node.right); 
         } 
     } 
+
+    void inOrder(Node node) { 
+        if (node != null) { 
+            inOrder(node.left); 
+            System.out.print(node.key + " "); 
+            inOrder(node.right); 
+        } 
+    } 
+
+    // Recursive function to find inorder predecessor for a given key in the BST
+    // Node findPredecessor(Node root, Node prec, int key) {
+    //     // base case
+    //     if (root == null) {
+    //         return prec;
+    //     }
+ 
+    //     // if a node with the desired value is found, the predecessor is the maximum
+    //     // value node in its left subtree (if any)
+    //     if (root.key == key)
+    //     {
+    //         if (root.left != null) {
+    //             return upperBound(root.left);
+    //         }
+    //     }
+ 
+    //     // if the given key is less than the root node, recur for the left subtree
+    //     else if (key < root.key) {
+    //         return findPredecessor(root.left, prec, key);
+    //     }
+ 
+    //     // if the given key is more than the root node, recur for the right subtree
+    //     else {
+    //         // update predecessor to the current node before recursing
+    //         // in the right subtree
+    //         prec = root;
+    //         return findPredecessor(root.right, prec, key);
+    //     }
+    //     return prec;
+    // }
+
+    // Find number of node < current node
+
 }
 
 // REFERENCES:
 // 1) https://www.geeksforgeeks.org/insertion-in-an-avl-tree/
 // 2) https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
+// 3) https://www.techiedelight.com/find-inorder-predecessor-given-key-bst/
+// 4) https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
