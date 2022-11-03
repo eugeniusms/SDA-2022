@@ -72,13 +72,14 @@ public class Lab05 {
 }
 
 
-// TODO: modify as needed
 class Node {
     int key, height;
+    String playerName;
     Node left, right;
 
-    Node(int key) {
+    Node(int key, String playerName) {
         this.key = key;
+        this.playerName = playerName;
         this.height = 1;
     }
 }
@@ -97,8 +98,8 @@ class AVLTree {
         y.left = T2;
   
         // Update tingginya
-        y.height = max(getHeight(y.left), getHeight(y.right)) + 1;
-        x.height = max(getHeight(x.left), getHeight(x.right)) + 1;
+        y.height = max(height(y.left), height(y.right)) + 1;
+        x.height = max(height(x.left), height(x.right)) + 1;
   
         // Return root baru
         return x;
@@ -113,16 +114,57 @@ class AVLTree {
         x.right = T2;
   
         // Update tingginya
-        x.height = max(getHeight(x.left), getHeight(x.right)) + 1;
-        y.height = max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = max(height(x.left), height(x.right)) + 1;
+        y.height = max(height(y.left), height(y.right)) + 1;
   
         // Return root baru
         return y;
     }
 
-    Node insertNode(Node node, int key, String playerName) {
-        // TODO: implement insert node
-        return null;
+    Node insert(Node node, int key, String playerName) {
+        /* 1.  Perform the normal BST insertion */
+        if (node == null)
+            return (new Node(key, playerName));
+  
+        if (key < node.key)
+            node.left = insert(node.left, key, playerName);
+        else if (key > node.key)
+            node.right = insert(node.right, key, playerName);
+        else // Duplicate keys not allowed
+            return node;
+  
+        /* 2. Update height of this ancestor node */
+        node.height = 1 + max(height(node.left),
+                              height(node.right));
+  
+        /* 3. Get the balance factor of this ancestor
+              node to check whether this node became
+              unbalanced */
+        int balance = getBalance(node);
+  
+        // If this node becomes unbalanced, then there
+        // are 4 cases Left Left Case
+        if (balance > 1 && key < node.left.key)
+            return rightRotate(node);
+  
+        // Right Right Case
+        if (balance < -1 && key > node.right.key)
+            return leftRotate(node);
+  
+        // Left Right Case
+        if (balance > 1 && key > node.left.key) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+  
+        // Right Left Case
+        if (balance < -1 && key < node.right.key) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
+        }
+  
+        /* return the (unchanged) node pointer */
+        return node;
     }
 
     Node deleteNode(Node node, int key) {
@@ -141,7 +183,7 @@ class AVLTree {
     }
 
     // Utility function to get height of node
-    int getHeight(Node node) {
+    int height(Node node) {
         if (node == null) {
             return 0;
         }
@@ -153,7 +195,7 @@ class AVLTree {
         if (node == null) {
             return 0;
         }
-        return getHeight(node.left) - getHeight(node.right);
+        return height(node.left) - height(node.right);
     }
 
     // Utility function to get maximum of two integers
