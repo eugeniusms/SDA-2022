@@ -22,7 +22,7 @@ public class Lab05 {
         for (int i = 0; i < numOfInitialPlayers; i++) {
             String playerName = in.next();
             int powerLevel = in.nextInt();
-            tree.root = tree.insertNode(tree.root, powerLevel, playerName, i);
+            tree.root = tree.insertNode(tree.root, powerLevel, playerName);
         }
 
         tree.preOrder(tree.root);
@@ -77,14 +77,13 @@ public class Lab05 {
 
 
 class Node {
-    int key, height, urutanDaftar;
+    int key, height;
     String playerName;
     Node left, right;
 
-    Node(int key, String playerName, int urutanDaftar) {
+    Node(int key, String playerName) {
         this.key = key;
         this.playerName = playerName;
-        this.urutanDaftar = urutanDaftar;
         this.height = 1;
     }
 }
@@ -128,24 +127,18 @@ class AVLTree {
         return y;
     }
 
-    Node insertNode(Node node, int key, String playerName, int urutanDaftar) {
+    Node insertNode(Node node, int key, String playerName) {
         /* 1.  Perform the normal BST insertion */
         if (node == null)
-            return (new Node(key, playerName, urutanDaftar));
+            return (new Node(key, playerName));
   
         if (key < node.key)
-            node.left = insertNode(node.left, key, playerName, urutanDaftar);
+            node.left = insertNode(node.left, key, playerName);
         else if (key > node.key)
-            node.right = insertNode(node.right, key, playerName, urutanDaftar);
+            node.right = insertNode(node.right, key, playerName);
         else 
-            // Jika nilai sama maka insert node ke childnya
-            // -> Jika urutanDaftar lebih kecil maka insert ke kiri
-            // -> Jika urutanDaftar lebih besar maka insert ke kanan
-            if (urutanDaftar < node.urutanDaftar) {
-                node.left = insertNode(node.left, key, playerName, urutanDaftar);
-            } else {
-                node.right = insertNode(node.right, key, playerName, urutanDaftar);
-            }
+            // Jika nilai sama maka insert node ke right childnya karena pasti urutan daftar lebih besar
+            node.right = insertNode(node.right, key, playerName);
   
         /* 2. Update height of this ancestor node */
         node.height = 1 + max(getHeight(node.left),
@@ -196,17 +189,12 @@ class AVLTree {
         else if (key > root.key) 
             root.right = deleteNode(root.right, key); 
   
-        // Jika key sama tetapi urutan daftar beda
-        else if (key == root.key) {
-            if (node.urutanDaftar < root.urutanDaftar) {
-                root.left = deleteNode(root.left, key);
-            } else {
-                root.right = deleteNode(root.right, key);
-            }
-        }
+        // Jika key sama tetapi urutan daftar beda / masih ada right child node dengan nilai key sama
+        else if (key == root.key && key == root.right.key)
+            root.right = deleteNode(root.right, key);
 
-        // if key is same as root's key && urutanDaftar sama, then this is the node 
-        // to be deleted 
+        // if key is same as root's key && urutan daftar sama (tidak ada right child node
+        // dengan key yg sama), then this is the node to be deleted 
         else
         { 
   
