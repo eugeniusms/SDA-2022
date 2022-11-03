@@ -262,7 +262,7 @@ class AVLTree {
     node with minimum key value found in that tree. 
     Note that the entire tree does not need to be 
     searched. */
-    Node lowerBound(Node node, int value) {
+    Node lowerBound(Node node) {
         Node current = node; 
   
         /* loop down to find the leftmost leaf */
@@ -272,9 +272,14 @@ class AVLTree {
         return current; 
     }
 
-    Node upperBound(Node node, int value) {
-        // TODO: return node with the greatest key that is <= value
-        return null;
+    Node upperBound(Node node) {
+        Node current = node; 
+  
+        /* loop down to find the rightmost leaf */
+        while (current.right != null) 
+        current = current.right; 
+  
+        return current; 
     }
 
     // Utility function to get height of node
