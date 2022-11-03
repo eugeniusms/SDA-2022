@@ -20,18 +20,22 @@ public class Lab05 {
 
         int numOfInitialPlayers = in.nextInt();
         for (int i = 0; i < numOfInitialPlayers; i++) {
-            // TODO: process inputs
+            String playerName = in.next();
+            int powerLevel = in.nextInt();
+            tree.root = tree.insertNode(tree.root, powerLevel, playerName);
         }
 
-        int numOfQueries = in.nextInt();
-        for (int i = 0; i < numOfQueries; i++) {
-            String cmd = in.next();
-            if (cmd.equals("MASUK")) {
-                handleQueryMasuk();
-            } else {
-                handleQueryDuo();
-            }
-        }
+        tree.preOrder(tree.root);
+
+        // int numOfQueries = in.nextInt();
+        // for (int i = 0; i < numOfQueries; i++) {
+        //     String cmd = in.next();
+        //     if (cmd.equals("MASUK")) {
+        //         handleQueryMasuk();
+        //     } else {
+        //         handleQueryDuo();
+        //     }
+        // }
 
         out.close();
     }
@@ -302,6 +306,17 @@ class AVLTree {
     int max(int a, int b) {
         return (a > b) ? a : b;
     }
+
+    // A utility function to print preorder traversal of 
+    // the tree. The function also prints height of every 
+    // node 
+    void preOrder(Node node) { 
+        if (node != null) { 
+            System.out.print(node.key + " "); 
+            preOrder(node.left); 
+            preOrder(node.right); 
+        } 
+    } 
 }
 
 // REFERENCES:
