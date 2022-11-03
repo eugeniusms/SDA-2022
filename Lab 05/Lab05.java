@@ -97,8 +97,8 @@ class AVLTree {
         y.left = T2;
   
         // Update tingginya
-        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
-        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+        y.height = max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = max(getHeight(x.left), getHeight(x.right)) + 1;
   
         // Return root baru
         return x;
@@ -143,6 +143,11 @@ class AVLTree {
             return 0;
         }
         return getHeight(node.left) - getHeight(node.right);
+    }
+
+    // Utility function to get maximum of two integers
+    int max(int a, int b) {
+        return (a > b) ? a : b;
     }
 }
 
