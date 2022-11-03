@@ -89,7 +89,9 @@ class Node {
     }
 }
 
-
+// Insert by
+// 1) key
+// 2) if key same, then urutanDaftar
 class AVLTree {
 
     Node root;
