@@ -276,3 +276,8 @@ class AVLTree {
         }
     }
 }
+
+// References:
+// 1) https://www.geeksforgeeks.org/deletion-in-an-avl-tree
+// 2) https://www.geeksforgeeks.org/stack-class-in-java/
+// 3) https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
