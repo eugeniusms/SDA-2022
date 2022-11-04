@@ -107,35 +107,43 @@ public class Lab05Stack {
         if (map.containsKey(leftRange)) {
             leftKey = leftRange;
             out.println(map.get(leftRange).peek());
+            removeNode(leftRange);
         } else {
             leftKey = tree.findSuccessor(tree.root, leftRange).key;
-            out.println(map.get(leftKey).peek());
-        }
-        // remove node
-        if (map.get(leftKey).size() > 1) {
-            map.get(leftKey).pop();
-        } else {
-            map.remove(leftKey); // delete dari map
-            // dan delete avl
-            tree.deleteNode(tree.root, leftKey);
+            if (map.containsKey(leftKey)) {
+                out.println(map.get(leftKey).peek());
+                removeNode(leftKey);
+            } else {
+                out.println("-1");
+            }
         }
         
-
         // RIGHT RANGE
         if (map.containsKey(rightRange)) {
             rightKey = rightRange;
             out.println(map.get(rightRange).peek());
+            removeNode(rightRange);
         } else {
             rightKey = tree.findPredecessor(tree.root, rightRange).key;
-            out.println(map.get(rightKey).peek());
-        }        
+            if (map.containsKey(rightKey)) {
+                out.println(map.get(rightKey).peek());
+                removeNode(rightKey);
+            } else {
+                out.println("-1");
+            }
+        }
+    }
+
+    // remove node decision
+    static void removeNode(int key) {
         // remove node
-        if (map.get(rightKey).size() > 1) {
-            map.get(rightKey).pop();
+        if (map.get(key).size() > 1) {
+            map.get(key).pop();
+        } else if (map.get(key).size() == 1) {
+            map.remove(key); // delete dari map
+            tree.deleteNode(tree.root, key); // delete dari avl
         } else {
-            map.remove(rightKey); // delete dari map
-            // dan delete avl
-            tree.deleteNode(tree.root, rightKey);
+            // do nothing
         }
     }
 
