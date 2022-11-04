@@ -14,8 +14,8 @@ public class Lab05Stack {
     static PrintWriter out;
     static AVLTree tree = new AVLTree();
 
-    // Map penyimpan node power level sama [ PowerLevel : <Stack of Nodes> ]
-    static HashMap<Integer, Stack<Node>> map = new HashMap<Integer, Stack<Node>>();
+    // Map penyimpan node power level sama [ PowerLevel : <Stack of Nama Peserta> ]
+    static HashMap<Integer, Stack<String>> map = new HashMap<Integer, Stack<String>>();
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -76,10 +76,9 @@ public class Lab05Stack {
     }
 }
 
-
-// TODO: modify as needed
+// Node menyimpan power level saja (key dalam map)
 class Node {
-    int key, height;
+    int key, height; // key => sama dengan key map (power level)
     Node left, right;
 
     Node(int key) {
