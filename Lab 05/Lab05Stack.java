@@ -97,9 +97,46 @@ public class Lab05Stack {
         int leftRange = in.nextInt();
         int rightRange = in.nextInt();
 
+        // CEK APAKAH ADA RANGE DALAM MAP KEYS (INKLUSIF)
+        // LALU PRINT NAMA PERTAMA (ALIAS TERAKHIR MASUK)
+        // JIKA MAP TERSEBUT LEBIH DARI 1, POP NAMA TERAKHIR MASUK SAJA
         out.println("DUO");
-        out.println(tree.findSuccessor(tree.root, leftRange).key);
-        out.println(tree.findPredecessor(tree.root, rightRange).key);
+        int leftKey, rightKey;
+
+        // LEFT RANGE
+        if (map.containsKey(leftRange)) {
+            leftKey = leftRange;
+            out.println(map.get(leftRange).peek());
+        } else {
+            leftKey = tree.findSuccessor(tree.root, leftRange).key;
+            out.println(map.get(leftKey).peek());
+        }
+        // remove node
+        // if (map.get(leftKey).size() > 1) {
+        //     map.get(leftKey).pop();
+        // } else {
+        //     map.remove(leftKey); // delete dari map
+        //     // dan delete avl
+        //     tree.root = tree.deleteNode(tree.root, leftKey);
+        // }
+        
+
+        // RIGHT RANGE
+        if (map.containsKey(rightRange)) {
+            rightKey = rightRange;
+            out.println(map.get(rightRange).peek());
+        } else {
+            rightKey = tree.findPredecessor(tree.root, rightRange).key;
+            out.println(map.get(rightKey).peek());
+        }        
+        // remove node
+        // if (map.get(rightKey).size() > 1) {
+        //     map.get(rightKey).pop();
+        // } else {
+        //     map.remove(rightKey); // delete dari map
+        //     // dan delete avl
+        //     tree.root = tree.deleteNode(tree.root, rightKey);
+        // }
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -227,10 +264,82 @@ class AVLTree {
     }
 
     // // Implement delete node from AVL Tree
-    // Node deleteNode(Node node, int key) {
-    //     // TODO: implement delete node
-    //     return null;
-    // }
+    Node deleteNode(Node node, int key) {
+        if (node == null) {
+            return node;
+        }
+
+        if (key < node.key) {
+            node.left = deleteNode(node.left, key);
+        } else if (key > node.key) {
+            node.right = deleteNode(node.right, key);
+        } else {
+            // node with only one child or no child
+            if ((node.left == null) || (node.right == null)) {
+                Node temp = null;
+                if (temp == node.left) {
+                    temp = node.right;
+                } else {
+                    temp = node.left;
+                }
+
+                // No child case
+                if (temp == null) {
+                    temp = node;
+                    node = null;
+                } else {
+                    // One child case
+                    node = temp;
+                }
+            } else {
+                // node with two children: Get the inorder successor (smallest in the right subtree)
+                Node temp = lowerBound(node.right);
+
+                // Copy the inorder successor's content to this node
+                node.key = temp.key;
+
+                // Delete the inorder successor
+                node.right = deleteNode(node.right, temp.key);
+            }
+        }
+
+        // If the tree had only one node then return
+        if (node == null) {
+            return node;
+        }
+
+        // Update height of this ancestor node
+        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+
+        // Get the balance factor of this ancestor node to check whether this node became unbalanced
+        int balance = getBalance(node);
+
+        // If this node becomes unbalanced, then there are 4 cases
+
+        // Left Left Case
+        if (balance > 1 && getBalance(node.left) >= 0) {
+            return rightRotate(node);
+        }
+
+        // Left Right Case
+        if (balance > 1 && getBalance(node.left) < 0) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+
+        // Right Right Case
+        if (balance < -1 && getBalance(node.right) <= 0) {
+            return leftRotate(node);
+        }
+
+        // Right Left Case
+        if (balance < -1 && getBalance(node.right) > 0) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
+        }
+
+        return node;
+    }
 
     Node lowerBound(Node node) {
         // Return node with the lowest from this node
