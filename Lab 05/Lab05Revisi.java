@@ -21,23 +21,36 @@ public class Lab05Revisi {
         int numOfInitialPlayers = in.nextInt();
         for (int i = 0; i < numOfInitialPlayers; i++) {
             // TODO: process inputs
+            String nama = in.next();
+            int power= in.nextInt();
+            Node node = new Node(power, nama, i);
+            tree.root = tree.insertNode(tree.root, node);
         }
 
         int numOfQueries = in.nextInt();
+        int counter = 0;
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             if (cmd.equals("MASUK")) {
-                handleQueryMasuk();
+                handleQueryMasuk(numOfInitialPlayers+counter);
+                counter++;
             } else {
                 handleQueryDuo();
             }
         }
 
+        System.out.println();
+        tree.inOrder(tree.root);
+
         out.close();
     }
 
-    static void handleQueryMasuk() {
+    static void handleQueryMasuk(int urutan) {
         // TODO
+        String nama = in.next();
+        int power = in.nextInt();
+        Node node = new Node(power, nama, urutan);
+        tree.root = tree.insertNode(tree.root, node);
     }
 
     static void handleQueryDuo() {
@@ -237,5 +250,13 @@ class AVLTree {
             return 0;
         }
         return getHeight(node.left) - getHeight(node.right);
+    }
+
+    void inOrder(Node node) {
+        if (node != null) {
+            inOrder(node.left);
+            System.out.println(node.power + "[" + node.nama + "|" + node.urutan + "]");
+            inOrder(node.right);
+        }
     }
 }
