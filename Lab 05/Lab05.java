@@ -42,12 +42,11 @@ public class Lab05 {
         String name = in.next();
         int power = in.nextInt();
         tree.root = tree.insert(tree.root, power, name);
-
-        
     }
 
     static void handleQueryDuo() {
-        // TODO
+        int rangeLeft = in.nextInt();
+        int rangeRight = in.nextInt();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -325,6 +324,28 @@ class AVLTree
 			preOrder(node.right);
 		}
     }
+
+    // int countNodes(Node root){
+    //     if(root==null){
+    //         return 0;
+    //     }
+    //     return countNodes(root.left) + countNodes(root.right) + 1;
+    // }
+
+    // int countNodesLowerThanK(Node root,int K){
+    //     if(root==null){
+    //         return 0;
+    //     }
+    //     if(root.key == K) {
+    //         return countNodes(root.right);
+    //     }else if(root.key>K) {
+    //         int sum = countNodes(root.right)+1;
+    //         sum += countNodesLowerThanK(root.left,K);
+    //         return sum;
+    //     }else{
+    //         return countNodesLowerThanK(root.left,K);
+    //     }
+    // }
 
 }
 
