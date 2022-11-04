@@ -104,33 +104,125 @@ class AVLTree {
     Node root;
 
     Node rightRotate(Node node) {
-        // TODO: implement right rotate
-        return null;
+        // Implement right rotate AVL Tree
+        Node newRoot = node.left;
+        node.left = newRoot.right;
+        newRoot.right = node;
+        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+        newRoot.height = Math.max(getHeight(newRoot.left), getHeight(newRoot.right)) + 1;
+        return newRoot;
     }
 
     Node leftRotate(Node node) {
-        // TODO: implement left rotate
-        return null;
+        // Implement left rotate AVL Tree
+        Node newRoot = node.right;
+        node.right = newRoot.left;
+        newRoot.left = node;
+        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+        newRoot.height = Math.max(getHeight(newRoot.left), getHeight(newRoot.right)) + 1;
+        return newRoot;
     }
 
-    Node insertNode(Node node, int key, String playerName) {
-        // TODO: implement insert node
-        return null;
+    Node insertNode(Node root, int node) {
+        // Implement insert node to root node AVL Tree
+        if (root == null) {
+            return new Node(node, null, 0);
+        }
+        if (node < root.power) {
+            root.left = insertNode(root.left, node);
+        } else if (node > root.power) {
+            root.right = insertNode(root.right, node);
+        } else {
+            return root;
+        }
+        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right));
+        int balance = getBalance(root);
+        if (balance > 1 && node < root.left.power) {
+            return rightRotate(root);
+        }
+        if (balance < -1 && node > root.right.power) {
+            return leftRotate(root);
+        }
+        if (balance > 1 && node > root.left.power) {
+            root.left = leftRotate(root.left);
+            return rightRotate(root);
+        }
+        if (balance < -1 && node < root.right.power) {
+            root.right = rightRotate(root.right);
+            return leftRotate(root);
+        }
+        return root;
     }
 
-    Node deleteNode(Node node, int key) {
-        // TODO: implement delete node
-        return null;
+    // Implement delete node from the root of AVL Tree
+    Node deleteNode(Node root, Node node) {
+        if (root == null) {
+            return root;
+        }
+        if (node.compareTo(root) < 0) {
+            root.left = deleteNode(root.left, node);
+        } else if (node.compareTo(root) > 0) {
+            root.right = deleteNode(root.right, node);
+        } else {
+            if ((root.left == null) || (root.right == null)) {
+                Node temp = null;
+                if (temp == root.left) {
+                    temp = root.right;
+                } else {
+                    temp = root.left;
+                }
+                if (temp == null) {
+                    temp = root;
+                    root = null;
+                } else {
+                    root = temp;
+                }
+            } else {
+                Node temp = lowerBound(root.right);
+                root.power = temp.power;
+                root.right = deleteNode(root.right, temp);
+            }
+        }
+        if (root == null) {
+            return root;
+        }
+        root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+        int balance = getBalance(root);
+        if (balance > 1 && getBalance(root.left) >= 0) {
+            return rightRotate(root);
+        }
+        if (balance > 1 && getBalance(root.left) < 0) {
+            root.left = leftRotate(root.left);
+            return rightRotate(root);
+        }
+        if (balance < -1 && getBalance(root.right) <= 0) {
+            return leftRotate(root);
+        }
+        if (balance < -1 && getBalance(root.right) > 0) {
+            root.right = rightRotate(root.right);
+            return leftRotate(root);
+        }
+        return root;
+    }
+        
+        
+
+    Node lowerBound(Node node) {
+        // Return node with the lowest from this node
+        Node current = node;
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current;
     }
 
-    Node lowerBound(Node node, int value) {
-        // TODO: return node with the lowest key that is >= value
-        return null;
-    }
-
-    Node upperBound(Node node, int value) {
-        // TODO: return node with the greatest key that is <= value
-        return null;
+    Node upperBound(Node node) {
+        // Return node with the greatest from this node
+        Node current = node;
+        while (current.right != null) {
+            current = current.right;
+        }
+        return current;
     }
 
     // Utility function to get height of node
