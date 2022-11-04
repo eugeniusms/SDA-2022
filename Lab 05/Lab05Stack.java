@@ -102,8 +102,8 @@ public class Lab05Stack {
         // LALU PRINT NAMA PERTAMA (ALIAS TERAKHIR MASUK)
         // JIKA MAP TERSEBUT LEBIH DARI 1, POP NAMA TERAKHIR MASUK SAJA
         out.println("DUO");
-        // int leftKey, rightKey;
-        // String leftDuo, rightDuo;
+        int leftKey = 0, rightKey = 0;
+        String leftDuo = "", rightDuo = "";
 
         if (map.containsKey(leftRange)) {
             removeNode(leftRange);
@@ -111,7 +111,8 @@ public class Lab05Stack {
             // successor
             for (Integer k : map.keySet()) {
                 if (k > leftRange) {
-                    removeNode(k);
+                    leftKey = k;
+                    leftDuo = getRemoveNodeName(k);
                     break;
                 }
             }
@@ -125,19 +126,42 @@ public class Lab05Stack {
             for(int i=keys.size()-1; i>=0;i--){
                 int k = keys.get(i);
                 if (k < rightRange) {
-                    removeNode(k);
+                    rightKey = k;
+                    rightDuo = getRemoveNodeName(k);
                 }
             }
+        }
+
+        // PRINT
+        if (leftDuo.equals("-1") || rightDuo.equals("-1")) {
+            out.println("-1 -1");
+        } else {
+            removeNode(leftKey);
+            removeNode(rightKey);
         }
     }
 
     // remove node decision
-    static void removeNode(int key) {
+    static String getRemoveNodeName(int key) {
+        String nama = "-1"; // default
         // remove node
         if (map.get(key).size() > 1) {
-            out.println(map.get(key).pop());
+            nama = map.get(key).peek();
         } else if (map.get(key).size() == 1) {
-            out.println(map.get(key).pop());
+            nama = map.get(key).peek();
+            map.remove(key); // delete dari map
+            tree.deleteNode(tree.root, key); // delete dari avl
+        } else {
+            // do nothing
+        }
+        return nama;
+    }
+
+    static void removeNode(int key) {
+        if (map.get(key).size() > 1) {
+            map.get(key).pop();
+        } else if (map.get(key).size() == 1) {
+            map.get(key).pop();
             map.remove(key); // delete dari map
             tree.deleteNode(tree.root, key); // delete dari avl
         } else {
