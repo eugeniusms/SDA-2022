@@ -102,11 +102,12 @@ public class Lab05Stack {
         // LALU PRINT NAMA PERTAMA (ALIAS TERAKHIR MASUK)
         // JIKA MAP TERSEBUT LEBIH DARI 1, POP NAMA TERAKHIR MASUK SAJA
         out.println("DUO");
-        int leftKey = 0, rightKey = 0;
-        String leftDuo = "", rightDuo = "";
+        int leftKey = 0; int rightKey = 0;
+        String leftDuo = ""; String rightDuo = "";
 
         if (map.containsKey(leftRange)) {
-            removeNode(leftRange);
+            leftKey = leftRange;
+            leftDuo = getRemoveNodeName(leftRange);
         } else {
             // successor
             for (Integer k : map.keySet()) {
@@ -119,7 +120,8 @@ public class Lab05Stack {
         }
 
         if (map.containsKey(rightRange)) {
-            removeNode(rightRange);
+            rightKey = rightRange;
+            rightDuo = getRemoveNodeName(rightRange);
         } else {
             // predecessor
             ArrayList<Integer> keys = new ArrayList<Integer>(map.keySet());
@@ -136,7 +138,8 @@ public class Lab05Stack {
         if (leftDuo.equals("-1") || rightDuo.equals("-1")) {
             out.println("-1 -1");
         } else {
-            removeNode(leftKey);
+            out.println(leftDuo + " " + rightDuo);
+            removeNode(leftKey); // TODO: MASALAH LOCAL GLOBAL
             removeNode(rightKey);
         }
     }
@@ -149,8 +152,6 @@ public class Lab05Stack {
             nama = map.get(key).peek();
         } else if (map.get(key).size() == 1) {
             nama = map.get(key).peek();
-            map.remove(key); // delete dari map
-            tree.deleteNode(tree.root, key); // delete dari avl
         } else {
             // do nothing
         }
@@ -158,6 +159,8 @@ public class Lab05Stack {
     }
 
     static void removeNode(int key) {
+        // cek apakah ada di dalam map
+        // TODO
         if (map.get(key).size() > 1) {
             map.get(key).pop();
         } else if (map.get(key).size() == 1) {
