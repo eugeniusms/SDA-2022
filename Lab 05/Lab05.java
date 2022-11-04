@@ -172,6 +172,8 @@ class AVLTree
 		else if (key > node.key)
 			node.right = insert(node.right, key, name);
 		else // Equal keys not allowed
+            // Jika ditemukan equal keys, maka tambahkan nama ke dalam stack
+            masukkanKeStack(node, name);
 			return node;
 
 		/* 2. Update height of this ancestor node */
