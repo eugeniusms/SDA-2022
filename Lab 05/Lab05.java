@@ -367,39 +367,6 @@ class AVLTree {
         } 
     } 
 
-    // Recursive function to find inorder predecessor for a given key in the BST
-    // Node findPredecessor(Node root, Node prec, int key) {
-    //     // base case
-    //     if (root == null) {
-    //         return prec;
-    //     }
- 
-    //     // if a node with the desired value is found, the predecessor is the maximum
-    //     // value node in its left subtree (if any)
-    //     if (root.key == key)
-    //     {
-    //         if (root.left != null) {
-    //             return upperBound(root.left);
-    //         }
-    //     }
- 
-    //     // if the given key is less than the root node, recur for the left subtree
-    //     else if (key < root.key) {
-    //         return findPredecessor(root.left, prec, key);
-    //     }
- 
-    //     // if the given key is more than the root node, recur for the right subtree
-    //     else {
-    //         // update predecessor to the current node before recursing
-    //         // in the right subtree
-    //         prec = root;
-    //         return findPredecessor(root.right, prec, key);
-    //     }
-    //     return prec;
-    // }
-
-    // Find number of node < current node
-
 }
 
 // REFERENCES:
