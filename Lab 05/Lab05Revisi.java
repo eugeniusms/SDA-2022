@@ -39,6 +39,8 @@ public class Lab05Revisi {
             }
         }
 
+        tree.deleteNode(tree, node);
+
         System.out.println();
         tree.inOrder(tree.root);
 
@@ -50,7 +52,8 @@ public class Lab05Revisi {
         String nama = in.next();
         int power = in.nextInt();
         Node node = new Node(power, nama, urutan);
-        tree.root = tree.insertNode(tree.root, node);
+        tree.insertNode(tree.root, node);
+        // out.println(tree.countNodesLowerThanNodeK(node));
     }
 
     static void handleQueryDuo() {
@@ -259,4 +262,20 @@ class AVLTree {
             inOrder(node.right);
         }
     }
+
+    // Implement count nodes that lower than node K in AVL Tree
+    // Insert 6 in tree inside 1, 2, 4, 7, 8 => 3
+    // int countNodesLowerThanNodeK(Node K) {
+    //     int count = 0;
+    //     Node current = root;
+    //     while (current != null) {
+    //         if (K.compareTo(current) > 0) {
+    //             count += 1 + getHeight(current.left);
+    //             current = current.right;
+    //         } else {
+    //             current = current.left;
+    //         }
+    //     }
+    //     return count;
+    // }
 }
