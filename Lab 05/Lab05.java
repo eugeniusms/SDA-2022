@@ -12,6 +12,9 @@ public class Lab05 {
     static PrintWriter out;
     static AVLTree tree = new AVLTree();
 
+    // Calculating attributes
+    static int counter = 0;
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -43,15 +46,35 @@ public class Lab05 {
     }
 
     static void handleQueryMasuk() {
-        // TODO
+        // Get input and insert node
         String playerName = in.next();
         int powerLevel = in.nextInt();
         Node node = new Node(powerLevel, playerName);
         tree.root = tree.insertNode(tree.root, node);
 
-        out.println("COUNT BEFORE: ");
-        tree.countBefore(tree.root, node);
+        countBefore(node);        
     }
+
+    static void countBefore(Node node) {
+        counter = 0; // reset again
+        count(tree.root, node);
+    }
+
+    // Count node before with inOrder Concept
+    // MINUS: GABISA NGESTOP PAS KETEMU NODE :) PIKIRIN CARA LAGI NANTI PAKAI HEIGHT(?)
+    static void count(Node rootNode, Node node) {
+        // Base Case
+        if (rootNode == node) {
+            out.println(counter-1); // print index of node
+        }
+
+        // Recursive Case
+        if (rootNode != null) { 
+            count(rootNode.left, node); 
+            counter++;
+            count(rootNode.right, node);
+        }
+    } 
 
     static void handleQueryDuo() {
         // TODO
@@ -341,22 +364,6 @@ class AVLTree {
             inOrder(node.left); 
             System.out.print(node.key + " "); 
             inOrder(node.right); 
-        } 
-    } 
-
-    // Count node before with inOrder Concept
-    void countBefore(Node rootNode, Node node) { 
-        // Base Case
-        if (rootNode == node) {
-            System.out.println("MASUK");
-            return;
-        }
-
-        // Recursive Case
-        if (rootNode != null) { 
-            countBefore(rootNode.left, node); 
-            System.out.print(rootNode.key + " "); 
-            countBefore(rootNode.right, node); 
         } 
     } 
 

@@ -2,5 +2,6 @@
 B 7
 A 5
 C 8
-1
+2
 MASUK D 5
+MASUK E 7
