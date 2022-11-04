@@ -91,7 +91,7 @@ public class Lab05Stack {
     }
 }
 
-// Node menyimpan power level saja (key dalam map)
+// Node menyimpan power level saja (key dalam map) refer ke map
 class Node {
     int key, height; // key => sama dengan key map (power level)
     Node left, right;
@@ -107,35 +107,111 @@ class AVLTree {
 
     Node root;
 
+    // Implement right rotate
     Node rightRotate(Node node) {
-        // TODO: implement right rotate
-        return null;
+        Node leftChild = node.left;
+        Node rightChildOfLeftChild = leftChild.right;
+
+        // Perform rotation
+        leftChild.right = node;
+        node.left = rightChildOfLeftChild;
+
+        // Update height
+        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+        leftChild.height = Math.max(getHeight(leftChild.left), getHeight(leftChild.right)) + 1;
+
+        // Return new root
+        return leftChild;
     }
 
+    // Implement left rotate
     Node leftRotate(Node node) {
-        // TODO: implement left rotate
-        return null;
+        Node rightChild = node.right;
+        Node leftChildOfRightChild = rightChild.left;
+
+        // Perform rotation
+        rightChild.left = node;
+        node.right = leftChildOfRightChild;
+
+        // Update height
+        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+        rightChild.height = Math.max(getHeight(rightChild.left), getHeight(rightChild.right)) + 1;
+
+        // Return new root
+        return rightChild;
     }
 
+    // Implement insert node to AVL Tree
     Node insertNode(Node node, int key) {
-        // TODO: implement insert node
-        return null;
+        if (node == null) {
+            return (new Node(key));
+        }
+
+        if (key < node.key) {
+            node.left = insertNode(node.left, key);
+        } else if (key > node.key) {
+            node.right = insertNode(node.right, key);
+        } else {
+            return node;
+        }
+
+        // Update height
+        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
+
+        // Get balance factor
+        int balance = getBalance(node);
+
+        // If this node becomes unbalanced, then there are 4 cases
+
+        // Left Left Case
+        if (balance > 1 && key < node.left.key) {
+            return rightRotate(node);
+        }
+
+        // Right Right Case
+        if (balance < -1 && key > node.right.key) {
+            return leftRotate(node);
+        }
+
+        // Left Right Case
+        if (balance > 1 && key > node.left.key) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+
+        // Right Left Case
+        if (balance < -1 && key < node.right.key) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
+        }
+
+        return node;
     }
 
-    Node deleteNode(Node node, int key) {
-        // TODO: implement delete node
-        return null;
+    // // Implement delete node from AVL Tree
+    // Node deleteNode(Node node, int key) {
+    //     // TODO: implement delete node
+    //     return null;
+    // }
+
+    Node lowerBound(Node node) {
+        // Return node with the lowest from this node
+        Node current = node;
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current;
     }
 
-    Node lowerBound(Node node, int value) {
-        // TODO: return node with the lowest key that is >= value
-        return null;
+    Node upperBound(Node node) {
+        // Return node with the greatest from this node
+        Node current = node;
+        while (current.right != null) {
+            current = current.right;
+        }
+        return current;
     }
 
-    Node upperBound(Node node, int value) {
-        // TODO: return node with the greatest key that is <= value
-        return null;
-    }
 
     // Utility function to get height of node
     int getHeight(Node node) {
