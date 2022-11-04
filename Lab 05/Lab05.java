@@ -83,36 +83,7 @@ public class Lab05 {
     static void handleQueryDuo() {
         int powerLevel1 = in.nextInt();
         int powerLevel2 = in.nextInt();
-
-        out.println(findDuoFirst(tree.root, powerLevel1) + "YOW");
     }
-
-    static String findDuoFirst(Node root, int key) {
-        // cari node sesuai keynya
-        Node result = tree.search(root, key);
-        String playerName = "-1";
-        if (result != null) {
-            playerName = result.playerName;
-            // TODO: Delete node di sini
-            return playerName;
-        } else {
-            // kalau null (tidak ada node dengan key segitu) maka cari successor
-            result = tree.findSuccessor(root, result, key);
-            if (result != null) {
-                playerName = result.playerName;
-                // TODO: Delete node di sini
-                return playerName;
-            } else {
-                return playerName;
-            }
-        }
-    }
-
-    
-
-    // static String findDuoSecond(Node root, int key) {
-    //     // TODO
-    // }
 
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
@@ -430,61 +401,6 @@ class AVLTree {
     
         // Key is smaller than root's key
         return search(root.left, pl);
-    }
-
-    // Recursive function to find inorder predecessor for a given key in the BST
-    // Node findPredecessor(Node root, Node prec, int key) {
-    //     // base case
-    //     if (root == null) {
-    //         return prec;
-    //     }
- 
-    //     // if a node with the desired value is found, the predecessor is the maximum
-    //     // value node in its left subtree (if any)
-    //     if (root.key == key)
-    //     {
-    //         if (root.left != null) {
-    //             return upperBound(root.left);
-    //         }
-    //     }
- 
-    //     // if the given key is less than the root node, recur for the left subtree
-    //     else if (key < root.key) {
-    //         return findPredecessor(root.left, prec, key);
-    //     }
- 
-    //     // if the given key is more than the root node, recur for the right subtree
-    //     else {
-    //         // update predecessor to the current node before recursing
-    //         // in the right subtree
-    //         prec = root;
-    //         return findPredecessor(root.right, prec, key);
-    //     }
-    //     return prec;
-    // }
-
-    // Recursive function to find inorder predecessor for a given key in the BST
-    Node findSuccessor(Node root, Node succ, int pl) {
-        // base case
-        if (root == null) {
-            return succ;
-        }
-
-        // jika ditemukan parent dari node yg dicari successornya
-        if (root.powerLevel == pl) {
-            if (root.right != null) {
-                return lowerBound(root.right);
-            }
-        }
- 
-        // mencari letak node yg akan dicari successornya
-        else if (pl > root.powerLevel) {
-            return findSuccessor(root.right, succ, pl);
-        } else {
-            succ = root;
-            return findSuccessor(root.left, succ, pl);
-        }
-        return succ;
     }
 }
 
