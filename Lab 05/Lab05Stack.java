@@ -112,13 +112,13 @@ public class Lab05Stack {
             out.println(map.get(leftKey).peek());
         }
         // remove node
-        // if (map.get(leftKey).size() > 1) {
-        //     map.get(leftKey).pop();
-        // } else {
-        //     map.remove(leftKey); // delete dari map
-        //     // dan delete avl
-        //     tree.root = tree.deleteNode(tree.root, leftKey);
-        // }
+        if (map.get(leftKey).size() > 1) {
+            map.get(leftKey).pop();
+        } else {
+            map.remove(leftKey); // delete dari map
+            // dan delete avl
+            tree.deleteNode(tree.root, leftKey);
+        }
         
 
         // RIGHT RANGE
@@ -130,13 +130,13 @@ public class Lab05Stack {
             out.println(map.get(rightKey).peek());
         }        
         // remove node
-        // if (map.get(rightKey).size() > 1) {
-        //     map.get(rightKey).pop();
-        // } else {
-        //     map.remove(rightKey); // delete dari map
-        //     // dan delete avl
-        //     tree.root = tree.deleteNode(tree.root, rightKey);
-        // }
+        if (map.get(rightKey).size() > 1) {
+            map.get(rightKey).pop();
+        } else {
+            map.remove(rightKey); // delete dari map
+            // dan delete avl
+            tree.deleteNode(tree.root, rightKey);
+        }
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -376,38 +376,23 @@ class AVLTree {
         return getHeight(node.left) - getHeight(node.right);
     }
 
-    static Node prec = null;
     Node findPredecessor(Node root, int key) {
-        // Base case
-        if (root == null)
-            return prec;
-    
-        // If key is present at root
-        if (root.key == key)
-        {
-            // The minimum value in
-            // right subtree is successor
-            if (root.left != null)
-            {
-                Node tmp = root.left;
-                
-                while (tmp.right != null)
-                    tmp = tmp.right;
-                    
-                prec = tmp;
+        Node current = root;
+        Node predecessor = null;
+        while (current != null) {
+            if (current.key == key) {
+                if (current.left != null) {
+                    predecessor = upperBound(current.left);
+                }
+                break;
+            } else if (current.key > key) {
+                current = current.left;
+            } else {
+                predecessor = current;
+                current = current.right;
             }
-            return prec;
         }
-    
-        // If key is smaller than
-        // root's key, go to left subtree
-        if (root.key > key) {
-            findPredecessor(root.left , key);
-        } else { // Go to right subtree
-            prec = root;
-            findPredecessor(root.right, key);
-        }
-        return prec;
+        return predecessor;
     }
 
     static Node suc = null;
