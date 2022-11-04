@@ -80,10 +80,11 @@ public class Lab05 {
         int powerLevel1 = in.nextInt();
         int powerLevel2 = in.nextInt();
 
-        out.println(findDuoFirst(tree.root, powerLevel1) + " " + findDuoSecond(tree.root, powerLevel2));
+        out.println(findDuoFirst(tree.root, powerLevel1) + "YOW");
     }
 
     static String findDuoFirst(Node root, int key) {
+        // cari node sesuai keynya
         Node result = tree.search(root, key);
         String playerName = "-1";
         if (result != null) {
@@ -91,7 +92,7 @@ public class Lab05 {
             // TODO: Delete node di sini
             return playerName;
         } else {
-            // kalau null maka cari successor
+            // kalau null (tidak ada node dengan key segitu) maka cari successor
             result = tree.findSuccessor(root, result, key);
             if (result != null) {
                 playerName = result.playerName;
@@ -105,9 +106,9 @@ public class Lab05 {
 
     
 
-    static String findDuoSecond(Node root, int key) {
-        // TODO
-    }
+    // static String findDuoSecond(Node root, int key) {
+    //     // TODO
+    // }
 
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
@@ -338,7 +339,7 @@ class AVLTree {
         Node current = node; 
   
         /* loop down to find the leftmost leaf */
-        while (current.left != null) 
+        while (current.left != null && ) 
         current = current.left; 
   
         return current; 
@@ -446,17 +447,17 @@ class AVLTree {
             return succ;
         }
 
+        // jika ditemukan parent dari node yg dicari successornya
         if (root.key == key) {
             if (root.right != null) {
                 return lowerBound(root.right);
             }
         }
  
+        // mencari letak node yg akan dicari successornya
         else if (key > root.key) {
             return findSuccessor(root.right, succ, key);
-        }
- 
-        else {
+        } else {
             succ = root;
             return findSuccessor(root.left, succ, key);
         }
