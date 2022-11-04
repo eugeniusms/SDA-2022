@@ -88,25 +88,7 @@ public class Lab05 {
     }
 
     static String findDuoFirst(Node root, int key) {
-        // cari node sesuai keynya
-        Node result = tree.search(root, key);
-        String playerName = "-1";
-        if (result != null) {
-            playerName = result.playerName;
-            // TODO: Delete node di sini
-            return playerName;
-        } else {
-            // kalau null (tidak ada node dengan key segitu) maka cari successor
-            result = tree.findSuccessor(root, result, key);
-
-            if (result != null) {
-                playerName = result.playerName;
-                // TODO: Delete node di sini
-                return playerName;
-            } else {
-                return playerName;
-            }
-        }
+        
     }
 
     
