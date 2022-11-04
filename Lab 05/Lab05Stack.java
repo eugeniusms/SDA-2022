@@ -19,6 +19,9 @@ public class Lab05Stack {
     // Map penyimpan node power level sama [ PowerLevel : <Stack of Nama Peserta> ]
     static HashMap<Integer, Stack<String>> map = new HashMap<Integer, Stack<String>>();
 
+    // Jumlah Before K (new node)
+    static int beforeK = 0;
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -73,7 +76,20 @@ public class Lab05Stack {
         }
 
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
-        out.println(tree.countNodes(tree.root, powerLevel));
+        // out.println(tree.countNodes(tree.root, powerLevel));
+        inOrderTraversal(tree.root, powerLevel);
+        out.println(beforeK);
+        beforeK = 0; // reset
+    }
+
+    static void inOrderTraversal(Node root, int powerLevel) {
+        if (root != null) {
+            inOrderTraversal(root.left, powerLevel);
+            if (root.key < powerLevel) {
+                beforeK += map.get(root.key).size();
+            }
+            inOrderTraversal(root.right, powerLevel);
+        }
     }
 
     static void handleQueryDuo() {
