@@ -14,6 +14,8 @@ public class Lab05 {
 
     // Calculating attributes
     static int counter = 0;
+    static Node deletedFirst = null;
+    static Node deletedSecond = null;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -84,11 +86,41 @@ public class Lab05 {
         int powerLevel1 = in.nextInt();
         int powerLevel2 = in.nextInt();
 
-        out.println(findDuoFirst(tree.root, powerLevel1) + "YOW");
+        findDuoFirst(tree.root, powerLevel1);
     }
 
-    static String findDuoFirst(Node root, int key) {
-        
+    static void findDuoFirst(Node root, int pl) {
+        deletedFirst = null; // reset again
+        // cari node sesuai keynya
+        Node result = tree.search(root, pl);
+        if (result != null) {
+            // cek ada yg sama ngga
+            getNodeFromSame(result, result.powerLevel);
+            // TODO: Delete node di sini
+    
+        } else {
+            // kalau null (tidak ada node dengan key segitu) maka cari successor
+            result = tree.findSuccessor(root, result, pl);
+            // cek ada yg sama ga
+            getNodeFromSame(result, result.powerLevel);
+        }
+
+        // Deleted node
+        if (deletedFirst != null) {
+            out.println("DELETED: " + deletedFirst.playerName);
+        }
+    }
+
+    // inorder get node from same power level
+    static void getNodeFromSame(Node node, int pl) {
+        if (node != null) { 
+            getNodeFromSame(node.left, pl); 
+            // save node kalau pl sama
+            if (node.powerLevel == pl) {
+                deletedFirst = node;
+            } 
+            getNodeFromSame(node.right, pl); 
+        } 
     }
 
     
