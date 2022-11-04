@@ -14,6 +14,8 @@ public class Lab05Stack {
     static PrintWriter out;
     static AVLTree tree = new AVLTree();
 
+    // IDE : AVL node menyimpan key menuju key dalam map yg berisi value-value
+
     // Map penyimpan node power level sama [ PowerLevel : <Stack of Nama Peserta> ]
     static HashMap<Integer, Stack<String>> map = new HashMap<Integer, Stack<String>>();
 
@@ -25,7 +27,20 @@ public class Lab05Stack {
 
         int numOfInitialPlayers = in.nextInt();
         for (int i = 0; i < numOfInitialPlayers; i++) {
-            // TODO: process inputs
+            String name = in.next();
+            int powerLevel = in.nextInt();
+
+            // INSERT KEY [POWER LEVEL] KE AVL
+            tree.root = tree.insertNode(tree.root, powerLevel); 
+
+            // INSERT NAMA KE MAP
+            if (map.containsKey(powerLevel)) {
+                map.get(powerLevel).push(name);
+            } else {
+                Stack<String> stack = new Stack<String>();
+                stack.push(name); 
+                map.put(powerLevel, stack); 
+            }
         }
 
         int numOfQueries = in.nextInt();
@@ -102,7 +117,7 @@ class AVLTree {
         return null;
     }
 
-    Node insertNode(Node node, int key, String playerName) {
+    Node insertNode(Node node, int key) {
         // TODO: implement insert node
         return null;
     }
