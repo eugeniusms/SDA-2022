@@ -20,7 +20,9 @@ public class Lab05 {
 
         int numOfInitialPlayers = in.nextInt();
         for (int i = 0; i < numOfInitialPlayers; i++) {
-            // TODO: process inputs
+            String name = in.next();
+            int power = in.nextInt();
+            tree.root = tree.insert(tree.root, power, name); 
         }
 
         int numOfQueries = in.nextInt();
@@ -37,7 +39,11 @@ public class Lab05 {
     }
 
     static void handleQueryMasuk() {
-        // TODO
+        String name = in.next();
+        int power = in.nextInt();
+        tree.root = tree.insert(tree.root, power, name);
+
+        
     }
 
     static void handleQueryDuo() {
@@ -77,11 +83,13 @@ class Node
 {
 	int key, height;
 	Node left, right;
+    String name;
 
-	Node(int d)
+	Node(int power, String name)
 	{
-		key = d;
-		height = 1;
+		this.key = power;
+		this.height = 1;
+        this.name = name;
 	}
 }
 
@@ -149,16 +157,16 @@ class AVLTree
 		return height(N.left) - height(N.right);
 	}
 
-	Node insert(Node node, int key)
+	Node insert(Node node, int key, String name)
 	{
 		/* 1. Perform the normal BST rotation */
 		if (node == null)
-			return (new Node(key));
+			return (new Node(key, name));
 
 		if (key < node.key)
-			node.left = insert(node.left, key);
+			node.left = insert(node.left, key, name);
 		else if (key > node.key)
-			node.right = insert(node.right, key);
+			node.right = insert(node.right, key, name);
 		else // Equal keys not allowed
 			return node;
 
@@ -319,3 +327,6 @@ class AVLTree
     }
 
 }
+
+// References:
+// 1) https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
