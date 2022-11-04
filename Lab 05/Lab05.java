@@ -26,18 +26,18 @@ public class Lab05 {
             tree.root = tree.insertNode(tree.root, node);
         }
 
-        tree.preOrder(tree.root);
-        tree.inOrder(tree.root);
+        // tree.preOrder(tree.root);
+        // tree.inOrder(tree.root);
 
-        // int numOfQueries = in.nextInt();
-        // for (int i = 0; i < numOfQueries; i++) {
-        //     String cmd = in.next();
-        //     if (cmd.equals("MASUK")) {
-        //         handleQueryMasuk();
-        //     } else {
-        //         handleQueryDuo();
-        //     }
-        // }
+        int numOfQueries = in.nextInt();
+        for (int i = 0; i < numOfQueries; i++) {
+            String cmd = in.next();
+            if (cmd.equals("MASUK")) {
+                handleQueryMasuk();
+            } else {
+                handleQueryDuo();
+            }
+        }
 
         out.close();
     }
@@ -49,7 +49,8 @@ public class Lab05 {
         Node node = new Node(powerLevel, playerName);
         tree.root = tree.insertNode(tree.root, node);
 
-
+        out.println("COUNT BEFORE: ");
+        tree.countBefore(tree.root, node);
     }
 
     static void handleQueryDuo() {
@@ -340,6 +341,22 @@ class AVLTree {
             inOrder(node.left); 
             System.out.print(node.key + " "); 
             inOrder(node.right); 
+        } 
+    } 
+
+    // Count node before with inOrder Concept
+    void countBefore(Node rootNode, Node node) { 
+        // Base Case
+        if (rootNode == node) {
+            System.out.println("MASUK");
+            return;
+        }
+
+        // Recursive Case
+        if (rootNode != null) { 
+            countBefore(rootNode.left, node); 
+            System.out.print(rootNode.key + " "); 
+            countBefore(rootNode.right, node); 
         } 
     } 
 
