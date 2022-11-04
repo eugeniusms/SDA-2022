@@ -12,9 +12,6 @@ public class Lab05 {
     static PrintWriter out;
     static AVLTree tree = new AVLTree();
 
-    // Calculating attributes
-    static int counter = 0;
-
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -23,14 +20,8 @@ public class Lab05 {
 
         int numOfInitialPlayers = in.nextInt();
         for (int i = 0; i < numOfInitialPlayers; i++) {
-            String playerName = in.next();
-            int powerLevel = in.nextInt();
-            Node node = new Node(powerLevel, playerName);
-            tree.root = tree.insertNode(tree.root, node);
+            // TODO: process inputs
         }
-
-        // tree.preOrder(tree.root);
-        // tree.inOrder(tree.root);
 
         int numOfQueries = in.nextInt();
         for (int i = 0; i < numOfQueries; i++) {
@@ -46,40 +37,11 @@ public class Lab05 {
     }
 
     static void handleQueryMasuk() {
-        // Get input and insert node
-        String playerName = in.next();
-        int powerLevel = in.nextInt();
-        Node node = new Node(powerLevel, playerName);
-        tree.root = tree.insertNode(tree.root, node);
-
-        countBefore(node);        
+        // TODO
     }
-
-    static void countBefore(Node node) {
-        counter = 0; // reset again
-        count(tree.root, node);
-    }
-
-    // Count node before with inOrder Concept
-    // MINUS: GABISA NGESTOP PAS KETEMU NODE :) PIKIRIN CARA LAGI NANTI PAKAI HEIGHT(?)
-    static void count(Node rootNode, Node node) {
-        // Base Case
-        if (rootNode == node) {
-            out.println(counter-1); // print index of node
-        }
-
-        // Recursive Case
-        if (rootNode != null) { 
-            count(rootNode.left, node); 
-            counter++;
-            count(rootNode.right, node);
-        }
-    } 
 
     static void handleQueryDuo() {
         // TODO
-        int powerLevel1 = in.nextInt();
-        int powerLevel2 = in.nextInt();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -109,301 +71,251 @@ public class Lab05 {
     }
 }
 
+// Java program for deletion in AVL Tree
 
-class Node {
-    int key, height;
-    String playerName;
-    Node left, right;
+class Node
+{
+	int key, height;
+	Node left, right;
 
-    Node(int key, String playerName) {
-        this.key = key;
-        this.playerName = playerName;
-        this.height = 1;
-    }
+	Node(int d)
+	{
+		key = d;
+		height = 1;
+	}
 }
 
-// Insert by
-// 1) key
-// 2) if key same, then urutanDaftar
-class AVLTree {
+class AVLTree
+{
+	Node root;
 
-    Node root;
+	// A utility function to get height of the tree
+	int height(Node N)
+	{
+		if (N == null)
+			return 0;
+		return N.height;
+	}
 
-    Node rightRotate(Node y) {
-        Node x = y.left;
-        Node T2 = x.right;
-  
-        // Rotasikan
-        x.right = y;
-        y.left = T2;
-  
-        // Update tingginya
-        y.height = max(getHeight(y.left), getHeight(y.right)) + 1;
-        x.height = max(getHeight(x.left), getHeight(x.right)) + 1;
-  
-        // Return root baru
-        return x;
+	// A utility function to get maximum of two integers
+	int max(int a, int b)
+	{
+		return (a > b) ? a : b;
+	}
+
+	// A utility function to right rotate subtree rooted with y
+	// See the diagram given above.
+	Node rightRotate(Node y)
+	{
+		Node x = y.left;
+		Node T2 = x.right;
+
+		// Perform rotation
+		x.right = y;
+		y.left = T2;
+
+		// Update heights
+		y.height = max(height(y.left), height(y.right)) + 1;
+		x.height = max(height(x.left), height(x.right)) + 1;
+
+		// Return new root
+		return x;
+	}
+
+	// A utility function to left rotate subtree rooted with x
+	// See the diagram given above.
+	Node leftRotate(Node x)
+	{
+		Node y = x.right;
+		Node T2 = y.left;
+
+		// Perform rotation
+		y.left = x;
+		x.right = T2;
+
+		// Update heights
+		x.height = max(height(x.left), height(x.right)) + 1;
+		y.height = max(height(y.left), height(y.right)) + 1;
+
+		// Return new root
+		return y;
+	}
+
+	// Get Balance factor of node N
+	int getBalance(Node N)
+	{
+		if (N == null)
+			return 0;
+		return height(N.left) - height(N.right);
+	}
+
+	Node insert(Node node, int key)
+	{
+		/* 1. Perform the normal BST rotation */
+		if (node == null)
+			return (new Node(key));
+
+		if (key < node.key)
+			node.left = insert(node.left, key);
+		else if (key > node.key)
+			node.right = insert(node.right, key);
+		else // Equal keys not allowed
+			return node;
+
+		/* 2. Update height of this ancestor node */
+		node.height = 1 + max(height(node.left),
+							height(node.right));
+
+		/* 3. Get the balance factor of this ancestor
+		node to check whether this node became
+		Wunbalanced */
+		int balance = getBalance(node);
+
+		// If this node becomes unbalanced, then
+		// there are 4 cases Left Left Case
+		if (balance > 1 && key < node.left.key)
+			return rightRotate(node);
+
+		// Right Right Case
+		if (balance < -1 && key > node.right.key)
+			return leftRotate(node);
+
+		// Left Right Case
+		if (balance > 1 && key > node.left.key)
+		{
+			node.left = leftRotate(node.left);
+			return rightRotate(node);
+		}
+
+		// Right Left Case
+		if (balance < -1 && key < node.right.key)
+		{
+			node.right = rightRotate(node.right);
+			return leftRotate(node);
+		}
+
+		/* return the (unchanged) node pointer */
+		return node;
+	}
+
+	/* Given a non-empty binary search tree, return the
+	node with minimum key value found in that tree.
+	Note that the entire tree does not need to be
+	searched. */
+	Node minValueNode(Node node)
+	{
+		Node current = node;
+
+		/* loop down to find the leftmost leaf */
+		while (current.left != null)
+		current = current.left;
+
+		return current;
+	}
+
+	Node deleteNode(Node root, int key)
+	{
+		// STEP 1: PERFORM STANDARD BST DELETE
+		if (root == null)
+			return root;
+
+		// If the key to be deleted is smaller than
+		// the root's key, then it lies in left subtree
+		if (key < root.key)
+			root.left = deleteNode(root.left, key);
+
+		// If the key to be deleted is greater than the
+		// root's key, then it lies in right subtree
+		else if (key > root.key)
+			root.right = deleteNode(root.right, key);
+
+		// if key is same as root's key, then this is the node
+		// to be deleted
+		else
+		{
+
+			// node with only one child or no child
+			if ((root.left == null) || (root.right == null))
+			{
+				Node temp = null;
+				if (temp == root.left)
+					temp = root.right;
+				else
+					temp = root.left;
+
+				// No child case
+				if (temp == null)
+				{
+					temp = root;
+					root = null;
+				}
+				else // One child case
+					root = temp; // Copy the contents of
+								// the non-empty child
+			}
+			else
+			{
+
+				// node with two children: Get the inorder
+				// successor (smallest in the right subtree)
+				Node temp = minValueNode(root.right);
+
+				// Copy the inorder successor's data to this node
+				root.key = temp.key;
+
+				// Delete the inorder successor
+				root.right = deleteNode(root.right, temp.key);
+			}
+		}
+
+		// If the tree had only one node then return
+		if (root == null)
+			return root;
+
+		// STEP 2: UPDATE HEIGHT OF THE CURRENT NODE
+		root.height = max(height(root.left), height(root.right)) + 1;
+
+		// STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether
+		// this node became unbalanced)
+		int balance = getBalance(root);
+
+		// If this node becomes unbalanced, then there are 4 cases
+		// Left Left Case
+		if (balance > 1 && getBalance(root.left) >= 0)
+			return rightRotate(root);
+
+		// Left Right Case
+		if (balance > 1 && getBalance(root.left) < 0)
+		{
+			root.left = leftRotate(root.left);
+			return rightRotate(root);
+		}
+
+		// Right Right Case
+		if (balance < -1 && getBalance(root.right) <= 0)
+			return leftRotate(root);
+
+		// Right Left Case
+		if (balance < -1 && getBalance(root.right) > 0)
+		{
+			root.right = rightRotate(root.right);
+			return leftRotate(root);
+		}
+
+		return root;
+	}
+
+	// A utility function to print preorder traversal of
+	// the tree. The function also prints height of every
+	// node
+	void preOrder(Node node)
+	{
+		if (node != null)
+		{
+			System.out.print(node.key + " ");
+			preOrder(node.left);
+			preOrder(node.right);
+		}
     }
-
-    Node leftRotate(Node x) {
-        Node y = x.right;
-        Node T2 = y.left;
-  
-        // Rotasikan
-        y.left = x;
-        x.right = T2;
-  
-        // Update tingginya
-        x.height = max(getHeight(x.left), getHeight(x.right)) + 1;
-        y.height = max(getHeight(y.left), getHeight(y.right)) + 1;
-  
-        // Return root baru
-        return y;
-    }
-
-    Node insertNode(Node rootNode, Node node) {
-        /* 1.  Perform the normal BST insertion */
-        if (rootNode == null)
-            return node;
-  
-        if (node.key < rootNode.key)
-            rootNode.left = insertNode(rootNode.left, node);
-        else if (node.key > rootNode.key)
-            rootNode.right = insertNode(rootNode.right, node);
-        else 
-            // Jika nilai sama maka insert node ke right childnya karena pasti urutan daftar lebih besar
-            rootNode.right = insertNode(rootNode.right, node);
-  
-        /* 2. Update height of this ancestor node */
-        rootNode.height = 1 + max(getHeight(rootNode.left),
-                              getHeight(rootNode.right));
-  
-        /* 3. Get the balance factor of this ancestor
-              node to check whether this node became
-              unbalanced */
-        int balance = getBalance(rootNode);
-  
-        // If this node becomes unbalanced, then there
-        // are 4 cases Left Left Case
-        if (balance > 1 && node.key < rootNode.left.key)
-            return rightRotate(rootNode);
-  
-        // Right Right Case
-        if (balance < -1 && node.key > rootNode.right.key)
-            return leftRotate(rootNode);
-  
-        // Left Right Case
-        if (balance > 1 && node.key > rootNode.left.key) {
-            rootNode.left = leftRotate(rootNode.left);
-            return rightRotate(rootNode);
-        }
-  
-        // Right Left Case
-        if (balance < -1 && node.key < rootNode.right.key) {
-            rootNode.right = rightRotate(rootNode.right);
-            return leftRotate(rootNode);
-        }
-  
-        /* return the (unchanged) node pointer */
-        return rootNode;
-    }
-
-    Node deleteNode(Node node, int key) {
-        // STEP 1: PERFORM STANDARD BST DELETE 
-        if (root == null) 
-            return root; 
-  
-        // If the key to be deleted is smaller than 
-        // the root's key, then it lies in left subtree 
-        if (key < root.key) 
-            root.left = deleteNode(root.left, key); 
-  
-        // If the key to be deleted is greater than the 
-        // root's key, then it lies in right subtree 
-        else if (key > root.key) 
-            root.right = deleteNode(root.right, key); 
-  
-        // Jika key sama tetapi urutan daftar beda / masih ada right child node dengan nilai key sama
-        else if (key == root.key && key == root.right.key)
-            root.right = deleteNode(root.right, key);
-
-        // if key is same as root's key && urutan daftar sama (tidak ada right child node
-        // dengan key yg sama), then this is the node to be deleted 
-        else
-        { 
-  
-            // node with only one child or no child 
-            if ((root.left == null) || (root.right == null)) 
-            { 
-                Node temp = null; 
-                if (temp == root.left) 
-                    temp = root.right; 
-                else
-                    temp = root.left; 
-  
-                // No child case 
-                if (temp == null) 
-                { 
-                    temp = root; 
-                    root = null; 
-                } 
-                else // One child case 
-                    root = temp; // Copy the contents of 
-                                // the non-empty child 
-            } 
-            else
-            { 
-  
-                // node with two children: Get the inorder 
-                // successor (smallest in the right subtree) 
-                Node temp = lowerBound(root.right); 
-  
-                // Copy the inorder successor's data to this node 
-                root.key = temp.key; 
-  
-                // Delete the inorder successor 
-                root.right = deleteNode(root.right, temp.key); 
-            } 
-        } 
-  
-        // If the tree had only one node then return 
-        if (root == null) 
-            return root; 
-  
-        // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE 
-        root.height = max(getHeight(root.left), getHeight(root.right)) + 1; 
-  
-        // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether 
-        // this node became unbalanced) 
-        int balance = getBalance(root); 
-  
-        // If this node becomes unbalanced, then there are 4 cases 
-        // Left Left Case 
-        if (balance > 1 && getBalance(root.left) >= 0) 
-            return rightRotate(root); 
-  
-        // Left Right Case 
-        if (balance > 1 && getBalance(root.left) < 0) 
-        { 
-            root.left = leftRotate(root.left); 
-            return rightRotate(root); 
-        } 
-  
-        // Right Right Case 
-        if (balance < -1 && getBalance(root.right) <= 0) 
-            return leftRotate(root); 
-  
-        // Right Left Case 
-        if (balance < -1 && getBalance(root.right) > 0) 
-        { 
-            root.right = rightRotate(root.right); 
-            return leftRotate(root); 
-        } 
-  
-        return root; 
-    }
-
-    /* Given a non-empty binary search tree, return the 
-    node with minimum key value found in that tree. 
-    Note that the entire tree does not need to be 
-    searched. */
-    Node lowerBound(Node node) {
-        Node current = node; 
-  
-        /* loop down to find the leftmost leaf */
-        while (current.left != null) 
-        current = current.left; 
-  
-        return current; 
-    }
-
-    Node upperBound(Node node) {
-        Node current = node; 
-  
-        /* loop down to find the rightmost leaf */
-        while (current.right != null) 
-        current = current.right; 
-  
-        return current; 
-    }
-
-    // Utility function to get height of node
-    int getHeight(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        return node.height;
-    }
-
-    // Utility function to get balance factor of node
-    int getBalance(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        return getHeight(node.left) - getHeight(node.right);
-    }
-
-    // Utility function to get maximum of two integers
-    int max(int a, int b) {
-        return (a > b) ? a : b;
-    }
-
-    // A utility function to print preorder traversal of 
-    // the tree. The function also prints height of every 
-    // node 
-    void preOrder(Node node) { 
-        if (node != null) { 
-            System.out.print(node.key + " "); 
-            preOrder(node.left); 
-            preOrder(node.right); 
-        } 
-    } 
-
-    void inOrder(Node node) { 
-        if (node != null) { 
-            inOrder(node.left); 
-            System.out.print(node.key + " "); 
-            inOrder(node.right); 
-        } 
-    } 
-
-    // Recursive function to find inorder predecessor for a given key in the BST
-    // Node findPredecessor(Node root, Node prec, int key) {
-    //     // base case
-    //     if (root == null) {
-    //         return prec;
-    //     }
- 
-    //     // if a node with the desired value is found, the predecessor is the maximum
-    //     // value node in its left subtree (if any)
-    //     if (root.key == key)
-    //     {
-    //         if (root.left != null) {
-    //             return upperBound(root.left);
-    //         }
-    //     }
- 
-    //     // if the given key is less than the root node, recur for the left subtree
-    //     else if (key < root.key) {
-    //         return findPredecessor(root.left, prec, key);
-    //     }
- 
-    //     // if the given key is more than the root node, recur for the right subtree
-    //     else {
-    //         // update predecessor to the current node before recursing
-    //         // in the right subtree
-    //         prec = root;
-    //         return findPredecessor(root.right, prec, key);
-    //     }
-    //     return prec;
-    // }
-
-    // Find number of node < current node
 
 }
-
-// REFERENCES:
-// 1) https://www.geeksforgeeks.org/insertion-in-an-avl-tree/
-// 2) https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
-// 3) https://www.techiedelight.com/find-inorder-predecessor-given-key-bst/
-// 4) https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
