@@ -71,15 +71,30 @@ public class Lab05Revisi {
     }
 }
 
-
-// TODO: modify as needed
-class Node {
-    int key, height;
+class Node implements Comparable<Node>{
+    int power, height, urutan;
     Node left, right;
+    String nama;
 
-    Node(int key) {
-        this.key = key;
+    Node(int power, String nama, int urutan) {
+        this.nama = nama;
+        this.power = power;
+        this.urutan = urutan;
         this.height = 1;
+    }
+
+    // compareTo (ngikutin tandanya aja)
+    // this.compareTo(other) > 0 = this > other
+    // this.compareTo(other) < 0 = this < other
+    @Override
+    public int compareTo(Node other) { // default this < other
+        // jika power level sama
+        if (this.power == other.power) {
+            // bandingkan by urutan daftar
+            return this.urutan - other.urutan;
+        }
+        // bandingkan berdasarkan power level
+        return this.power - other.power;
     }
 }
 
