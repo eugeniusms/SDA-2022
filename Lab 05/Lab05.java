@@ -14,8 +14,6 @@ public class Lab05 {
 
     // Calculating attributes
     static int counter = 0;
-    static Node deletedFirst = null;
-    static Node deletedSecond = null;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -43,10 +41,10 @@ public class Lab05 {
             } else {
                 handleQueryDuo();
             }
-            tree.inOrder(tree.root);
         }
 
         // tree.preOrder(tree.root);
+        tree.inOrder(tree.root);
 
         out.close();
     }
@@ -86,75 +84,35 @@ public class Lab05 {
         int powerLevel1 = in.nextInt();
         int powerLevel2 = in.nextInt();
 
-        findDuoFirst(tree.root, powerLevel1);
-        findDuoSecond(tree.root, powerLevel2);
+        out.println(findDuoFirst(tree.root, powerLevel1) + "YOW");
     }
 
-    static void findDuoFirst(Node root, int pl) {
-        deletedFirst = null; // reset again
+    static String findDuoFirst(Node root, int key) {
         // cari node sesuai keynya
-        Node result = tree.search(root, pl);
+        Node result = tree.search(root, key);
+        String playerName = "-1";
         if (result != null) {
-            // cek ada yg sama ngga
-            getNodeFromSameA(result, result.powerLevel);
+            playerName = result.playerName;
+            // TODO: Delete node di sini
+            return playerName;
         } else {
             // kalau null (tidak ada node dengan key segitu) maka cari successor
-            result = tree.findSuccessor(root, result, pl);
-            // cek ada yg sama ga
-            getNodeFromSameA(result, result.powerLevel);
-        }
-
-        // Deleted node
-        if (deletedFirst != null) {
-            out.println("DELETED: " + deletedFirst.playerName);
-            tree.root = tree.deleteNode(tree.root, deletedFirst);
-        }
-    }
-
-    // inorder get node from same power level
-    static void getNodeFromSameA(Node node, int pl) {
-        if (node != null) { 
-            getNodeFromSameA(node.left, pl); 
-            // save node kalau pl sama
-            if (node.powerLevel == pl) {
-                deletedFirst = node;
-            } 
-            getNodeFromSameA(node.right, pl); 
-        } 
-    }
-
-    static void findDuoSecond(Node root, int pl) {
-        deletedSecond = null; // reset again
-        // cari node sesuai keynya
-        Node result = tree.search(root, pl);
-        if (result != null) {
-            // cek ada yg sama ngga
-            getNodeFromSameB(result, result.powerLevel);
-        } else {
-            // kalau null (tidak ada node dengan key segitu) maka cari successor
-            result = tree.findPredecessor(root, result, pl);
-            // cek ada yg sama ga
-            getNodeFromSameB(result, result.powerLevel);
-        }
-
-        // Deleted node
-        if (deletedSecond != null) {
-            out.println("DELETED: " + deletedSecond.playerName);
-            tree.root = tree.deleteNode(tree.root, deletedSecond);
+            result = tree.findSuccessor(root, result, key);
+            if (result != null) {
+                playerName = result.playerName;
+                // TODO: Delete node di sini
+                return playerName;
+            } else {
+                return playerName;
+            }
         }
     }
 
-    // inorder get node from same power level
-    static void getNodeFromSameB(Node node, int pl) {
-        if (node != null) { 
-            getNodeFromSameB(node.left, pl); 
-            // save node kalau pl sama
-            if (node.powerLevel == pl) {
-                deletedSecond = node;
-            } 
-            getNodeFromSameB(node.right, pl); 
-        } 
-    }
+    
+
+    // static String findDuoSecond(Node root, int key) {
+    //     // TODO
+    // }
 
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
@@ -303,7 +261,7 @@ class AVLTree {
         // STEP 1: PERFORM STANDARD BST DELETE 
         if (root == null) 
             return root; 
-            
+  
         // If the key to be deleted is smaller than 
         // the root's key, then it lies in left subtree 
         if (node.compareTo(root) < 0)
@@ -463,7 +421,7 @@ class AVLTree {
     // A utility function to search a given key in BST
     Node search(Node root, int pl) {
         // Base Cases: root is null or key is present at root
-        if (root==null || root.powerLevel==pl) // cek juga right sama ngga (pilih terakhir soalnya)
+        if (root==null || root.powerLevel==pl && root.right.powerLevel!=pl) // cek juga right sama ngga (pilih terakhir soalnya)
             return root;
     
         // Key is greater than root's key
@@ -475,37 +433,37 @@ class AVLTree {
     }
 
     // Recursive function to find inorder predecessor for a given key in the BST
-    Node findPredecessor(Node root, Node prec, int pl) {
-        // base case
-        if (root == null) {
-            return prec;
-        }
+    // Node findPredecessor(Node root, Node prec, int key) {
+    //     // base case
+    //     if (root == null) {
+    //         return prec;
+    //     }
  
-        // if a node with the desired value is found, the predecessor is the maximum
-        // value node in its left subtree (if any)
-        if (root.powerLevel == pl)
-        {
-            if (root.left != null) {
-                return upperBound(root.left);
-            }
-        }
+    //     // if a node with the desired value is found, the predecessor is the maximum
+    //     // value node in its left subtree (if any)
+    //     if (root.key == key)
+    //     {
+    //         if (root.left != null) {
+    //             return upperBound(root.left);
+    //         }
+    //     }
  
-        // if the given key is less than the root node, recur for the left subtree
-        else if (pl < root.powerLevel) {
-            return findPredecessor(root.left, prec, pl);
-        }
+    //     // if the given key is less than the root node, recur for the left subtree
+    //     else if (key < root.key) {
+    //         return findPredecessor(root.left, prec, key);
+    //     }
  
-        // if the given key is more than the root node, recur for the right subtree
-        else {
-            // update predecessor to the current node before recursing
-            // in the right subtree
-            prec = root;
-            return findPredecessor(root.right, prec, pl);
-        }
-        return prec;
-    }
+    //     // if the given key is more than the root node, recur for the right subtree
+    //     else {
+    //         // update predecessor to the current node before recursing
+    //         // in the right subtree
+    //         prec = root;
+    //         return findPredecessor(root.right, prec, key);
+    //     }
+    //     return prec;
+    // }
 
-    // Recursive function to find inorder successor for a given key in the BST
+    // Recursive function to find inorder predecessor for a given key in the BST
     Node findSuccessor(Node root, Node succ, int pl) {
         // base case
         if (root == null) {
