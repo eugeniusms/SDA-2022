@@ -25,18 +25,20 @@ public class Lab05 {
         for (int i = 0; i < numOfInitialPlayers; i++) {
             String playerName = in.next();
             int powerLevel = in.nextInt();
-            Node node = new Node(powerLevel, playerName);
+            Node node = new Node(powerLevel, playerName, i);
             tree.root = tree.insertNode(tree.root, node);
         }
 
         // tree.preOrder(tree.root);
         // tree.inOrder(tree.root);
 
+        // menambahkan i ke MASUK LAGI
+
         int numOfQueries = in.nextInt();
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             if (cmd.equals("MASUK")) {
-                handleQueryMasuk();
+                handleQueryMasuk(numOfInitialPlayers+i+1);
             } else {
                 handleQueryDuo();
             }
@@ -45,11 +47,11 @@ public class Lab05 {
         out.close();
     }
 
-    static void handleQueryMasuk() {
+    static void handleQueryMasuk(int urutanDaftar) {
         // Get input and insert node
         String playerName = in.next();
         int powerLevel = in.nextInt();
-        Node node = new Node(powerLevel, playerName);
+        Node node = new Node(powerLevel, playerName, urutanDaftar);
         tree.root = tree.insertNode(tree.root, node);
 
         countBefore(node);        
@@ -138,15 +140,30 @@ public class Lab05 {
 }
 
 
-class Node {
-    int key, height;
+class Node implements Comparable<Node> {
+    int powerLevel, height, urutanDaftar;
     String playerName;
     Node left, right;
 
-    Node(int key, String playerName) {
-        this.key = key;
+    Node(int powerLevel, String playerName, int urutanDaftar) {
+        this.powerLevel = powerLevel;
         this.playerName = playerName;
+        this.urutanDaftar = urutanDaftar;
         this.height = 1;
+    }
+
+    // compareTo (ngikutin tandanya aja)
+    // this.compareTo(other) > 0 = this > other
+    // this.compareTo(other) < 0 = this < other
+    @Override
+    public int compareTo(Node other) { // default this < other
+        // jika power level sama
+        if (this.powerLevel == other.powerLevel) {
+            // bandingkan by urutan daftar
+            return this.urutanDaftar - other.urutanDaftar;
+        }
+        // bandingkan berdasarkan power level
+        return this.powerLevel - other.powerLevel;
     }
 }
 
@@ -194,13 +211,15 @@ class AVLTree {
         if (rootNode == null)
             return node;
   
-        if (node.key < rootNode.key)
+        // review compareTo 
+        // this.compareTo(other) > 0 = this > other
+        // this.compareTo(other) < 0 = this < other
+        if (node.compareTo(rootNode) < 0)
             rootNode.left = insertNode(rootNode.left, node);
-        else if (node.key > rootNode.key)
+        else if (node.compareTo(rootNode) > 0)
             rootNode.right = insertNode(rootNode.right, node);
-        else 
-            // Jika nilai sama maka insert node ke right childnya karena pasti urutan daftar lebih besar
-            rootNode.right = insertNode(rootNode.right, node);
+        else // Duplicate keys not allowed
+            return node;
   
         /* 2. Update height of this ancestor node */
         rootNode.height = 1 + max(getHeight(rootNode.left),
@@ -213,21 +232,21 @@ class AVLTree {
   
         // If this node becomes unbalanced, then there
         // are 4 cases Left Left Case
-        if (balance > 1 && node.key < rootNode.left.key)
+        if (balance > 1 && node.compareTo(rootNode.left) < 0)
             return rightRotate(rootNode);
   
         // Right Right Case
-        if (balance < -1 && node.key > rootNode.right.key)
+        if (balance < -1 && node.compareTo(rootNode.right) > 0)
             return leftRotate(rootNode);
   
         // Left Right Case
-        if (balance > 1 && node.key > rootNode.left.key) {
+        if (balance > 1 && node.compareTo(rootNode.left) > 0) {
             rootNode.left = leftRotate(rootNode.left);
             return rightRotate(rootNode);
         }
   
         // Right Left Case
-        if (balance < -1 && node.key < rootNode.right.key) {
+        if (balance < -1 && node.compareTo(rootNode.right) < 0) {
             rootNode.right = rightRotate(rootNode.right);
             return leftRotate(rootNode);
         }
@@ -236,24 +255,24 @@ class AVLTree {
         return rootNode;
     }
 
-    Node deleteNode(Node node, int key) {
+    Node deleteNode(Node root, Node node) {
         // STEP 1: PERFORM STANDARD BST DELETE 
         if (root == null) 
             return root; 
   
         // If the key to be deleted is smaller than 
         // the root's key, then it lies in left subtree 
-        if (key < root.key) 
-            root.left = deleteNode(root.left, key); 
+        if (node.compareTo(root) < 0)
+            root.left = deleteNode(root.left, node); 
   
         // If the key to be deleted is greater than the 
         // root's key, then it lies in right subtree 
-        else if (key > root.key) 
-            root.right = deleteNode(root.right, key); 
+        else if (node.compareTo(root) > 0) 
+            root.right = deleteNode(root.right, node); 
   
         // Jika key sama tetapi urutan daftar beda / masih ada right child node dengan nilai key sama
-        else if (key == root.key && key == root.right.key)
-            root.right = deleteNode(root.right, key);
+        else if (node.compareTo(root) == 0 && node.compareTo(root.right) == 0)
+            root.right = deleteNode(root.right, node);
 
         // if key is same as root's key && urutan daftar sama (tidak ada right child node
         // dengan key yg sama), then this is the node to be deleted 
@@ -287,10 +306,12 @@ class AVLTree {
                 Node temp = lowerBound(root.right); 
   
                 // Copy the inorder successor's data to this node 
-                root.key = temp.key; 
+                root.playerName = temp.playerName;
+                root.urutanDaftar = temp.urutanDaftar;
+                root.powerLevel = temp.powerLevel;
   
                 // Delete the inorder successor 
-                root.right = deleteNode(root.right, temp.key); 
+                root.right = deleteNode(root.right, temp);
             } 
         } 
   
@@ -339,8 +360,8 @@ class AVLTree {
         Node current = node; 
   
         /* loop down to find the leftmost leaf */
-        while (current.left != null && ) 
-        current = current.left; 
+        while (current.left != null) 
+            current = current.left; 
   
         return current; 
     }
@@ -381,7 +402,7 @@ class AVLTree {
     // node 
     void preOrder(Node node) { 
         if (node != null) { 
-            System.out.print(node.key + " "); 
+            System.out.print(node.powerLevel + " "); 
             preOrder(node.left); 
             preOrder(node.right); 
         } 
@@ -390,76 +411,76 @@ class AVLTree {
     void inOrder(Node node) { 
         if (node != null) { 
             inOrder(node.left); 
-            System.out.print(node.key + " "); 
+            System.out.print(node.powerLevel + " "); 
             inOrder(node.right); 
         } 
     } 
 
     // A utility function to search a given key in BST
-    Node search(Node root, int key) {
+    Node search(Node root, int pl) {
         // Base Cases: root is null or key is present at root
-        if (root==null || root.key==key && root.right.key!=key) // cek juga right sama ngga (pilih terakhir soalnya)
+        if (root==null || root.powerLevel==pl && root.right.powerLevel!=pl) // cek juga right sama ngga (pilih terakhir soalnya)
             return root;
     
         // Key is greater than root's key
-        if (root.key < key)
-            return search(root.right, key);
+        if (root.powerLevel < pl)
+            return search(root.right, pl);
     
         // Key is smaller than root's key
-        return search(root.left, key);
+        return search(root.left, pl);
     }
 
     // Recursive function to find inorder predecessor for a given key in the BST
-    Node findPredecessor(Node root, Node prec, int key) {
-        // base case
-        if (root == null) {
-            return prec;
-        }
+    // Node findPredecessor(Node root, Node prec, int key) {
+    //     // base case
+    //     if (root == null) {
+    //         return prec;
+    //     }
  
-        // if a node with the desired value is found, the predecessor is the maximum
-        // value node in its left subtree (if any)
-        if (root.key == key)
-        {
-            if (root.left != null) {
-                return upperBound(root.left);
-            }
-        }
+    //     // if a node with the desired value is found, the predecessor is the maximum
+    //     // value node in its left subtree (if any)
+    //     if (root.key == key)
+    //     {
+    //         if (root.left != null) {
+    //             return upperBound(root.left);
+    //         }
+    //     }
  
-        // if the given key is less than the root node, recur for the left subtree
-        else if (key < root.key) {
-            return findPredecessor(root.left, prec, key);
-        }
+    //     // if the given key is less than the root node, recur for the left subtree
+    //     else if (key < root.key) {
+    //         return findPredecessor(root.left, prec, key);
+    //     }
  
-        // if the given key is more than the root node, recur for the right subtree
-        else {
-            // update predecessor to the current node before recursing
-            // in the right subtree
-            prec = root;
-            return findPredecessor(root.right, prec, key);
-        }
-        return prec;
-    }
+    //     // if the given key is more than the root node, recur for the right subtree
+    //     else {
+    //         // update predecessor to the current node before recursing
+    //         // in the right subtree
+    //         prec = root;
+    //         return findPredecessor(root.right, prec, key);
+    //     }
+    //     return prec;
+    // }
 
     // Recursive function to find inorder predecessor for a given key in the BST
-    Node findSuccessor(Node root, Node succ, int key) {
+    Node findSuccessor(Node root, Node succ, int pl) {
         // base case
         if (root == null) {
             return succ;
         }
 
         // jika ditemukan parent dari node yg dicari successornya
-        if (root.key == key) {
+        if (root.powerLevel == pl) {
             if (root.right != null) {
                 return lowerBound(root.right);
             }
         }
  
         // mencari letak node yg akan dicari successornya
-        else if (key > root.key) {
-            return findSuccessor(root.right, succ, key);
+        else if (pl > root.powerLevel) {
+            return findSuccessor(root.right, succ, pl);
         } else {
             succ = root;
-            return findSuccessor(root.left, succ, key);
+            return findSuccessor(root.left, succ, pl);
         }
         return succ;
     }
@@ -472,3 +493,4 @@ class AVLTree {
 // 4) https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
 // 5) https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/
 // 6) https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
+// 7) https://www.geeksforgeeks.org/comparable-vs-comparator-in-java/
