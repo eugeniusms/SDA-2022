@@ -43,10 +43,10 @@ public class Lab05 {
             } else {
                 handleQueryDuo();
             }
+            tree.inOrder(tree.root);
         }
 
         // tree.preOrder(tree.root);
-        tree.inOrder(tree.root);
 
         out.close();
     }
@@ -97,8 +97,6 @@ public class Lab05 {
         if (result != null) {
             // cek ada yg sama ngga
             getNodeFromSameA(result, result.powerLevel);
-            // TODO: Delete node di sini
-    
         } else {
             // kalau null (tidak ada node dengan key segitu) maka cari successor
             result = tree.findSuccessor(root, result, pl);
@@ -109,6 +107,7 @@ public class Lab05 {
         // Deleted node
         if (deletedFirst != null) {
             out.println("DELETED: " + deletedFirst.playerName);
+            tree.root = tree.deleteNode(tree.root, deletedFirst);
         }
     }
 
@@ -131,8 +130,6 @@ public class Lab05 {
         if (result != null) {
             // cek ada yg sama ngga
             getNodeFromSameB(result, result.powerLevel);
-            // TODO: Delete node di sini
-    
         } else {
             // kalau null (tidak ada node dengan key segitu) maka cari successor
             result = tree.findPredecessor(root, result, pl);
@@ -143,6 +140,7 @@ public class Lab05 {
         // Deleted node
         if (deletedSecond != null) {
             out.println("DELETED: " + deletedSecond.playerName);
+            tree.root = tree.deleteNode(tree.root, deletedSecond);
         }
     }
 
@@ -305,7 +303,7 @@ class AVLTree {
         // STEP 1: PERFORM STANDARD BST DELETE 
         if (root == null) 
             return root; 
-  
+            
         // If the key to be deleted is smaller than 
         // the root's key, then it lies in left subtree 
         if (node.compareTo(root) < 0)
