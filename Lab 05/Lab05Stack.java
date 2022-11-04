@@ -57,7 +57,23 @@ public class Lab05Stack {
     }
 
     static void handleQueryMasuk() {
-        // TODO
+        String name = in.next();
+        int powerLevel = in.nextInt();
+
+        // INSERT KEY [POWER LEVEL] KE AVL
+        tree.root = tree.insertNode(tree.root, powerLevel); 
+
+        // INSERT NAMA KE MAP
+        if (map.containsKey(powerLevel)) {
+            map.get(powerLevel).push(name);
+        } else {
+            Stack<String> stack = new Stack<String>();
+            stack.push(name); 
+            map.put(powerLevel, stack); 
+        }
+
+        // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
+        out.println(tree.countNodes(tree.root, powerLevel));
     }
 
     static void handleQueryDuo() {
@@ -227,5 +243,20 @@ class AVLTree {
             return 0;
         }
         return getHeight(node.left) - getHeight(node.right);
+    }
+
+    // Utility function to get number of nodes before this node
+    int countNodes(Node node, int key) {
+        if (node == null) {
+            return 0;
+        }
+
+        if (key < node.key) {
+            return countNodes(node.left, key);
+        } else if (key > node.key) {
+            return 1 + getHeight(node.left) + countNodes(node.right, key);
+        } else {
+            return getHeight(node.left);
+        }
     }
 }
