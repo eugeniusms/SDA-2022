@@ -73,22 +73,7 @@ public class Lab05Stack {
         }
 
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
-        out.println(countNodes(tree.root, powerLevel));
-    }
-
-    // Utility function to get number of nodes before this node
-    static int countNodes(Node node, int key) {
-        if (node == null) {
-            return 0;
-        }
-
-        if (key < node.key) {
-            return countNodes(node.left, key);
-        } else if (key > node.key) {
-            return 1 + tree.getHeight(node.left) + countNodes(node.right, key);
-        } else {
-            return tree.getHeight(node.left);
-        }
+        out.println(tree.countNodes(tree.root, powerLevel));
     }
 
     static void handleQueryDuo() {
@@ -258,5 +243,20 @@ class AVLTree {
             return 0;
         }
         return getHeight(node.left) - getHeight(node.right);
+    }
+
+    // Utility function to get number of nodes before this node
+    int countNodes(Node node, int key) {
+        if (node == null) {
+            return 0;
+        }
+
+        if (key < node.key) {
+            return countNodes(node.left, key);
+        } else if (key > node.key) {
+            return 1 + getHeight(node.left) + countNodes(node.right, key);
+        } else {
+            return getHeight(node.left);
+        }
     }
 }
