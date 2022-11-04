@@ -123,37 +123,37 @@ class AVLTree {
         return newRoot;
     }
 
-    Node insertNode(Node root, int node) {
-        // Implement insert node to root node AVL Tree
+    // Implement insert node to root node AVL Tree
+    Node insertNode(Node root, Node node) {
         if (root == null) {
-            return new Node(node, null, 0);
+            return node;
         }
-        if (node < root.power) {
+        if (node.compareTo(root) < 0) {
             root.left = insertNode(root.left, node);
-        } else if (node > root.power) {
+        } else if (node.compareTo(root) > 0) {
             root.right = insertNode(root.right, node);
         } else {
             return root;
         }
-        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right));
+        root.height = Math.max(getHeight(root.left), getHeight(root.right)) + 1;
         int balance = getBalance(root);
-        if (balance > 1 && node < root.left.power) {
+        if (balance > 1 && node.compareTo(root.left) < 0) {
             return rightRotate(root);
         }
-        if (balance < -1 && node > root.right.power) {
+        if (balance < -1 && node.compareTo(root.right) > 0) {
             return leftRotate(root);
         }
-        if (balance > 1 && node > root.left.power) {
+        if (balance > 1 && node.compareTo(root.left) > 0) {
             root.left = leftRotate(root.left);
             return rightRotate(root);
         }
-        if (balance < -1 && node < root.right.power) {
+        if (balance < -1 && node.compareTo(root.right) < 0) {
             root.right = rightRotate(root.right);
             return leftRotate(root);
         }
         return root;
-    }
-
+    } 
+       
     // Implement delete node from the root of AVL Tree
     Node deleteNode(Node root, Node node) {
         if (root == null) {
@@ -205,8 +205,6 @@ class AVLTree {
         return root;
     }
         
-        
-
     Node lowerBound(Node node) {
         // Return node with the lowest from this node
         Node current = node;
