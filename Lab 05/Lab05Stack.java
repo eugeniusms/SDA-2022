@@ -102,36 +102,7 @@ public class Lab05Stack {
         // JIKA MAP TERSEBUT LEBIH DARI 1, POP NAMA TERAKHIR MASUK SAJA
         out.println("DUO");
         int leftKey, rightKey;
-
-        // LEFT RANGE
-        if (map.containsKey(leftRange)) {
-            leftKey = leftRange;
-            out.println(map.get(leftRange).peek());
-            removeNode(leftRange);
-        } else {
-            leftKey = tree.findSuccessor(tree.root, leftRange).key;
-            if (map.containsKey(leftKey)) {
-                out.println(map.get(leftKey).peek());
-                removeNode(leftKey);
-            } else {
-                out.println("-1");
-            }
-        }
-        
-        // RIGHT RANGE
-        if (map.containsKey(rightRange)) {
-            rightKey = rightRange;
-            out.println(map.get(rightRange).peek());
-            removeNode(rightRange);
-        } else {
-            rightKey = tree.findPredecessor(tree.root, rightRange).key;
-            if (map.containsKey(rightKey)) {
-                out.println(map.get(rightKey).peek());
-                removeNode(rightKey);
-            } else {
-                out.println("-1");
-            }
-        }
+        String leftDuo, rightDuo;
     }
 
     // remove node decision
