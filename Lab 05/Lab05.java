@@ -77,9 +77,36 @@ public class Lab05 {
     } 
 
     static void handleQueryDuo() {
-        // TODO
         int powerLevel1 = in.nextInt();
         int powerLevel2 = in.nextInt();
+
+        out.println(findDuoFirst(tree.root, powerLevel1) + " " + findDuoSecond(tree.root, powerLevel2));
+    }
+
+    static String findDuoFirst(Node root, int key) {
+        Node result = tree.search(root, key);
+        String playerName = "-1";
+        if (result != null) {
+            playerName = result.playerName;
+            // TODO: Delete node di sini
+            return playerName;
+        } else {
+            // kalau null maka cari successor
+            result = tree.findSuccessor(root, result, key);
+            if (result != null) {
+                playerName = result.playerName;
+                // TODO: Delete node di sini
+                return playerName;
+            } else {
+                return playerName;
+            }
+        }
+    }
+
+    
+
+    static String findDuoSecond(Node root, int key) {
+        // TODO
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -367,6 +394,74 @@ class AVLTree {
         } 
     } 
 
+    // A utility function to search a given key in BST
+    Node search(Node root, int key) {
+        // Base Cases: root is null or key is present at root
+        if (root==null || root.key==key && root.right.key!=key) // cek juga right sama ngga (pilih terakhir soalnya)
+            return root;
+    
+        // Key is greater than root's key
+        if (root.key < key)
+            return search(root.right, key);
+    
+        // Key is smaller than root's key
+        return search(root.left, key);
+    }
+
+    // Recursive function to find inorder predecessor for a given key in the BST
+    Node findPredecessor(Node root, Node prec, int key) {
+        // base case
+        if (root == null) {
+            return prec;
+        }
+ 
+        // if a node with the desired value is found, the predecessor is the maximum
+        // value node in its left subtree (if any)
+        if (root.key == key)
+        {
+            if (root.left != null) {
+                return upperBound(root.left);
+            }
+        }
+ 
+        // if the given key is less than the root node, recur for the left subtree
+        else if (key < root.key) {
+            return findPredecessor(root.left, prec, key);
+        }
+ 
+        // if the given key is more than the root node, recur for the right subtree
+        else {
+            // update predecessor to the current node before recursing
+            // in the right subtree
+            prec = root;
+            return findPredecessor(root.right, prec, key);
+        }
+        return prec;
+    }
+
+    // Recursive function to find inorder predecessor for a given key in the BST
+    Node findSuccessor(Node root, Node succ, int key) {
+        // base case
+        if (root == null) {
+            return succ;
+        }
+
+        if (root.key == key) {
+            if (root.right != null) {
+                return lowerBound(root.right);
+            }
+        }
+ 
+        else if (key > root.key) {
+            return findSuccessor(root.right, succ, key);
+        }
+ 
+        else {
+            succ = root;
+            return findSuccessor(root.left, succ, key);
+        }
+        return succ;
+    }
 }
 
 // REFERENCES:
@@ -374,3 +469,5 @@ class AVLTree {
 // 2) https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
 // 3) https://www.techiedelight.com/find-inorder-predecessor-given-key-bst/
 // 4) https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
+// 5) https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/
+// 6) https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
