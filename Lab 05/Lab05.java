@@ -98,6 +98,7 @@ public class Lab05 {
         } else {
             // kalau null (tidak ada node dengan key segitu) maka cari successor
             result = tree.findSuccessor(root, result, key);
+            result = tree.findSuccessor(root, result, key);
             if (result != null) {
                 playerName = result.playerName;
                 // TODO: Delete node di sini
