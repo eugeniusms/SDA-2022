@@ -44,7 +44,7 @@ public class Lab05 {
         }
 
         // tree.preOrder(tree.root);
-        tree.inOrder(tree.root);
+        // tree.inOrder(tree.root);
 
         out.close();
     }
