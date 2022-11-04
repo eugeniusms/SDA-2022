@@ -29,9 +29,6 @@ public class Lab05 {
             tree.root = tree.insertNode(tree.root, node);
         }
 
-        // tree.preOrder(tree.root);
-        // tree.inOrder(tree.root);
-
         // menambahkan i ke MASUK LAGI
 
         int numOfQueries = in.nextInt();
@@ -43,6 +40,9 @@ public class Lab05 {
                 handleQueryDuo();
             }
         }
+
+        // tree.preOrder(tree.root);
+        tree.inOrder(tree.root);
 
         out.close();
     }
@@ -411,7 +411,7 @@ class AVLTree {
     void inOrder(Node node) { 
         if (node != null) { 
             inOrder(node.left); 
-            System.out.print(node.powerLevel + " "); 
+            System.out.println("ORDER: " + node.playerName + "[" + node.powerLevel + "|" + node.urutanDaftar + "]" + " "); 
             inOrder(node.right); 
         } 
     } 
