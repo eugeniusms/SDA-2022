@@ -94,6 +94,12 @@ public class Lab05Stack {
 
     static void handleQueryDuo() {
         // TODO
+        int leftRange = in.nextInt();
+        int rightRange = in.nextInt();
+
+        out.println("DUO");
+        out.println(tree.findSuccessor(tree.root, leftRange).key);
+        out.println(tree.findPredecessor(tree.root, rightRange).key);
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -261,6 +267,74 @@ class AVLTree {
         return getHeight(node.left) - getHeight(node.right);
     }
 
+    static Node prec = null;
+    Node findPredecessor(Node root, int key) {
+        // Base case
+        if (root == null)
+            return prec;
+    
+        // If key is present at root
+        if (root.key == key)
+        {
+            // The minimum value in
+            // right subtree is successor
+            if (root.left != null)
+            {
+                Node tmp = root.left;
+                
+                while (tmp.right != null)
+                    tmp = tmp.right;
+                    
+                prec = tmp;
+            }
+            return prec;
+        }
+    
+        // If key is smaller than
+        // root's key, go to left subtree
+        if (root.key > key) {
+            findPredecessor(root.left , key);
+        } else { // Go to right subtree
+            prec = root;
+            findPredecessor(root.right, key);
+        }
+        return prec;
+    }
+
+    static Node suc = null;
+    Node findSuccessor(Node root, int key) {
+        // Base case
+        if (root == null)
+            return suc;
+    
+        // If key is present at root
+        if (root.key == key)
+        {
+            // The minimum value in
+            // right subtree is successor
+            if (root.right != null)
+            {
+                Node tmp = root.right;
+                
+                while (tmp.left != null)
+                    tmp = tmp.left;
+                    
+                suc = tmp;
+            }
+            return suc;
+        }
+    
+        // If key is smaller than
+        // root's key, go to left subtree
+        if (root.key > key) {
+            suc = root;
+            findSuccessor(root.left , key);
+        } else { // Go to right subtree
+            findSuccessor(root.right, key);
+        }
+        return suc;
+    }
+
     // Utility function to get number of nodes before this node
     int countNodes(Node node, int key) {
         if (node == null) {
@@ -281,3 +355,4 @@ class AVLTree {
 // 1) https://www.geeksforgeeks.org/deletion-in-an-avl-tree
 // 2) https://www.geeksforgeeks.org/stack-class-in-java/
 // 3) https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+// 4) https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
