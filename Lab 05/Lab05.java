@@ -100,6 +100,10 @@ public class Lab05 {
             result = tree.findSuccessor(root, result, key);
             System.out.println(result.playerName);
             result = tree.findSuccessor(root, result, key);
+            System.out.println(result.playerName);
+            result = tree.findSuccessor(root, result, key);
+            System.out.println(result.playerName);
+            result = tree.findSuccessor(root, result, key);
             if (result != null) {
                 playerName = result.playerName;
                 // TODO: Delete node di sini
