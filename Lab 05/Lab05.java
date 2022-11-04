@@ -32,10 +32,12 @@ public class Lab05 {
         // menambahkan i ke MASUK LAGI
 
         int numOfQueries = in.nextInt();
+        int counterPlusPlayer = 0;
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             if (cmd.equals("MASUK")) {
-                handleQueryMasuk(numOfInitialPlayers+i+1);
+                handleQueryMasuk(numOfInitialPlayers+counterPlusPlayer);
+                counterPlusPlayer++;
             } else {
                 handleQueryDuo();
             }
