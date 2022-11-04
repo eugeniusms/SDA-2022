@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class Lab05Stack {
 
@@ -101,16 +102,42 @@ public class Lab05Stack {
         // LALU PRINT NAMA PERTAMA (ALIAS TERAKHIR MASUK)
         // JIKA MAP TERSEBUT LEBIH DARI 1, POP NAMA TERAKHIR MASUK SAJA
         out.println("DUO");
-        int leftKey, rightKey;
-        String leftDuo, rightDuo;
+        // int leftKey, rightKey;
+        // String leftDuo, rightDuo;
+
+        if (map.containsKey(leftRange)) {
+            removeNode(leftRange);
+        } else {
+            // successor
+            for (Integer k : map.keySet()) {
+                if (k > leftRange) {
+                    removeNode(k);
+                    break;
+                }
+            }
+        }
+
+        if (map.containsKey(rightRange)) {
+            removeNode(rightRange);
+        } else {
+            // predecessor
+            ArrayList<Integer> keys = new ArrayList<Integer>(map.keySet());
+            for(int i=keys.size()-1; i>=0;i--){
+                int k = keys.get(i);
+                if (k < rightRange) {
+                    removeNode(k);
+                }
+            }
+        }
     }
 
     // remove node decision
     static void removeNode(int key) {
         // remove node
         if (map.get(key).size() > 1) {
-            map.get(key).pop();
+            out.println(map.get(key).pop());
         } else if (map.get(key).size() == 1) {
+            out.println(map.get(key).pop());
             map.remove(key); // delete dari map
             tree.deleteNode(tree.root, key); // delete dari avl
         } else {
