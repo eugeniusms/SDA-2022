@@ -24,3 +24,17 @@ MASUK A 1
 MASUK B 2
 DUO 1 4
 DUO 1 4
+
+// batasan ada 0 nya
+4
+A 1
+B 2
+C 3
+D 4
+6
+DUO 0 4
+DUO 0 4
+MASUK A 0
+MASUK B 2
+DUO 0 4
+DUO 0 4
