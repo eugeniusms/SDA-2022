@@ -204,8 +204,33 @@ public class Lab05 {
         if (isLExist && isRExist) {
             // do nothing if l & r exist
         } else {
-            if (lDihapus == rDihapus && map.get(keyLDihapus).size() == 1) { // SAMA2 NODE BERISI 7
+            if (lDihapus == rDihapus && map.get(keyLDihapus).size() <= 1) { // SAMA2 NODE BERISI 7
                 out.println("MASUK D");
+                return "-1 -1";
+            }
+        }
+
+        // CHECK : Jika keyLDihapus == keyRDihapus maka dicek
+        if (keyLDihapus == keyRDihapus) {
+            boolean isExist = map.containsKey(keyLDihapus);
+            if (isExist) { // jika exist & sizenya >= 2
+                if (map.get(keyLDihapus).size() >= 2) {
+                    String popFirst = map.get(keyLDihapus).pop();
+                    String popSecond = map.get(keyLDihapus).pop();
+                    // jika stack empty maka hapus saja key dari map & node avlnya
+                    if (map.get(keyLDihapus).isEmpty()) {
+                        map.remove(keyLDihapus);
+                        tree.root = tree.deleteNode(tree.root, keyLDihapus);
+                    }
+                    if (popFirst.compareTo(popSecond) < 0) {
+                        return popFirst + " " + popSecond;
+                    } else {
+                        return popSecond + " " + popFirst;
+                    }
+                } else {
+                    return "-1 -1";
+                }
+            } else {
                 return "-1 -1";
             }
         }
