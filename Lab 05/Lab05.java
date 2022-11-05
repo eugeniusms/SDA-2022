@@ -54,6 +54,10 @@ public class Lab05 {
             } else {
                 out.println(handleQueryDuo());
             }
+            // CHECK TREE
+            out.println("CEK "+i+": ");
+            inOrder(tree.root);
+            out.println("\n");
         }
 
         // out.println("\nCEK 1: "); 
