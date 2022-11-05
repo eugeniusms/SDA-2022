@@ -172,7 +172,6 @@ public class Lab05 {
         // Step 1: Cek apakah map memiliki node dengan key l atau r
         boolean isLExist = map.containsKey(l);
         boolean isRExist = map.containsKey(r);
-        // out.println("REXIST: "+isRExist);
 
         // Step 2: Dapatkan node yang ingin dihapus, jika exist dalam map maka langsung aja, jika tidak kalau l cari successor, kalau r cari predecessor
         int keyLDihapus = 0, keyRDihapus = 0; 
@@ -182,8 +181,6 @@ public class Lab05 {
             keyLDihapus = l;
         } else {
             lDihapus = tree.findSuccessor(tree.root, null, l);
-            // CEK
-            // out.println("MASUK SINI SUCCESSOR L : "+lDihapus);
             if (lDihapus == null) { // jika null nodenya maka langsung return -1 -1
                 // out.println("MASUK B");
                 return "-1 -1";
@@ -199,15 +196,13 @@ public class Lab05 {
             keyRDihapus = r;
         } else {
             rDihapus = tree.findPredecessor(tree.root, null, r);
-            // CEK
-            // out.println("MASUK SINI PREDECESSOR R : "+rDihapus);
             if (rDihapus == null) {
-                // out.println("MASUK C");
+                // out.println("MASUK D");
                 return "-1 -1";
             }
             keyRDihapus = rDihapus.key;
             if (keyRDihapus < l || keyRDihapus > r) {
-                // out.println("MASUK D");
+                // out.println("MASUK E");
                 return "-1 -1";
             }
         }
@@ -218,16 +213,10 @@ public class Lab05 {
             // do nothing if l & r exist
         } else {
             if (lDihapus == rDihapus && map.get(keyLDihapus).size() <= 1) { // SAMA2 NODE BERISI 7
-                // out.println("MASUK D");
+                // out.println("MASUK F");
                 return "-1 -1";
             }
         }
-
-        // // CEK JIKA rDihapus < r || lDihapus > l (saat pencarian di tengah sedangkan data dipinggir tar bablas) bablas
-        // if (keyLDihapus < l || keyRDihapus > r) {
-        //     // out.println("MASUK E");
-        //     return "-1 -1";
-        // }
 
         // CHECK : Jika keyLDihapus == keyRDihapus maka dicek
         if (keyLDihapus == keyRDihapus) {
