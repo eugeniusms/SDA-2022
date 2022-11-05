@@ -50,17 +50,17 @@ public class Lab05 {
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             // CHECK TREE
-            out.println("\nCEK "+i+" BEFORE : ");
-            inOrder(tree.root);
-            out.println();
+            // out.println("\nCEK "+i+" BEFORE : ");
+            // inOrder(tree.root);
+            // out.println();
             if (cmd.equals("MASUK")) {
                 handleQueryMasuk();
             } else {
                 out.println(handleQueryDuo());
             }  
-            out.println("CEK "+i+" AFTER : ");
-            inOrder(tree.root);
-            out.println("\n");
+            // out.println("CEK "+i+" AFTER : ");
+            // inOrder(tree.root);
+            // out.println("\n");
         }
 
         // out.println("\nCEK 1: "); 
@@ -165,13 +165,14 @@ public class Lab05 {
         // CHECK 1: Cek tinggi tree, jika cuma tersisa root maka tidak bisa dihapus
         int height = tree.getHeight(tree.root);
         if (height == 0) {
-            out.println("MASUK A");
+            // out.println("MASUK A");
             return "-1 -1";
         }
 
         // Step 1: Cek apakah map memiliki node dengan key l atau r
         boolean isLExist = map.containsKey(l);
         boolean isRExist = map.containsKey(r);
+        // out.println("REXIST: "+isRExist);
 
         // Step 2: Dapatkan node yang ingin dihapus, jika exist dalam map maka langsung aja, jika tidak kalau l cari successor, kalau r cari predecessor
         int keyLDihapus = 0, keyRDihapus = 0; 
@@ -181,22 +182,34 @@ public class Lab05 {
             keyLDihapus = l;
         } else {
             lDihapus = tree.findSuccessor(tree.root, null, l);
+            // CEK
+            // out.println("MASUK SINI SUCCESSOR L : "+lDihapus);
             if (lDihapus == null) { // jika null nodenya maka langsung return -1 -1
-                out.println("MASUK B");
+                // out.println("MASUK B");
                 return "-1 -1";
             }
             keyLDihapus = lDihapus.key;
+            if (keyLDihapus > r || keyLDihapus < l) { // jika key successor l > r maka langsung return -1 -1
+                // out.println("MASUK C");
+                return "-1 -1";
+            }
         }
         // r check
         if (isRExist) {
             keyRDihapus = r;
         } else {
             rDihapus = tree.findPredecessor(tree.root, null, r);
+            // CEK
+            // out.println("MASUK SINI PREDECESSOR R : "+rDihapus);
             if (rDihapus == null) {
-                out.println("MASUK C");
+                // out.println("MASUK C");
                 return "-1 -1";
             }
             keyRDihapus = rDihapus.key;
+            if (keyRDihapus < l || keyRDihapus > r) {
+                // out.println("MASUK D");
+                return "-1 -1";
+            }
         }
 
         // CEK KEKNYA MASALAHNYA SISA DI SINI
@@ -205,10 +218,16 @@ public class Lab05 {
             // do nothing if l & r exist
         } else {
             if (lDihapus == rDihapus && map.get(keyLDihapus).size() <= 1) { // SAMA2 NODE BERISI 7
-                out.println("MASUK D");
+                // out.println("MASUK D");
                 return "-1 -1";
             }
         }
+
+        // // CEK JIKA rDihapus < r || lDihapus > l (saat pencarian di tengah sedangkan data dipinggir tar bablas) bablas
+        // if (keyLDihapus < l || keyRDihapus > r) {
+        //     // out.println("MASUK E");
+        //     return "-1 -1";
+        // }
 
         // CHECK : Jika keyLDihapus == keyRDihapus maka dicek
         if (keyLDihapus == keyRDihapus) {
@@ -235,7 +254,7 @@ public class Lab05 {
             }
         }
 
-        // Jika sudah lewat sini berarti pasti ada yg bakal dihapus
+        // Jika sudah lewat sini berarti pasti ada yg bakal dihapus 
 
         // Step 3: Dapatkan stack dari key yang ingin dihapus
         Stack<String> stackLDihapus = map.get(keyLDihapus);
