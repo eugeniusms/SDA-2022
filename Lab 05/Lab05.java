@@ -201,7 +201,11 @@ public class Lab05 {
         }
 
         // Step 7: Return nama yang dihapus
-        return namaLDihapus + " " + namaRDihapus;
+        if (namaLDihapus.compareTo(namaRDihapus) > 0) {
+            return namaRDihapus + " " + namaLDihapus;
+        } else {
+            return namaLDihapus + " " + namaRDihapus;
+        }
     }
 
     static void inOrder(Node node) {
