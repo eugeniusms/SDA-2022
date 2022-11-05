@@ -124,6 +124,33 @@ public class Lab05 {
         int l = in.nextInt();
         int r = in.nextInt();
 
+        // CHECK : Jika L == R maka dicek
+        if (l == r) {
+            boolean isExist = map.containsKey(l);
+            if (isExist) { // jika exist & sizenya >= 2
+                if (map.get(l).size() >= 2) {
+                    String popFirst = map.get(l).pop();
+                    String popSecond = map.get(l).pop();
+                    // jika stack empty maka hapus saja key dari map & node avlnya
+                    if (map.get(l).isEmpty()) {
+                        map.remove(l);
+                        tree.root = tree.deleteNode(tree.root, l);
+                    }
+                    if (popFirst.compareTo(popSecond) < 0) {
+                        return popFirst + " " + popSecond;
+                    } else {
+                        return popSecond + " " + popFirst;
+                    }
+                } else {
+                    return "-1 -1";
+                }
+            } else {
+                return "-1 -1";
+            }
+        }
+
+        // CHECK: JIKA L & R BERBEDA MAKA LANJUT
+
         // CARI SUCCESSOR OF L & R
         // Node predecessorL = tree.findPredecessor(tree.root, null, l);
         // Node predecessorR = tree.findPredecessor(tree.root, null, r);
