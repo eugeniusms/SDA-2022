@@ -97,6 +97,8 @@ public class Lab05 {
         String name = in.next();
         int powerLevel = in.nextInt();
 
+        out.println(findTotalBefore(tree.root, powerLevel));
+
         // INSERT KEY [POWER LEVEL] KE AVL
         tree.root = tree.insertNode(tree.root, powerLevel); 
 
@@ -109,24 +111,24 @@ public class Lab05 {
             map.put(powerLevel, stack); 
         }
 
-        // INSERT POWER LEVEL KE SET
-        set.add(powerLevel);
+        // // INSERT POWER LEVEL KE SET
+        // set.add(powerLevel);
 
-        // ITERATE SET
-        for (Integer power : set) {
-            if (power < powerLevel) {
-                beforeK += map.get(power).size();
-            } else {
-                break;
-            }
-        }
+        // // ITERATE SET
+        // for (Integer power : set) {
+        //     if (power < powerLevel) {
+        //         beforeK += map.get(power).size();
+        //     } else {
+        //         break;
+        //     }
+        // }
           
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
         // out.println(tree.countNodes(tree.root, powerLevel));
         // inOrderTraversal(tree.root, powerLevel);
         // out.println(beforeK);
-        out.println(tree.findTotalBefore(tree.root, powerLevel));
-        beforeK = 0; // reset
+       
+        // beforeK = 0; // reset
     }
 
     static void inOrderTraversal(Node root, int powerLevel) {
@@ -308,7 +310,27 @@ public class Lab05 {
         out.print(node + "[" + node.people + "] ->");
         // traverse the right child
         inOrder(node.right);
-      }
+    }
+
+    static int findTotalBefore(Node root, int key) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.key == key) {
+            if (root.left == null) {
+                return 0;
+            }
+            return root.left.people;
+        }
+        if (root.key > key) { // ke kiri
+            return findTotalBefore(root.left, key);
+        } 
+        // ke kanan
+        if (root.left == null) {
+            return 0;
+        }
+        return root.left.people + map.get(root.key).size() + findTotalBefore(root.right, key);
+    }
 
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
@@ -655,27 +677,6 @@ class AVLTree {
         }
         return searchNodePop(root.right, key);
     }
-
-    int findTotalBefore(Node root, int key) {
-        if (root == null) {
-            return 0;
-        }
-        if (root.key == key) {
-            if (root.left == null) {
-                return 0;
-            }
-            return root.left.people;
-        }
-        if (root.key > key) { // ke kiri
-            return findTotalBefore(root.left, key);
-        } 
-        // ke kanan
-        if (root.left == null) {
-            return 0;
-        }
-        return root.left.people + findTotalBefore(root.right, key);
-    }
-    
 }
 
 // References:
