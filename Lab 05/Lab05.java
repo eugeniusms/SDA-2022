@@ -98,9 +98,15 @@ public class Lab05 {
         int r = in.nextInt();
 
         // CARI SUCCESSOR OF L & R
+        Node predecessorL = tree.findPredecessor(tree.root, null, l);
+        Node predecessorR = tree.findPredecessor(tree.root, null, r);
         Node successorL = tree.findSuccessor(tree.root, null, l);
         Node successorR = tree.findSuccessor(tree.root, null, r);
-        out.println(successorL + " " + successorR);
+        out.println("Predecessor of " + l + " is " + predecessorL);
+        out.println("Successor of "+l+" is "+successorL);
+
+        out.println("Predecessor of " + r + " is " + predecessorR);
+        out.println("Successor of "+r+" is "+successorR);
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -326,12 +332,40 @@ class AVLTree {
         return succ;
     }
 
-
     // predecessor case
     // 1) saat node x memiliki left subtree
     // 2) saat node x tidak memiliki left subtree dan x merupakan left child dari parentnya
     // 3) saat node x tidak memiliki left subtree dan x merupakan right child dari parentnya
-
+    // Recursive function to find inorder predecessor for a given key in the BST
+    Node findPredecessor(Node root, Node prec, int key) { // return null when gaada successor
+        // base case
+        if (root == null) {
+            return prec;
+        }
+ 
+        // if a node with the desired value is found, the predecessor is the maximum
+        // value node in its left subtree (if any)
+        if (root.key == key)
+        {
+            if (root.left != null) {
+                return upperBound(root.left);
+            }
+        }
+ 
+        // if the given key is less than the root node, recur for the left subtree
+        else if (key < root.key) {
+            return findPredecessor(root.left, prec, key);
+        }
+ 
+        // if the given key is more than the root node, recur for the right subtree
+        else {
+            // update predecessor to the current node before recursing
+            // in the right subtree
+            prec = root;
+            return findPredecessor(root.right, prec, key);
+        }
+        return prec;
+    }
 }
 
 // References:
@@ -342,3 +376,5 @@ class AVLTree {
 // AVL Methods:
 // 1) https://www.youtube.com/watch?v=psFKTGahpCs
 // 2) https://www.youtube.com/watch?v=JdmAYw5h3G8
+// 3 https://www.techiedelight.com/find-inorder-successor-given-key-bst/)
+// 4) https://www.techiedelight.com/find-inorder-predecessor-given-key-bst/
