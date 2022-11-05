@@ -94,6 +94,13 @@ public class Lab05 {
 
     static void handleQueryDuo() {
         // TODO
+        int l = in.nextInt();
+        int r = in.nextInt();
+
+        // CARI SUCCESSOR OF L & R
+        Node successorL = tree.findSuccessor(tree.root, null, l);
+        Node successorR = tree.findSuccessor(tree.root, null, r);
+        out.println(successorL + " " + successorR);
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -131,6 +138,12 @@ class Node {
     Node(int key) {
         this.key = key;
         this.height = 1;
+    }
+
+    // Overriding toString() method of String class
+    @Override
+    public String toString() {
+        return this.key + "";
     }
 }
 
@@ -275,9 +288,57 @@ class AVLTree {
             return getHeight(node.left);
         }
     }
+
+    // successor case
+    // 1) saat node x memiliki right subtree > cari lowerbound dari subtree kanan
+    // 2) saat node x tidak memiliki right subtree dan x merupakan right child dari parentnya > the last left is the answer
+    // 3) saat node x tidak memiliki right subtree dan x merupakan left child dari parentnya
+    // Recursive function to find an inorder successor for the given key in the BST
+    Node findSuccessor(Node root, Node succ, int key) { // return null when gaada successor
+        // base case
+        if (root == null) {
+            return succ;
+        }
+
+        // if a node with the desired value is found, the successor is the minimum
+        // value node in its right subtree (if any)
+        if (root.key == key)
+        {
+            if (root.right != null) {
+                return lowerBound(root.right);
+            }
+        }
+
+        // if the given key is less than the root node, recur for the left subtree
+        else if (key < root.key)
+        {
+            // update successor to the current node before recursing in the
+            // left subtree
+            succ = root;
+            return findSuccessor(root.left, succ, key);
+        }
+
+        // if the given key is more than the root node, recur for the right subtree
+        else {
+            return findSuccessor(root.right, succ, key);
+        }
+
+        return succ;
+    }
+
+
+    // predecessor case
+    // 1) saat node x memiliki left subtree
+    // 2) saat node x tidak memiliki left subtree dan x merupakan left child dari parentnya
+    // 3) saat node x tidak memiliki left subtree dan x merupakan right child dari parentnya
+
 }
 
 // References:
 // 1) https://www.geeksforgeeks.org/deletion-in-an-avl-tree
 // 2) https://www.geeksforgeeks.org/stack-class-in-java/
 // 3) https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+
+// AVL Methods:
+// 1) https://www.youtube.com/watch?v=psFKTGahpCs
+// 2) https://www.youtube.com/watch?v=JdmAYw5h3G8
