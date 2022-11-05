@@ -42,7 +42,7 @@ public class Lab05 {
 
             // INSERT NAMA KE MAP
             if (map.containsKey(powerLevel)) {
-                map.get(powerLevel).push(name);
+                map.get(powerLevel).push(name); tree.searchNodePush(tree.root, powerLevel).people += 1; // add people after push
             } else {
                 Stack<String> stack = new Stack<String>();
                 stack.push(name); 
@@ -102,10 +102,10 @@ public class Lab05 {
 
         // INSERT NAMA KE MAP
         if (map.containsKey(powerLevel)) {
-            map.get(powerLevel).push(name);
+            map.get(powerLevel).push(name); tree.searchNodePush(tree.root, powerLevel).people += 1; // add people after push
         } else {
             Stack<String> stack = new Stack<String>();
-            stack.push(name); 
+            stack.push(name);  
             map.put(powerLevel, stack); 
         }
 
@@ -148,8 +148,9 @@ public class Lab05 {
             boolean isExist = map.containsKey(l);
             if (isExist) { // jika exist & sizenya >= 2
                 if (map.get(l).size() >= 2) {
-                    String popFirst = map.get(l).pop();
+                    String popFirst = map.get(l).pop(); 
                     String popSecond = map.get(l).pop();
+                    tree.searchNodePop(tree.root, l).people -= 2; // add people after pop 2x
                     // jika stack empty maka hapus saja key dari map & node avlnya
                     if (map.get(l).isEmpty()) {
                         map.remove(l);
@@ -245,6 +246,7 @@ public class Lab05 {
                 if (map.get(keyLDihapus).size() >= 2) {
                     String popFirst = map.get(keyLDihapus).pop();
                     String popSecond = map.get(keyLDihapus).pop();
+                    tree.searchNodePop(tree.root, keyLDihapus).people -= 2; // add people after pop 2x
                     // jika stack empty maka hapus saja key dari map & node avlnya
                     if (map.get(keyLDihapus).isEmpty()) {
                         map.remove(keyLDihapus);
@@ -271,8 +273,8 @@ public class Lab05 {
         Stack<String> stackRDihapus = map.get(keyRDihapus);
 
         // Step 4: Dapatkan nama dari stack yang ingin dihapus
-        String namaLDihapus = stackLDihapus.pop();
-        String namaRDihapus = stackRDihapus.pop();
+        String namaLDihapus = stackLDihapus.pop();  tree.searchNodePop(tree.root, keyLDihapus).people -= 1; // add people after pop 1x
+        String namaRDihapus = stackRDihapus.pop(); tree.searchNodePop(tree.root, keyRDihapus).people -= 1; // add people after pop 1x
 
         // Step 5: Cek apakah stack kosong, jika kosong hapus key dari map
         if (stackLDihapus.isEmpty()) {
@@ -629,6 +631,28 @@ class AVLTree {
     
     int max(int a, int b) {
         return (a > b) ? a : b;
+    }
+
+    Node searchNodePush(Node root, int key) {
+        if (root == null || root.key == key) {
+            return root;
+        }
+        root.people+=1;
+        if (root.key > key) { 
+            return searchNodePush(root.left, key);
+        }
+        return searchNodePush(root.right, key);
+    }
+
+    Node searchNodePop(Node root, int key) {
+        if (root == null || root.key == key) {
+            return root;
+        }
+        root.people-=1;
+        if (root.key > key) { 
+            return searchNodePop(root.left, key);
+        }
+        return searchNodePop(root.right, key);
     }
     
 }

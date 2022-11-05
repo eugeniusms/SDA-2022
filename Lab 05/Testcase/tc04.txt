@@ -10,3 +10,11 @@ DUO 1 5
 DUO 1 5
 
 ADD Submitted 08 nilai 75/100
+
+3
+A 2
+B 2
+C 2
+2
+MASUK D 2
+MASUK E 2
