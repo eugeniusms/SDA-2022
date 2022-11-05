@@ -112,9 +112,18 @@ public class Lab05 {
         // INSERT POWER LEVEL KE SET
         set.add(powerLevel);
 
+        // ITERATE SET
+        for (Integer power : set) {
+            if (power < powerLevel) {
+                beforeK += map.get(power).size();
+            } else {
+                break;
+            }
+        }
+          
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
         // out.println(tree.countNodes(tree.root, powerLevel));
-        inOrderTraversal(tree.root, powerLevel);
+        // inOrderTraversal(tree.root, powerLevel);
         out.println(beforeK);
         beforeK = 0; // reset
     }
@@ -612,6 +621,7 @@ class AVLTree {
 // 1) https://www.geeksforgeeks.org/deletion-in-an-avl-tree
 // 2) https://www.geeksforgeeks.org/stack-class-in-java/
 // 3) https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+// 4) https://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html
 
 // AVL Methods:
 // 1) https://www.youtube.com/watch?v=psFKTGahpCs
