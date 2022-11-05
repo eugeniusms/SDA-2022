@@ -149,6 +149,7 @@ public class Lab05 {
             if (lDihapus == null) { // jika null nodenya maka langsung return -1 -1
                 return "-1 -1";
             }
+            keyLDihapus = lDihapus.key;
         }
         // r check
         if (isRExist) {
@@ -158,6 +159,7 @@ public class Lab05 {
             if (rDihapus == null) {
                 return "-1 -1";
             }
+            keyRDihapus = rDihapus.key;
         }
 
         // CHECK 3: Cek apakah lDihapus dan rDihapus sama, jika ya maka tidak bisa dihapus
