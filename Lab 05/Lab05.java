@@ -112,7 +112,7 @@ public class Lab05 {
         }
     }
 
-    static void handleQueryDuo() {
+    static String handleQueryDuo() {
         // TODO
         int l = in.nextInt();
         int r = in.nextInt();
@@ -127,6 +127,68 @@ public class Lab05 {
 
         out.println("Predecessor of " + r + " is " + predecessorR);
         out.println("Successor of "+r+" is "+successorR);
+
+        // CHECK 1: Cek tinggi tree, jika cuma tersisa root maka tidak bisa dihapus
+        int height = tree.getHeight(tree.root);
+        if (height == 0) {
+            return "-1 -1";
+        }
+
+        // Step 1: Cek apakah map memiliki node dengan key l atau r
+        boolean isLExist = map.containsKey(l);
+        boolean isRExist = map.containsKey(r);
+
+        // Step 2: Dapatkan node yang ingin dihapus, jika exist dalam map maka langsung aja, jika tidak kalau l cari successor, kalau r cari predecessor
+        int keyLDihapus = 0, keyRDihapus = 0; 
+        Node lDihapus = null, rDihapus = null; 
+        // l check
+        if (isLExist) {
+            keyLDihapus = l;
+        } else {
+            lDihapus = tree.findSuccessor(tree.root, null, l);
+            if (lDihapus == null) { // jika null nodenya maka langsung return -1 -1
+                return "-1 -1";
+            }
+        }
+        // r check
+        if (isRExist) {
+            keyRDihapus = r;
+        } else {
+            rDihapus = tree.findPredecessor(tree.root, null, r);
+            if (rDihapus == null) {
+                return "-1 -1";
+            }
+        }
+
+        // CHECK 3: Cek apakah lDihapus dan rDihapus sama, jika ya maka tidak bisa dihapus
+        if (lDihapus == rDihapus) {
+            return "-1 -1";
+        }
+
+        // Jika sudah lewat sini berarti pasti ada yg bakal dihapus
+
+        // Step 3: Dapatkan stack dari key yang ingin dihapus
+        Stack<String> stackLDihapus = map.get(keyLDihapus);
+        Stack<String> stackRDihapus = map.get(keyRDihapus);
+
+        // Step 4: Dapatkan nama dari stack yang ingin dihapus
+        String namaLDihapus = stackLDihapus.pop();
+        String namaRDihapus = stackRDihapus.pop();
+
+        // Step 5: Cek apakah stack kosong, jika kosong hapus key dari map
+        if (stackLDihapus.isEmpty()) {
+            map.remove(keyLDihapus);
+            // Step 6: Hapus node AVL karena stack kosong
+            tree.root = tree.deleteNode(tree.root, keyLDihapus);
+        }
+        if (stackRDihapus.isEmpty()) {
+            map.remove(keyRDihapus);
+            // Step 6: Hapus node AVL karena stack kosong
+            tree.root = tree.deleteNode(tree.root, keyRDihapus);
+        }
+
+        // Step 7: Return nama yang dihapus
+        return namaLDihapus + " " + namaRDihapus;
     }
 
     static void inOrder(Node node) {
