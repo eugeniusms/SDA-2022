@@ -9,4 +9,4 @@ DUO 1 5
 DUO 1 5
 DUO 1 5
 
-ADD Submitted 07 (12/12 TCs) ANJAY 72/100
+ADD Submitted 08 nilai 75/100
