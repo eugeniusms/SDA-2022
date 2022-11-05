@@ -57,17 +57,17 @@ public class Lab05 {
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             // CHECK TREE
-            out.println("\nCEK "+i+" BEFORE : ");
-            inOrder(tree.root);
-            out.println();
+            // out.println("\nCEK "+i+" BEFORE : ");
+            // inOrder(tree.root);
+            // out.println();
             if (cmd.equals("MASUK")) {
                 handleQueryMasuk();
             } else {
                 out.println(handleQueryDuo());
             }  
-            out.println("CEK "+i+" AFTER : ");
-            inOrder(tree.root);
-            out.println("\n");
+            // out.println("CEK "+i+" AFTER : ");
+            // inOrder(tree.root);
+            // out.println("\n");
         }
 
         // out.println("\nCEK 1: "); 
@@ -124,7 +124,8 @@ public class Lab05 {
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
         // out.println(tree.countNodes(tree.root, powerLevel));
         // inOrderTraversal(tree.root, powerLevel);
-        out.println(beforeK);
+        // out.println(beforeK);
+        out.println(tree.findTotalBefore(tree.root, powerLevel));
         beforeK = 0; // reset
     }
 
@@ -653,6 +654,26 @@ class AVLTree {
             return searchNodePop(root.left, key);
         }
         return searchNodePop(root.right, key);
+    }
+
+    int findTotalBefore(Node root, int key) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.key == key) {
+            if (root.left == null) {
+                return 0;
+            }
+            return root.left.people;
+        }
+        if (root.key > key) { // ke kiri
+            return findTotalBefore(root.left, key);
+        } 
+        // ke kanan
+        if (root.left == null) {
+            return 0;
+        }
+        return root.left.people + findTotalBefore(root.right, key);
     }
     
 }
