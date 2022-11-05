@@ -97,7 +97,11 @@ public class Lab05 {
         String name = in.next();
         int powerLevel = in.nextInt();
 
-        out.println(findTotalBefore(tree.root, powerLevel));
+
+        boolean yow = map.containsKey(powerLevel);
+        if (!yow) {
+            out.println(findTotalBefore(tree.root, powerLevel));
+        }
 
         // INSERT KEY [POWER LEVEL] KE AVL
         tree.root = tree.insertNode(tree.root, powerLevel); 
@@ -122,6 +126,10 @@ public class Lab05 {
         //         break;
         //     }
         // }
+
+        if (yow) {
+            out.println(findTotalBefore(tree.root, powerLevel));
+        }
           
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
         // out.println(tree.countNodes(tree.root, powerLevel));
