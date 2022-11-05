@@ -213,7 +213,7 @@ public class Lab05 {
             // do nothing if l & r exist
         } else {
             if (lDihapus == rDihapus && map.get(keyLDihapus).size() <= 1) { // SAMA2 NODE BERISI 7
-                // out.println("MASUK F");
+                // out.println("MASUK ");
                 return "-1 -1";
             }
         }
