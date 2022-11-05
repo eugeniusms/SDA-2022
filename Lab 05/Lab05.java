@@ -138,6 +138,7 @@ public class Lab05 {
         // CHECK 1: Cek tinggi tree, jika cuma tersisa root maka tidak bisa dihapus
         int height = tree.getHeight(tree.root);
         if (height == 0) {
+            out.println("MASUK A");
             return "-1 -1";
         }
 
@@ -154,6 +155,7 @@ public class Lab05 {
         } else {
             lDihapus = tree.findSuccessor(tree.root, null, l);
             if (lDihapus == null) { // jika null nodenya maka langsung return -1 -1
+                out.println("MASUK B");
                 return "-1 -1";
             }
             keyLDihapus = lDihapus.key;
@@ -164,6 +166,7 @@ public class Lab05 {
         } else {
             rDihapus = tree.findPredecessor(tree.root, null, r);
             if (rDihapus == null) {
+                out.println("MASUK C");
                 return "-1 -1";
             }
             keyRDihapus = rDihapus.key;
@@ -171,6 +174,7 @@ public class Lab05 {
 
         // CHECK 3: Cek apakah lDihapus dan rDihapus sama, jika ya maka tidak bisa dihapus
         if (lDihapus == rDihapus) {
+            out.println("MASUK D");
             return "-1 -1";
         }
 
