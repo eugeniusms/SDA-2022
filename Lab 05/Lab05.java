@@ -173,9 +173,13 @@ public class Lab05 {
         }
 
         // CHECK 3: Cek apakah lDihapus dan rDihapus sama, jika ya maka tidak bisa dihapus
-        if (lDihapus == rDihapus && map.get(keyLDihapus).size() == 1) { // SAMA2 NODE BERISI 7
-            out.println("MASUK D");
-            return "-1 -1";
+        if (isLExist && isRExist) {
+            // do nothing if l & r exist
+        } else {
+            if (lDihapus == rDihapus && map.get(keyLDihapus).size() == 1) { // SAMA2 NODE BERISI 7
+                out.println("MASUK D");
+                return "-1 -1";
+            }
         }
 
         // Jika sudah lewat sini berarti pasti ada yg bakal dihapus
