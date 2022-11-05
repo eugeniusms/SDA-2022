@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -21,6 +22,9 @@ public class Lab05 {
 
     // Jumlah Before K (new node)
     static int beforeK = 0;
+
+    // Menyimpan semua nilai power level yang unique
+    static TreeSet<Integer> set = new TreeSet<Integer>();
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -44,6 +48,9 @@ public class Lab05 {
                 stack.push(name); 
                 map.put(powerLevel, stack); 
             }
+
+            // INSERT POWER LEVEL KE SET
+            set.add(powerLevel);
         }
 
         int numOfQueries = in.nextInt();
@@ -102,6 +109,9 @@ public class Lab05 {
             map.put(powerLevel, stack); 
         }
 
+        // INSERT POWER LEVEL KE SET
+        set.add(powerLevel);
+
         // PRINT JUMLAH NODE SEBELUM NODE SAAT INI
         // out.println(tree.countNodes(tree.root, powerLevel));
         inOrderTraversal(tree.root, powerLevel);
@@ -135,6 +145,7 @@ public class Lab05 {
                     if (map.get(l).isEmpty()) {
                         map.remove(l);
                         tree.root = tree.deleteNode(tree.root, l);
+                        set.remove(l); // hapus dari set
                     }
                     if (popFirst.compareTo(popSecond) < 0) {
                         return popFirst + " " + popSecond;
@@ -229,6 +240,7 @@ public class Lab05 {
                     if (map.get(keyLDihapus).isEmpty()) {
                         map.remove(keyLDihapus);
                         tree.root = tree.deleteNode(tree.root, keyLDihapus);
+                        set.remove(keyLDihapus); // hapus dari set
                     }
                     if (popFirst.compareTo(popSecond) < 0) {
                         return popFirst + " " + popSecond;
@@ -258,11 +270,13 @@ public class Lab05 {
             map.remove(keyLDihapus);
             // Step 6: Hapus node AVL karena stack kosong
             tree.root = tree.deleteNode(tree.root, keyLDihapus);
+            set.remove(keyLDihapus); // hapus dari set
         }
         if (stackRDihapus.isEmpty()) {
             map.remove(keyRDihapus);
             // Step 6: Hapus node AVL karena stack kosong
             tree.root = tree.deleteNode(tree.root, keyRDihapus);
+            set.remove(keyRDihapus); // hapus dari set
         }
 
         // Step 7: Return nama yang dihapus
