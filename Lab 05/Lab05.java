@@ -49,15 +49,15 @@ public class Lab05 {
         int numOfQueries = in.nextInt();
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
+            // CHECK TREE
+            out.println("\nCEK "+i+": ");
+            inOrder(tree.root);
+            out.println();
             if (cmd.equals("MASUK")) {
                 handleQueryMasuk();
             } else {
                 out.println(handleQueryDuo());
-            }
-            // CHECK TREE
-            out.println("CEK "+i+": ");
-            inOrder(tree.root);
-            out.println("\n");
+            }  
         }
 
         // out.println("\nCEK 1: "); 
