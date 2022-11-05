@@ -50,17 +50,17 @@ public class Lab05 {
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             // CHECK TREE
-            // out.println("\nCEK "+i+" BEFORE : ");
-            // inOrder(tree.root);
-            // out.println();
+            out.println("\nCEK "+i+" BEFORE : ");
+            inOrder(tree.root);
+            out.println();
             if (cmd.equals("MASUK")) {
                 handleQueryMasuk();
             } else {
                 out.println(handleQueryDuo());
             }  
-            // out.println("CEK "+i+" AFTER : ");
-            // inOrder(tree.root);
-            // out.println("\n");
+            out.println("CEK "+i+" AFTER : ");
+            inOrder(tree.root);
+            out.println("\n");
         }
 
         // out.println("\nCEK 1: "); 
@@ -165,7 +165,7 @@ public class Lab05 {
         // CHECK 1: Cek tinggi tree, jika cuma tersisa root maka tidak bisa dihapus
         int height = tree.getHeight(tree.root);
         if (height == 0) {
-            // out.println("MASUK A");
+            out.println("MASUK A");
             return "-1 -1";
         }
 
@@ -182,7 +182,7 @@ public class Lab05 {
         } else {
             lDihapus = tree.findSuccessor(tree.root, null, l);
             if (lDihapus == null) { // jika null nodenya maka langsung return -1 -1
-                // out.println("MASUK B");
+                out.println("MASUK B");
                 return "-1 -1";
             }
             keyLDihapus = lDihapus.key;
@@ -193,7 +193,7 @@ public class Lab05 {
         } else {
             rDihapus = tree.findPredecessor(tree.root, null, r);
             if (rDihapus == null) {
-                // out.println("MASUK C");
+                out.println("MASUK C");
                 return "-1 -1";
             }
             keyRDihapus = rDihapus.key;
@@ -204,7 +204,7 @@ public class Lab05 {
             // do nothing if l & r exist
         } else {
             if (lDihapus == rDihapus && map.get(keyLDihapus).size() == 1) { // SAMA2 NODE BERISI 7
-                // out.println("MASUK D");
+                out.println("MASUK D");
                 return "-1 -1";
             }
         }
