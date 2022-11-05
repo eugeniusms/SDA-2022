@@ -57,17 +57,17 @@ public class Lab05 {
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             // CHECK TREE
-            // out.println("\nCEK "+i+" BEFORE : ");
-            // inOrder(tree.root);
-            // out.println();
+            out.println("\nCEK "+i+" BEFORE : ");
+            inOrder(tree.root);
+            out.println();
             if (cmd.equals("MASUK")) {
                 handleQueryMasuk();
             } else {
                 out.println(handleQueryDuo());
             }  
-            // out.println("CEK "+i+" AFTER : ");
-            // inOrder(tree.root);
-            // out.println("\n");
+            out.println("CEK "+i+" AFTER : ");
+            inOrder(tree.root);
+            out.println("\n");
         }
 
         // out.println("\nCEK 1: "); 
@@ -302,7 +302,7 @@ public class Lab05 {
         // traverse the left child
         inOrder(node.left);
         // traverse the root node
-        out.print(node + "->");
+        out.print(node + "[" + node.people + "] ->");
         // traverse the right child
         inOrder(node.right);
       }
@@ -336,11 +336,12 @@ public class Lab05 {
 
 // Node menyimpan power level saja (key dalam map) refer ke map
 class Node {
-    int key, height; // key => sama dengan key map (power level)
+    int key, height, people; // key => sama dengan key map (power level)
     Node left, right;
 
     Node(int key) {
         this.key = key;
+        this.people = 1;
         this.height = 1;
     }
 
@@ -367,8 +368,10 @@ class AVLTree {
   
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
+        y.people = getPeople(y.left) + getPeople(y.right) + 1;
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
-  
+        x.people = getPeople(x.left) + getPeople(x.right) + 1;
+
         // Return new root 
         return x; 
     }
@@ -384,7 +387,9 @@ class AVLTree {
   
         // Update heights 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
+        x.people = getPeople(x.left) + getPeople(x.right) + 1;
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
+        y.people = getPeople(y.left) + getPeople(y.right) + 1;
   
         // Return new root 
         return y; 
@@ -406,6 +411,7 @@ class AVLTree {
 
         // Update height
         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
+        node.people = 1 + getPeople(node.left) + getPeople(node.right);
 
         // Get balance factor
         int balance = getBalance(node);
@@ -469,6 +475,8 @@ class AVLTree {
 
         // Update the balance factor of each node and balance the tree
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1;
+        root.people = getPeople(root.left) + getPeople(root.right) + 1;
+
         int balanceFactor = getBalance(root);
         if (balanceFactor > 1) {
         if (getBalance(root.left) >= 0) {
@@ -514,6 +522,14 @@ class AVLTree {
             return 0;
         }
         return node.height;
+    }
+
+    // Utility function to get num of peoples
+    int getPeople(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        return node.people;
     }
 
     // Utility function to get balance factor of node
