@@ -199,6 +199,7 @@ public class Lab05 {
             keyRDihapus = rDihapus.key;
         }
 
+        // CEK KEKNYA MASALAHNYA SISA DI SINI
         // CHECK 3: Cek apakah lDihapus dan rDihapus sama, jika ya maka tidak bisa dihapus
         if (isLExist && isRExist) {
             // do nothing if l & r exist
