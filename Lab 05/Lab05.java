@@ -50,7 +50,7 @@ public class Lab05 {
         for (int i = 0; i < numOfQueries; i++) {
             String cmd = in.next();
             // CHECK TREE
-            out.println("\nCEK "+i+": ");
+            out.println("\nCEK "+i+" BEFORE : ");
             inOrder(tree.root);
             out.println();
             if (cmd.equals("MASUK")) {
@@ -58,6 +58,9 @@ public class Lab05 {
             } else {
                 out.println(handleQueryDuo());
             }  
+            out.println("CEK "+i+" AFTER : ");
+            inOrder(tree.root);
+            out.println("\n");
         }
 
         // out.println("\nCEK 1: "); 
