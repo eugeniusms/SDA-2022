@@ -1,0 +1,10 @@
+3
+B 7
+A 5
+C 8
+5
+MASUK D 6
+DUO 4 9
+DUO 5 8
+DUO 6 7
+DUO 5 5

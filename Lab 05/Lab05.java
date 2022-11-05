@@ -56,6 +56,18 @@ public class Lab05 {
             }
         }
 
+        out.println("\nCEK 1: "); 
+        tree.root = tree.deleteNode(tree.root, 7); 
+        inOrder(tree.root);
+
+        out.println("\nCEK 2: "); 
+        tree.root = tree.deleteNode(tree.root, 8); 
+        inOrder(tree.root);
+
+        out.println("\nCEK 3: "); 
+        tree.root = tree.deleteNode(tree.root, 5); 
+        inOrder(tree.root);
+
         out.close();
     }
 
@@ -109,6 +121,17 @@ public class Lab05 {
         out.println("Successor of "+r+" is "+successorR);
     }
 
+    static void inOrder(Node node) {
+        if (node == null)
+          return;
+        // traverse the left child
+        inOrder(node.left);
+        // traverse the root node
+        out.print(node + "->");
+        // traverse the right child
+        inOrder(node.right);
+      }
+
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
         public BufferedReader reader;
@@ -159,37 +182,37 @@ class AVLTree {
     Node root;
 
     // Implement right rotate
-    Node rightRotate(Node node) {
-        Node leftChild = node.left;
-        Node rightChildOfLeftChild = leftChild.right;
-
-        // Perform rotation
-        leftChild.right = node;
-        node.left = rightChildOfLeftChild;
-
-        // Update height
-        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
-        leftChild.height = Math.max(getHeight(leftChild.left), getHeight(leftChild.right)) + 1;
-
-        // Return new root
-        return leftChild;
+    Node rightRotate(Node y) {
+        Node x = y.left; 
+        Node T2 = x.right; 
+  
+        // Perform rotation 
+        x.right = y; 
+        y.left = T2; 
+  
+        // Update heights 
+        y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
+        x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
+  
+        // Return new root 
+        return x; 
     }
 
     // Implement left rotate
-    Node leftRotate(Node node) {
-        Node rightChild = node.right;
-        Node leftChildOfRightChild = rightChild.left;
-
-        // Perform rotation
-        rightChild.left = node;
-        node.right = leftChildOfRightChild;
-
-        // Update height
-        node.height = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
-        rightChild.height = Math.max(getHeight(rightChild.left), getHeight(rightChild.right)) + 1;
-
-        // Return new root
-        return rightChild;
+    Node leftRotate(Node x) {
+        Node y = x.right; 
+        Node T2 = y.left; 
+  
+        // Perform rotation 
+        y.left = x; 
+        x.right = T2;   
+  
+        // Update heights 
+        x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
+        y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
+  
+        // Return new root 
+        return y; 
     }
 
     // Implement insert node to AVL Tree
@@ -207,7 +230,7 @@ class AVLTree {
         }
 
         // Update height
-        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
+        node.height = 1 + max(getHeight(node.left), getHeight(node.right));
 
         // Get balance factor
         int balance = getBalance(node);
@@ -239,11 +262,57 @@ class AVLTree {
         return node;
     }
 
-    // // Implement delete node from AVL Tree
-    // Node deleteNode(Node node, int key) {
-    //     // TODO: implement delete node
-    //     return null;
-    // }
+    // Delete a node
+    Node deleteNode(Node root, int key) {
+        // Find the node to be deleted and remove it
+        if (root == null)
+        return root;
+        if (key < root.key)
+        root.left = deleteNode(root.left, key);
+        else if (key > root.key)
+        root.right = deleteNode(root.right, key);
+        else {
+        if ((root.left == null) || (root.right == null)) {
+            Node temp = null;
+            if (temp == root.left)
+            temp = root.right;
+            else
+            temp = root.left;
+            if (temp == null) {
+            temp = root;
+            root = null;
+            } else
+            root = temp;
+        } else {
+            Node temp = lowerBound(root.right);
+            root.key = temp.key;
+            root.right = deleteNode(root.right, temp.key);
+        }
+        }
+        if (root == null)
+        return root;
+
+        // Update the balance factor of each node and balance the tree
+        root.height = max(getHeight(root.left), getHeight(root.right)) + 1;
+        int balanceFactor = getBalance(root);
+        if (balanceFactor > 1) {
+        if (getBalance(root.left) >= 0) {
+            return rightRotate(root);
+        } else {
+            root.left = leftRotate(root.left);
+            return rightRotate(root);
+        }
+        }
+        if (balanceFactor < -1) {
+        if (getBalance(root.right) <= 0) {
+            return leftRotate(root);
+        } else {
+            root.right = rightRotate(root.right);
+            return leftRotate(root);
+        }
+        }
+        return root;
+    }
 
     Node lowerBound(Node node) {
         // Return node with the lowest from this node
@@ -366,6 +435,11 @@ class AVLTree {
         }
         return prec;
     }
+    
+    int max(int a, int b) {
+        return (a > b) ? a : b;
+    }
+    
 }
 
 // References:
@@ -378,3 +452,5 @@ class AVLTree {
 // 2) https://www.youtube.com/watch?v=JdmAYw5h3G8
 // 3 https://www.techiedelight.com/find-inorder-successor-given-key-bst/)
 // 4) https://www.techiedelight.com/find-inorder-predecessor-given-key-bst/
+// 5) https://www.geeksforgeeks.org/deletion-in-binary-search-tree/
+// 6) https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
