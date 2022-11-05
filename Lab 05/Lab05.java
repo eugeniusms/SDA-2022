@@ -68,6 +68,14 @@ public class Lab05 {
         tree.root = tree.deleteNode(tree.root, 5); 
         inOrder(tree.root);
 
+        out.println("\nCEK 4: "); 
+        tree.root = tree.deleteNode(tree.root, 6); 
+        inOrder(tree.root);
+
+        out.println("\nCEK 5: ");
+        tree.root = tree.deleteNode(tree.root, 9);
+        inOrder(tree.root);
+
         out.close();
     }
 
