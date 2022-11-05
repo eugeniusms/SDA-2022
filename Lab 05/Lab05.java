@@ -52,29 +52,29 @@ public class Lab05 {
             if (cmd.equals("MASUK")) {
                 handleQueryMasuk();
             } else {
-                handleQueryDuo();
+                out.println(handleQueryDuo());
             }
         }
 
-        out.println("\nCEK 1: "); 
-        tree.root = tree.deleteNode(tree.root, 7); 
-        inOrder(tree.root);
+        // out.println("\nCEK 1: "); 
+        // tree.root = tree.deleteNode(tree.root, 7); 
+        // inOrder(tree.root);
 
-        out.println("\nCEK 2: "); 
-        tree.root = tree.deleteNode(tree.root, 8); 
-        inOrder(tree.root);
+        // out.println("\nCEK 2: "); 
+        // tree.root = tree.deleteNode(tree.root, 8); 
+        // inOrder(tree.root);
 
-        out.println("\nCEK 3: "); 
-        tree.root = tree.deleteNode(tree.root, 5); 
-        inOrder(tree.root);
+        // out.println("\nCEK 3: "); 
+        // tree.root = tree.deleteNode(tree.root, 5); 
+        // inOrder(tree.root);
 
-        out.println("\nCEK 4: "); 
-        tree.root = tree.deleteNode(tree.root, 6); 
-        inOrder(tree.root);
+        // out.println("\nCEK 4: "); 
+        // tree.root = tree.deleteNode(tree.root, 6); 
+        // inOrder(tree.root);
 
-        out.println("\nCEK 5: ");
-        tree.root = tree.deleteNode(tree.root, 9);
-        inOrder(tree.root);
+        // out.println("\nCEK 5: ");
+        // tree.root = tree.deleteNode(tree.root, 9);
+        // inOrder(tree.root);
 
         out.close();
     }
@@ -118,15 +118,15 @@ public class Lab05 {
         int r = in.nextInt();
 
         // CARI SUCCESSOR OF L & R
-        Node predecessorL = tree.findPredecessor(tree.root, null, l);
-        Node predecessorR = tree.findPredecessor(tree.root, null, r);
-        Node successorL = tree.findSuccessor(tree.root, null, l);
-        Node successorR = tree.findSuccessor(tree.root, null, r);
-        out.println("Predecessor of " + l + " is " + predecessorL);
-        out.println("Successor of "+l+" is "+successorL);
+        // Node predecessorL = tree.findPredecessor(tree.root, null, l);
+        // Node predecessorR = tree.findPredecessor(tree.root, null, r);
+        // Node successorL = tree.findSuccessor(tree.root, null, l);
+        // Node successorR = tree.findSuccessor(tree.root, null, r);
+        // out.println("Predecessor of " + l + " is " + predecessorL);
+        // out.println("Successor of "+l+" is "+successorL);
 
-        out.println("Predecessor of " + r + " is " + predecessorR);
-        out.println("Successor of "+r+" is "+successorR);
+        // out.println("Predecessor of " + r + " is " + predecessorR);
+        // out.println("Successor of "+r+" is "+successorR);
 
         // CHECK 1: Cek tinggi tree, jika cuma tersisa root maka tidak bisa dihapus
         int height = tree.getHeight(tree.root);
