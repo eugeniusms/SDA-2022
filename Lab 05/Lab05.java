@@ -410,22 +410,22 @@ class AVLTree {
     }
 
     // Implement left rotate
-    Node leftRotate(Node x) {
-        Node y = x.right; 
-        Node T2 = y.left; 
+    Node leftRotate(Node y) {
+        Node x = y.right; 
+        Node T2 = x.left; 
   
         // Perform rotation 
-        y.left = x; 
-        x.right = T2;   
+        x.left = y; 
+        y.right = T2;   
   
         // Update heights 
-        x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
-        x.people = getPeople(x.left) + getPeople(x.right) + 1;
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
-        y.people = getPeople(y.left) + getPeople(y.right) + 1;
+        // y.people = getPeople(y.left) + getPeople(y.right) + 1;
+        x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
+        // x.people = getPeople(x.left) + getPeople(x.right) + 1;
   
         // Return new root 
-        return y; 
+        return x; 
     }
 
     // Implement insert node to AVL Tree
