@@ -12,7 +12,7 @@ public class TP02 {
     private static InputReader in;
     static PrintWriter out;
 
-    static CircularDoublyLL<Mesin> Permainan = new CircularDoublyLL<Mesin>();
+    static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>();
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -22,10 +22,50 @@ public class TP02 {
 
         // input
 
+        TESTCircularDoublyLL();
+
         out.close();
     }
 
     // method
+
+    static void TESTCircularDoublyLL() {
+        // add last 1
+        Mesin mesinBaru = new Mesin(1);
+        daftarMesin.addLast(mesinBaru);
+        daftarMesin.print();
+        // add last 2
+        mesinBaru = new Mesin(2);
+        daftarMesin.addLast(mesinBaru);
+        daftarMesin.print();
+        // remove last 1
+        daftarMesin.removeLast();
+        daftarMesin.print();
+        // remove last 2
+        daftarMesin.removeLast();
+        daftarMesin.print();
+        // remove last 3 => error
+        // daftarMesin.removeLast();
+        // daftarMesin.print();
+
+        // add first 1
+        mesinBaru = new Mesin(3);
+        daftarMesin.addFirst(mesinBaru);
+        daftarMesin.print();
+        // add first 2
+        mesinBaru = new Mesin(4);
+        daftarMesin.addFirst(mesinBaru);
+        daftarMesin.print();
+        // remove first 1
+        daftarMesin.removeFirst();
+        daftarMesin.print();
+        // remove first 2
+        daftarMesin.removeFirst();
+        daftarMesin.print();
+        // remove first 3 => error
+        // daftarMesin.removeFirst();
+        // daftarMesin.print();
+    }
 
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
@@ -73,8 +113,10 @@ class Mesin {
     Mesin prev, next;
     AVLTree scoreTree = new AVLTree(); // penyimpan score
     int popularity = 0;
+    int id;
     
-    Mesin() {
+    Mesin(int id) {
+        this.id = id;
     }
 }
 
@@ -85,8 +127,8 @@ class CircularDoublyLL<E> {
     // construct empty list
     CircularDoublyLL() {
         this.size = 0;
-        this.header = new Mesin();
-        this.footer = new Mesin();
+        this.header = new Mesin(0);
+        this.footer = new Mesin(0);
     }
 
     // sepertinya done (belum dicek)
@@ -123,14 +165,17 @@ class CircularDoublyLL<E> {
     // sepertinya done (belum dicek)
     void addLast(Mesin mesin) {
         if (this.size == 0) { // empty
-            mesin.prev = footer.prev; // mesin thingy first
-            mesin.prev.next = mesin;      
+            footer.prev = mesin;
+            mesin.next = footer;
+            header.next = mesin;
+            mesin.prev = header;
+
         } else { // is exist
             footer.prev.next = mesin;
             mesin.prev = footer.prev;
+            mesin.next = footer;
+            footer.prev = mesin;
         }
-        mesin.next = footer;
-        footer.prev = mesin;
 
         this.size += 1;
     }
@@ -175,6 +220,20 @@ class CircularDoublyLL<E> {
             return footer.prev;
         } 
         return mesin.prev;
+    }
+
+    // TEST
+    void print() {
+        if (this.size == 0) {
+            System.out.println("List Kosong :D");
+        } else {
+            Mesin mesin = header.next;
+            while (mesin != footer) {
+                System.out.print(mesin.id + " ");
+                mesin = mesin.next;
+            }
+        }
+        System.out.println();
     }
 }
 
