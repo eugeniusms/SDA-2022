@@ -53,4 +53,16 @@ public class TP02 {
 
 // class
 
-// references
+class Mesin {
+    
+}
+
+// References:
+
+// HAPUS (JANGAN LUPA DIBALANCING SETELAH DIHAPUS), 
+// *OPSI 1* FIND GREATEST K-TH NODE THEN DELETE NODE WITH FUNCTION DELETENODE (NO REBALANCING)
+// *OPSI 2* FIND MAX -> DELETE -> FIND MAX -> DELETE ... N TIMES (LIKED)
+// *OPSI 3* FIND MAX -> PREDECESSOR -> DELETE -> PREDECESSOR ... N TIMES (OVERSEARCH)
+// 1) https://www.geeksforgeeks.org/kth-largest-element-bst-using-constant-extra-space/
+// 2) https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
+// 3) https://favtutor.com/blogs/avl-tree-python#:~:text=Insertion%20and%20Deletion%20time%20complexity,tree%20and%20red%2Dblack%20tree.
