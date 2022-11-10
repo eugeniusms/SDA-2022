@@ -135,6 +135,7 @@ class CircularDoublyLL<E> {
         this.size += 1;
     }
 
+    // sepertinya done (belum dicek)
     void removeLast() {
         if (this.size == 0) { // empty
             // do nothing
