@@ -65,6 +65,26 @@ public class TP02 {
         // remove first 3 => error
         // daftarMesin.removeFirst();
         // daftarMesin.print();
+
+        // add first 1
+        Mesin mesinBaru5 = new Mesin(5);
+        daftarMesin.addFirst(mesinBaru5);
+        daftarMesin.print();
+        // add last 1
+        Mesin mesinBaru6 = new Mesin(6);
+        daftarMesin.addLast(mesinBaru6);
+        daftarMesin.print();
+        // add first 2
+        Mesin mesinBaru7 = new Mesin(7);
+        daftarMesin.addFirst(mesinBaru7);
+        daftarMesin.print();
+        // add last 2
+        Mesin mesinBaru8 = new Mesin(8);
+        daftarMesin.addLast(mesinBaru8);
+        daftarMesin.print();
+        // swap 5 <=> 7
+        daftarMesin.swap(mesinBaru5, mesinBaru7);
+        daftarMesin.print();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -222,16 +242,30 @@ class CircularDoublyLL<E> {
         return mesin.prev;
     }
 
+    void swap(Mesin satu, Mesin dua) {
+        // temp variable
+       
+        if (satu.equals(dua)) {
+            // do nothing
+        } else if (satu.next.equals(dua)) { // saat bersebelahan [1]->[2]
+  
+        } else {
+            
+        }
+    }
+
     // TEST
     void print() {
         if (this.size == 0) {
-            System.out.println("List Kosong :D");
+            System.out.println("List: Kosong :D");
         } else {
             Mesin mesin = header.next;
+            System.out.print("List: header->");
             while (mesin != footer) {
-                System.out.print(mesin.id + " ");
+                System.out.print("[" + mesin.id + "]->");
                 mesin = mesin.next;
             }
+            System.out.print("footer");
         }
         System.out.println();
     }
