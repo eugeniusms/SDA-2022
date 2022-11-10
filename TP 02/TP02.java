@@ -150,6 +150,32 @@ class CircularDoublyLL<E> {
 
         this.size -= 1;
     }
+
+    // get kanan mesin
+    Mesin gerakKanan(Mesin mesin) {
+        if (this.size == 0) { // empty
+            // do nothing
+            throw new NullPointerException("LinkedList Size is 0");
+        } else if (this.size == 1) { // cuma satu elemen
+            return mesin;
+        } else if (mesin.next == footer) { // elemen terakhir
+            return header.next;
+        }
+        return mesin.next;
+    }
+
+    // get kiri mesin
+    Mesin gerakKiri(Mesin mesin) {
+        if (this.size == 0) {
+            // do nothing
+            throw new NullPointerException("LinkedList Size is 0");
+        } else if (this.size == 1) {
+            return mesin;
+        } else if (mesin.prev == header) { // elemen pertama
+            return footer.prev;
+        } 
+        return mesin.prev;
+    }
 }
 
 // ====================================== AVL THINGS ====================================
