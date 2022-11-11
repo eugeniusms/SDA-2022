@@ -82,9 +82,12 @@ public class TP02 {
         Mesin mesinBaru8 = new Mesin(8);
         daftarMesin.addLast(mesinBaru8);
         daftarMesin.print();
-        // swap 5 <=> 7
-        daftarMesin.swap(mesinBaru5, mesinBaru7);
+        // swap 5 <=> 8
+        daftarMesin.swap(mesinBaru5, mesinBaru8);
         daftarMesin.print();
+        // swap 5 <=> 7
+        // daftarMesin.swap(mesinBaru5, mesinBaru7);
+        // daftarMesin.print();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -244,13 +247,25 @@ class CircularDoublyLL<E> {
 
     void swap(Mesin satu, Mesin dua) {
         // temp variable
+        Mesin satuPrev = satu.prev;
+        Mesin satuNext = satu.next;
+        Mesin duaPrev = dua.prev;
+        Mesin duaNext = dua.next;
        
         if (satu.equals(dua)) {
             // do nothing
-        } else if (satu.next.equals(dua)) { // saat bersebelahan [1]->[2]
-  
-        } else {
+        } else if (satuNext.equals(dua)) { // saat bersebelahan [1]->[2]
             
+        } else {
+            dua.prev = satuPrev;
+            dua.next = satuNext;
+            satuPrev.next = dua;
+            satuNext.prev = dua;
+
+            satu.prev = duaPrev;
+            satu.next = duaNext;
+            duaPrev.next = satu;
+            duaNext.prev = satu;
         }
     }
 
