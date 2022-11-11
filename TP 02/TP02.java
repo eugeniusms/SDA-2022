@@ -82,12 +82,24 @@ public class TP02 {
         Mesin mesinBaru8 = new Mesin(8);
         daftarMesin.addLast(mesinBaru8);
         daftarMesin.print();
+
         // swap 5 <=> 7
         daftarMesin.swap(mesinBaru5, mesinBaru7);
         daftarMesin.print();
         // swap 5 <=> 8
         daftarMesin.swap(mesinBaru5, mesinBaru8);
         daftarMesin.print();   
+
+        // remove 7
+        daftarMesin.remove(mesinBaru7);
+        daftarMesin.print();
+        // add first 7
+        daftarMesin.addFirst(mesinBaru7);
+        daftarMesin.print();
+        // pindah mesin 6 ke pojok kanan
+        Mesin ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
+        daftarMesin.print();
+        System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id);
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -219,7 +231,24 @@ class CircularDoublyLL<E> {
         this.size -= 1;
     }
 
-    // get kanan mesin
+    // done
+    Mesin remove(Mesin mesin) {
+        if (this.size == 0) { // empty
+            // do nothing
+            throw new NullPointerException("LinkedList Size is 0");
+        } else if (this.size == 1) { // tidak ada elemen kedua
+            header.next = footer;
+            footer.prev = header;
+        } else { // saat ada lebih dari 1 node
+            mesin.prev.next = mesin.next;
+            mesin.next.prev = mesin.prev;
+        }
+
+        this.size -= 1;
+        return mesin;
+    }
+
+    // get kanan mesin untuk ditempati budi
     Mesin gerakKanan(Mesin mesin) {
         if (this.size == 0) { // empty
             // do nothing
@@ -232,7 +261,7 @@ class CircularDoublyLL<E> {
         return mesin.next;
     }
 
-    // get kiri mesin
+    // get kiri mesin untuk ditempati budi
     Mesin gerakKiri(Mesin mesin) {
         if (this.size == 0) {
             // do nothing
@@ -243,6 +272,24 @@ class CircularDoublyLL<E> {
             return footer.prev;
         } 
         return mesin.prev;
+    }
+
+    // pindah mesin sekaligus mereturn mesin untuk ditempati budi
+    Mesin pindahMesin(Mesin mesin) {
+        if (this.size == 0) {
+            // do nothing
+            throw new NullPointerException("LinkedList Size is 0");
+        } else if (this.size == 1) { // cuma satu mesin permainan
+            return mesin;
+        } else if (mesin.next == footer) { // paling kanan
+            return header.next;
+        } else { // sisanya
+            // pindah mesin ke pojok kanan
+            Mesin tempatBaruBudi = gerakKanan(mesin);
+            Mesin mesinDipindah = remove(mesin);
+            this.addLast(mesinDipindah);
+            return tempatBaruBudi;
+        }
     }
 
     // swap [1]<->[2] = [2]<->[1]
