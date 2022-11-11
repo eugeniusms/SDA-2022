@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
-import java.util.LinkedList;
 
 public class TP02 {
 
@@ -13,6 +12,7 @@ public class TP02 {
     static PrintWriter out;
 
     static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>();
+    static AVLTree tree = new AVLTree();
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -23,6 +23,7 @@ public class TP02 {
         // input
 
         TESTCircularDoublyLL();
+        TESTAVLTree();
 
         out.close();
     }
@@ -104,6 +105,26 @@ public class TP02 {
         ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
         daftarMesin.print();
         System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
+    }
+
+    static void TESTAVLTree() {
+        // balance tree
+        tree.root = tree.insert(tree.root, 8);
+        tree.root = tree.insert(tree.root, 4);
+        tree.root = tree.insert(tree.root, 12);
+        tree.root = tree.insert(tree.root, 2);
+        tree.root = tree.insert(tree.root, 6);
+        tree.root = tree.insert(tree.root, 10);
+        tree.root = tree.insert(tree.root, 14);
+        tree.root = tree.insert(tree.root, 1);
+        tree.root = tree.insert(tree.root, 3);
+        tree.root = tree.insert(tree.root, 5);
+        tree.root = tree.insert(tree.root, 7);
+        tree.root = tree.insert(tree.root, 9);
+        tree.root = tree.insert(tree.root, 11);
+        tree.root = tree.insert(tree.root, 13);
+        tree.root = tree.insert(tree.root, 15);
+        tree.printInorder();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -368,6 +389,7 @@ class CircularDoublyLL<E> {
 class Node { // AVL Node
     int key, height, count, sum; // key => score
     Node left, right;
+    // Stack stack; jumlah yg sama aja kali ya?
 
     Node(int key) {
         this.key = key;
@@ -420,15 +442,15 @@ class AVLTree {
     }
 
     // Implement insert node to AVL Tree
-    Node insertNode(Node node, int key) {
+    Node insert(Node node, int key) {
         if (node == null) {
             return (new Node(key));
         }
 
         if (key < node.key) {
-            node.left = insertNode(node.left, key);
+            node.left = insert(node.left, key);
         } else if (key > node.key) {
-            node.right = insertNode(node.right, key);
+            node.right = insert(node.right, key);
         } else {
             return node;
         }
@@ -468,14 +490,14 @@ class AVLTree {
     }
 
     // Delete a node
-    Node deleteNode(Node root, int key) {
+    Node delete(Node root, int key) {
         // Find the node to be deleted and remove it
         if (root == null)
         return root;
         if (key < root.key)
-        root.left = deleteNode(root.left, key);
+        root.left = delete(root.left, key);
         else if (key > root.key)
-        root.right = deleteNode(root.right, key);
+        root.right = delete(root.right, key);
         else {
         if ((root.left == null) || (root.right == null)) {
             Node temp = null;
@@ -491,7 +513,7 @@ class AVLTree {
         } else {
             Node temp = lowerBound(root.right);
             root.key = temp.key;
-            root.right = deleteNode(root.right, temp.key);
+            root.right = delete(root.right, temp.key);
         }
         }
         if (root == null)
@@ -676,12 +698,32 @@ class AVLTree {
         }
         return searchNodePop(root.right, key);
     }
+
+    void inOrder(Node node) {
+        if (node == null)
+            return;
+ 
+        /* first recur on left child */
+        inOrder(node.left);
+        /* then print the data of node */
+        System.out.print(node.key +"["+ node.count + "]---");
+        /* now recur on right child */
+        inOrder(node.right);
+    }
+ 
+    // Wrappers over above recursive functions
+    void printInorder() { 
+        System.out.println("IN ORDER TREE: ");
+        inOrder(root); 
+        System.out.println();
+    }
 }
 
 // References:
 
 // Data Structure:
 // 1) https://www.w3schools.com/java/java_linkedlist.asp
+// 2) https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
 
 // HAPUS (JANGAN LUPA DIBALANCING SETELAH DIHAPUS), 
 // *OPSI 0* USE node.sum FOR DELETING SEKALIGUS (MUST LEARN REBALANCING SUBTREE TO TREE) (BETTER)
