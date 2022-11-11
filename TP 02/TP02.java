@@ -11,9 +11,8 @@ public class TP02 {
     private static InputReader in;
     static PrintWriter out;
 
-    static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>();
+    static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>(); // include budi di dalamnya
     static AVLTree tree = new AVLTree();
-    static Budi budi;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -47,14 +46,16 @@ public class TP02 {
 
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(terpopuler);
-        out.println(daftarMesin.budiNow.id);
+        // out.println(daftarMesin.budiNow.id); // TEST
 
         // QUERY
         int Q = in.nextInt();
         for(int i = 1; i <= Q; i++) {
             String query = in.next();
-            if (query.equals("GERAK")) {
-                gerak();
+            if (query.equals("MAIN")) {
+                MAIN();
+            } else if (query.equals("GERAK")) {
+                GERAK();
             }
         }
 
@@ -63,7 +64,18 @@ public class TP02 {
 
     // method
 
-    static void gerak() {
+    static void MAIN() { // TODO: BELUM INCLUDE STACK/QUEUE DI DALAMNYA
+        int insertedKey = in.nextInt();
+        // insert score to tree
+        AVLTree budiTree = daftarMesin.budiNow.scoreTree;
+        budiTree.root = budiTree.insert(budiTree.root, insertedKey);
+        // get result
+        int sumOfCount = budiTree.root.count;
+        int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
+        out.println(sumOfCount - sumOfBefore);
+    }
+
+    static void GERAK() {
         String arah = in.next();
         if (arah.equals("KIRI")) {
             out.println(daftarMesin.gerakKiri().id);
@@ -201,14 +213,6 @@ public class TP02 {
 // IDE:
 // LinkedList<Mesin> (LinkedList)
 // Mesin.root (AVLTree)
-
-class Budi {
-    Mesin now;
-
-    Budi(Mesin now) {
-        this.now = now;
-    }
-}
 
 // ================================== LINKEDLIST THINGS ==================================
 
@@ -787,6 +791,28 @@ class AVLTree {
         System.out.println("PRE-ORDER TREE: ");
         preOrder(root); 
         System.out.println();
+    }
+
+    // QUERY MAIN, LIHAT
+    int countBefore(Node node, int insertedKey) {
+        if (node.key == insertedKey) {
+            // cek kiri
+            if (node.left != null) {
+                return node.left.count;
+            } else {
+                return 0;
+            }
+        }
+        if (node.key < insertedKey) {
+            // cek kiri lalu, ke kanan
+            if (node.left != null) {
+                return 1 + node.left.count + countBefore(node.right, insertedKey);
+            } else {
+                return 1 + countBefore(node.right, insertedKey);
+            }
+        }
+        // ke kiri
+        return countBefore(node.left, insertedKey);
     }
 }
 
