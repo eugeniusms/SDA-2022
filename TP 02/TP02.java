@@ -124,7 +124,8 @@ public class TP02 {
         tree.root = tree.insert(tree.root, 11);
         tree.root = tree.insert(tree.root, 13);
         tree.root = tree.insert(tree.root, 15);
-        tree.printInorder();
+        tree.printInOrder();
+        tree.printPreOrder();
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -699,6 +700,7 @@ class AVLTree {
         return searchNodePop(root.right, key);
     }
 
+    // in order traversal
     void inOrder(Node node) {
         if (node == null)
             return;
@@ -712,9 +714,26 @@ class AVLTree {
     }
  
     // Wrappers over above recursive functions
-    void printInorder() { 
-        System.out.println("IN ORDER TREE: ");
+    void printInOrder() { 
+        System.out.println("IN-ORDER TREE: ");
         inOrder(root); 
+        System.out.println();
+    }
+
+    // pre order traversal
+    void preOrder(Node node) {
+        if (node == null)
+            return;
+
+        System.out.print(node.key +"["+ node.count + "]---");
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+ 
+    // Wrappers over above recursive functions
+    void printPreOrder() { 
+        System.out.println("PRE-ORDER TREE: ");
+        preOrder(root); 
         System.out.println();
     }
 }
