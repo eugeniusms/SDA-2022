@@ -13,6 +13,7 @@ public class TP02 {
 
     static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>();
     static AVLTree tree = new AVLTree();
+    static Budi budi;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -22,21 +23,61 @@ public class TP02 {
 
         // input
 
-        TESTCircularDoublyLL();
-        TESTAVLTree();
+        // TESTCircularDoublyLL();
+        // TESTAVLTree();
+
+        // INISIALISASI INPUT
+        int N = in.nextInt(); // banyak mesin
+        Mesin terpopuler = null;
+        int maxi = -999999;
+        for(int i = 1; i <= N; i++) {
+            int M = in.nextInt(); // banyak score
+            AVLTree scoreTree = new AVLTree();
+            for(int s = 1; s <= M; s++) {
+                int S = in.nextInt(); // daftar score
+                scoreTree.root = scoreTree.insert(scoreTree.root, S);
+            }
+            Mesin mesin = new Mesin(i, scoreTree);
+            daftarMesin.addLast(mesin);
+            if (M > maxi) {
+                maxi = M;
+                terpopuler = mesin;
+            }
+        }
+
+        // INISIALISASI BUDI
+        budi = new Budi(terpopuler);
+
+        // QUERY
+        int Q = in.nextInt();
+        for(int i = 1; i <= Q; i++) {
+            String query = in.next();
+            if (query == "GERAK") {
+                gerak();
+            }
+        }
 
         out.close();
     }
 
     // method
 
+    static void gerak() {
+        String arah = in.next();
+        if (arah == "KIRI") {
+            budi.now = budi.now.gerakKiri();
+        } else {
+
+        }
+    }
+
     static void TESTCircularDoublyLL() {
         // add last 1
-        Mesin mesinBaru = new Mesin(1);
+        Mesin mesinBaru = new Mesin(1, tree);
         daftarMesin.addLast(mesinBaru);
         daftarMesin.print();
         // add last 2
-        mesinBaru = new Mesin(2);
+        mesinBaru = new Mesin(2, tree);
         daftarMesin.addLast(mesinBaru);
         daftarMesin.print();
         // remove last 1
@@ -50,11 +91,11 @@ public class TP02 {
         // daftarMesin.print();
 
         // add first 1
-        mesinBaru = new Mesin(3);
+        mesinBaru = new Mesin(3, tree);
         daftarMesin.addFirst(mesinBaru);
         daftarMesin.print();
         // add first 2
-        mesinBaru = new Mesin(4);
+        mesinBaru = new Mesin(4, tree);
         daftarMesin.addFirst(mesinBaru);
         daftarMesin.print();
         // remove first 1
@@ -68,19 +109,19 @@ public class TP02 {
         // daftarMesin.print();
 
         // add first 1
-        Mesin mesinBaru5 = new Mesin(5);
+        Mesin mesinBaru5 = new Mesin(5, tree);
         daftarMesin.addFirst(mesinBaru5);
         daftarMesin.print();
         // add last 1
-        Mesin mesinBaru6 = new Mesin(6);
+        Mesin mesinBaru6 = new Mesin(6, tree);
         daftarMesin.addLast(mesinBaru6);
         daftarMesin.print();
         // add first 2
-        Mesin mesinBaru7 = new Mesin(7);
+        Mesin mesinBaru7 = new Mesin(7, tree);
         daftarMesin.addFirst(mesinBaru7);
         daftarMesin.print();
         // add last 2
-        Mesin mesinBaru8 = new Mesin(8);
+        Mesin mesinBaru8 = new Mesin(8, tree);
         daftarMesin.addLast(mesinBaru8);
         daftarMesin.print();
 
@@ -172,13 +213,16 @@ class Budi {
 
 class Mesin {
     Mesin prev, next;
-    AVLTree scoreTree = new AVLTree(); // penyimpan score
+    AVLTree scoreTree; // penyimpan score
     int popularity = 0;
     int id;
     
-    Mesin(int id) {
+    Mesin(int id, AVLTree scoreTree) {
         this.id = id;
+        this.scoreTree = scoreTree;
     }
+
+    void gerakKiri()
 }
 
 class CircularDoublyLL<E> {
@@ -188,8 +232,8 @@ class CircularDoublyLL<E> {
     // construct empty list
     CircularDoublyLL() {
         this.size = 0;
-        this.header = new Mesin(0);
-        this.footer = new Mesin(0);
+        this.header = new Mesin(0, null);
+        this.footer = new Mesin(0, null);
     }
 
     // sepertinya done (belum dicek)
