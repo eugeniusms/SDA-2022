@@ -96,10 +96,14 @@ public class TP02 {
         // add first 7
         daftarMesin.addFirst(mesinBaru7);
         daftarMesin.print();
-        // pindah mesin 6 ke pojok kanan
+        // pindah mesin 6 ke pojok kanan, budi ke 5
         Mesin ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
         daftarMesin.print();
-        System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id);
+        System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
+        // pindah mesin 5 ke pojok kanan, budi ke depan
+        ditempatiBudi = daftarMesin.pindahMesin(mesinBaru5);
+        daftarMesin.print();
+        System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
     }
 
     // taken from https://codeforces.com/submissions/Petr
