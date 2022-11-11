@@ -46,13 +46,13 @@ public class TP02 {
         }
 
         // INISIALISASI BUDI
-        budi = new Budi(terpopuler);
+        daftarMesin.setBudiNow(terpopuler);
 
         // QUERY
         int Q = in.nextInt();
         for(int i = 1; i <= Q; i++) {
             String query = in.next();
-            if (query == "GERAK") {
+            if (query.equals("GERAK")) {
                 gerak();
             }
         }
@@ -65,9 +65,9 @@ public class TP02 {
     static void gerak() {
         String arah = in.next();
         if (arah == "KIRI") {
-            budi.now = budi.now.gerakKiri();
+            out.println(daftarMesin.gerakKiri().id);
         } else {
-
+            out.println(daftarMesin.gerakKanan().id);
         }
     }
 
@@ -221,13 +221,12 @@ class Mesin {
         this.id = id;
         this.scoreTree = scoreTree;
     }
-
-    void gerakKiri()
 }
 
 class CircularDoublyLL<E> {
     int size;
     Mesin header, footer; // null node for easier add and remove
+    Mesin budiNow; // untuk menyimpan lokasi budi
     
     // construct empty list
     CircularDoublyLL() {
@@ -318,30 +317,38 @@ class CircularDoublyLL<E> {
         return mesin;
     }
 
+    void setBudiNow(Mesin mesin) {
+        budiNow = mesin;
+    }
+
     // get kanan mesin untuk ditempati budi
-    Mesin gerakKanan(Mesin mesin) {
+    Mesin gerakKanan() {
         if (this.size == 0) { // empty
             // do nothing
             throw new NullPointerException("LinkedList Size is 0");
         } else if (this.size == 1) { // cuma satu elemen
-            return mesin;
-        } else if (mesin.next == footer) { // elemen terakhir
-            return header.next;
+            // do nothing
+        } else if (budiNow.next == footer) { // elemen terakhir
+            budiNow = header.next;
+        } else {
+            budiNow = budiNow.next;
         }
-        return mesin.next;
+        return budiNow;
     }
 
     // get kiri mesin untuk ditempati budi
-    Mesin gerakKiri(Mesin mesin) {
+    Mesin gerakKiri() {
         if (this.size == 0) {
             // do nothing
             throw new NullPointerException("LinkedList Size is 0");
         } else if (this.size == 1) {
-            return mesin;
-        } else if (mesin.prev == header) { // elemen pertama
-            return footer.prev;
-        } 
-        return mesin.prev;
+            // do nothing
+        } else if (budiNow.prev == header) { // elemen pertama
+            budiNow = footer.prev;
+        } else {
+            budiNow = budiNow.prev;
+        }
+        return budiNow;
     }
 
     // pindah mesin sekaligus mereturn mesin untuk ditempati budi
@@ -355,7 +362,7 @@ class CircularDoublyLL<E> {
             return header.next;
         } else { // sisanya
             // pindah mesin ke pojok kanan
-            Mesin tempatBaruBudi = gerakKanan(mesin);
+            Mesin tempatBaruBudi = gerakKanan();
             Mesin mesinDipindah = remove(mesin);
             this.addLast(mesinDipindah);
             return tempatBaruBudi;
