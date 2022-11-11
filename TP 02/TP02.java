@@ -100,8 +100,8 @@ public class TP02 {
         Mesin ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
         daftarMesin.print();
         System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
-        // pindah mesin 5 ke pojok kanan, budi ke depan
-        ditempatiBudi = daftarMesin.pindahMesin(mesinBaru5);
+        // mesin 6 tetep di pojok kanan, budi ke depan
+        ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
         daftarMesin.print();
         System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
     }
@@ -337,6 +337,7 @@ class CircularDoublyLL<E> {
 
     // TEST
     void print() {
+        System.out.println("LinkedList Size is " + this.size);
         if (this.size == 0) {
             System.out.println("List: Kosong :D");
         } else {
