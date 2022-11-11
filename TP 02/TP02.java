@@ -47,6 +47,7 @@ public class TP02 {
 
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(terpopuler);
+        out.println(daftarMesin.budiNow.id);
 
         // QUERY
         int Q = in.nextInt();
@@ -64,7 +65,7 @@ public class TP02 {
 
     static void gerak() {
         String arah = in.next();
-        if (arah == "KIRI") {
+        if (arah.equals("KIRI")) {
             out.println(daftarMesin.gerakKiri().id);
         } else {
             out.println(daftarMesin.gerakKanan().id);
