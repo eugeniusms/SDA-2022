@@ -274,13 +274,23 @@ class CircularDoublyLL<E> {
         if (this.size == 0) {
             System.out.println("List: Kosong :D");
         } else {
+            // dari depan
             Mesin mesin = header.next;
             System.out.print("List: header->");
             while (mesin != footer) {
                 System.out.print("[" + mesin.id + "]->");
                 mesin = mesin.next;
             }
-            System.out.print("footer");
+            System.out.print("footer\n");
+            
+            // dari belakang
+            mesin = footer.prev;
+            System.out.print("List: footer->");
+            while (mesin != header) {
+                System.out.print("[" + mesin.id + "]->");
+                mesin = mesin.prev;
+            }
+            System.out.print("header\n");
         }
         System.out.println();
     }
