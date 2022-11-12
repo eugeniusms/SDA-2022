@@ -109,6 +109,7 @@ public class TP02 {
     static void EVALUASI() {
         daftarMesin.sort(daftarMesin.header.next, daftarMesin.header.prev);
         out.println(daftarMesin.getBudiMesinSortedNow());
+        daftarMesin.print();
     }
 
     static void TESTCircularDoublyLL() {
@@ -469,8 +470,16 @@ class CircularDoublyLL<E> {
         // no need to iterate till the end
         // because end is pivot
         while (start != end) {
-            if (start.scoreTree.root.count < pivot) {
+            if (start.scoreTree.root.count < pivot) { // swap v1
  
+                // keep tracks of last modified item
+                pivot_prev = curr;
+                int temp = curr.scoreTree.root.count;
+                curr.scoreTree.root.count = start.scoreTree.root.count;
+                start.scoreTree.root.count = temp;
+                curr = curr.next;
+            } else if (start.scoreTree.root.count == pivot &&  start.id < end.id) { // swap v2
+                
                 // keep tracks of last modified item
                 pivot_prev = curr;
                 int temp = curr.scoreTree.root.count;
@@ -494,8 +503,8 @@ class CircularDoublyLL<E> {
 
     void sort(Mesin start, Mesin end)
     {
-        if (start == null || start == end
-            || start == end.next)
+        if (start == null || start == end)
+            // || start == end.next)
             return;
  
         // Split list and partition recurse
