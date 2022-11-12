@@ -553,31 +553,31 @@ class AVLTree {
     Node delete(Node root, int key) {
         // Find the node to be deleted and remove it
         if (root == null)
-        return root;
+            return root;
         if (key < root.key)
-        root.left = delete(root.left, key);
+            root.left = delete(root.left, key);
         else if (key > root.key)
-        root.right = delete(root.right, key);
+            root.right = delete(root.right, key);
         else {
-        if ((root.left == null) || (root.right == null)) {
-            Node temp = null;
-            if (temp == root.left)
-            temp = root.right;
-            else
-            temp = root.left;
-            if (temp == null) {
-            temp = root;
-            root = null;
-            } else
-            root = temp;
-        } else {
-            Node temp = lowerBound(root.right);
-            root.key = temp.key;
-            root.right = delete(root.right, temp.key);
-        }
+            if ((root.left == null) || (root.right == null)) {
+                Node temp = null;
+                if (temp == root.left)
+                    temp = root.right;
+                else
+                    temp = root.left;
+                if (temp == null) {
+                    temp = root;
+                    root = null;
+                } else
+                    root = temp;
+            } else {
+                Node temp = lowerBound(root.right);
+                root.key = temp.key;
+                root.right = delete(root.right, temp.key);
+            }
         }
         if (root == null)
-        return root;
+            return root;
 
         // Update the balance factor of each node and balance the tree
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1;
@@ -585,20 +585,20 @@ class AVLTree {
 
         int balanceFactor = getBalance(root);
         if (balanceFactor > 1) {
-        if (getBalance(root.left) >= 0) {
-            return rightRotate(root);
-        } else {
-            root.left = leftRotate(root.left);
-            return rightRotate(root);
-        }
+            if (getBalance(root.left) >= 0) {
+                return rightRotate(root);
+            } else {
+                root.left = leftRotate(root.left);
+                return rightRotate(root);
+            }
         }
         if (balanceFactor < -1) {
-        if (getBalance(root.right) <= 0) {
-            return leftRotate(root);
-        } else {
-            root.right = rightRotate(root.right);
-            return leftRotate(root);
-        }
+            if (getBalance(root.right) <= 0) {
+                return leftRotate(root);
+            } else {
+                root.right = rightRotate(root.right);
+                return leftRotate(root);
+            }
         }
         return root;
     }
