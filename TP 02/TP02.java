@@ -47,6 +47,7 @@ public class TP02 {
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(terpopuler);
         // out.println(daftarMesin.budiNow.id); // TEST
+        daftarMesin.print();
 
         // QUERY
         int Q = in.nextInt();
@@ -470,7 +471,7 @@ class CircularDoublyLL<E> {
         // no need to iterate till the end
         // because end is pivot
         while (start != end) {
-            if (start.scoreTree.root.count < pivot) { // swap v1
+            if (start.scoreTree.root.count > pivot) { // swap v1
  
                 // keep tracks of last modified item
                 pivot_prev = curr;
@@ -539,18 +540,18 @@ class CircularDoublyLL<E> {
         } else {
             // dari depan
             Mesin mesin = header.next;
-            System.out.print("List: header->");
+            System.out.println("List: header->");
             while (mesin != footer) {
-                System.out.print("[" + mesin.id + "]->");
+                System.out.println("[ID: " + mesin.id + "|PO: " + mesin.scoreTree.root.count + "|" + mesin + "]->");
                 mesin = mesin.next;
             }
             System.out.print("footer\n");
             
             // dari belakang
             mesin = footer.prev;
-            System.out.print("List: footer->");
+            System.out.println("List: footer->");
             while (mesin != header) {
-                System.out.print("[" + mesin.id + "]->");
+                System.out.println("[ID: " + mesin.id + "|PO: " + mesin.scoreTree.root.count + "|" + mesin + "]->");
                 mesin = mesin.prev;
             }
             System.out.print("header\n");
