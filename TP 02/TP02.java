@@ -460,7 +460,8 @@ class CircularDoublyLL<E> {
     // the whole linked list
     Mesin paritionLast(Mesin start, Mesin end)
     {
-        if (start == end || start == null || end == null)
+        System.out.println("start: " + start.id + " end: " + end.id);
+        if (start.equals(end) || start.equals(null) || end.equals(null))
             return start;
  
         Mesin pivot_prev = start;
@@ -470,7 +471,7 @@ class CircularDoublyLL<E> {
         // iterate till one before the end,
         // no need to iterate till the end
         // because end is pivot
-        while (start != end) {
+        while (!start.equals(end)) {
             if (start.scoreTree.root.count > pivot) { // swap v1
  
                 // keep tracks of last modified item
@@ -510,7 +511,7 @@ class CircularDoublyLL<E> {
 
     void sort(Mesin start, Mesin end)
     {
-        if (start == null || start == end)
+        if (start.equals(null) || start.equals(end))
             // || start == end.next)
             return;
  
@@ -521,14 +522,13 @@ class CircularDoublyLL<E> {
         // If pivot is picked and moved to the start,
         // that means start and pivot is same
         // so pick from next of pivot
-        if (pivot_prev != null && pivot_prev == start)
+        if (!pivot_prev.equals(null) && pivot_prev.equals(start))
             sort(pivot_prev.next, end);
  
         // If pivot is in between of the list,
         // start from next of pivot,
         // since we have pivot_prev, so we move two nodes
-        else if (pivot_prev != null
-                 && pivot_prev.next != null)
+        else if (!pivot_prev.equals(null) && !pivot_prev.next.equals(null))
             sort(pivot_prev.next.next, end);
     }
 
