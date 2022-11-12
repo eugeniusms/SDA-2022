@@ -107,7 +107,8 @@ public class TP02 {
     }
 
     static void EVALUASI() {
-        
+        daftarMesin.sort(daftarMesin.header.next, daftarMesin.header.prev);
+        out.println(daftarMesin.getBudiMesinSortedNow());
     }
 
     static void TESTCircularDoublyLL() {
@@ -352,6 +353,19 @@ class CircularDoublyLL<E> {
         budiNow = mesin;
     }
 
+    int getBudiMesinSortedNow() {
+        Mesin check = header;
+        int counter = 0;
+        while (check.next != footer) {
+            check = check.next;
+            counter++;
+            if (check.equals(budiNow)) {
+                return counter;
+            }
+        }
+        return size;
+    }
+
     // get kanan mesin untuk ditempati budi
     Mesin gerakKanan() {
         if (this.size == 0) { // empty
@@ -437,6 +451,69 @@ class CircularDoublyLL<E> {
             duaPrev.next = satu;
             duaNext.prev = satu;
         }
+    }
+
+    // Takes first and last node,
+    // but do not break any links in
+    // the whole linked list
+    Mesin paritionLast(Mesin start, Mesin end)
+    {
+        if (start == end || start == null || end == null)
+            return start;
+ 
+        Mesin pivot_prev = start;
+        Mesin curr = start;
+        int pivot = end.scoreTree.root.count;
+ 
+        // iterate till one before the end,
+        // no need to iterate till the end
+        // because end is pivot
+        while (start != end) {
+            if (start.scoreTree.root.count < pivot) {
+ 
+                // keep tracks of last modified item
+                pivot_prev = curr;
+                int temp = curr.scoreTree.root.count;
+                curr.scoreTree.root.count = start.scoreTree.root.count;
+                start.scoreTree.root.count = temp;
+                curr = curr.next;
+            }
+            start = start.next;
+        }
+ 
+        // Swap the position of curr i.e.
+        // next suitable index and pivot
+        int temp = curr.scoreTree.root.count;
+        curr.scoreTree.root.count = pivot;
+        end.scoreTree.root.count = temp;
+ 
+        // Return one previous to current
+        // because current is now pointing to pivot
+        return pivot_prev;
+    }
+
+    void sort(Mesin start, Mesin end)
+    {
+        if (start == null || start == end
+            || start == end.next)
+            return;
+ 
+        // Split list and partition recurse
+        Mesin pivot_prev = paritionLast(start, end);
+        sort(start, pivot_prev);
+ 
+        // If pivot is picked and moved to the start,
+        // that means start and pivot is same
+        // so pick from next of pivot
+        if (pivot_prev != null && pivot_prev == start)
+            sort(pivot_prev.next, end);
+ 
+        // If pivot is in between of the list,
+        // start from next of pivot,
+        // since we have pivot_prev, so we move two nodes
+        else if (pivot_prev != null
+                 && pivot_prev.next != null)
+            sort(pivot_prev.next.next, end);
     }
 
     // TEST
