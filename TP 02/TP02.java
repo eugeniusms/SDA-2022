@@ -355,16 +355,16 @@ class CircularDoublyLL<E> {
     }
 
     int getBudiMesinSortedNow() {
+        System.out.println(budiNow.id);
+
         Mesin check = header;
         int counter = 0;
-        while (check.next != footer) {
-            check = check.next;
+        while (!check.equals(budiNow)) {
+            System.out.print(check.id + " ");
             counter++;
-            if (check.equals(budiNow)) {
-                return counter;
-            }
+            check = check.next;
         }
-        return size;
+        return counter;
     }
 
     // get kanan mesin untuk ditempati budi
@@ -474,17 +474,21 @@ class CircularDoublyLL<E> {
  
                 // keep tracks of last modified item
                 pivot_prev = curr;
-                int temp = curr.scoreTree.root.count;
-                curr.scoreTree.root.count = start.scoreTree.root.count;
-                start.scoreTree.root.count = temp;
+                // swap curr <-> start
+                // int temp = curr.scoreTree.root.count;
+                // curr.scoreTree.root.count = start.scoreTree.root.count;
+                // start.scoreTree.root.count = temp;
+                swap(curr, start);
                 curr = curr.next;
             } else if (start.scoreTree.root.count == pivot &&  start.id < end.id) { // swap v2
                 
                 // keep tracks of last modified item
                 pivot_prev = curr;
-                int temp = curr.scoreTree.root.count;
-                curr.scoreTree.root.count = start.scoreTree.root.count;
-                start.scoreTree.root.count = temp;
+                // swap curr <-> start
+                // int temp = curr.scoreTree.root.count;
+                // curr.scoreTree.root.count = start.scoreTree.root.count;
+                // start.scoreTree.root.count = temp;
+                swap(curr, start);
                 curr = curr.next;
             }
             start = start.next;
@@ -492,9 +496,11 @@ class CircularDoublyLL<E> {
  
         // Swap the position of curr i.e.
         // next suitable index and pivot
-        int temp = curr.scoreTree.root.count;
-        curr.scoreTree.root.count = pivot;
-        end.scoreTree.root.count = temp;
+        // swap curr <-> end
+        // int temp = curr.scoreTree.root.count;
+        // curr.scoreTree.root.count = pivot;
+        // end.scoreTree.root.count = temp;
+        swap(curr, end);
  
         // Return one previous to current
         // because current is now pointing to pivot
