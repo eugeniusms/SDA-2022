@@ -446,13 +446,14 @@ class CircularDoublyLL<E> {
 class Node { // AVL Node
     int key, height, count, sum; // key => score
     Node left, right;
-    // Stack stack; jumlah yg sama aja kali ya?
+    int jumlahSama; // jumlah isi key yg sama // URUSAN TERKAIT DELETE & INSERT PADA AVLTREE
 
     Node(int key) {
         this.key = key;
         this.height = 1;
         this.count = 1;
-        this.sum = key;
+        this.sum = key; 
+        this.jumlahSama = 1;
     }
 }
 
@@ -509,6 +510,8 @@ class AVLTree {
         } else if (key > node.key) {
             node.right = insert(node.right, key);
         } else {
+            // no duplication
+            node.jumlahSama += 1;
             return node;
         }
 
