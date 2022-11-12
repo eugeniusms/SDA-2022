@@ -56,6 +56,12 @@ public class TP02 {
                 MAIN();
             } else if (query.equals("GERAK")) {
                 GERAK();
+            } else if (query.equals("HAPUS")) {
+                HAPUS();
+            } else if (query.equals("LIHAT")) {
+                LIHAT();
+            } else if (query.equals("EVALUASI")) {
+                EVALUASI();
             }
         }
 
@@ -82,6 +88,26 @@ public class TP02 {
         } else {
             out.println(daftarMesin.gerakKanan().id);
         }
+    }
+
+    // TODO: Susun Algoritma HAPUS
+    static void HAPUS() {
+        int X = in.nextInt();
+    }
+
+    static void LIHAT() {
+        int lowkey = in.nextInt();
+        int highkey = in.nextInt();
+        // get count before && count after
+        AVLTree budiTree = daftarMesin.budiNow.scoreTree;
+        int sumOfBefore = budiTree.countBefore(budiTree.root, lowkey);
+        int sumOfAfter = budiTree.countAfter(budiTree.root, highkey);
+        // get result
+        out.println(budiTree.root.count - sumOfBefore - sumOfAfter);
+    }
+
+    static void EVALUASI() {
+        
     }
 
     static void TESTCircularDoublyLL() {
@@ -816,6 +842,28 @@ class AVLTree {
         }
         // ke kiri
         return countBefore(node.left, insertedKey);
+    }
+
+    // QUERY LIHAT
+    int countAfter(Node node, int insertedKey) {
+        if (node.key == insertedKey) {
+            // cek kanan
+            if (node.right != null) {
+                return node.right.count;
+            } else {
+                return 0;
+            }
+        }
+        if (node.key < insertedKey) {
+            // ke kanan
+            return countAfter(node.right, insertedKey);
+        }
+        // cek kanan lalu, ke kiri
+        if (node.right != null) {
+            return 1 + node.right.count + countAfter(node.left, insertedKey);
+        } else {
+            return 1 + countAfter(node.left, insertedKey);
+        }
     }
 }
 
