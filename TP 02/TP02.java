@@ -467,15 +467,15 @@ class CircularDoublyLL<E> {
     // Merges two subarrays of arr[].
     // First subarray is arr[l..m]
     // Second subarray is arr[m+1..r]
-    void merge(int arr[], int l, int m, int r)
+    void merge(Mesin arr[], int l, int m, int r)
     {
         // Find sizes of two subarrays to be merged
         int n1 = m - l + 1;
         int n2 = r - m;
  
         /* Create temp arrays */
-        int L[] = new int[n1];
-        int R[] = new int[n2];
+        Mesin L[] = new Mesin[n1];
+        Mesin R[] = new Mesin[n2];
  
         /*Copy data to temp arrays*/
         for (int i = 0; i < n1; ++i)
@@ -491,7 +491,7 @@ class CircularDoublyLL<E> {
         // Initial index of merged subarray array
         int k = l;
         while (i < n1 && j < n2) {
-            if (L[i] <= R[j]) {
+            if (L[i].scoreTree.root.count <= R[j].scoreTree.root.count) {
                 arr[k] = L[i];
                 i++;
             }
@@ -517,7 +517,7 @@ class CircularDoublyLL<E> {
         }
     }
 
-    void mergesort(int arr[], int l, int r) {
+    void mergesort(Mesin arr[], int l, int r) {
         // sort array pakai merge sort
         if (l < r) {
             // Find the middle point
@@ -539,6 +539,12 @@ class CircularDoublyLL<E> {
         for(int i = 0; i < this.size; i++) {
             arr[i] = masuk;
             masuk = masuk.next;
+        }
+        mergesort(arr, 0, this.size - 1);
+
+        // print array
+        for(int i = 0; i < this.size; i++) {
+            System.out.println(arr[i].scoreTree.root.count);
         }
     }
 
