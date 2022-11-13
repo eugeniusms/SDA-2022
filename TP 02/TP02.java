@@ -115,7 +115,7 @@ public class TP02 {
             daftarMesin.addLast(arr[i]);
         }
         out.println(daftarMesin.getBudiMesinSortedNow());
-        daftarMesin.print();
+        // daftarMesin.print();
     }
 
     static void TESTCircularDoublyLL() {
@@ -370,7 +370,7 @@ class CircularDoublyLL<E> {
     }
 
     int getBudiMesinSortedNow() {
-        System.out.println(budiNow.id);
+        // System.out.println(budiNow.id);
 
         Mesin check = header;
         int counter = 0;
