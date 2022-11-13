@@ -108,7 +108,12 @@ public class TP02 {
     }
 
     static void EVALUASI() {
-        daftarMesin.sort();
+        Mesin[] arr = daftarMesin.sort(); // wujud sorted adalah array
+        // insert new data sorted to daftarMesin after reset the list
+        daftarMesin.clear();
+        for(int i = 0; i < arr.length; i++) {
+            daftarMesin.addLast(arr[i]);
+        }
         out.println(daftarMesin.getBudiMesinSortedNow());
         daftarMesin.print();
     }
@@ -464,6 +469,13 @@ class CircularDoublyLL<E> {
         }
     }
 
+    void clear() {
+        header.next = footer;
+        footer.prev = header;
+
+        this.size = 0;
+    }
+
     // Merges two subarrays of arr[].
     // First subarray is arr[l..m]
     // Second subarray is arr[m+1..r]
@@ -532,7 +544,7 @@ class CircularDoublyLL<E> {
         }
     }
 
-    void sort() {
+    Mesin[] sort() {
         // masukkan ke dalam array
         Mesin[] arr = new Mesin[this.size];
         Mesin masuk = header.next;
@@ -542,10 +554,13 @@ class CircularDoublyLL<E> {
         }
         mergesort(arr, 0, this.size - 1);
 
+        return arr;
+
         // print array
-        for(int i = 0; i < this.size; i++) {
-            System.out.println(arr[i].scoreTree.root.count);
-        }
+        // for(int i = 0; i < this.size; i++) {
+        //     // System.out.println(arr[i].scoreTree.root.count);
+        //     this.addLast(arr[i]);
+        // }
     }
 
     // TEST
