@@ -108,7 +108,7 @@ public class TP02 {
     }
 
     static void EVALUASI() {
-        daftarMesin.sort(daftarMesin.header.next, daftarMesin.header.prev);
+        daftarMesin.sort();
         out.println(daftarMesin.getBudiMesinSortedNow());
         daftarMesin.print();
     }
@@ -351,6 +351,15 @@ class CircularDoublyLL<E> {
         return mesin;
     }
 
+    void insertBetween(Mesin a, Mesin b, Mesin mesin) {
+        a.next = mesin;
+        mesin.prev = a;
+        mesin.next = b;
+        b.prev = mesin;
+        
+        this.size += 1;
+    }
+
     void setBudiNow(Mesin mesin) {
         budiNow = mesin;
     }
@@ -455,81 +464,18 @@ class CircularDoublyLL<E> {
         }
     }
 
-    // Takes first and last node,
-    // but do not break any links in
-    // the whole linked list
-    Mesin paritionLast(Mesin start, Mesin end)
-    {
-        System.out.println("start: " + start.id + " end: " + end.id);
-        if (start.equals(end) || start.equals(null) || end.equals(null))
-            return start;
- 
-        Mesin pivot_prev = start;
-        Mesin curr = start;
-        int pivot = end.scoreTree.root.count;
- 
-        // iterate till one before the end,
-        // no need to iterate till the end
-        // because end is pivot
-        while (!start.equals(end)) {
-            if (start.scoreTree.root.count > pivot) { // swap v1
- 
-                // keep tracks of last modified item
-                pivot_prev = curr;
-                // swap curr <-> start
-                // int temp = curr.scoreTree.root.count;
-                // curr.scoreTree.root.count = start.scoreTree.root.count;
-                // start.scoreTree.root.count = temp;
-                swap(curr, start);
-                curr = curr.next;
-            } else if (start.scoreTree.root.count == pivot &&  start.id < end.id) { // swap v2
-                
-                // keep tracks of last modified item
-                pivot_prev = curr;
-                // swap curr <-> start
-                // int temp = curr.scoreTree.root.count;
-                // curr.scoreTree.root.count = start.scoreTree.root.count;
-                // start.scoreTree.root.count = temp;
-                swap(curr, start);
-                curr = curr.next;
+    void sort() {
+        Mesin key = header.next;
+        while(key != footer) {
+            Mesin temp = key.next;
+            while(temp != footer && key.scoreTree != null && temp.scoreTree != null) {
+                if (key.scoreTree.root.count > temp.scoreTree.root.count) {
+                    swap(key, temp);
+                }
+                temp = temp.next;
             }
-            start = start.next;
+            key = key.next;
         }
- 
-        // Swap the position of curr i.e.
-        // next suitable index and pivot
-        // swap curr <-> end
-        // int temp = curr.scoreTree.root.count;
-        // curr.scoreTree.root.count = pivot;
-        // end.scoreTree.root.count = temp;
-        swap(curr, end);
- 
-        // Return one previous to current
-        // because current is now pointing to pivot
-        return pivot_prev;
-    }
-
-    void sort(Mesin start, Mesin end)
-    {
-        if (start.equals(null) || start.equals(end))
-            // || start == end.next)
-            return;
- 
-        // Split list and partition recurse
-        Mesin pivot_prev = paritionLast(start, end);
-        sort(start, pivot_prev);
- 
-        // If pivot is picked and moved to the start,
-        // that means start and pivot is same
-        // so pick from next of pivot
-        if (!pivot_prev.equals(null) && pivot_prev.equals(start))
-            sort(pivot_prev.next, end);
- 
-        // If pivot is in between of the list,
-        // start from next of pivot,
-        // since we have pivot_prev, so we move two nodes
-        else if (!pivot_prev.equals(null) && !pivot_prev.next.equals(null))
-            sort(pivot_prev.next.next, end);
     }
 
     // TEST
@@ -978,3 +924,5 @@ class AVLTree {
 // EVALUASI
 // 1) https://www.geeksforgeeks.org/quick-sort/
 // 2) https://visualgo.net/en/sorting
+// 3) https://www.geeksforgeeks.org/quicksort-on-singly-linked-list/
+// 4) https://www.geeksforgeeks.org/insertion-sort/
