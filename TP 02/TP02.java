@@ -42,8 +42,8 @@ public class TP02 {
         daftarMesin.sort();
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
-        out.println("BUDI AWAL: "+daftarMesin.budiNow.id+"[" + daftarMesin.budiNow + "]"); // TEST
-        daftarMesin.print();
+        // out.println("BUDI AWAL: "+daftarMesin.budiNow.id+"[" + daftarMesin.budiNow + "]"); // TEST
+        // daftarMesin.print();
 
         // QUERY
         int Q = in.nextInt();
@@ -115,8 +115,8 @@ public class TP02 {
         for(int i = 0; i < arr.length; i++) {
             daftarMesin.addLast(arr[i]);
         }
-        out.println("EVALUASI: "+daftarMesin.getBudiMesinSortedNow());
-        daftarMesin.print();
+        out.println(daftarMesin.getBudiMesinSortedNow());
+        // daftarMesin.print();
     }
 
     static void TESTCircularDoublyLL() {
@@ -371,12 +371,12 @@ class CircularDoublyLL<E> {
     }
 
     int getBudiMesinSortedNow() {
-        System.out.println("BUDI NOW: " + budiNow.id + "["+ budiNow + "]");
+        // System.out.println("BUDI NOW: " + budiNow.id + "["+ budiNow + "]");
 
         Mesin check = header.next;
         int counter = 0;
         while (!check.equals(budiNow)) {
-            System.out.print(check.id + "[" + check + "]->");
+            // System.out.print(check.id + "[" + check + "]->");
             counter++;
             check = check.next;
         }
