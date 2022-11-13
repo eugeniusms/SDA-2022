@@ -1064,6 +1064,7 @@ class AVLTree {
         }
     }
 
+    // jangan dinullin beneran, dikosongi aja countnya & sumnya
     int deleteAfter(Node node, int insertedKey) {
         if (node == null) {
             return 0;
@@ -1073,7 +1074,10 @@ class AVLTree {
             if (node.right != null) {
                 // delete kanan
                 int deleted = node.right.sum;
-                node.right = null;
+
+                node.right.count = 0; // reset sum
+                node.right.sum = 0; // reset sum
+
                 return deleted;
             } else {
                 return 0;
@@ -1087,7 +1091,10 @@ class AVLTree {
         if (node.right != null) {
             // delete kanan
             int deleted = node.right.sum;
-            node.right = null;
+
+            node.right.count = 0;
+            node.right.sum = 0;
+
             return node.key + deleted + deleteAfter(node.left, insertedKey);
         } else {
             return node.key + deleteAfter(node.left, insertedKey);
