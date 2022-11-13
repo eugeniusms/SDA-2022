@@ -685,7 +685,7 @@ class AVLTree {
         } else {
             // no duplication
             node.jumlahSama += 1;
-            return node;
+            // return node;
         }
 
         // Update height
@@ -992,9 +992,9 @@ class AVLTree {
         if (node.key < insertedKey) {
             // cek kiri lalu, ke kanan
             if (node.left != null) {
-                return 1 + node.left.count + countBefore(node.right, insertedKey);
+                return node.jumlahSama + node.left.count + countBefore(node.right, insertedKey);
             } else {
-                return 1 + countBefore(node.right, insertedKey);
+                return node.jumlahSama + countBefore(node.right, insertedKey);
             }
         }
         // ke kiri
@@ -1011,16 +1011,16 @@ class AVLTree {
                 return 0;
             }
         }
-        if (node.key < insertedKey) {
-            // ke kanan
-            return countAfter(node.right, insertedKey);
-        }
-        // cek kanan lalu, ke kiri
-        if (node.right != null) {
-            return 1 + node.right.count + countAfter(node.left, insertedKey);
-        } else {
-            return 1 + countAfter(node.left, insertedKey);
-        }
+        if (node.key > insertedKey) {
+            // cek kanan lalu, ke kiri
+            if (node.right != null) {
+                return node.jumlahSama + node.right.count + countAfter(node.left, insertedKey);
+            } else {
+                return node.jumlahSama + countAfter(node.left, insertedKey);
+            }
+        }   
+        // ke kanan
+        return countAfter(node.right, insertedKey);
     }
 
     int findXthKey(Node node, int X) {
