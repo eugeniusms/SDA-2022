@@ -42,7 +42,7 @@ public class TP02 {
         daftarMesin.sort();
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
-        // out.println(daftarMesin.budiNow.id); // TEST
+        out.println("BUDI AWAL: "+daftarMesin.budiNow.id+"[" + daftarMesin.budiNow + "]"); // TEST
         daftarMesin.print();
 
         // QUERY
@@ -371,12 +371,12 @@ class CircularDoublyLL<E> {
     }
 
     int getBudiMesinSortedNow() {
-        // System.out.println(budiNow.id);
+        System.out.println("BUDI NOW: " + budiNow.id + "["+ budiNow + "]");
 
-        Mesin check = header;
+        Mesin check = header.next;
         int counter = 0;
         while (!check.equals(budiNow)) {
-            System.out.print(check.id + " ");
+            System.out.print(check.id + "[" + check + "]->");
             counter++;
             check = check.next;
         }
