@@ -98,6 +98,7 @@ public class TP02 {
         int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
         int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
         out.println(sumOfAfterDeleted);
+        daftarMesin.print();
     }
 
     static void LIHAT() {
@@ -1070,7 +1071,10 @@ class AVLTree {
         if (node.key == insertedKey) {
             // cek kanan
             if (node.right != null) {
-                return node.right.sum;
+                // delete kanan
+                int deleted = node.right.sum;
+                node.right = null;
+                return deleted;
             } else {
                 return 0;
             }
@@ -1081,7 +1085,10 @@ class AVLTree {
         }
         // cek kanan lalu, ke kiri
         if (node.right != null) {
-            return node.key + node.right.sum + deleteAfter(node.left, insertedKey);
+            // delete kanan
+            int deleted = node.right.sum;
+            node.right = null;
+            return node.key + deleted + deleteAfter(node.left, insertedKey);
         } else {
             return node.key + deleteAfter(node.left, insertedKey);
         }
