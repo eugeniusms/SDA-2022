@@ -430,6 +430,8 @@ class CircularDoublyLL<E> {
         }
     }
 
+
+
     // swap [1]<->[2] = [2]<->[1]
     void swap(Mesin satu, Mesin dua) {
         // temp variable
@@ -633,8 +635,11 @@ class AVLTree {
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
         y.count = getCount(y.left) + getCount(y.right) + 1;
+        y.sum = getSum(y.left) + getSum(y.right) + y.key;
+
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
         x.count = getCount(x.left) + getCount(x.right) + 1;
+        x.sum = getSum(x.left) + getSum(x.right) + x.key;
 
         // Return new root 
         return x; 
@@ -652,8 +657,11 @@ class AVLTree {
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
         y.count = getCount(y.left) + getCount(y.right) + 1;
+        y.sum = getSum(y.left) + getSum(y.right) + y.key;
+
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
         x.count = getCount(x.left) + getCount(x.right) + 1;
+        x.sum = getSum(x.left) + getSum(x.right) + x.key;
   
         // Return new root 
         return x; 
@@ -678,6 +686,7 @@ class AVLTree {
         // Update height
         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
         node.count = 1 + getCount(node.left) + getCount(node.right);
+        node.sum = node.key + getSum(node.left) + getSum(node.right);
 
         // Get balance factor
         int balance = getBalance(node);
@@ -742,6 +751,7 @@ class AVLTree {
         // Update the balance factor of each node and balance the tree
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1;
         root.count = getCount(root.left) + getCount(root.right) + 1;
+        root.sum = root.key + getSum(root.left) + getSum(root.right);
 
         int balanceFactor = getBalance(root);
         if (balanceFactor > 1) {
@@ -796,6 +806,14 @@ class AVLTree {
             return 0;
         }
         return node.count;
+    }
+
+    // Utility function to get sum of peoples
+    int getSum(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        return node.sum;
     }
 
     // Utility function to get balance factor of node
@@ -998,6 +1016,28 @@ class AVLTree {
         } else {
             return 1 + countAfter(node.left, insertedKey);
         }
+    }
+
+    static int deletedSum = 0;
+    Node deleteAfter(Node node, int X) {
+        if (X == 0) {
+            return 0;
+        }
+        // ke kanan mentok
+        if (node.right != null) {
+            if (node.right.count <= X) {
+                // delete node.right
+                int deleted = node.right.sum;
+                node.right = null;
+                return deleted;
+            } else {
+                return deleteAfter(node.right, X); // ke dalam
+            }
+        }
+        // node visited diapain (?)
+        node.left = delete(node, X)
+        // baru ke kiri
+        
     }
 }
 
