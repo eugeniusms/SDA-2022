@@ -11,3 +11,11 @@ EVALUASI
 2 1 2
 1
 EVALUASI
+
+// data sama
+
+2
+2 1 2
+2 1 2
+1
+EVALUASI

@@ -38,7 +38,7 @@ public class TP02 {
             }
             Mesin mesin = new Mesin(i, scoreTree);
             daftarMesin.addLast(mesin);
-            if (M > maxi) {
+            if (M > maxi) { // TODO: CEK APAKAH INI BENAR (PALING POPULAR TERDEPAN)
                 maxi = M;
                 terpopuler = mesin;
             }
@@ -503,10 +503,20 @@ class CircularDoublyLL<E> {
         // Initial index of merged subarray array
         int k = l;
         while (i < n1 && j < n2) {
-            if (L[i].scoreTree.root.count >= R[j].scoreTree.root.count) {
+            if (L[i].scoreTree.root.count > R[j].scoreTree.root.count) {
                 arr[k] = L[i];
                 i++;
+            } else if (L[i].scoreTree.root.count == R[j].scoreTree.root.count) {
+                // dicek lagi identitynya (yg rendah di depan)
+                if (L[i].id < R[j].id) {
+                    arr[k] = L[i];
+                    i++;
+                } else {
+                    arr[k] = R[j];
+                    j++;
+                }
             }
+
             else {
                 arr[k] = R[j];
                 j++;
