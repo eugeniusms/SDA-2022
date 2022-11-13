@@ -351,12 +351,12 @@ class CircularDoublyLL<E> {
         return mesin;
     }
 
-    void insertBetween(Mesin a, Mesin b, Mesin mesin) {
+    void insertBetween(Mesin mesin, Mesin a, Mesin b) {
         a.next = mesin;
         mesin.prev = a;
         mesin.next = b;
         b.prev = mesin;
-        
+
         this.size += 1;
     }
 
@@ -464,17 +464,81 @@ class CircularDoublyLL<E> {
         }
     }
 
-    void sort() {
-        Mesin key = header.next;
-        while(key != footer) {
-            Mesin temp = key.next;
-            while(temp != footer && key.scoreTree != null && temp.scoreTree != null) {
-                if (key.scoreTree.root.count > temp.scoreTree.root.count) {
-                    swap(key, temp);
-                }
-                temp = temp.next;
+    // Merges two subarrays of arr[].
+    // First subarray is arr[l..m]
+    // Second subarray is arr[m+1..r]
+    void merge(int arr[], int l, int m, int r)
+    {
+        // Find sizes of two subarrays to be merged
+        int n1 = m - l + 1;
+        int n2 = r - m;
+ 
+        /* Create temp arrays */
+        int L[] = new int[n1];
+        int R[] = new int[n2];
+ 
+        /*Copy data to temp arrays*/
+        for (int i = 0; i < n1; ++i)
+            L[i] = arr[l + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = arr[m + 1 + j];
+ 
+        /* Merge the temp arrays */
+ 
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+ 
+        // Initial index of merged subarray array
+        int k = l;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
             }
-            key = key.next;
+            else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+ 
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+ 
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
+    void mergesort(int arr[], int l, int r) {
+        // sort array pakai merge sort
+        if (l < r) {
+            // Find the middle point
+            int m = l + (r - l) / 2;
+ 
+            // Sort first and second halves
+            mergesort(arr, l, m);
+            mergesort(arr, m + 1, r);
+ 
+            // Merge the sorted halves
+            merge(arr, l, m, r);
+        }
+    }
+
+    void sort() {
+        // masukkan ke dalam array
+        Mesin[] arr = new Mesin[this.size];
+        Mesin masuk = header.next;
+        for(int i = 0; i < this.size; i++) {
+            arr[i] = masuk;
+            masuk = masuk.next;
         }
     }
 
