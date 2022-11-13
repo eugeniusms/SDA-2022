@@ -491,7 +491,7 @@ class CircularDoublyLL<E> {
         // Initial index of merged subarray array
         int k = l;
         while (i < n1 && j < n2) {
-            if (L[i].scoreTree.root.count <= R[j].scoreTree.root.count) {
+            if (L[i].scoreTree.root.count >= R[j].scoreTree.root.count) {
                 arr[k] = L[i];
                 i++;
             }
