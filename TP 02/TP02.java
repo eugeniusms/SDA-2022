@@ -27,8 +27,6 @@ public class TP02 {
 
         // INISIALISASI INPUT
         int N = in.nextInt(); // banyak mesin
-        Mesin terpopuler = null;
-        int maxi = -999999;
         for(int i = 1; i <= N; i++) {
             int M = in.nextInt(); // banyak score
             AVLTree scoreTree = new AVLTree();
@@ -38,16 +36,14 @@ public class TP02 {
             }
             Mesin mesin = new Mesin(i, scoreTree);
             daftarMesin.addLast(mesin);
-            if (M > maxi) { // TODO: CEK APAKAH INI BENAR (PALING POPULAR TERDEPAN)
-                maxi = M;
-                terpopuler = mesin;
-            }
         }
 
+        // sort sebelum main terurut
+        daftarMesin.sort();
         // INISIALISASI BUDI
-        daftarMesin.setBudiNow(terpopuler);
+        daftarMesin.setBudiNow(daftarMesin.header.next);
         // out.println(daftarMesin.budiNow.id); // TEST
-        // daftarMesin.print();
+        daftarMesin.print();
 
         // QUERY
         int Q = in.nextInt();
@@ -119,8 +115,8 @@ public class TP02 {
         for(int i = 0; i < arr.length; i++) {
             daftarMesin.addLast(arr[i]);
         }
-        out.println(daftarMesin.getBudiMesinSortedNow());
-        // daftarMesin.print();
+        out.println("EVALUASI: "+daftarMesin.getBudiMesinSortedNow());
+        daftarMesin.print();
     }
 
     static void TESTCircularDoublyLL() {
