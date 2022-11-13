@@ -95,7 +95,9 @@ public class TP02 {
     static void HAPUS() {
         int X = in.nextInt();
         AVLTree budiTree = daftarMesin.budiNow.scoreTree;
-        out.println("HAPUS: "+ budiTree.findXthKeyReverse(budiTree.root, X));
+        int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
+        int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
+        out.println(sumOfAfterDeleted);
     }
 
     static void LIHAT() {
@@ -1061,8 +1063,28 @@ class AVLTree {
         }
     }
 
-    int deleteAfter() {
-        return 0;
+    int deleteAfter(Node node, int insertedKey) {
+        if (node == null) {
+            return 0;
+        }
+        if (node.key == insertedKey) {
+            // cek kanan
+            if (node.right != null) {
+                return node.right.sum;
+            } else {
+                return 0;
+            }
+        }
+        if (node.key < insertedKey) {
+            // ke kanan
+            return deleteAfter(node.right, insertedKey);
+        }
+        // cek kanan lalu, ke kiri
+        if (node.right != null) {
+            return node.key + node.right.sum + deleteAfter(node.left, insertedKey);
+        } else {
+            return node.key + deleteAfter(node.left, insertedKey);
+        }
     }
 }
 
