@@ -94,6 +94,8 @@ public class TP02 {
     // TODO: Susun Algoritma HAPUS
     static void HAPUS() {
         int X = in.nextInt();
+        AVLTree budiTree = daftarMesin.budiNow.scoreTree;
+        out.println("HAPUS: "+ budiTree.findXthKeyReverse(budiTree.root, X));
     }
 
     static void LIHAT() {
@@ -1018,26 +1020,49 @@ class AVLTree {
         }
     }
 
-    static int deletedSum = 0;
-    Node deleteAfter(Node node, int X) {
-        if (X == 0) {
-            return 0;
+    int findXthKey(Node node, int X) {
+        if (node == null) {
+            return -1;
         }
-        // ke kanan mentok
-        if (node.right != null) {
-            if (node.right.count <= X) {
-                // delete node.right
-                int deleted = node.right.sum;
-                node.right = null;
-                return deleted;
-            } else {
-                return deleteAfter(node.right, X); // ke dalam
+        if (node.left != null) {
+            if (node.left.count == X) {
+                return node.key;
             }
+            if (node.left.count > X) {
+                return findXthKey(node.left, X);
+            }
+            return findXthKey(node.right, X - node.left.count - 1);
+        } else {
+            if (X == 0) {
+                return node.key;
+            }
+            return findXthKey(node.right, X - 1);
         }
-        // node visited diapain (?)
-        node.left = delete(node, X)
-        // baru ke kiri
-        
+    }
+
+    // cari x th element key dari belakang
+    int findXthKeyReverse(Node node, int X) {
+        if (node == null) {
+            return -1;
+        }
+        if (node.right != null) {
+            if (node.right.count == X) {
+                return node.key;
+            }
+            if (node.right.count > X) {
+                return findXthKeyReverse(node.right, X);
+            }
+            return findXthKeyReverse(node.left, X - node.right.count - 1);
+        } else {
+            if (X == 0) {
+                return node.key;
+            }
+            return findXthKeyReverse(node.left, X - 1);
+        }
+    }
+
+    int deleteAfter() {
+        return 0;
     }
 }
 
