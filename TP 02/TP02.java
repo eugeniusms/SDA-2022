@@ -47,7 +47,7 @@ public class TP02 {
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(terpopuler);
         // out.println(daftarMesin.budiNow.id); // TEST
-        daftarMesin.print();
+        // daftarMesin.print();
 
         // QUERY
         int Q = in.nextInt();
@@ -94,11 +94,11 @@ public class TP02 {
     // TODO: Susun Algoritma HAPUS
     static void HAPUS() {
         int X = in.nextInt();
-        AVLTree budiTree = daftarMesin.budiNow.scoreTree;
-        int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
-        int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
-        out.println(sumOfAfterDeleted);
-        daftarMesin.print();
+        // AVLTree budiTree = daftarMesin.budiNow.scoreTree;
+        // int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
+        // int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
+        // out.println(sumOfAfterDeleted);
+        // daftarMesin.print();
     }
 
     static void LIHAT() {
