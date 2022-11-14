@@ -104,10 +104,10 @@ public class TP02 {
         int highkey = in.nextInt();
         // get count before && count after
         AVLTree budiTree = daftarMesin.budiNow.scoreTree;
-        int sumOfBefore = budiTree.countBefore(budiTree.root, lowkey);
-        int sumOfAfter = budiTree.countAfter(budiTree.root, highkey);
+        int sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
+        int sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
         // get result
-        out.println(budiTree.root.count - sumOfBefore - sumOfAfter);
+        out.println(sumOfBeforeH - sumOfBeforeL);
     }
 
     static void EVALUASI() {
@@ -994,28 +994,6 @@ class AVLTree {
         }
         // ke kiri
         return countBefore(node.left, insertedKey);
-    }
-
-    // QUERY LIHAT
-    int countAfter(Node node, int insertedKey) {
-        if (node.key == insertedKey) {
-            // cek kanan
-            if (node.right != null) {
-                return node.right.count;
-            } else {
-                return 0;
-            }
-        }
-        if (node.key > insertedKey) {
-            // cek kanan lalu, ke kiri
-            if (node.right != null) {
-                return node.jumlahSama + node.right.count + countAfter(node.left, insertedKey);
-            } else {
-                return node.jumlahSama + countAfter(node.left, insertedKey);
-            }
-        }   
-        // ke kanan
-        return countAfter(node.right, insertedKey);
     }
 
     int findXthKey(Node node, int X) {
