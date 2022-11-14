@@ -77,7 +77,7 @@ public class TP02 {
         int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
 
         out.println(sumOfCount - sumOfBefore + 1);
-        budiTree.printInOrder();
+        // budiTree.printInOrder();
     }
 
     static void GERAK() {
