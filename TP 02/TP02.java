@@ -92,6 +92,19 @@ public class TP02 {
     // TODO: Susun Algoritma HAPUS
     static void HAPUS() {
         int X = in.nextInt();
+
+
+        if(X >= daftarMesin.size) {
+            daftarMesin.budiNow.scoreTree.root = null; // set to null
+            // implement case
+            daftarMesin.pindahMesin(daftarMesin.budiNow);
+        } else {
+            // masuk ke case yg di dalam soal
+            while(X > 0) {
+                Node maxi = daftarMesin.budiNow.scoreTree.findMax();
+                daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
+            }
+        }
         // AVLTree budiTree = daftarMesin.budiNow.scoreTree;
         // int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
         // int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
@@ -725,59 +738,97 @@ class AVLTree {
     }
 
     // Delete a node
-    Node delete(Node root, int key) {
-        // Find the node to be deleted and remove it
-        if (root == null)
-            return root;
-        if (key < root.key)
-            root.left = delete(root.left, key);
-        else if (key > root.key)
-            root.right = delete(root.right, key);
-        else {
-            if ((root.left == null) || (root.right == null)) {
-                Node temp = null;
-                if (temp == root.left)
-                    temp = root.right;
+    Node delete(Node root, int key) 
+    { 
+        // STEP 1: PERFORM STANDARD BST DELETE 
+        if (root == null) 
+            return root; 
+  
+        // If the key to be deleted is smaller than 
+        // the root's key, then it lies in left subtree 
+        if (key < root.key) 
+            root.left = delete(root.left, key); 
+  
+        // If the key to be deleted is greater than the 
+        // root's key, then it lies in right subtree 
+        else if (key > root.key) 
+            root.right = delete(root.right, key); 
+  
+        // if key is same as root's key, then this is the node 
+        // to be deleted 
+        else
+        { 
+  
+            // node with only one child or no child 
+            if ((root.left == null) || (root.right == null)) 
+            { 
+                Node temp = null; 
+                if (temp == root.left) 
+                    temp = root.right; 
                 else
-                    temp = root.left;
-                if (temp == null) {
-                    temp = root;
-                    root = null;
-                } else
-                    root = temp;
-            } else {
-                Node temp = lowerBound(root.right);
-                root.key = temp.key;
-                root.right = delete(root.right, temp.key);
-            }
-        }
-        if (root == null)
-            return root;
-
-        // Update the balance factor of each node and balance the tree
-        root.height = max(getHeight(root.left), getHeight(root.right)) + 1;
-        root.count = getCount(root.left) + getCount(root.right) + 1;
-        root.sum = root.key + getSum(root.left) + getSum(root.right);
-
-        int balanceFactor = getBalance(root);
-        if (balanceFactor > 1) {
-            if (getBalance(root.left) >= 0) {
-                return rightRotate(root);
-            } else {
-                root.left = leftRotate(root.left);
-                return rightRotate(root);
-            }
-        }
-        if (balanceFactor < -1) {
-            if (getBalance(root.right) <= 0) {
-                return leftRotate(root);
-            } else {
-                root.right = rightRotate(root.right);
-                return leftRotate(root);
-            }
-        }
-        return root;
-    }
+                    temp = root.left; 
+  
+                // No child case 
+                if (temp == null) 
+                { 
+                    temp = root; 
+                    root = null; 
+                } 
+                else // One child case 
+                    root = temp; // Copy the contents of 
+                                // the non-empty child 
+            } 
+            else
+            { 
+  
+                // node with two children: Get the inorder 
+                // successor (smallest in the right subtree) 
+                Node temp = lowerBound(root.right); 
+  
+                // Copy the inorder successor's data to this node 
+                root.key = temp.key; 
+  
+                // Delete the inorder successor 
+                root.right = delete(root.right, temp.key); 
+            } 
+        } 
+  
+        // If the tree had only one node then return 
+        if (root == null) 
+            return root; 
+  
+        // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE 
+        root.height = max(getHeight(root.left), getHeight(root.right)) + 1; 
+  
+        // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether 
+        // this node became unbalanced) 
+        int balance = getBalance(root); 
+  
+        // If this node becomes unbalanced, then there are 4 cases 
+        // Left Left Case 
+        if (balance > 1 && getBalance(root.left) >= 0) 
+            return rightRotate(root); 
+  
+        // Left Right Case 
+        if (balance > 1 && getBalance(root.left) < 0) 
+        { 
+            root.left = leftRotate(root.left); 
+            return rightRotate(root); 
+        } 
+  
+        // Right Right Case 
+        if (balance < -1 && getBalance(root.right) <= 0) 
+            return leftRotate(root); 
+  
+        // Right Left Case 
+        if (balance < -1 && getBalance(root.right) > 0) 
+        { 
+            root.right = rightRotate(root.right); 
+            return leftRotate(root); 
+        } 
+  
+        return root; 
+    } 
 
     Node lowerBound(Node node) {
         // Return node with the lowest from this node
@@ -1076,6 +1127,14 @@ class AVLTree {
         } else {
             return node.key + deleteAfter(node.left, insertedKey);
         }
+    }
+
+    Node findMax() {
+        Node temp = root;
+        while (temp.right != null) {
+            temp = temp.right;
+        }
+        return temp;
     }
 }
 
