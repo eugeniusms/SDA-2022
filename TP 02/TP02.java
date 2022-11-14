@@ -382,7 +382,7 @@ class CircularDoublyLL<E> {
             counter++;
             check = check.next;
         }
-        return counter;
+        return counter + 1;
     }
 
     // get kanan mesin untuk ditempati budi
@@ -609,7 +609,8 @@ class CircularDoublyLL<E> {
 // ====================================== AVL THINGS ====================================
 
 class Node { // AVL Node
-    int key, height, count, sum; // key => score
+    int key, height, count;// key => score
+    long sum;
     Node left, right;
     int jumlahSama; // jumlah isi key yg sama // URUSAN TERKAIT DELETE & INSERT PADA AVLTREE
 
@@ -814,7 +815,7 @@ class AVLTree {
     }
 
     // Utility function to get sum of peoples
-    int getSum(Node node) {
+    long getSum(Node node) {
         if (node == null) {
             return 0;
         }
@@ -984,7 +985,10 @@ class AVLTree {
         if (node == null) {
             return 0;
         }
-        if (node.key <= insertedKey) {
+        if (node.key == insertedKey) {
+            return node.jumlahSama + getCount(node.left);
+        }
+        if (node.key < insertedKey) {
             // cek kiri lalu, ke kanan
             if (node.left != null) {
                 return node.jumlahSama + node.left.count + countBefore(node.right, insertedKey);
@@ -1038,7 +1042,7 @@ class AVLTree {
     }
 
     // jangan dinullin beneran, dikosongi aja countnya & sumnya
-    int deleteAfter(Node node, int insertedKey) {
+    long deleteAfter(Node node, int insertedKey) {
         if (node == null) {
             return 0;
         }
@@ -1046,7 +1050,7 @@ class AVLTree {
             // cek kanan
             if (node.right != null) {
                 // delete kanan
-                int deleted = node.right.sum;
+                long deleted = node.right.sum;
 
                 node.right.count = 0; // reset sum
                 node.right.sum = 0; // reset sum
@@ -1063,7 +1067,7 @@ class AVLTree {
         // cek kanan lalu, ke kiri
         if (node.right != null) {
             // delete kanan
-            int deleted = node.right.sum;
+            long deleted = node.right.sum;
 
             node.right.count = 0;
             node.right.sum = 0;
