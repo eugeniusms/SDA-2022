@@ -75,9 +75,8 @@ public class TP02 {
         // get result
         int sumOfCount = budiTree.root.count;
         int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
-        Node scoreNode = budiTree.treeNodeDisimpan;
-        // out.println("CEKKKK: "+scoreNode.jumlahSama);
-        out.println(sumOfCount - sumOfBefore - scoreNode.jumlahSama + 1); // jika ternyata ada yang sama 
+
+        out.println(sumOfCount - sumOfBefore + 1);
         budiTree.printInOrder();
     }
 
@@ -626,7 +625,6 @@ class Node { // AVL Node
 class AVLTree {
 
     Node root;
-    Node treeNodeDisimpan;
 
     // Implement right rotate
     Node rightRotate(Node y) {
@@ -983,16 +981,10 @@ class AVLTree {
 
     // QUERY MAIN, LIHAT
     int countBefore(Node node, int insertedKey) {
-        if (node.key == insertedKey) {
-            treeNodeDisimpan = node;
-            // cek kiri
-            if (node.left != null) {
-                return node.left.count;
-            } else {
-                return 0;
-            }
+        if (node == null) {
+            return 0;
         }
-        if (node.key < insertedKey) {
+        if (node.key <= insertedKey) {
             // cek kiri lalu, ke kanan
             if (node.left != null) {
                 return node.jumlahSama + node.left.count + countBefore(node.right, insertedKey);
