@@ -75,7 +75,10 @@ public class TP02 {
         // get result
         int sumOfCount = budiTree.root.count;
         int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
-        out.println(sumOfCount - sumOfBefore);
+        Node scoreNode = budiTree.treeNodeDisimpan;
+        // out.println("CEKKKK: "+scoreNode.jumlahSama);
+        out.println(sumOfCount - sumOfBefore - scoreNode.jumlahSama + 1); // jika ternyata ada yang sama 
+        budiTree.printInOrder();
     }
 
     static void GERAK() {
@@ -623,6 +626,7 @@ class Node { // AVL Node
 class AVLTree {
 
     Node root;
+    Node treeNodeDisimpan;
 
     // Implement right rotate
     Node rightRotate(Node y) {
@@ -681,13 +685,15 @@ class AVLTree {
         } else {
             // no duplication
             node.jumlahSama += 1;
-            // return node;
+            node.count += 1;
+            node.sum += node.key;
+            return node;
         }
 
         // Update height
         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
-        node.count = 1 + getCount(node.left) + getCount(node.right);
-        node.sum = node.key + getSum(node.left) + getSum(node.right);
+        node.count = node.jumlahSama + getCount(node.left) + getCount(node.right);
+        node.sum = (node.key * node.jumlahSama) + getSum(node.left) + getSum(node.right);
 
         // Get balance factor
         int balance = getBalance(node);
@@ -946,7 +952,7 @@ class AVLTree {
         /* first recur on left child */
         inOrder(node.left);
         /* then print the data of node */
-        System.out.print(node.key +"["+ node.count + "]---");
+        System.out.println(node.key +"[COUNT:"+ node.count + "]-[SAMA:"+ node.jumlahSama + "]|v");
         /* now recur on right child */
         inOrder(node.right);
     }
@@ -978,6 +984,7 @@ class AVLTree {
     // QUERY MAIN, LIHAT
     int countBefore(Node node, int insertedKey) {
         if (node.key == insertedKey) {
+            treeNodeDisimpan = node;
             // cek kiri
             if (node.left != null) {
                 return node.left.count;
