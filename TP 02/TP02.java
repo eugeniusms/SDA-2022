@@ -522,9 +522,11 @@ class CircularDoublyLL<E> {
         // Initial index of merged subarray array
         int k = l;
         while (i < n1 && j < n2) {
-
-            // TODO KERJAIN INI
-            if (L[i].scoreTree.root == null && R[i].scoreTree.root == null) // nol
+            
+            if (L[i].scoreTree.root.count > R[j].scoreTree.root.count) {
+                arr[k] = L[i];
+                i++;
+            } else if (L[i].scoreTree.root.count == R[j].scoreTree.root.count) {
                 // dicek lagi identitynya (yg rendah di depan)
                 if (L[i].id < R[j].id) {
                     arr[k] = L[i];
@@ -533,33 +535,11 @@ class CircularDoublyLL<E> {
                     arr[k] = R[j];
                     j++;
                 }
-            if (L[i].scoreTree.root == null && R[i].scoreTree.root.count > 0) // L == 0 < R
-                arr[k] = L[i];
-                i++;
-            if (L[i].scoreTree.root.count > 0 && R[i].scoreTree.root == null) // L > 0 < R == 0
+            }
+
+            else {
                 arr[k] = R[j];
                 j++;
-
-
-            if (L[i].scoreTree.root != null && R[i].scoreTree.root != null) { // L > 0 < R > 0
-                if (L[i].scoreTree.root.count > R[j].scoreTree.root.count) {
-                    arr[k] = L[i];
-                    i++;
-                } else if (L[i].scoreTree.root.count == R[j].scoreTree.root.count) {
-                    // dicek lagi identitynya (yg rendah di depan)
-                    if (L[i].id < R[j].id) {
-                        arr[k] = L[i];
-                        i++;
-                    } else {
-                        arr[k] = R[j];
-                        j++;
-                    }
-                }
-
-                else {
-                    arr[k] = R[j];
-                    j++;
-                }
             }
 
             k++;
