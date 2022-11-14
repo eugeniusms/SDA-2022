@@ -38,11 +38,8 @@ public class TP02 {
             daftarMesin.addLast(mesin);
         }
 
-        // sort sebelum main terurut
-        daftarMesin.sort();
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
-        // out.println("BUDI AWAL: "+daftarMesin.budiNow.id+"[" + daftarMesin.budiNow + "]"); // TEST
         // daftarMesin.print();
 
         // QUERY
@@ -100,10 +97,14 @@ public class TP02 {
             daftarMesin.pindahMesin(daftarMesin.budiNow);
         } else {
             // masuk ke case yg di dalam soal
+            long sum = 0;
             while(X > 0) {
                 Node maxi = daftarMesin.budiNow.scoreTree.findMax();
-                daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
+                Node deleted = daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
+                sum += deleted.key;
+                X--;
             }
+            out.println(sum);
         }
         // AVLTree budiTree = daftarMesin.budiNow.scoreTree;
         // int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
@@ -521,10 +522,9 @@ class CircularDoublyLL<E> {
         // Initial index of merged subarray array
         int k = l;
         while (i < n1 && j < n2) {
-            if (L[i].scoreTree.root.count > R[j].scoreTree.root.count) {
-                arr[k] = L[i];
-                i++;
-            } else if (L[i].scoreTree.root.count == R[j].scoreTree.root.count) {
+
+            // TODO KERJAIN INI
+            if (L[i].scoreTree.root == null && R[i].scoreTree.root == null) // nol
                 // dicek lagi identitynya (yg rendah di depan)
                 if (L[i].id < R[j].id) {
                     arr[k] = L[i];
@@ -533,12 +533,35 @@ class CircularDoublyLL<E> {
                     arr[k] = R[j];
                     j++;
                 }
-            }
-
-            else {
+            if (L[i].scoreTree.root == null && R[i].scoreTree.root.count > 0) // L == 0 < R
+                arr[k] = L[i];
+                i++;
+            if (L[i].scoreTree.root.count > 0 && R[i].scoreTree.root == null) // L > 0 < R == 0
                 arr[k] = R[j];
                 j++;
+
+
+            if (L[i].scoreTree.root != null && R[i].scoreTree.root != null) { // L > 0 < R > 0
+                if (L[i].scoreTree.root.count > R[j].scoreTree.root.count) {
+                    arr[k] = L[i];
+                    i++;
+                } else if (L[i].scoreTree.root.count == R[j].scoreTree.root.count) {
+                    // dicek lagi identitynya (yg rendah di depan)
+                    if (L[i].id < R[j].id) {
+                        arr[k] = L[i];
+                        i++;
+                    } else {
+                        arr[k] = R[j];
+                        j++;
+                    }
+                }
+
+                else {
+                    arr[k] = R[j];
+                    j++;
+                }
             }
+
             k++;
         }
  
@@ -573,7 +596,7 @@ class CircularDoublyLL<E> {
     }
 
     Mesin[] sort() {
-        // masukkan ke dalam array
+        // kalo ga 0 sizenya
         Mesin[] arr = new Mesin[this.size];
         Mesin masuk = header.next;
         for(int i = 0; i < this.size; i++) {
@@ -758,6 +781,13 @@ class AVLTree {
         // to be deleted 
         else
         { 
+            // if jumlah sama masih ada rootnya jangan diilangin dulu gan
+            if (root.jumlahSama > 1) {
+                root.jumlahSama -= 1;
+                root.count -= 1;
+                root.sum -= root.key;
+                return root;
+            }
   
             // node with only one child or no child 
             if ((root.left == null) || (root.right == null)) 
@@ -799,6 +829,8 @@ class AVLTree {
   
         // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE 
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1; 
+        root.count = root.jumlahSama + getCount(root.left) + getCount(root.right);
+        root.sum = (root.key * root.jumlahSama) + getSum(root.left) + getSum(root.right);
   
         // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether 
         // this node became unbalanced) 
