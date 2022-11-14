@@ -41,6 +41,7 @@ public class TP02 {
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
         // daftarMesin.print();
+        daftarMesin.budiNow.scoreTree.printInOrder();
 
         // QUERY
         int Q = in.nextInt();
@@ -74,7 +75,7 @@ public class TP02 {
         int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
 
         out.println(sumOfCount - sumOfBefore + 1);
-        // budiTree.printInOrder();
+        budiTree.printInOrder();
     }
 
     static void GERAK() {
@@ -92,6 +93,7 @@ public class TP02 {
 
 
         if(X >= daftarMesin.size) {
+            out.println(daftarMesin.budiNow.scoreTree.root.sum);
             daftarMesin.budiNow.scoreTree.root = null; // set to null
             // implement case
             daftarMesin.pindahMesin(daftarMesin.budiNow);
@@ -1014,7 +1016,7 @@ class AVLTree {
         /* first recur on left child */
         inOrder(node.left);
         /* then print the data of node */
-        System.out.println(node.key +"[COUNT:"+ node.count + "]-[SAMA:"+ node.jumlahSama + "]|v");
+        System.out.println(node.key +"[COUNT:"+ node.count + "]-[SAMA:"+ node.jumlahSama + "]-[SUM:" + node.sum + "]|v");
         /* now recur on right child */
         inOrder(node.right);
     }
