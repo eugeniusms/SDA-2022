@@ -75,7 +75,9 @@ public class TP02 {
         int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
 
         out.println(sumOfCount - sumOfBefore + 1);
-        budiTree.printInOrder();
+        // budiTree.printInOrder();
+        // update budiTree popularity juga
+        daftarMesin.budiNow.popularity += 1;
     }
 
     static void GERAK() {
@@ -272,12 +274,13 @@ public class TP02 {
 class Mesin {
     Mesin prev, next;
     AVLTree scoreTree; // penyimpan score
-    int popularity = 0;
+    int popularity;
     int id;
     
     Mesin(int id, AVLTree scoreTree) {
         this.id = id;
         this.scoreTree = scoreTree;
+        this.popularity = scoreTree.root.count;
     }
 }
 
@@ -525,10 +528,10 @@ class CircularDoublyLL<E> {
         int k = l;
         while (i < n1 && j < n2) {
             
-            if (L[i].scoreTree.root.count > R[j].scoreTree.root.count) {
+            if (L[i].popularity > R[j].popularity) {
                 arr[k] = L[i];
                 i++;
-            } else if (L[i].scoreTree.root.count == R[j].scoreTree.root.count) {
+            } else if (L[i].popularity == R[j].popularity) {
                 // dicek lagi identitynya (yg rendah di depan)
                 if (L[i].id < R[j].id) {
                     arr[k] = L[i];
@@ -656,12 +659,12 @@ class AVLTree {
   
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
-        y.count = getCount(y.left) + getCount(y.right) + 1;
-        y.sum = getSum(y.left) + getSum(y.right) + y.key;
+        y.count = y.jumlahSama + getCount(y.left) + getCount(y.right) + 1;
+        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right) + y.key;
 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
-        x.count = getCount(x.left) + getCount(x.right) + 1;
-        x.sum = getSum(x.left) + getSum(x.right) + x.key;
+        x.count = x.jumlahSama + getCount(x.left) + getCount(x.right) + 1;
+        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right) + x.key;
 
         // Return new root 
         return x; 
@@ -678,12 +681,12 @@ class AVLTree {
   
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
-        y.count = getCount(y.left) + getCount(y.right) + 1;
-        y.sum = getSum(y.left) + getSum(y.right) + y.key;
+        y.count = y.jumlahSama + getCount(y.left) + getCount(y.right) + 1;
+        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right) + y.key;
 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
-        x.count = getCount(x.left) + getCount(x.right) + 1;
-        x.sum = getSum(x.left) + getSum(x.right) + x.key;
+        x.count = x.jumlahSama + getCount(x.left) + getCount(x.right) + 1;
+        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right) + x.key;
   
         // Return new root 
         return x; 
