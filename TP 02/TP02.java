@@ -100,7 +100,7 @@ public class TP02 {
             out.println(daftarMesin.budiNow.scoreTree.root.sum);
             daftarMesin.budiNow.scoreTree.root = null; // set to null
             // implement case
-            daftarMesin.pindahMesin(daftarMesin.budiNow);
+            daftarMesin.budiNow = daftarMesin.pindahMesin(daftarMesin.budiNow);
 
             // update budiTree popularity juga
             daftarMesin.budiNow.popularity = 1;
