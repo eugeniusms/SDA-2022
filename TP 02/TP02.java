@@ -59,7 +59,7 @@ public class TP02 {
                 EVALUASI();
             }
             // daftarMesin.print();
-            daftarMesin.budiNow.scoreTree.printInOrder();
+            // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
@@ -95,9 +95,9 @@ public class TP02 {
     static void HAPUS() {
         int X = in.nextInt();
 
-        out.println("POPULARITY: "+daftarMesin.budiNow.popularity);
+        // out.println("POPULARITY: "+daftarMesin.budiNow.popularity);
 
-        if(daftarMesin.budiNow.scoreTree.root.count <= X) {
+        if(daftarMesin.budiNow.popularity <= X) {
             if (daftarMesin.budiNow.popularity <= 0) {
                 out.println("0");
             } else {
@@ -110,6 +110,9 @@ public class TP02 {
                 daftarMesin.pindahMesin(daftarMesin.budiNow);                
             }
         } else {
+            // update budiTree popularity juga
+            daftarMesin.budiNow.popularity -= X;
+
             // masuk ke case yg di dalam soal
             long sum = 0;
             while(X > 0) {
@@ -119,9 +122,6 @@ public class TP02 {
                 X--;
             }
             out.println(sum);
-
-            // update budiTree popularity juga
-            daftarMesin.budiNow.popularity -= X;
         }      
     }
 
