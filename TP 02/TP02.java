@@ -125,6 +125,8 @@ public class TP02 {
         int sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
         int sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
         // get result
+        out.println("BEFORE L-1: "+sumOfBeforeL);
+        out.println("BEFORE H: "+sumOfBeforeH);
         out.println(sumOfBeforeH - sumOfBeforeL);
     }
 
@@ -303,7 +305,8 @@ class CircularDoublyLL<E> {
             counter++;
             check = check.next;
         }
-        return counter + 1;
+        // return counter + 1;
+        return counter;
     }
 
     // get kanan mesin untuk ditempati budi
@@ -561,12 +564,12 @@ class AVLTree {
   
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
-        y.count = y.jumlahSama + getCount(y.left) + getCount(y.right) + 1;
-        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right) + y.key;
+        y.count = y.jumlahSama + getCount(y.left) + getCount(y.right);
+        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right);
 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
-        x.count = x.jumlahSama + getCount(x.left) + getCount(x.right) + 1;
-        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right) + x.key;
+        x.count = x.jumlahSama + getCount(x.left) + getCount(x.right);
+        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right);
 
         // Return new root 
         return x; 
@@ -583,12 +586,12 @@ class AVLTree {
   
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
-        y.count = y.jumlahSama + getCount(y.left) + getCount(y.right) + 1;
-        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right) + y.key;
+        y.count = y.jumlahSama + getCount(y.left) + getCount(y.right);
+        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right);
 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
-        x.count = x.jumlahSama + getCount(x.left) + getCount(x.right) + 1;
-        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right) + x.key;
+        x.count = x.jumlahSama + getCount(x.left) + getCount(x.right);
+        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right);
   
         // Return new root 
         return x; 
@@ -814,104 +817,10 @@ class AVLTree {
             return getHeight(node.left);
         }
     }
-
-    // successor case
-    // 1) saat node x memiliki right subtree > cari lowerbound dari subtree kanan
-    // 2) saat node x tidak memiliki right subtree dan x merupakan right child dari parentnya > the last left is the answer
-    // 3) saat node x tidak memiliki right subtree dan x merupakan left child dari parentnya
-    // Recursive function to find an inorder successor for the given key in the BST
-    Node findSuccessor(Node root, Node succ, int key) { // return null when gaada successor
-        // base case
-        if (root == null) {
-            return succ;
-        }
-
-        // if a node with the desired value is found, the successor is the minimum
-        // value node in its right subtree (if any)
-        if (root.key == key)
-        {
-            if (root.right != null) {
-                return lowerBound(root.right);
-            }
-        }
-
-        // if the given key is less than the root node, recur for the left subtree
-        else if (key < root.key)
-        {
-            // update successor to the current node before recursing in the
-            // left subtree
-            succ = root;
-            return findSuccessor(root.left, succ, key);
-        }
-
-        // if the given key is more than the root node, recur for the right subtree
-        else {
-            return findSuccessor(root.right, succ, key);
-        }
-
-        return succ;
-    }
-
-    // predecessor case
-    // 1) saat node x memiliki left subtree
-    // 2) saat node x tidak memiliki left subtree dan x merupakan left child dari parentnya
-    // 3) saat node x tidak memiliki left subtree dan x merupakan right child dari parentnya
-    // Recursive function to find inorder predecessor for a given key in the BST
-    Node findPredecessor(Node root, Node prec, int key) { // return null when gaada successor
-        // base case
-        if (root == null) {
-            return prec;
-        }
- 
-        // if a node with the desired value is found, the predecessor is the maximum
-        // value node in its left subtree (if any)
-        if (root.key == key)
-        {
-            if (root.left != null) {
-                return upperBound(root.left);
-            }
-        }
- 
-        // if the given key is less than the root node, recur for the left subtree
-        else if (key < root.key) {
-            return findPredecessor(root.left, prec, key);
-        }
- 
-        // if the given key is more than the root node, recur for the right subtree
-        else {
-            // update predecessor to the current node before recursing
-            // in the right subtree
-            prec = root;
-            return findPredecessor(root.right, prec, key);
-        }
-        return prec;
-    }
     
     int max(int a, int b) {
         return (a > b) ? a : b;
-    }
-
-    Node searchNodePush(Node root, int key) {
-        if (root == null || root.key == key) {
-            return root;
-        }
-        root.count+=1;
-        if (root.key > key) { 
-            return searchNodePush(root.left, key);
-        }
-        return searchNodePush(root.right, key);
-    }
-
-    Node searchNodePop(Node root, int key) {
-        if (root == null || root.key == key) {
-            return root;
-        }
-        root.count-=1;
-        if (root.key > key) { 
-            return searchNodePop(root.left, key);
-        }
-        return searchNodePop(root.right, key);
-    }
+    }   
 
     // in order traversal
     void inOrder(Node node) {
