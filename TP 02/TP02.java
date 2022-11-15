@@ -117,14 +117,7 @@ public class TP02 {
 
             // update budiTree popularity juga
             daftarMesin.budiNow.popularity -= X;
-        }
-        // AVLTree budiTree = daftarMesin.budiNow.scoreTree;
-        // int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
-        // int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
-        // out.println(sumOfAfterDeleted);
-        // daftarMesin.print();
-
-        
+        }      
     }
 
     static void LIHAT() {
@@ -179,9 +172,6 @@ public class TP02 {
 }
 
 // class
-// IDE:
-// LinkedList<Mesin> (LinkedList)
-// Mesin.root (AVLTree)
 
 // ================================== LINKEDLIST THINGS ==================================
 
@@ -292,15 +282,6 @@ class CircularDoublyLL<E> {
         return mesin;
     }
 
-    void insertBetween(Mesin mesin, Mesin a, Mesin b) {
-        a.next = mesin;
-        mesin.prev = a;
-        mesin.next = b;
-        b.prev = mesin;
-
-        this.size += 1;
-    }
-
     void setBudiNow(Mesin mesin) {
         budiNow = mesin;
     }
@@ -367,51 +348,9 @@ class CircularDoublyLL<E> {
         }
     }
 
-
-
-    // swap [1]<->[2] = [2]<->[1]
-    void swap(Mesin satu, Mesin dua) {
-        // temp variable
-        Mesin satuPrev = satu.prev;
-        Mesin satuNext = satu.next;
-        Mesin duaPrev = dua.prev;
-        Mesin duaNext = dua.next;
-       
-        if (satu.equals(dua)) {
-            // do nothing
-        } else if (satuNext.equals(dua)) { // saat bersebelahan [1]<->[2]
-            satuPrev.next = dua;
-            dua.prev = satuPrev;
-            duaNext.prev = satu;
-            satu.next = duaNext;
-            satu.prev = dua;
-            dua.next = satu;
-            
-        } else if (duaNext.equals(satu)) { // kebalikan dari case atas [2]<->[1]
-            duaPrev.next = satu;
-            satu.prev = duaPrev;
-            satuNext.prev = dua;
-            dua.next = satuNext;
-            dua.prev = satu;
-            satu.next = dua;
-
-        } else {
-            dua.prev = satuPrev;
-            dua.next = satuNext;
-            satuPrev.next = dua;
-            satuNext.prev = dua;
-
-            satu.prev = duaPrev;
-            satu.next = duaNext;
-            duaPrev.next = satu;
-            duaNext.prev = satu;
-        }
-    }
-
     void clear() {
         header.next = footer;
         footer.prev = header;
-
         this.size = 0;
     }
 
@@ -506,12 +445,6 @@ class CircularDoublyLL<E> {
         mergesort(arr, 0, this.size - 1);
 
         return arr;
-
-        // print array
-        // for(int i = 0; i < this.size; i++) {
-        //     // System.out.println(arr[i].scoreTree.root.count);
-        //     this.addLast(arr[i]);
-        // }
     }
 
     // TEST
@@ -820,21 +753,6 @@ class AVLTree {
         }
         return getHeight(node.left) - getHeight(node.right);
     }
-
-    // Utility function to get number of nodes before this node
-    int countNodes(Node node, int key) {
-        if (node == null) {
-            return 0;
-        }
-
-        if (key < node.key) {
-            return countNodes(node.left, key);
-        } else if (key > node.key) {
-            return 1 + getHeight(node.left) + countNodes(node.right, key);
-        } else {
-            return getHeight(node.left);
-        }
-    }
     
     int max(int a, int b) {
         return (a > b) ? a : b;
@@ -860,23 +778,6 @@ class AVLTree {
         System.out.println();
     }
 
-    // pre order traversal
-    void preOrder(Node node) {
-        if (node == null)
-            return;
-
-        System.out.print(node.key +"["+ node.count + "]---");
-        preOrder(node.left);
-        preOrder(node.right);
-    }
- 
-    // Wrappers over above recursive functions
-    void printPreOrder() { 
-        System.out.println("PRE-ORDER TREE: ");
-        preOrder(root); 
-        System.out.println();
-    }
-
     // QUERY MAIN, LIHAT
     int countBefore(Node node, int insertedKey) {
         if (node == null) {
@@ -895,84 +796,6 @@ class AVLTree {
         }
         // ke kiri
         return countBefore(node.left, insertedKey);
-    }
-
-    int findXthKey(Node node, int X) {
-        if (node == null) {
-            return -1;
-        }
-        if (node.left != null) {
-            if (node.left.count == X) {
-                return node.key;
-            }
-            if (node.left.count > X) {
-                return findXthKey(node.left, X);
-            }
-            return findXthKey(node.right, X - node.left.count - 1);
-        } else {
-            if (X == 0) {
-                return node.key;
-            }
-            return findXthKey(node.right, X - 1);
-        }
-    }
-
-    // cari x th element key dari belakang
-    int findXthKeyReverse(Node node, int X) {
-        if (node == null) {
-            return -1;
-        }
-        if (node.right != null) {
-            if (node.right.count == X) {
-                return node.key;
-            }
-            if (node.right.count > X) {
-                return findXthKeyReverse(node.right, X);
-            }
-            return findXthKeyReverse(node.left, X - node.right.count - 1);
-        } else {
-            if (X == 0) {
-                return node.key;
-            }
-            return findXthKeyReverse(node.left, X - 1);
-        }
-    }
-
-    // jangan dinullin beneran, dikosongi aja countnya & sumnya
-    long deleteAfter(Node node, int insertedKey) {
-        if (node == null) {
-            return 0;
-        }
-        if (node.key == insertedKey) {
-            // cek kanan
-            if (node.right != null) {
-                // delete kanan
-                long deleted = node.right.sum;
-
-                node.right.count = 0; // reset sum
-                node.right.sum = 0; // reset sum
-
-                return deleted;
-            } else {
-                return 0;
-            }
-        }
-        if (node.key < insertedKey) {
-            // ke kanan
-            return deleteAfter(node.right, insertedKey);
-        }
-        // cek kanan lalu, ke kiri
-        if (node.right != null) {
-            // delete kanan
-            long deleted = node.right.sum;
-
-            node.right.count = 0;
-            node.right.sum = 0;
-
-            return node.key + deleted + deleteAfter(node.left, insertedKey);
-        } else {
-            return node.key + deleteAfter(node.left, insertedKey);
-        }
     }
 
     Node findMax() {
