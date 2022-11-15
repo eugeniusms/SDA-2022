@@ -54,7 +54,7 @@ public class TP02 {
                 EVALUASI();
             }
             // daftarMesin.print();
-            daftarMesin.budiNow.scoreTree.printInOrder();
+            // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
@@ -113,9 +113,9 @@ public class TP02 {
             long sum = 0;
             while(X > 0) {
                 Node maxi = daftarMesin.budiNow.scoreTree.findMax();
-                out.println("MAXI: "+maxi.key);
+                // out.println("MAXI: "+maxi.key);
                 sum += maxi.key;
-                daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
+                daftarMesin.budiNow.scoreTree.root = daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
                 X--;
             }
             out.println(sum);
