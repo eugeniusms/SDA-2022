@@ -20,11 +20,6 @@ public class TP02 {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
-        // input
-
-        // TESTCircularDoublyLL();
-        // TESTAVLTree();
-
         // INISIALISASI INPUT
         int N = in.nextInt(); // banyak mesin
         for(int i = 1; i <= N; i++) {
@@ -40,7 +35,7 @@ public class TP02 {
 
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
-        // daftarMesin.print();
+        daftarMesin.print();
         
 
         // QUERY
@@ -58,7 +53,7 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            // daftarMesin.print();
+            daftarMesin.print();
             // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
@@ -102,10 +97,11 @@ public class TP02 {
                 out.println("0");
             } else {
                 out.println(daftarMesin.budiNow.scoreTree.root.sum);
-                daftarMesin.budiNow.scoreTree.root = null; // set to null
+                daftarMesin.budiNow.scoreTree = new AVLTree();; // set to null reset AVLTree
                 // implement case
                 // update budiTree popularity juga
                 daftarMesin.budiNow.popularity = 0;
+                // daftarMesin.budiNow.
                 // budi pindah dulu baru mesin dipindah
                 daftarMesin.pindahMesin(daftarMesin.budiNow);                
             }
@@ -341,7 +337,7 @@ class CircularDoublyLL<E> {
             // do nothing
         } else if (this.size == 1) { // cuma satu mesin permainan
             // do nothing
-        } else if (mesin.next == footer) { // mesin berada paling kanan
+        } else if (mesin.next.equals(footer)) { // mesin berada paling kanan
             // mesin stay
             // budi pindah ke depan
             budiNow = header.next;
