@@ -40,7 +40,7 @@ public class TP02 {
 
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
-        // daftarMesin.print();
+        daftarMesin.print();
         
 
         // QUERY
@@ -58,7 +58,7 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            // daftarMesin.print();
+            daftarMesin.print();
             // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
@@ -97,13 +97,18 @@ public class TP02 {
 
 
         if(daftarMesin.budiNow.popularity <= X) {
-            out.println(daftarMesin.budiNow.scoreTree.root.sum);
-            daftarMesin.budiNow.scoreTree.root = null; // set to null
-            // implement case
-            daftarMesin.budiNow = daftarMesin.pindahMesin(daftarMesin.budiNow);
+            if (daftarMesin.budiNow.popularity <= 0) {
+                out.println("0");
+            } else {
+                out.println(daftarMesin.budiNow.scoreTree.root.sum);
+                daftarMesin.budiNow.scoreTree.root = null; // set to null
+                // implement case
+                // budi pindah dulu baru mesin dipindah
+                daftarMesin.pindahMesin(daftarMesin.budiNow);
 
-            // update budiTree popularity juga
-            daftarMesin.budiNow.popularity = 1;
+                // update budiTree popularity juga
+                daftarMesin.budiNow.popularity = 0;
+            }
         } else {
             // masuk ke case yg di dalam soal
             long sum = 0;
@@ -331,20 +336,21 @@ class CircularDoublyLL<E> {
     }
 
     // pindah mesin sekaligus mereturn mesin untuk ditempati budi
-    Mesin pindahMesin(Mesin mesin) {
+    void pindahMesin(Mesin mesin) {
         if (this.size == 0) {
             // do nothing
-            throw new NullPointerException("LinkedList Size is 0");
         } else if (this.size == 1) { // cuma satu mesin permainan
-            return mesin;
-        } else if (mesin.next == footer) { // paling kanan
-            return header.next;
+            // do nothing
+        } else if (mesin.next == footer) { // mesin berada paling kanan
+            // mesin stay
+            // budi pindah ke depan
+            budiNow = header.next;
         } else { // sisanya
+            // budi pindah ke kanannya
+            budiNow = mesin.next;
             // pindah mesin ke pojok kanan
-            Mesin tempatBaruBudi = gerakKanan();
             Mesin mesinDipindah = remove(mesin);
             this.addLast(mesinDipindah);
-            return tempatBaruBudi;
         }
     }
 
@@ -467,17 +473,17 @@ class CircularDoublyLL<E> {
             System.out.print("footer\n");
             
             // dari belakang
-            mesin = footer.prev;
-            System.out.println("List: footer->");
-            while (mesin != header) {
-                if (budiNow.equals(mesin)) {
-                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "][BUDI HERE]->");
-                } else {
-                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "]->");
-                }
-                mesin = mesin.prev;
-            }
-            System.out.print("header\n");
+            // mesin = footer.prev;
+            // System.out.println("List: footer->");
+            // while (mesin != header) {
+            //     if (budiNow.equals(mesin)) {
+            //         System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "][BUDI HERE]->");
+            //     } else {
+            //         System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "]->");
+            //     }
+            //     mesin = mesin.prev;
+            // }
+            // System.out.print("header\n");
         }
         System.out.println();
     }
