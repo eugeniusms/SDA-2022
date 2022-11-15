@@ -103,11 +103,10 @@ public class TP02 {
                 out.println(daftarMesin.budiNow.scoreTree.root.sum);
                 daftarMesin.budiNow.scoreTree.root = null; // set to null
                 // implement case
-                // budi pindah dulu baru mesin dipindah
-                daftarMesin.pindahMesin(daftarMesin.budiNow);
-
                 // update budiTree popularity juga
                 daftarMesin.budiNow.popularity = 0;
+                // budi pindah dulu baru mesin dipindah
+                daftarMesin.pindahMesin(daftarMesin.budiNow);                
             }
         } else {
             // masuk ke case yg di dalam soal
