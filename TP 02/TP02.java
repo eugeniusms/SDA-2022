@@ -58,8 +58,8 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            daftarMesin.print();
-            daftarMesin.budiNow.scoreTree.printInOrder();
+            // daftarMesin.print();
+            // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
@@ -96,7 +96,7 @@ public class TP02 {
         int X = in.nextInt();
 
 
-        if(X >= daftarMesin.size) {
+        if(daftarMesin.budiNow.popularity <= X) {
             out.println(daftarMesin.budiNow.scoreTree.root.sum);
             daftarMesin.budiNow.scoreTree.root = null; // set to null
             // implement case
