@@ -54,7 +54,7 @@ public class TP02 {
                 EVALUASI();
             }
             // daftarMesin.print();
-            // daftarMesin.budiNow.scoreTree.printInOrder();
+            daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
