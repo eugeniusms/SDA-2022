@@ -34,7 +34,7 @@ public class TP02 {
                 int S = in.nextInt(); // daftar score
                 scoreTree.root = scoreTree.insert(scoreTree.root, S);
             }
-            Mesin mesin = new Mesin(i, scoreTree);
+            Mesin mesin = new Mesin(i, scoreTree, M);
             daftarMesin.addLast(mesin);
         }
 
@@ -139,104 +139,6 @@ public class TP02 {
         // daftarMesin.print();
     }
 
-    static void TESTCircularDoublyLL() {
-        // add last 1
-        Mesin mesinBaru = new Mesin(1, tree);
-        daftarMesin.addLast(mesinBaru);
-        daftarMesin.print();
-        // add last 2
-        mesinBaru = new Mesin(2, tree);
-        daftarMesin.addLast(mesinBaru);
-        daftarMesin.print();
-        // remove last 1
-        daftarMesin.removeLast();
-        daftarMesin.print();
-        // remove last 2
-        daftarMesin.removeLast();
-        daftarMesin.print();
-        // remove last 3 => error
-        // daftarMesin.removeLast();
-        // daftarMesin.print();
-
-        // add first 1
-        mesinBaru = new Mesin(3, tree);
-        daftarMesin.addFirst(mesinBaru);
-        daftarMesin.print();
-        // add first 2
-        mesinBaru = new Mesin(4, tree);
-        daftarMesin.addFirst(mesinBaru);
-        daftarMesin.print();
-        // remove first 1
-        daftarMesin.removeFirst();
-        daftarMesin.print();
-        // remove first 2
-        daftarMesin.removeFirst();
-        daftarMesin.print();
-        // remove first 3 => error
-        // daftarMesin.removeFirst();
-        // daftarMesin.print();
-
-        // add first 1
-        Mesin mesinBaru5 = new Mesin(5, tree);
-        daftarMesin.addFirst(mesinBaru5);
-        daftarMesin.print();
-        // add last 1
-        Mesin mesinBaru6 = new Mesin(6, tree);
-        daftarMesin.addLast(mesinBaru6);
-        daftarMesin.print();
-        // add first 2
-        Mesin mesinBaru7 = new Mesin(7, tree);
-        daftarMesin.addFirst(mesinBaru7);
-        daftarMesin.print();
-        // add last 2
-        Mesin mesinBaru8 = new Mesin(8, tree);
-        daftarMesin.addLast(mesinBaru8);
-        daftarMesin.print();
-
-        // swap 5 <=> 7
-        daftarMesin.swap(mesinBaru5, mesinBaru7);
-        daftarMesin.print();
-        // swap 5 <=> 8
-        daftarMesin.swap(mesinBaru5, mesinBaru8);
-        daftarMesin.print();   
-
-        // remove 7
-        daftarMesin.remove(mesinBaru7);
-        daftarMesin.print();
-        // add first 7
-        daftarMesin.addFirst(mesinBaru7);
-        daftarMesin.print();
-        // pindah mesin 6 ke pojok kanan, budi ke 5
-        Mesin ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
-        daftarMesin.print();
-        System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
-        // mesin 6 tetep di pojok kanan, budi ke depan
-        ditempatiBudi = daftarMesin.pindahMesin(mesinBaru6);
-        daftarMesin.print();
-        System.out.println("Mesin Ditempati Budi: "+ditempatiBudi.id + "\n");
-    }
-
-    static void TESTAVLTree() {
-        // balance tree
-        tree.root = tree.insert(tree.root, 8);
-        tree.root = tree.insert(tree.root, 4);
-        tree.root = tree.insert(tree.root, 12);
-        tree.root = tree.insert(tree.root, 2);
-        tree.root = tree.insert(tree.root, 6);
-        tree.root = tree.insert(tree.root, 10);
-        tree.root = tree.insert(tree.root, 14);
-        tree.root = tree.insert(tree.root, 1);
-        tree.root = tree.insert(tree.root, 3);
-        tree.root = tree.insert(tree.root, 5);
-        tree.root = tree.insert(tree.root, 7);
-        tree.root = tree.insert(tree.root, 9);
-        tree.root = tree.insert(tree.root, 11);
-        tree.root = tree.insert(tree.root, 13);
-        tree.root = tree.insert(tree.root, 15);
-        tree.printInOrder();
-        tree.printPreOrder();
-    }
-
     // taken from https://codeforces.com/submissions/Petr
     static class InputReader {
         public BufferedReader reader;
@@ -277,10 +179,10 @@ class Mesin {
     int popularity;
     int id;
     
-    Mesin(int id, AVLTree scoreTree) {
+    Mesin(int id, AVLTree scoreTree, int popularity) {
         this.id = id;
         this.scoreTree = scoreTree;
-        this.popularity = scoreTree.root.count;
+        this.popularity = popularity;
     }
 }
 
@@ -292,8 +194,8 @@ class CircularDoublyLL<E> {
     // construct empty list
     CircularDoublyLL() {
         this.size = 0;
-        this.header = new Mesin(0, null);
-        this.footer = new Mesin(0, null);
+        this.header = new Mesin(0, null, 0);
+        this.footer = new Mesin(0, null, 0);
     }
 
     // sepertinya done (belum dicek)
