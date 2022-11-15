@@ -59,6 +59,7 @@ public class TP02 {
                 EVALUASI();
             }
             // daftarMesin.print();
+            System.out.println("POPULARITY: "+daftarMesin.budiNow.popularity);
             daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
@@ -94,7 +95,6 @@ public class TP02 {
     // TODO: Susun Algoritma HAPUS
     static void HAPUS() {
         int X = in.nextInt();
-
 
         if(daftarMesin.budiNow.scoreTree.root.count <= X) {
             if (daftarMesin.budiNow.popularity <= 0) {
