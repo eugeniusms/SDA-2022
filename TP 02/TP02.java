@@ -135,8 +135,8 @@ public class TP02 {
         int sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
         int sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
         // get result
-        out.println("BEFORE L-1: "+sumOfBeforeL);
-        out.println("BEFORE H: "+sumOfBeforeH);
+        // out.println("BEFORE L-1: "+sumOfBeforeL);
+        // out.println("BEFORE H: "+sumOfBeforeH);
         out.println(sumOfBeforeH - sumOfBeforeL);
     }
 
