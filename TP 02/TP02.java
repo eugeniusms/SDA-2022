@@ -113,6 +113,7 @@ public class TP02 {
             long sum = 0;
             while(X > 0) {
                 Node maxi = daftarMesin.budiNow.scoreTree.findMax();
+                out.println("MAXI: "+maxi.key);
                 sum += maxi.key;
                 daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
                 X--;
