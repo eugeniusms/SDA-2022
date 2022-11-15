@@ -99,6 +99,9 @@ public class TP02 {
             daftarMesin.budiNow.scoreTree.root = null; // set to null
             // implement case
             daftarMesin.pindahMesin(daftarMesin.budiNow);
+
+            // update budiTree popularity juga
+            daftarMesin.budiNow.popularity = 1;
         } else {
             // masuk ke case yg di dalam soal
             long sum = 0;
@@ -109,12 +112,17 @@ public class TP02 {
                 X--;
             }
             out.println(sum);
+
+            // update budiTree popularity juga
+            daftarMesin.budiNow.popularity -= X;
         }
         // AVLTree budiTree = daftarMesin.budiNow.scoreTree;
         // int XthReverseKey = budiTree.findXthKeyReverse(budiTree.root, X);
         // int sumOfAfterDeleted = budiTree.deleteAfter(budiTree.root, XthReverseKey);
         // out.println(sumOfAfterDeleted);
         // daftarMesin.print();
+
+        
     }
 
     static void LIHAT() {
@@ -305,8 +313,8 @@ class CircularDoublyLL<E> {
             counter++;
             check = check.next;
         }
-        // return counter + 1;
-        return counter;
+        // return counter;
+        return counter + 1;
     }
 
     // get kanan mesin untuk ditempati budi
