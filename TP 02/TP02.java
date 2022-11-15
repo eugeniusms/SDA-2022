@@ -35,7 +35,7 @@ public class TP02 {
 
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
-        daftarMesin.print();
+        // daftarMesin.print();
         
 
         // QUERY
@@ -53,7 +53,7 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            daftarMesin.print();
+            // daftarMesin.print();
             // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
