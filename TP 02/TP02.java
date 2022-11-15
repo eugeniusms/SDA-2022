@@ -41,7 +41,7 @@ public class TP02 {
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
         // daftarMesin.print();
-        daftarMesin.budiNow.scoreTree.printInOrder();
+        
 
         // QUERY
         int Q = in.nextInt();
@@ -58,6 +58,8 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
+            daftarMesin.print();
+            daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
@@ -107,6 +109,7 @@ public class TP02 {
             long sum = 0;
             while(X > 0) {
                 Node maxi = daftarMesin.budiNow.scoreTree.findMax();
+                out.println("MAXI: " + maxi.key);
                 Node deleted = daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
                 sum += deleted.key;
                 X--;
@@ -522,7 +525,11 @@ class CircularDoublyLL<E> {
             Mesin mesin = header.next;
             System.out.println("List: header->");
             while (mesin != footer) {
-                System.out.println("[ID: " + mesin.id + "|PO: " + mesin.scoreTree.root.count + "|" + mesin + "]->");
+                if (budiNow.equals(mesin)) {
+                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "][BUDI HERE]->");
+                } else {
+                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "]->");
+                }
                 mesin = mesin.next;
             }
             System.out.print("footer\n");
@@ -531,7 +538,11 @@ class CircularDoublyLL<E> {
             mesin = footer.prev;
             System.out.println("List: footer->");
             while (mesin != header) {
-                System.out.println("[ID: " + mesin.id + "|PO: " + mesin.scoreTree.root.count + "|" + mesin + "]->");
+                if (budiNow.equals(mesin)) {
+                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "][BUDI HERE]->");
+                } else {
+                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "]->");
+                }
                 mesin = mesin.prev;
             }
             System.out.print("header\n");
