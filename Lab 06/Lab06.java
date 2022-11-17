@@ -73,22 +73,25 @@ public class Lab06 {
     }
 }
 
-// TODO: Lengkapi class ini
-class Saham {
-    public int id;
+class Saham implements Comparable<Saham> {
+    public int id; // nomor seri
     public int harga;
 
     public Saham(int id, int harga) {
-        this.id = id;
+        this.id = id; 
         this.harga = harga;
     }
-}
 
-// TODO: Lengkapi class ini
-class Heap {
+    @Override
+    public int compareTo(Saham other) {
+        if (this.harga == other.harga) {
+            return this.id - other.id; // id terkecil hingga terbesar
+        }
+        return this.harga - other.harga; // harga termurah hingga termahal
+    }
 
-    public Heap() {
-
+    boolean isLessThan(Saham other) {
+        return this.compareTo(other) < 0;
     }
 }
 
@@ -304,3 +307,4 @@ class MinHeap {
 // 1) https://stackoverflow.com/questions/15319561/how-to-implement-a-median-heap/15319593#15319593
 // 2) https://www.geeksforgeeks.org/max-heap-in-java/
 // 3) https://www.geeksforgeeks.org/min-heap-in-java/#:~:text=A%20Min%2DHeap%20is%20a,child%20at%20index%202k%20%2B%202.
+// 4) https://stackoverflow.com/questions/13051568/making-your-own-class-comparable
