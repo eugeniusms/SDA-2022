@@ -577,47 +577,26 @@ class AVLTree {
             if (root.jumlahSama > 1) {
                 root.jumlahSama -= 1;
                 root.count -= 1;
-                root.sum -= root.key;
-                return root;
-            }
-  
-            // node with only one child or no child 
-            if ((root.left == null) || (root.right == null)) 
-            { 
-                Node temp = null; 
-                if (temp == root.left) 
-                    temp = root.right; 
-                else
-                    temp = root.left; 
-  
-                // No child case 
-                if (temp == null) 
-                { 
-                    temp = root; 
-                    root = null; 
+                root.sum -= key;
+            } else {
+                // node with only one child or no child 
+                if ((root.left == null) || (root.right == null)) { 
+                    root = (root.left == null) ? root.right : root.left;
+                } else {
+                    // node with two children: Get the inorder 
+                    // successor (smallest in the right subtree) 
+                    Node temp = lowerBound(root.right); 
+    
+                    // Copy the inorder successor's data to this node 
+                    root.key = temp.key; 
+                    // fixing yg keupdate ga cuma key doang
+                    root.jumlahSama = temp.jumlahSama;
+                    root.count = temp.count;
+                    root.sum = temp.sum;
+                    // Delete the inorder successor 
+                    root.right = delete(root.right, temp.key); 
                 } 
-                else // One child case 
-                    root = temp; // Copy the contents of 
-                                // the non-empty child 
-            } 
-            else
-            { 
-  
-                // node with two children: Get the inorder 
-                // successor (smallest in the right subtree) 
-                Node temp = lowerBound(root.right); 
-  
-                // Copy the inorder successor's data to this node 
-                root.key = temp.key; 
-                // fixing yg keupdate ga cuma key doang
-                root.jumlahSama = temp.jumlahSama;
-                root.count = temp.count;
-                root.sum = temp.sum;
-                temp.count = 1;
-  
-                // Delete the inorder successor 
-                root.right = delete(root.right, temp.key); 
-            } 
+            }
         } 
   
         // If the tree had only one node then return 
