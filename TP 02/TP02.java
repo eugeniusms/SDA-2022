@@ -33,6 +33,14 @@ public class TP02 {
             daftarMesin.addLast(mesin);
         }
 
+        // SORTING MESIN DULU
+        Mesin[] arr = daftarMesin.sort(); // wujud sorted adalah array
+        // insert new data sorted to daftarMesin after reset the list
+        daftarMesin.clear();
+        for(int i = 0; i < arr.length; i++) {
+            daftarMesin.addLast(arr[i]);
+        }
+
         // INISIALISASI BUDI
         daftarMesin.setBudiNow(daftarMesin.header.next);
         // daftarMesin.print();
