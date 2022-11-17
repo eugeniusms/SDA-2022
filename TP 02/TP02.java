@@ -95,7 +95,6 @@ public class TP02 {
         if(daftarMesin.budiNow.popularity <= X) {
             if (daftarMesin.budiNow.popularity <= 0) {
                 out.println("0");
-                daftarMesin.budiNow.scoreTree = new AVLTree();
                 daftarMesin.budiNow.popularity = 0; // test mana tau sampai minus
                 daftarMesin.pindahMesin(daftarMesin.budiNow);  
             } else {
