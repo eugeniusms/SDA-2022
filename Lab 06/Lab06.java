@@ -35,8 +35,22 @@ public class Lab06 {
             System.out.println("[HARGA: "+initialSaham[i].harga + " ID: " + initialSaham[i].id+"]");
         }
 
-        Saham median = getMedian(initialSaham, N);
-        System.out.println("MEDIAN: [HARGA: "+median.harga + " ID: " + median.id+"]");
+        // get median of initial saham
+        int median = getIndexMedian(N);
+        Saham sahamMedian = initialSaham[median];
+        System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]");
+
+        // inisiasi maxheap untuk data ke 1 - median
+        MaxHeap maxHeap = new MaxHeap(200069);
+        for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
+            maxHeap.insert(initialSaham[i]);
+        }
+        // inisiasi minheap untuk data ke median - N
+        MinHeap minHeap = new MinHeap(200069);
+        for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
+            minHeap.insert(initialSaham[i]);
+        }
+
 
         // int Q = in.nextInt();
 
@@ -56,11 +70,11 @@ public class Lab06 {
         out.flush();
     }
 
-    static Saham getMedian (Saham[] saham, int length) {
+    static int getIndexMedian (int length) {
         if (length % 2 == 0) {
-            return saham[length/2];
+            return length/2;
         } else {
-            return saham[(length-1)/2];
+            return (length-1)/2;
         }
     }
 
