@@ -291,12 +291,10 @@ class MinHeap {
  
     // To remove and return the minimum
     // element from the heap
-    public int remove() {
- 
+    public int extractMin() {
         int popped = Heap[FRONT];
         Heap[FRONT] = Heap[size--];
         minHeapify(FRONT);
- 
         return popped;
     }
 }
