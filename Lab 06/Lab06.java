@@ -60,7 +60,7 @@ public class Lab06 {
         if (length % 2 == 0) {
             return saham[length/2];
         } else {
-            return saham[(length+1)/2];
+            return saham[(length-1)/2];
         }
     }
 
