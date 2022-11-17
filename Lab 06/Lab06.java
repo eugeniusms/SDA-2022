@@ -35,6 +35,9 @@ public class Lab06 {
             System.out.println("[HARGA: "+initialSaham[i].harga + " ID: " + initialSaham[i].id+"]");
         }
 
+        Saham median = getMedian(initialSaham, N);
+        System.out.println("MEDIAN: [HARGA: "+median.harga + " ID: " + median.id+"]");
+
         // int Q = in.nextInt();
 
         // // TODO
@@ -51,6 +54,14 @@ public class Lab06 {
         //     }
         // }
         out.flush();
+    }
+
+    static Saham getMedian (Saham[] saham, int length) {
+        if (length % 2 == 0) {
+            return saham[length/2];
+        } else {
+            return saham[(length+1)/2];
+        }
     }
 
     static class InputReader {
