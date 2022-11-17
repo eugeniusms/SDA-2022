@@ -34,9 +34,7 @@ public class TP02 {
         }
 
         // INISIALISASI BUDI
-        daftarMesin.setBudiNow(daftarMesin.header.next);
-        // daftarMesin.print();
-        
+        daftarMesin.setBudiNow(daftarMesin.header.next);        
 
         // QUERY
         int Q = in.nextInt();
@@ -53,9 +51,6 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            // System.out.println(query);
-            // daftarMesin.print();
-            // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
@@ -86,7 +81,6 @@ public class TP02 {
         }
     }
 
-    // TODO: Susun Algoritma HAPUS
     static void HAPUS() {
         int X = in.nextInt();
 
@@ -128,8 +122,6 @@ public class TP02 {
         long sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
         long sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
         // get result
-        // out.println("BEFORE L-1: "+sumOfBeforeL);
-        // out.println("BEFORE H: "+sumOfBeforeH);
         out.println(sumOfBeforeH - sumOfBeforeL);
     }
 
@@ -397,41 +389,6 @@ class CircularDoublyLL<E> {
 
         return arr;
     }
-
-    // TEST
-    void print() {
-        System.out.println("LinkedList Size is " + this.size);
-        if (this.size == 0) {
-            System.out.println("List: Kosong :D");
-        } else {
-            // dari depan
-            Mesin mesin = header.next;
-            System.out.println("List: header->");
-            while (mesin != footer) {
-                if (budiNow.equals(mesin)) {
-                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "][BUDI HERE]->");
-                } else {
-                    System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "]->");
-                }
-                mesin = mesin.next;
-            }
-            System.out.print("footer\n");
-            
-            // dari belakang
-            // mesin = footer.prev;
-            // System.out.println("List: footer->");
-            // while (mesin != header) {
-            //     if (budiNow.equals(mesin)) {
-            //         System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "][BUDI HERE]->");
-            //     } else {
-            //         System.out.println("[ID: " + mesin.id + "|PO: " + mesin.popularity + "|" + mesin + "]->");
-            //     }
-            //     mesin = mesin.prev;
-            // }
-            // System.out.print("header\n");
-        }
-        System.out.println();
-    }
 }
 
 // ====================================== AVL THINGS ====================================
@@ -604,11 +561,9 @@ class AVLTree {
             return root; 
   
         // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE 
-        long a = root.key;
-        long b = root.jumlahSama;
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1; 
         root.count = root.jumlahSama + getCount(root.left) + getCount(root.right);
-        root.sum = (a*b) + getSum(root.left) + getSum(root.right);
+        root.sum = root.key*root.jumlahSama + getSum(root.left) + getSum(root.right);
   
         // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether 
         // this node became unbalanced) 
@@ -694,26 +649,6 @@ class AVLTree {
     long max(long a, long b) {
         return (a > b) ? a : b;
     }   
-
-    // in order traversal
-    void inOrder(Node node) {
-        if (node == null)
-            return;
- 
-        /* first recur on left child */
-        inOrder(node.left);
-        /* then print the data of node */
-        System.out.println(node.key +"[COUNT:"+ node.count + "]-[SAMA:"+ node.jumlahSama + "]-[SUM:" + node.sum + "]|v");
-        /* now recur on right child */
-        inOrder(node.right);
-    }
- 
-    // Wrappers over above recursive functions
-    void printInOrder() { 
-        System.out.println("IN-ORDER TREE: ");
-        inOrder(root); 
-        System.out.println();
-    }
 
     // QUERY MAIN, LIHAT
     long countBefore(Node node, long insertedKey) {
