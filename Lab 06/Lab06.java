@@ -32,42 +32,43 @@ public class Lab06 {
 
         // cek isi array
         for(int i = 0; i < N; i++) {
-            System.out.println("[HARGA: "+initialSaham[i].harga + " ID: " + initialSaham[i].id+"]");
+            System.out.println("[HARGA: "+initialSaham[i].harga + " ID: " + initialSaham[i].id+"]"); // DEBUG
         }
 
         // get median of initial saham
         int median = getIndexMedian(N);
         Saham sahamMedian = initialSaham[median];
-        System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]");
+        System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
 
         // inisiasi maxheap untuk data ke 1 - median
         MaxHeap maxHeap = new MaxHeap(200069);
         for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
             maxHeap.insert(initialSaham[i]);
         }
-        maxHeap.print();
+        maxHeap.print(); // DEBUG
         // inisiasi minheap untuk data ke median - N
         MinHeap minHeap = new MinHeap(200069);
         for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
             minHeap.insert(initialSaham[i]);
         }
-        minHeap.print();
+        minHeap.print(); // DEBUG
 
-        // int Q = in.nextInt();
+        // input query
+        int Q = in.nextInt();
+        for (int i = 0; i < Q; i++) {
+            String q = in.next();
 
-        // // TODO
-        // for (int i = 0; i < Q; i++) {
-        //     String q = in.next();
+            if (q.equals("TAMBAH")) {
+                int harga = in.nextInt();
+                TAMBAH(harga);
 
-        //     if (q.equals("TAMBAH")) {
-        //         int harga = in.nextInt();
+            } else if (q.equals("UBAH")) {
+                int nomorSeri = in.nextInt();
+                int harga = in.nextInt();
+                UBAH(nomorSeri, harga);
 
-        //     } else if (q.equals("UBAH")) {
-        //         int nomorSeri = in.nextInt();
-        //         int harga = in.nextInt();
-
-        //     }
-        // }
+            }
+        }
         out.flush();
     }
 
@@ -77,6 +78,14 @@ public class Lab06 {
         } else {
             return (length-1)/2;
         }
+    }
+
+    static void TAMBAH(int harga) {
+        // TODO
+    }
+
+    static void UBAH(int nomorSeri, int harga) {
+        // TODO
     }
 
     static class InputReader {
