@@ -25,11 +25,13 @@ public class TP02 {
         for(int i = 1; i <= N; i++) {
             int M = in.nextInt(); // banyak score
             AVLTree scoreTree = new AVLTree();
+            long sumScore = 0;
             for(int s = 1; s <= M; s++) {
                 int S = in.nextInt(); // daftar score
                 scoreTree.root = scoreTree.insert(scoreTree.root, S);
+                sumScore += S;
             }
-            Mesin mesin = new Mesin(i, scoreTree, M);
+            Mesin mesin = new Mesin(i, scoreTree, M, sumScore);
             daftarMesin.addLast(mesin);
         }
 
@@ -70,6 +72,8 @@ public class TP02 {
         out.println(sumOfCount - sumOfBefore + 1);
         // update budiTree popularity juga
         daftarMesin.budiNow.popularity += 1;
+        // insert sumScore in mesin
+        daftarMesin.budiNow.sumScore += insertedKey;
     }
 
     static void GERAK() {
@@ -88,13 +92,15 @@ public class TP02 {
             if (daftarMesin.budiNow.popularity <= 0) {
                 out.println("0");
                 daftarMesin.budiNow.popularity = 0; // test mana tau sampai minus
+                daftarMesin.budiNow.sumScore = 0;
                 daftarMesin.pindahMesin(daftarMesin.budiNow);  
             } else {
-                out.println(daftarMesin.budiNow.scoreTree.root.sum);
+                out.println(daftarMesin.budiNow.sumScore);
                 // implement case
                 // update budiTree popularity juga
                 daftarMesin.budiNow.scoreTree = new AVLTree();; // set to null reset AVLTree
                 daftarMesin.budiNow.popularity = 0;
+                daftarMesin.budiNow.sumScore = 0;
                 // budi pindah dulu baru mesin dipindah
                 daftarMesin.pindahMesin(daftarMesin.budiNow);                
             }
@@ -110,6 +116,7 @@ public class TP02 {
                 daftarMesin.budiNow.scoreTree.root = daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
                 X--;
             }
+            daftarMesin.budiNow.sumScore -= sum;
             out.println(sum);
         }      
     }
@@ -171,11 +178,13 @@ class Mesin {
     AVLTree scoreTree; // penyimpan score
     int popularity;
     int id;
+    long sumScore;
     
-    Mesin(int id, AVLTree scoreTree, int popularity) {
+    Mesin(int id, AVLTree scoreTree, int popularity, long sumScore) {
         this.id = id;
         this.scoreTree = scoreTree;
         this.popularity = popularity;
+        this.sumScore = sumScore;
     }
 }
 
@@ -187,8 +196,8 @@ class CircularDoublyLL<E> {
     // construct empty list
     CircularDoublyLL() {
         this.size = 0;
-        this.header = new Mesin(0, null, 0);
-        this.footer = new Mesin(0, null, 0);
+        this.header = new Mesin(0, null, 0, 0);
+        this.footer = new Mesin(0, null, 0, 0);
     }
 
     // done
@@ -395,7 +404,6 @@ class CircularDoublyLL<E> {
 
 class Node { // AVL Node
     long key, height, count;// key => score
-    long sum;
     Node left, right;
     long jumlahSama; // jumlah isi key yg sama // URUSAN TERKAIT DELETE & INSERT PADA AVLTREE
 
@@ -403,7 +411,6 @@ class Node { // AVL Node
         this.key = key;
         this.height = 1;
         this.count = 1;
-        this.sum = key; 
         this.jumlahSama = 1;
     }
 }
@@ -424,11 +431,9 @@ class AVLTree {
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
         y.count = y.jumlahSama + getCount(y.left) + getCount(y.right);
-        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right);
 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
         x.count = x.jumlahSama + getCount(x.left) + getCount(x.right);
-        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right);
 
         // Return new root 
         return x; 
@@ -446,11 +451,9 @@ class AVLTree {
         // Update heights 
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
         y.count = y.jumlahSama + getCount(y.left) + getCount(y.right);
-        y.sum = (y.key * y.jumlahSama) + getSum(y.left) + getSum(y.right);
 
         x.height = max(getHeight(x.left), getHeight(x.right)) + 1; 
         x.count = x.jumlahSama + getCount(x.left) + getCount(x.right);
-        x.sum = (x.key * x.jumlahSama) + getSum(x.left) + getSum(x.right);
   
         // Return new root 
         return x; 
@@ -470,14 +473,12 @@ class AVLTree {
             // no duplication
             node.jumlahSama += 1;
             node.count += 1;
-            node.sum += node.key;
             return node;
         }
 
         // Update height
         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
         node.count = node.jumlahSama + getCount(node.left) + getCount(node.right);
-        node.sum = (node.key * node.jumlahSama) + getSum(node.left) + getSum(node.right);
 
         // Get balance factor
         long balance = getBalance(node);
@@ -534,7 +535,6 @@ class AVLTree {
             if (root.jumlahSama > 1) {
                 root.jumlahSama -= 1;
                 root.count -= 1;
-                root.sum -= key;
             } else {
                 // node with only one child or no child 
                 if ((root.left == null) || (root.right == null)) { 
@@ -549,7 +549,6 @@ class AVLTree {
                     // fixing yg keupdate ga cuma key doang
                     root.jumlahSama = temp.jumlahSama;
                     root.count = temp.count;
-                    root.sum = temp.sum;
                     // Delete the inorder successor 
                     root.right = delete(root.right, temp.key); 
                 } 
@@ -563,7 +562,6 @@ class AVLTree {
         // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE 
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1; 
         root.count = root.jumlahSama + getCount(root.left) + getCount(root.right);
-        root.sum = root.key*root.jumlahSama + getSum(root.left) + getSum(root.right);
   
         // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether 
         // this node became unbalanced) 
@@ -628,14 +626,6 @@ class AVLTree {
             return 0;
         }
         return node.count;
-    }
-
-    // Utility function to get sum of peoples
-    long getSum(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        return node.sum;
     }
 
     // Utility function to get balance factor of node
