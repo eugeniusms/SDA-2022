@@ -62,7 +62,7 @@ public class TP02 {
 
     // method
 
-    static void MAIN() { // TODO: BELUM INCLUDE STACK/QUEUE DI DALAMNYA
+    static void MAIN() { 
         int insertedKey = in.nextInt();
         // insert score to tree
         AVLTree budiTree = daftarMesin.budiNow.scoreTree;
@@ -72,7 +72,6 @@ public class TP02 {
         int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
 
         out.println(sumOfCount - sumOfBefore + 1);
-        // budiTree.printInOrder();
         // update budiTree popularity juga
         daftarMesin.budiNow.popularity += 1;
     }
@@ -204,7 +203,7 @@ class CircularDoublyLL<E> {
         this.footer = new Mesin(0, null, 0);
     }
 
-    // sepertinya done (belum dicek)
+    // done
     void addLast(Mesin mesin) {
         if (this.size == 0) { // empty
             footer.prev = mesin;
@@ -222,7 +221,6 @@ class CircularDoublyLL<E> {
         this.size += 1;
     }
 
-    // done
     Mesin remove(Mesin mesin) {
         if (this.size == 0) { // empty
             // do nothing
@@ -244,8 +242,6 @@ class CircularDoublyLL<E> {
     }
 
     int getBudiMesinSortedNow() {
-        // System.out.println("BUDI NOW: " + budiNow.id + "["+ budiNow + "]");
-
         Mesin check = header.next;
         int counter = 0;
         while (!check.equals(budiNow)) {
@@ -264,7 +260,7 @@ class CircularDoublyLL<E> {
             throw new NullPointerException("LinkedList Size is 0");
         } else if (this.size == 1) { // cuma satu elemen
             // do nothing
-        } else if (budiNow.next == footer) { // elemen terakhir
+        } else if (budiNow.next.equals(footer)) { // elemen terakhir
             budiNow = header.next;
         } else {
             budiNow = budiNow.next;
@@ -279,7 +275,7 @@ class CircularDoublyLL<E> {
             throw new NullPointerException("LinkedList Size is 0");
         } else if (this.size == 1) {
             // do nothing
-        } else if (budiNow.prev == header) { // elemen pertama
+        } else if (budiNow.prev.equals(header)) { // elemen pertama
             budiNow = footer.prev;
         } else {
             budiNow = budiNow.prev;
@@ -306,6 +302,7 @@ class CircularDoublyLL<E> {
         }
     }
 
+    // clear all mesin
     void clear() {
         header.next = footer;
         footer.prev = header;
