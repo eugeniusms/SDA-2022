@@ -90,8 +90,6 @@ public class TP02 {
     static void HAPUS() {
         int X = in.nextInt();
 
-        // out.println("POPULARITY: "+daftarMesin.budiNow.popularity);
-
         if(daftarMesin.budiNow.popularity <= X) {
             if (daftarMesin.budiNow.popularity <= 0) {
                 out.println("0");
@@ -99,11 +97,10 @@ public class TP02 {
                 daftarMesin.pindahMesin(daftarMesin.budiNow);  
             } else {
                 out.println(daftarMesin.budiNow.scoreTree.root.sum);
-                daftarMesin.budiNow.scoreTree = new AVLTree();; // set to null reset AVLTree
                 // implement case
                 // update budiTree popularity juga
+                daftarMesin.budiNow.scoreTree = new AVLTree();; // set to null reset AVLTree
                 daftarMesin.budiNow.popularity = 0;
-                // daftarMesin.budiNow.
                 // budi pindah dulu baru mesin dipindah
                 daftarMesin.pindahMesin(daftarMesin.budiNow);                
             }
