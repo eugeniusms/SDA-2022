@@ -131,7 +131,7 @@ class Saham implements Comparable<Saham> {
 }
 
 class MaxHeap {
-    private int[] Heap;
+    private Saham[] Heap;
     private int size;
     private int maxsize;
  
@@ -142,7 +142,7 @@ class MaxHeap {
         // This keyword refers to current instance itself
         this.maxsize = maxsize;
         this.size = 0;
-        Heap = new int[this.maxsize];
+        Heap = new Saham[this.maxsize];
     }
  
     // Returning position of parent
@@ -159,7 +159,7 @@ class MaxHeap {
  
     // Swapping nodes
     private void swap(int fpos, int spos) {
-        int tmp;
+        Saham tmp;
         tmp = Heap[fpos];
         Heap[fpos] = Heap[spos];
         Heap[spos] = tmp;
@@ -170,11 +170,10 @@ class MaxHeap {
         if (isLeaf(pos))
             return;
  
-        if (Heap[pos] < Heap[leftChild(pos)]
-            || Heap[pos] < Heap[rightChild(pos)]) {
+        if (Heap[pos].isLessThan(Heap[leftChild(pos)])
+            || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
  
-            if (Heap[leftChild(pos)]
-                > Heap[rightChild(pos)]) {
+            if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
                 swap(pos, leftChild(pos));
                 maxHeapify(leftChild(pos));
             }
@@ -186,12 +185,12 @@ class MaxHeap {
     }
  
     // Inserts a new element to max heap
-    public void insert(int element) {
+    public void insert(Saham element) {
         Heap[size] = element;
  
         // Traverse up and fix violated property
         int current = size;
-        while (Heap[current] > Heap[parent(current)]) {
+        while (Heap[parent(current)].isLessThan(Heap[current])) {
             swap(current, parent(current));
             current = parent(current);
         }
@@ -222,8 +221,8 @@ class MaxHeap {
     }
 
     // Remove an element from max heap
-    public int extractMax() {
-        int popped = Heap[0];
+    public Saham extractMax() {
+        Saham popped = Heap[0];
         Heap[0] = Heap[--size];
         maxHeapify(0);
         return popped;
