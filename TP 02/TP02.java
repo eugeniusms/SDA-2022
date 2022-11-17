@@ -53,6 +53,7 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
+            System.out.println(query);
             daftarMesin.print();
             // daftarMesin.budiNow.scoreTree.printInOrder();
         }
@@ -144,7 +145,6 @@ public class TP02 {
             daftarMesin.addLast(arr[i]);
         }
         out.println(daftarMesin.getBudiMesinSortedNow());
-        // daftarMesin.print();
     }
 
     // taken from https://codeforces.com/submissions/Petr
