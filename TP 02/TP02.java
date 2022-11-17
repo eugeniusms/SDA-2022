@@ -53,7 +53,7 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            // daftarMesin.print();
+            daftarMesin.print();
             // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
@@ -94,6 +94,7 @@ public class TP02 {
 
         if(daftarMesin.budiNow.popularity <= X) {
             if (daftarMesin.budiNow.popularity <= 0) {
+                daftarMesin.budiNow.popularity = 0; // test mana tau sampai minus
                 out.println("0");
                 daftarMesin.pindahMesin(daftarMesin.budiNow);  
             } else {
@@ -204,37 +205,6 @@ class CircularDoublyLL<E> {
     }
 
     // sepertinya done (belum dicek)
-    void addFirst(Mesin mesin) {
-        if (this.size == 0) { // empty
-            footer.prev = mesin;
-            mesin.next = footer;
-        } else { // is exist
-            mesin.next = header.next;
-            mesin.next.prev = mesin;
-        }
-        header.next = mesin;
-        mesin.prev = header;
-
-        this.size += 1;
-    }
-
-    // sepertinya done (belum dicek)
-    void removeFirst() {
-        if (this.size == 0) { // empty
-            // do nothing
-            throw new NullPointerException("LinkedList Size is 0");
-        } else if (this.size == 1) { // tidak ada elemen kedua
-            header.next = footer;
-            footer.prev = header;
-        } else { // saat ada lebih dari 1 node
-            header.next = header.next.next;
-            header.next.prev = header;
-        }
-
-        this.size -= 1;
-    }
-
-    // sepertinya done (belum dicek)
     void addLast(Mesin mesin) {
         if (this.size == 0) { // empty
             footer.prev = mesin;
@@ -250,22 +220,6 @@ class CircularDoublyLL<E> {
         }
 
         this.size += 1;
-    }
-
-    // sepertinya done (belum dicek)
-    void removeLast() {
-        if (this.size == 0) { // empty
-            // do nothing
-            throw new NullPointerException("LinkedList Size is 0");
-        } else if (this.size == 1) { // tidak ada elemen kedua
-            header.next = footer;
-            footer.prev = header;
-        } else { // saat ada lebih dari 1 node
-            footer.prev.prev.next = footer;
-            footer.prev = footer.prev.prev;
-        }
-
-        this.size -= 1;
     }
 
     // done
