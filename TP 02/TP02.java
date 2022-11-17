@@ -609,6 +609,11 @@ class AVLTree {
   
                 // Copy the inorder successor's data to this node 
                 root.key = temp.key; 
+                // fixing yg keupdate ga cuma key doang
+                root.jumlahSama = temp.jumlahSama;
+                root.count = temp.count;
+                root.sum = temp.sum;
+                temp.count = 1;
   
                 // Delete the inorder successor 
                 root.right = delete(root.right, temp.key); 
