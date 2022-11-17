@@ -69,8 +69,8 @@ public class TP02 {
         AVLTree budiTree = daftarMesin.budiNow.scoreTree;
         budiTree.root = budiTree.insert(budiTree.root, insertedKey);
         // get result
-        int sumOfCount = budiTree.root.count;
-        int sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
+        long sumOfCount = budiTree.root.count;
+        long sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
 
         out.println(sumOfCount - sumOfBefore + 1);
         // update budiTree popularity juga
@@ -125,8 +125,8 @@ public class TP02 {
         int highkey = in.nextInt();
         // get count before && count after
         AVLTree budiTree = daftarMesin.budiNow.scoreTree;
-        int sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
-        int sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
+        long sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
+        long sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
         // get result
         // out.println("BEFORE L-1: "+sumOfBeforeL);
         // out.println("BEFORE H: "+sumOfBeforeH);
@@ -437,12 +437,12 @@ class CircularDoublyLL<E> {
 // ====================================== AVL THINGS ====================================
 
 class Node { // AVL Node
-    int key, height, count;// key => score
+    long key, height, count;// key => score
     long sum;
     Node left, right;
-    int jumlahSama; // jumlah isi key yg sama // URUSAN TERKAIT DELETE & INSERT PADA AVLTREE
+    long jumlahSama; // jumlah isi key yg sama // URUSAN TERKAIT DELETE & INSERT PADA AVLTREE
 
-    Node(int key) {
+    Node(long key) {
         this.key = key;
         this.height = 1;
         this.count = 1;
@@ -500,7 +500,7 @@ class AVLTree {
     }
 
     // Implement insert node to AVL Tree
-    Node insert(Node node, int key) {
+    Node insert(Node node, long key) {
         if (node == null) {
             return (new Node(key));
         }
@@ -523,7 +523,7 @@ class AVLTree {
         node.sum = (node.key * node.jumlahSama) + getSum(node.left) + getSum(node.right);
 
         // Get balance factor
-        int balance = getBalance(node);
+        long balance = getBalance(node);
 
         // If this node becomes unbalanced, then there are 4 cases
 
@@ -553,7 +553,7 @@ class AVLTree {
     }
 
     // Delete a node
-    Node delete(Node root, int key) 
+    Node delete(Node root, long key) 
     { 
         // STEP 1: PERFORM STANDARD BST DELETE 
         if (root == null) 
@@ -604,13 +604,15 @@ class AVLTree {
             return root; 
   
         // STEP 2: UPDATE HEIGHT OF THE CURRENT NODE 
+        long a = root.key;
+        long b = root.jumlahSama;
         root.height = max(getHeight(root.left), getHeight(root.right)) + 1; 
         root.count = root.jumlahSama + getCount(root.left) + getCount(root.right);
-        root.sum = (root.key * root.jumlahSama) + getSum(root.left) + getSum(root.right);
+        root.sum = (a*b) + getSum(root.left) + getSum(root.right);
   
         // STEP 3: GET THE BALANCE FACTOR OF THIS NODE (to check whether 
         // this node became unbalanced) 
-        int balance = getBalance(root); 
+        long balance = getBalance(root); 
   
         // If this node becomes unbalanced, then there are 4 cases 
         // Left Left Case 
@@ -658,7 +660,7 @@ class AVLTree {
 
 
     // Utility function to get height of node
-    int getHeight(Node node) {
+    long getHeight(Node node) {
         if (node == null) {
             return 0;
         }
@@ -666,7 +668,7 @@ class AVLTree {
     }
 
     // Utility function to get num of peoples
-    int getCount(Node node) {
+    long getCount(Node node) {
         if (node == null) {
             return 0;
         }
@@ -682,14 +684,14 @@ class AVLTree {
     }
 
     // Utility function to get balance factor of node
-    int getBalance(Node node) {
+    long getBalance(Node node) {
         if (node == null) {
             return 0;
         }
         return getHeight(node.left) - getHeight(node.right);
     }
     
-    int max(int a, int b) {
+    long max(long a, long b) {
         return (a > b) ? a : b;
     }   
 
@@ -714,7 +716,7 @@ class AVLTree {
     }
 
     // QUERY MAIN, LIHAT
-    int countBefore(Node node, int insertedKey) {
+    long countBefore(Node node, long insertedKey) {
         if (node == null) {
             return 0;
         }
