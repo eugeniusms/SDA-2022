@@ -53,8 +53,8 @@ public class TP02 {
             } else if (query.equals("EVALUASI")) {
                 EVALUASI();
             }
-            daftarMesin.print();
-            daftarMesin.budiNow.scoreTree.printInOrder();
+            // daftarMesin.print();
+            // daftarMesin.budiNow.scoreTree.printInOrder();
         }
 
         out.close();
