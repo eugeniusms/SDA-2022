@@ -109,12 +109,12 @@ public class Lab06 {
         } else if (maxHeap.size - minHeap.size == 1) { // saat selisih size heap = 1
             minHeap.insert(maxHeap.extractMax());
         } else {
-            if (minHeap.size - maxHeap.size > 2) { // saat selisih size banyak
+            if (minHeap.size - maxHeap.size > 1) { // saat selisih size banyak
                 while (minHeap.size - maxHeap.size > 1) {
                     maxHeap.insert(minHeap.extractMin());
                 }
             }
-            if (maxHeap.size - minHeap.size > 2) { // saat selisih size banyak
+            if (maxHeap.size - minHeap.size > 0) { // saat selisih size banyak
                 while (maxHeap.size - minHeap.size > 0) {
                     minHeap.insert(maxHeap.extractMax());
                 }
