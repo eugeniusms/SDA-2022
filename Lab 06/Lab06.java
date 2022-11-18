@@ -78,7 +78,7 @@ public class Lab06 {
             }
         }
 
-        VIEW(); // DEBUG
+        // VIEW(); // DEBUG
 
         out.flush();
     }
@@ -133,7 +133,7 @@ public class Lab06 {
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
 
             // System.out.println("SANA");
-            VIEW(); // DEBUG
+            // VIEW(); // DEBUG
             Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
             while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
                 temp.add(maxHeap.extractMax());
