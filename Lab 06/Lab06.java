@@ -243,9 +243,11 @@ class MaxHeap {
     // To display heap
     public void print() {
  
+        System.out.println("\nMAXHEAP: ");
         for (int i = 0; i < size; i++) {
-            System.out.println("MaxHeap["+i+"]: "+Heap[i]);
+            System.out.println("["+i+"]: "+Heap[i]);
         }
+        System.out.println(" ");
     }
 
     // Remove an element from max heap
@@ -327,9 +329,11 @@ class MinHeap {
     // To display heap
     public void print() {
  
+        System.out.println("\nMINHEAP: ");
         for (int i = 0; i < size; i++) {
-            System.out.println("MinHeap["+i+"]: "+Heap[i]);
+            System.out.println("["+i+"]: "+Heap[i]);
         }
+        System.out.println(" ");
     }
 
     // Remove an element from min heap
