@@ -36,8 +36,9 @@ public class Lab06New {
 
         VIEW();
 
-        // map.get(2).harga = 100;
-        // minHeap.heapify();
+        map.get(2).harga = 100;
+        minHeap.heapify();
+        maxHeap.heapify();
 
         VIEW();
 
@@ -322,14 +323,15 @@ class MaxHeap<T extends Comparable<T>> {
 				data.set(idx, node);
 				break;
 			} else {
-				int minChildIdx = leftIdx;
+				int maxChildIdx = leftIdx;
 				int rightIdx = getRightChildIdx(idx);
 				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
-					minChildIdx = rightIdx;
+					maxChildIdx = rightIdx; // ubah max menjadi rightchild
 
-				if (node.compareTo(data.get(minChildIdx)) < 0) {
-					data.set(idx, data.get(minChildIdx));
-					idx = minChildIdx;
+				if (node.compareTo(data.get(maxChildIdx)) < 0) { // compare node dengan maxchild
+                    // jika node lebih kecil maka swap
+					data.set(idx, data.get(maxChildIdx));
+					idx = maxChildIdx;
 				} else {
 					data.set(idx, node);
 					break;
@@ -340,8 +342,8 @@ class MaxHeap<T extends Comparable<T>> {
 
 	private void percolateUp(int idx) {
 		T node = data.get(idx);
-		int parentIdx = getParentIdx(idx);
-		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) {
+		int parentIdx = getParentIdx(idx); // mendapatkan id parent
+		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) { // jika node lebih besar dari parent maka swap
 			data.set(idx, data.get(parentIdx));
 			idx = parentIdx;
 			parentIdx = getParentIdx(idx);
@@ -362,7 +364,7 @@ class MaxHeap<T extends Comparable<T>> {
 		return 2 * i + 2;
 	}
 
-	private void heapify() {
+	void heapify() {
 		for (int i = data.size() / 2 - 1; i >= 0; i--)
 			percolateDown(i);
 	}
