@@ -93,7 +93,7 @@ public class Lab06 {
         }
     }
 
-    static void TAMBAH(int id, int harga) {
+    static void TAMBAH(int id, int harga) { // O(logN)
         Saham sahamBaru = new Saham(id, harga);
         map.put(id, sahamBaru); // menyimpan ke map
 
@@ -118,7 +118,7 @@ public class Lab06 {
         out.println(sahamMedian.id); // RESULT
     }
 
-    static void UBAH(int nomorSeri, int harga) {
+    static void UBAH(int nomorSeri, int harga) { // O(logN)
         // mengambil node saham
         Saham sahamDipilih = map.get(nomorSeri);
         sahamDipilih.harga = harga; // update harga
@@ -128,6 +128,23 @@ public class Lab06 {
         } else { // jika lebih besar maka heapify minheap
             minHeap.minHeapify(0);
         }
+
+        // solve isu maxHeap[0] > minHeap[0] 
+        if (minHeap.getMin().isLessThan(maxHeap.getMax())) {
+            // swap
+            Saham maxi = maxHeap.getMax();
+            Saham mini = minHeap.getMin();
+            minHeap.Heap[0] = maxi;
+            maxHeap.Heap[0] = mini;
+
+            // heapify/fixheap kedua heap
+            maxHeap.maxHeapify(0);
+            minHeap.minHeapify(0);
+        }
+        
+        // update median
+        sahamMedian = minHeap.getMin();
+        out.println(sahamMedian.id); // RESULT
     }
 
     static void VIEW() {
@@ -278,6 +295,10 @@ class MaxHeap {
         Heap[0] = Heap[--size];
         maxHeapify(0);
         return popped;
+    }
+
+    public Saham getMax() {
+        return Heap[0];
     }
 }
 
