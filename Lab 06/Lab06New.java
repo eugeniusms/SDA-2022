@@ -454,3 +454,12 @@ class MaxHeap<T extends Comparable<T>> {
     }
 
 }
+
+// MARIO'S REFERENCES:
+// 1) https://stackoverflow.com/questions/15319561/how-to-implement-a-median-heap/15319593#15319593
+// 2) https://www.geeksforgeeks.org/max-heap-in-java/
+// 3) https://www.geeksforgeeks.org/min-heap-in-java/#:~:text=A%20Min%2DHeap%20is%20a,child%20at%20index%202k%20%2B%202.
+// 4) https://stackoverflow.com/questions/13051568/making-your-own-class-comparable
+// 5) https://www.geeksforgeeks.org/merge-sort/
+// 6) https://www.javatpoint.com/understanding-toString()-method
+// 7) Binary Heap by Bu Pudy
