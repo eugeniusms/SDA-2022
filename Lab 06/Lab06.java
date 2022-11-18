@@ -17,8 +17,6 @@ public class Lab06 {
     // inisiasi minheap untuk data ke median - N
     static MinHeap minHeap = new MinHeap(200069);
 
-    static Saham[] sahamById = new Saham[200069]; // save saham by id
-
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -34,7 +32,6 @@ public class Lab06 {
                 int harga = in.nextInt();
                 Saham saham = new Saham(i,harga);
                 initialSaham[i-1] = saham;
-                sahamById[i] = saham;
             }
 
             // sort saham
@@ -93,7 +90,6 @@ public class Lab06 {
 
     static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
-        sahamById[id] = sahamBaru;
         // cek apakah harga saham baru lebih besar dari median
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
@@ -106,19 +102,8 @@ public class Lab06 {
             maxHeap.insert(minHeap.extractMin());
         } else if (maxHeap.size - minHeap.size == 2) { // saat selisih size heap = 2
             minHeap.insert(maxHeap.extractMax());
-        } else if (maxHeap.size - minHeap.size == 1) { // saat selisih size heap = 1
+        } else if (maxHeap.size > minHeap.size) { // saat selisih size heap = 1
             minHeap.insert(maxHeap.extractMax());
-        } else {
-            if (minHeap.size - maxHeap.size > 2) { // saat selisih size banyak
-                while (minHeap.size - maxHeap.size > 1) {
-                    maxHeap.insert(minHeap.extractMin());
-                }
-            }
-            if (maxHeap.size - minHeap.size > 2) { // saat selisih size banyak
-                while (maxHeap.size - minHeap.size > 0) {
-                    minHeap.insert(maxHeap.extractMax());
-                }
-            }
         }
 
         // update median
@@ -127,41 +112,7 @@ public class Lab06 {
     }
 
     static void UBAH(int nomorSeri, int harga) {
-        // get saham by id
-        Saham sahamDipilih = sahamById[nomorSeri];
-        // cek apakah harga saham baru lebih besar dari median
-        if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
-
-            // System.out.println("SANA");
-            // VIEW(); // DEBUG
-            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
-            while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
-                temp.add(maxHeap.extractMax());
-            }
-            // remove sahamDipilih
-            maxHeap.extractMax();
-            // masukkan kembali ke maxHeap
-            while (!temp.isEmpty()) {
-                maxHeap.insert(temp.remove());
-            }
-
-        } else { // jika lebih besar maka cek ke inheap
-            
-            // System.out.println("SINI");
-            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
-            while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
-                temp.add(minHeap.extractMin());
-            }
-            // remove sahamDipilih
-            minHeap.extractMin();
-            // masukkan kembali ke minHeap
-            while (!temp.isEmpty()) {
-                minHeap.insert(temp.remove());
-            }
-        }
-
-        // TAMBAH NODE YANG AKAN DITIMPA
-        TAMBAH(nomorSeri, harga);
+        // TODO
     }
 
     static void VIEW() {
@@ -312,10 +263,6 @@ class MaxHeap {
         Heap[0] = Heap[--size];
         maxHeapify(0);
         return popped;
-    }
-
-    public Saham getMax() {
-        return Heap[0];
     }
 }
 
