@@ -354,25 +354,6 @@ class MinHeap {
         Heap[spos] = tmp;
     }
 
-    // Recursive function to max heapify given subtree
-    private void maxHeapify(int pos) {
-        if (isLeaf(pos))
-            return;
- 
-        if (Heap[pos].isLessThan(Heap[leftChild(pos)])
-            || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
- 
-            if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
-                swap(pos, leftChild(pos));
-                maxHeapify(leftChild(pos));
-            }
-            else {
-                swap(pos, rightChild(pos));
-                maxHeapify(rightChild(pos));
-            }
-        }
-    }
- 
     // Recursive function to min heapify given subtree
     private void minHeapify(int pos) {
         if (isLeaf(pos))
