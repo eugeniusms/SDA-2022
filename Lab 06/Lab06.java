@@ -78,7 +78,7 @@ public class Lab06 {
             }
         }
 
-        VIEW(); // DEBUG
+        // VIEW(); // DEBUG
 
         out.flush();
     }
@@ -120,8 +120,8 @@ public class Lab06 {
         Saham sahamDipilih = sahamById[nomorSeri];
         // cek apakah harga saham baru lebih besar dari median
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
-            
-            System.out.println("SANA");
+
+            // System.out.println("SANA");
             VIEW(); // DEBUG
             Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
             while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
@@ -136,7 +136,7 @@ public class Lab06 {
 
         } else { // jika lebih besar maka cek ke inheap
             
-            System.out.println("SINI");
+            // System.out.println("SINI");
             Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
             while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
                 temp.add(minHeap.extractMin());
@@ -147,7 +147,6 @@ public class Lab06 {
             while (!temp.isEmpty()) {
                 minHeap.insert(temp.remove());
             }
-    
         }
 
         // TAMBAH NODE YANG AKAN DITIMPA
