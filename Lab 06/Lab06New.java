@@ -135,14 +135,14 @@ public class Lab06New {
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
 			sahamDipilih.harga = harga; // update harga
 
-			int idx = maxHeap.data.indexOf(sahamDipilih);
+			int idx = sahamDipilih.posisi;
 			maxHeap.percolateUp(idx);
 			maxHeap.percolateDown(idx);
 
         } else { // jika lebih besar maka cek ke minheap
             sahamDipilih.harga = harga; // update harga
 
-			int idx = minHeap.data.indexOf(sahamDipilih);
+			int idx = sahamDipilih.posisi;
             minHeap.percolateUp(idx);
 			minHeap.percolateDown(idx);
 		}
@@ -230,30 +230,30 @@ class Saham implements Comparable<Saham> {
 }
 
 class MinHeap<T extends Comparable<T>> {
-	ArrayList<T> data;
+	ArrayList<Saham> data;
 
 	public MinHeap() {
-		this.data = new ArrayList<T>();
+		this.data = new ArrayList<Saham>();
 	}
 
-	public MinHeap(ArrayList<T> arr) {
+	public MinHeap(ArrayList<Saham> arr) {
 		this.data = arr;
 		heapify();
 	}
 
-	public T peek() {
+	public Saham peek() {
 		if (data.isEmpty())
 			return null;
 		return data.get(0);
 	}
 
-	public void insert(T value) {
+	public void insert(Saham value) {
 		data.add(value);
 		percolateUp(data.size() - 1);
 	}
 
-	public T remove() {
-		T removedObject = peek();
+	public Saham remove() {
+		Saham removedObject = peek();
 
 		if (data.size() == 1)
 			data.clear();
@@ -267,13 +267,13 @@ class MinHeap<T extends Comparable<T>> {
 	}
 
 	void percolateDown(int idx) {
-		T node = data.get(idx);
+		Saham node = data.get(idx);
 		int heapSize = data.size();
 
 		while (true) {
 			int leftIdx = getLeftChildIdx(idx);
 			if (leftIdx >= heapSize) {
-				data.set(idx, node);
+				data.set(idx, node); node.posisi = idx;
 				break;
 			} else {
 				int minChildIdx = leftIdx;
@@ -282,10 +282,10 @@ class MinHeap<T extends Comparable<T>> {
 					minChildIdx = rightIdx;
 
 				if (node.compareTo(data.get(minChildIdx)) > 0) {
-					data.set(idx, data.get(minChildIdx));
+					data.set(idx, data.get(minChildIdx)); data.get(minChildIdx).posisi = idx;
 					idx = minChildIdx;
 				} else {
-					data.set(idx, node);
+					data.set(idx, node); node.posisi = idx;
 					break;
 				}
 			}
@@ -293,15 +293,15 @@ class MinHeap<T extends Comparable<T>> {
 	}
 
 	void percolateUp(int idx) {
-		T node = data.get(idx);
+		Saham node = data.get(idx);
 		int parentIdx = getParentIdx(idx);
 		while (idx > 0 && node.compareTo(data.get(parentIdx)) < 0) {
-			data.set(idx, data.get(parentIdx));
+			data.set(idx, data.get(parentIdx)); data.get(parentIdx).posisi = idx;
 			idx = parentIdx;
 			parentIdx = getParentIdx(idx);
 		}
 
-		data.set(idx, node);
+		data.set(idx, node); node.posisi = idx; 
 	}
 
 	private int getParentIdx(int i) {
@@ -329,8 +329,8 @@ class MinHeap<T extends Comparable<T>> {
 		}
 	}
 
-	public T remove(int n) {
-		T removedObject = peek();
+	public Saham remove(int n) {
+		Saham removedObject = peek();
 
 		if (n > 1) {
 			data.set(0, data.get(n - 1));
@@ -341,13 +341,13 @@ class MinHeap<T extends Comparable<T>> {
 	}
 
 	void percolateDown(int idx, int n) {
-		T node = data.get(idx);
+		Saham node = data.get(idx);
 		int heapSize = n;
 
 		while (true) {
 			int leftIdx = getLeftChildIdx(idx);
 			if (leftIdx >= heapSize) {
-				data.set(idx, node);
+				data.set(idx, node); node.posisi = idx;
 				break;
 			} else {
 				int minChildIdx = leftIdx;
@@ -356,10 +356,10 @@ class MinHeap<T extends Comparable<T>> {
 					minChildIdx = rightIdx;
 
 				if (node.compareTo(data.get(minChildIdx)) > 0) {
-					data.set(idx, data.get(minChildIdx));
+					data.set(idx, data.get(minChildIdx)); data.get(minChildIdx).posisi = idx;
 					idx = minChildIdx;
 				} else {
-					data.set(idx, node);
+					data.set(idx, node); node.posisi = idx;
 					break;
 				}
 			}
@@ -371,7 +371,7 @@ class MinHeap<T extends Comparable<T>> {
  
         System.out.println("\nMINHEAP: ");
         int counter = 0;
-        for (T s : this.data) {
+        for (Saham s : this.data) {
             System.out.println("["+counter+"]: "+s);
             counter++;
         }
@@ -382,36 +382,36 @@ class MinHeap<T extends Comparable<T>> {
         return this.data.size();
     }
 
-    T getMin() {
+    Saham getMin() {
         return this.data.get(0);
     }
 }
 
 class MaxHeap<T extends Comparable<T>> {
-	ArrayList<T> data;
+	ArrayList<Saham> data;
 
 	public MaxHeap() {
-		this.data = new ArrayList<T>();
+		this.data = new ArrayList<Saham>();
 	}
 
-	public MaxHeap(ArrayList<T> arr) {
+	public MaxHeap(ArrayList<Saham> arr) {
 		this.data = arr;
 		heapify();
 	}
 
-	public T peek() {
+	public Saham peek() {
 		if (data.isEmpty())
 			return null;
 		return data.get(0);
 	}
 
-	public void insert(T value) {
+	public void insert(Saham value) {
 		data.add(value);
 		percolateUp(data.size() - 1);
 	}
 
-	public T remove() {
-		T removedObject = peek();
+	public Saham remove() {
+		Saham removedObject = peek();
 
 		if (data.size() == 1)
 			data.clear();
@@ -425,13 +425,13 @@ class MaxHeap<T extends Comparable<T>> {
 	}
 
 	void percolateDown(int idx) {
-		T node = data.get(idx);
+		Saham node = data.get(idx);
 		int heapSize = data.size();
 
 		while (true) {
 			int leftIdx = getLeftChildIdx(idx);
 			if (leftIdx >= heapSize) {
-				data.set(idx, node);
+				data.set(idx, node); node.posisi = idx;
 				break;
 			} else {
 				int maxChildIdx = leftIdx;
@@ -441,10 +441,10 @@ class MaxHeap<T extends Comparable<T>> {
 
 				if (node.compareTo(data.get(maxChildIdx)) < 0) { // compare node dengan maxchild
                     // jika node lebih kecil maka swap
-					data.set(idx, data.get(maxChildIdx));
+					data.set(idx, data.get(maxChildIdx)); data.get(maxChildIdx).posisi = idx;
 					idx = maxChildIdx;
 				} else {
-					data.set(idx, node);
+					data.set(idx, node); node.posisi = idx;
 					break;
 				}
 			}
@@ -452,15 +452,15 @@ class MaxHeap<T extends Comparable<T>> {
 	}
 
 	void percolateUp(int idx) {
-		T node = data.get(idx);
+		Saham node = data.get(idx);
 		int parentIdx = getParentIdx(idx); // mendapatkan id parent
 		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) { // jika node lebih besar dari parent maka swap
-			data.set(idx, data.get(parentIdx));
+			data.set(idx, data.get(parentIdx)); data.get(parentIdx).posisi = idx;
 			idx = parentIdx;
 			parentIdx = getParentIdx(idx);
 		}
 
-		data.set(idx, node);
+		data.set(idx, node); node.posisi = idx;
 	}
 
 	private int getParentIdx(int i) {
@@ -488,8 +488,8 @@ class MaxHeap<T extends Comparable<T>> {
 		}
 	}
 
-	public T remove(int n) {
-		T removedObject = peek();
+	public Saham remove(int n) {
+		Saham removedObject = peek();
 
 		if (n > 1) {
 			data.set(0, data.get(n - 1));
@@ -500,13 +500,13 @@ class MaxHeap<T extends Comparable<T>> {
 	}
 
 	void percolateDown(int idx, int n) {
-		T node = data.get(idx);
+		Saham node = data.get(idx);
 		int heapSize = n;
 
 		while (true) {
 			int leftIdx = getLeftChildIdx(idx);
 			if (leftIdx >= heapSize) {
-				data.set(idx, node);
+				data.set(idx, node); node.posisi = idx;
 				break;
 			} else {
 				int minChildIdx = leftIdx;
@@ -515,10 +515,10 @@ class MaxHeap<T extends Comparable<T>> {
 					minChildIdx = rightIdx;
 
 				if (node.compareTo(data.get(minChildIdx)) < 0) {
-					data.set(idx, data.get(minChildIdx));
+					data.set(idx, data.get(minChildIdx)); data.get(minChildIdx).posisi = idx;
 					idx = minChildIdx;
 				} else {
-					data.set(idx, node);
+					data.set(idx, node); node.posisi = idx;
 					break;
 				}
 			}
@@ -530,7 +530,7 @@ class MaxHeap<T extends Comparable<T>> {
  
         System.out.println("\nMAXHEAP: ");
         int counter = 0;
-        for (T s : this.data) {
+        for (Saham s : this.data) {
             System.out.println("["+counter+"]: "+s);
             counter++;
         }
@@ -541,7 +541,7 @@ class MaxHeap<T extends Comparable<T>> {
         return this.data.size();
     }
 
-    T getMax() {
+    Saham getMax() {
         return this.data.get(0);
     }
 }
