@@ -55,6 +55,7 @@ public class Lab06 {
                 minHeap.insert(initialSaham[i]);
             }
         } else {
+            // inisiasi sahamMedian saat N == 0
             sahamMedian = new Saham(0,0);
         }
         
