@@ -112,6 +112,8 @@ public class Lab06 {
         System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
         maxHeap.print(); // DEBUG
         minHeap.print(); // DEBUG
+        System.out.println(maxHeap.Heap[0]);
+        System.out.println(minHeap.Heap[0]);
     }
 
     static class InputReader {
@@ -172,7 +174,7 @@ class Saham implements Comparable<Saham> {
 }
 
 class MaxHeap {
-    private Saham[] Heap;
+    Saham[] Heap;
     int size;
     private int maxsize;
  
@@ -241,23 +243,8 @@ class MaxHeap {
     // To display heap
     public void print() {
  
-        for (int i = 0; i < size / 2; i++) {
- 
-            System.out.print("Parent Node : " + Heap[i]);
- 
-            if (leftChild(i)
-                < size) // if the child is out of the bound
-                        // of the array
-                System.out.print(" Left Child Node: "
-                                 + Heap[leftChild(i)]);
- 
-            if (rightChild(i)
-                < size) // if the right child index must not
-                        // be out of the index of the array
-                System.out.print(" Right Child Node: "
-                                 + Heap[rightChild(i)]);
- 
-            System.out.println(); // for new line
+        for (int i = 0; i < size; i++) {
+            System.out.println("MaxHeap["+i+"]: "+Heap[i]);
         }
     }
 
@@ -271,7 +258,7 @@ class MaxHeap {
 }
 
 class MinHeap {
-    private Saham[] Heap;
+    Saham[] Heap;
     int size;
     private int maxsize;
  
@@ -305,7 +292,7 @@ class MinHeap {
         Heap[spos] = tmp;
     }
  
-    // Recursive function to max heapify given subtree
+    // Recursive function to min heapify given subtree
     private void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
@@ -324,13 +311,13 @@ class MinHeap {
         }
     }
  
-    // Inserts a new element to max heap
+    // Inserts a new element to min heap
     public void insert(Saham element) {
         Heap[size] = element;
  
         // Traverse up and fix violated property
         int current = size;
-        while (Heap[parent(current)].isLessThan(Heap[current])) {
+        while (Heap[current].isLessThan(Heap[parent(current)])) {
             swap(current, parent(current));
             current = parent(current);
         }
@@ -340,27 +327,12 @@ class MinHeap {
     // To display heap
     public void print() {
  
-        for (int i = 0; i < size / 2; i++) {
- 
-            System.out.print("Parent Node : " + Heap[i]);
- 
-            if (leftChild(i)
-                < size) // if the child is out of the bound
-                        // of the array
-                System.out.print(" Left Child Node: "
-                                 + Heap[leftChild(i)]);
- 
-            if (rightChild(i)
-                < size) // if the right child index must not
-                        // be out of the index of the array
-                System.out.print(" Right Child Node: "
-                                 + Heap[rightChild(i)]);
- 
-            System.out.println(); // for new line
+        for (int i = 0; i < size; i++) {
+            System.out.println("MinHeap["+i+"]: "+Heap[i]);
         }
     }
 
-    // Remove an element from max heap
+    // Remove an element from min heap
     public Saham extractMin() {
         Saham popped = Heap[0];
         Heap[0] = Heap[--size];
