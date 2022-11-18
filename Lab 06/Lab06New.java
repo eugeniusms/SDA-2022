@@ -127,6 +127,30 @@ public class Lab06New {
     }
 
     static void UBAH(int nomorSeri, int harga) {
+		// get saham by id
+        Saham sahamDipilih = map.get(nomorSeri);
+		// cek letak sahamDipilih
+        if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
+			sahamDipilih.harga = harga; // update harga
+            maxHeap.heapify(); // fix heap
+        } else { // jika lebih besar maka cek ke inheap
+            sahamDipilih.harga = harga; // update harga
+            maxHeap.heapify(); // fix heap
+		}
+		// cek apakah harga saham baru lebih besar dari median
+		if (maxHeap.getSize() > 0 && minHeap.getSize() > 0) {
+			// swap
+			if (maxHeap.getMax().compareTo(minHeap.getMin()) > 0) {
+				Saham max = maxHeap.remove();
+				Saham min = minHeap.remove();
+				maxHeap.insert(min);
+				minHeap.insert(max);
+			}
+		}
+
+        // update median
+		sahamMedian = minHeap.getMin();
+		out.println(sahamMedian.id); // RESULT
     }
 
     static void VIEW() {
