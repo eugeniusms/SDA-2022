@@ -33,6 +33,12 @@ public class Lab06New {
 
 
         VIEW();
+
+        map.get(2).harga = 100;
+        minHeap.heapify();
+
+        VIEW();
+
         // int Q = in.nextInt();
 
         // // TODO
@@ -203,7 +209,7 @@ class MinHeap<T extends Comparable<T>> {
 		return 2 * i + 2;
 	}
 
-	private void heapify() {
+	void heapify() {
 		for (int i = data.size() / 2 - 1; i >= 0; i--)
 			percolateDown(i);
 	}
@@ -287,7 +293,7 @@ class MaxHeap<T extends Comparable<T>> {
 
 	public void insert(T value) {
 		data.add(value);
-		percolateUp(data.size() - 1);
+		percolateDown(data.size() - 1);
 	}
 
 	public T remove() {
