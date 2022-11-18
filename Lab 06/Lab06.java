@@ -78,7 +78,7 @@ public class Lab06 {
             }
         }
 
-        // VIEW(); // DEBUG
+        VIEW(); // DEBUG
 
         out.flush();
     }
@@ -106,8 +106,19 @@ public class Lab06 {
             maxHeap.insert(minHeap.extractMin());
         } else if (maxHeap.size - minHeap.size == 2) { // saat selisih size heap = 2
             minHeap.insert(maxHeap.extractMax());
-        } else if (maxHeap.size > minHeap.size) { // saat selisih size heap = 1
+        } else if (maxHeap.size - minHeap.size == 1) { // saat selisih size heap = 1
             minHeap.insert(maxHeap.extractMax());
+        } else {
+            if (minHeap.size - maxHeap.size > 2) { // saat selisih size banyak
+                while (minHeap.size - maxHeap.size > 1) {
+                    maxHeap.insert(minHeap.extractMin());
+                }
+            }
+            if (maxHeap.size - minHeap.size > 2) { // saat selisih size banyak
+                while (maxHeap.size - minHeap.size > 0) {
+                    minHeap.insert(maxHeap.extractMax());
+                }
+            }
         }
 
         // update median
