@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.*;
 
+// coba submit
 public class Lab06New {
 
     private static InputReader in;
