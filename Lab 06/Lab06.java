@@ -26,35 +26,38 @@ public class Lab06 {
         int N = in.nextInt();
 
         // inisiasi saham ke dalam array untuk disort dahulu
-        Saham[] initialSaham = new Saham[N]; // initial saham
-        for (int i = 1; i <= N; i++) {
-            int harga = in.nextInt();
-            Saham saham = new Saham(i,harga);
-            initialSaham[i-1] = saham;
-        }
+        if (N > 0) {
+            Saham[] initialSaham = new Saham[N]; // initial saham
+            for (int i = 1; i <= N; i++) {
+                int harga = in.nextInt();
+                Saham saham = new Saham(i,harga);
+                initialSaham[i-1] = saham;
+            }
 
-        // sort saham
-        Arrays.sort(initialSaham);
+            // sort saham
+            Arrays.sort(initialSaham);
 
-        // cek isi array
-        for(int i = 0; i < N; i++) {
-            System.out.println("[HARGA: "+initialSaham[i].harga + " ID: " + initialSaham[i].id+"]"); // DEBUG
-        }
+            // cek isi array
+            // for(int i = 0; i < N; i++) {
+            //     System.out.println("[HARGA: "+initialSaham[i].harga + " ID: " + initialSaham[i].id+"]"); // DEBUG
+            // }
 
-        // get median of initial saham
-        int median = getIndexMedian(N);
-        sahamMedian = initialSaham[median];
-        System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
+            // get median of initial saham
+            int median = getIndexMedian(N);
+            sahamMedian = initialSaham[median];
+            // System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
 
-        // insert node ke dalam heap
-        for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
-            maxHeap.insert(initialSaham[i]);
-        }
-        for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
-            minHeap.insert(initialSaham[i]);
+            // insert node ke dalam heap
+            for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
+                maxHeap.insert(initialSaham[i]);
+            }
+            for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
+                minHeap.insert(initialSaham[i]);
+            }
+        } else {
+            sahamMedian = new Saham(0,0);
         }
         
-
         // input query
         int Q = in.nextInt();
         for (int i = 0; i < Q; i++) {
