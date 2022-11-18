@@ -95,9 +95,11 @@ public class Lab06 {
             maxHeap.insert(sahamBaru);
         }
         // transfer node dari heap yang lebih banyak ke heap yang kurang banyak
-        if (minHeap.size > maxHeap.size) {
+        if (minHeap.size - maxHeap.size == 2) { // saat selisih size heap = 2
             maxHeap.insert(minHeap.extractMin());
-        } else if (maxHeap.size - minHeap.size == 2) {
+        } else if (maxHeap.size - minHeap.size == 2) { // saat selisih size heap = 2
+            minHeap.insert(maxHeap.extractMax());
+        } else if (maxHeap.size > minHeap.size) { // saat selisih size heap = 1
             minHeap.insert(maxHeap.extractMax());
         }
         // update median
