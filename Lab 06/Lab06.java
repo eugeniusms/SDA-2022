@@ -77,7 +77,7 @@ public class Lab06 {
                 int harga = in.nextInt();
                 UBAH(nomorSeri, harga);
             }
-            VIEW(); // DEBUG
+            // VIEW(); // DEBUG
         }
 
         // VIEW(); // DEBUG
@@ -101,7 +101,11 @@ public class Lab06 {
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
         } else { 
-            maxHeap.insert(sahamBaru);
+            if (minHeap.size == 0) {
+                minHeap.insert(sahamBaru);
+            } else {
+                maxHeap.insert(sahamBaru);
+            }
         }
 
         // transfer node dari heap yang lebih banyak ke heap yang kurang banyak
@@ -122,6 +126,7 @@ public class Lab06 {
         // mengambil node saham
         Saham sahamDipilih = map.get(nomorSeri);
         sahamDipilih.harga = harga; // update harga
+
         // lakukan heapify pada heap dengan node yang diubah
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka heapify maxheap
             maxHeap.maxHeapify(0); // KEKNYA HARUS TAHU POSISI sahamDipilih dalam Heap Array
@@ -130,18 +135,20 @@ public class Lab06 {
         }
 
         // solve isu maxHeap[0] > minHeap[0] 
-        if (minHeap.getMin().isLessThan(maxHeap.getMax())) {
-            // swap
-            Saham maxi = maxHeap.getMax();
-            Saham mini = minHeap.getMin();
-            minHeap.Heap[0] = maxi;
-            maxHeap.Heap[0] = mini;
-
-            // heapify/fixheap kedua heap
-            maxHeap.maxHeapify(0);
-            minHeap.minHeapify(0);
+        if (maxHeap.size > 0 && minHeap.size > 0) {
+            if (minHeap.getMin().isLessThan(maxHeap.getMax())) {
+                // swap
+                Saham maxi = maxHeap.getMax();
+                Saham mini = minHeap.getMin();
+                minHeap.Heap[0] = maxi;
+                maxHeap.Heap[0] = mini;
+    
+                // heapify/fixheap kedua heap
+                maxHeap.maxHeapify(0);
+                minHeap.minHeapify(0);
+            }
         }
-        
+       
         // update median
         sahamMedian = minHeap.getMin();
         out.println(sahamMedian.id); // RESULT
