@@ -32,7 +32,7 @@ public class Lab06 {
             Saham[] initialSaham = new Saham[N]; // initial saham
             for (int i = 1; i <= N; i++) {
                 int harga = in.nextInt();
-                Saham saham = new Saham(i,harga);
+                Saham saham = new Saham(i,harga, 0);
                 initialSaham[i-1] = saham;
                 sahamById[i] = saham;
             }
@@ -51,15 +51,21 @@ public class Lab06 {
             // System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
 
             // insert node ke dalam heap
+            int counter = 0;
             for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
+                initialSaham[i].posisi = counter;
                 maxHeap.insert(initialSaham[i]);
+                counter++;
             }
+            counter = 0;
             for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
+                initialSaham[i].posisi = counter;
                 minHeap.insert(initialSaham[i]);
+                counter++;
             }
         } else {
             // inisiasi sahamMedian saat N == 0
-            sahamMedian = new Saham(0,0);
+            sahamMedian = new Saham(0,0,0);
         }
         
         // input query
@@ -92,7 +98,7 @@ public class Lab06 {
     }
 
     static void TAMBAH(int id, int harga) {
-        Saham sahamBaru = new Saham(id, harga);
+        Saham sahamBaru = new Saham(id, harga, 0);
         sahamById[id] = sahamBaru;
         // cek apakah harga saham baru lebih besar dari median
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
@@ -131,6 +137,10 @@ public class Lab06 {
         Saham sahamDipilih = sahamById[nomorSeri];
         // cek apakah harga saham baru lebih besar dari median
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
+
+            sahamDipilih.harga = harga; // update harga
+            // fix heap
+            maxHeap.fixHeap(sahamDipilih.posisi);
 
             // System.out.println("SANA");
             // VIEW(); // DEBUG
@@ -205,10 +215,12 @@ public class Lab06 {
 class Saham implements Comparable<Saham> {
     public int id; // nomor seri
     public int harga;
+    public int posisi;
 
-    public Saham(int id, int harga) {
+    public Saham(int id, int harga, int posisi) {
         this.id = id; 
         this.harga = harga;
+        this.posisi = posisi;
     }
 
     @Override
@@ -259,9 +271,9 @@ class MaxHeap {
     // Swapping nodes
     private void swap(int fpos, int spos) {
         Saham tmp;
-        tmp = Heap[fpos];
-        Heap[fpos] = Heap[spos];
-        Heap[spos] = tmp;
+        tmp = Heap[fpos]; int tmpPos = Heap[fpos].posisi;
+        Heap[fpos] = Heap[spos]; Heap[fpos].posisi = Heap[spos].posisi;
+        Heap[spos] = tmp; Heap[spos].posisi = tmpPos;
     }
  
     // Recursive function to max heapify given subtree
@@ -291,7 +303,7 @@ class MaxHeap {
         int current = size;
         while (Heap[parent(current)].isLessThan(Heap[current])) {
             swap(current, parent(current));
-            current = parent(current);
+            current = parent(current); Heap[current].posisi = Heap[parent(current)].posisi;
         }
         size++;
     }
@@ -358,7 +370,7 @@ class MinHeap {
     private void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
-            
+
         // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
         if (Heap[leftChild(pos)].isLessThan(Heap[pos])
             || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
