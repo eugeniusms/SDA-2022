@@ -73,6 +73,8 @@ public class Lab06New {
                 int harga = in.nextInt();
                 UBAH(nomorSeri, harga);
             }
+
+			// VIEW();
         }
 
         // VIEW();
@@ -133,9 +135,9 @@ public class Lab06New {
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
 			sahamDipilih.harga = harga; // update harga
             maxHeap.heapify(); // fix heap
-        } else { // jika lebih besar maka cek ke inheap
+        } else { // jika lebih besar maka cek ke minheap
             sahamDipilih.harga = harga; // update harga
-            maxHeap.heapify(); // fix heap
+            minHeap.heapify(); // fix heap
 		}
 		// cek apakah harga saham baru lebih besar dari median
 		if (maxHeap.getSize() > 0 && minHeap.getSize() > 0) {
