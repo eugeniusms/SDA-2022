@@ -78,7 +78,7 @@ public class Lab06 {
             }
         }
 
-        // VIEW(); // DEBUG
+        VIEW(); // DEBUG
 
         out.flush();
     }
@@ -119,21 +119,10 @@ public class Lab06 {
         // get saham by id
         Saham sahamDipilih = sahamById[nomorSeri];
         // cek apakah harga saham baru lebih besar dari median
-        if (sahamMedian.isLessThan(sahamDipilih)) { // jika lebih besar maka cek ke minheap
-
-            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
-            while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
-                temp.add(minHeap.extractMin());
-            }
-            // remove sahamDipilih
-            minHeap.extractMin();
-            // masukkan kembali ke minHeap
-            while (!temp.isEmpty()) {
-                minHeap.insert(temp.remove());
-            }
-
-        } else { // jika lebih kecil maka cek ke maxheap
-                
+        if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
+            
+            System.out.println("SANA");
+            VIEW(); // DEBUG
             Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
             while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
                 temp.add(maxHeap.extractMax());
@@ -143,6 +132,20 @@ public class Lab06 {
             // masukkan kembali ke maxHeap
             while (!temp.isEmpty()) {
                 maxHeap.insert(temp.remove());
+            }
+
+        } else { // jika lebih besar maka cek ke inheap
+            
+            System.out.println("SINI");
+            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
+            while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
+                temp.add(minHeap.extractMin());
+            }
+            // remove sahamDipilih
+            minHeap.extractMin();
+            // masukkan kembali ke minHeap
+            while (!temp.isEmpty()) {
+                minHeap.insert(temp.remove());
             }
     
         }
