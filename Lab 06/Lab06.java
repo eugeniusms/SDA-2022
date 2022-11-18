@@ -75,7 +75,7 @@ public class Lab06 {
             }
         }
 
-        VIEW(); // DEBUG
+        // VIEW(); // DEBUG
 
         out.flush();
     }
