@@ -17,6 +17,8 @@ public class Lab06 {
     // inisiasi minheap untuk data ke median - N
     static MinHeap minHeap = new MinHeap(200069);
 
+    static Saham[] sahamById = new Saham[200069]; // save saham by id
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -32,6 +34,7 @@ public class Lab06 {
                 int harga = in.nextInt();
                 Saham saham = new Saham(i,harga);
                 initialSaham[i-1] = saham;
+                sahamById[i] = saham;
             }
 
             // sort saham
@@ -90,6 +93,7 @@ public class Lab06 {
 
     static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
+        sahamById[id] = sahamBaru;
         // cek apakah harga saham baru lebih besar dari median
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
@@ -112,7 +116,39 @@ public class Lab06 {
     }
 
     static void UBAH(int nomorSeri, int harga) {
-        // TODO
+        // get saham by id
+        Saham sahamDipilih = sahamById[nomorSeri];
+        // cek apakah harga saham baru lebih besar dari median
+        if (sahamMedian.isLessThan(sahamDipilih)) { // jika lebih besar maka cek ke minheap
+
+            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
+            while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
+                temp.add(minHeap.extractMin());
+            }
+            // remove sahamDipilih
+            minHeap.extractMin();
+            // masukkan kembali ke minHeap
+            while (!temp.isEmpty()) {
+                minHeap.insert(temp.remove());
+            }
+
+        } else { // jika lebih kecil maka cek ke maxheap
+                
+            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
+            while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
+                temp.add(maxHeap.extractMax());
+            }
+            // remove sahamDipilih
+            maxHeap.extractMax();
+            // masukkan kembali ke maxHeap
+            while (!temp.isEmpty()) {
+                maxHeap.insert(temp.remove());
+            }
+    
+        }
+
+        // TAMBAH NODE YANG AKAN DITIMPA
+        TAMBAH(nomorSeri, harga);
     }
 
     static void VIEW() {
@@ -263,6 +299,10 @@ class MaxHeap {
         Heap[0] = Heap[--size];
         maxHeapify(0);
         return popped;
+    }
+
+    public Saham getMax() {
+        return Heap[0];
     }
 }
 
