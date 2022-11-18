@@ -271,55 +271,49 @@ class MaxHeap {
 }
 
 class MinHeap {
-    // Member variables of this class
     private Saham[] Heap;
     int size;
     private int maxsize;
-
-    // Constructor of this class
-    public MinHeap(int maxsize) {
+ 
+    // Constructor to initialize an
+    // empty max heap with given maximum
+    // capacity
+    MinHeap(int maxsize) {
+        // This keyword refers to current instance itself
         this.maxsize = maxsize;
         this.size = 0;
         Heap = new Saham[this.maxsize];
     }
  
-    // Returning the position of
-    // the parent for the node currently
-    // at pos
+    // Returning position of parent
     private int parent(int pos) { return (pos - 1) / 2; }
  
-    // Returning the position of the
-    // left child for the node currently at pos
+    // Returning left children
     private int leftChild(int pos) { return (2 * pos) + 1; }
- 
-    // Returning the position of
-    // the right child for the node currently
-    // at pos
+
+    // Returning right children
     private int rightChild(int pos) { return (2 * pos) + 2; }
  
-    // Returning true if the passed
-    // node is a leaf node
+    // Returning true of given node is leaf
     private boolean isLeaf(int pos) { return (pos >= (size / 2) && pos <= size); }
-
-    // To swap two nodes of the heap
+ 
+    // Swapping nodes
     private void swap(int fpos, int spos) {
         Saham tmp;
         tmp = Heap[fpos];
         Heap[fpos] = Heap[spos];
         Heap[spos] = tmp;
     }
-
-
-    // SUSUN SENDIRI INI :")
-    // Recursive function to min heapify given subtree
-    private void minHeapify(int pos) {  
+ 
+    // Recursive function to max heapify given subtree
+    private void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
-
-        if (Heap[leftChild(pos)].isLessThan(Heap[pos])
-            || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
-
-            if (Heap[leftChild(pos)].isLessThan(Heap[rightChild(pos)])) {
+ 
+        if (Heap[pos].compareTo(Heap[leftChild(pos)])
+            > Heap[pos].compareTo(Heap[rightChild(pos)])) {
+ 
+            if (Heap[rightChild(pos)].compareTo(Heap[leftChild(pos)]) > 0) {
                 swap(pos, leftChild(pos));
                 minHeapify(leftChild(pos));
             }
@@ -329,22 +323,22 @@ class MinHeap {
             }
         }
     }
-   
  
-    // To insert a node into the heap
+    // Inserts a new element to max heap
     public void insert(Saham element) {
         Heap[size] = element;
-        int current = size;
  
-        while (Heap[current].isLessThan(Heap[parent(current)])) {
+        // Traverse up and fix violated property
+        int current = size;
+        while (Heap[parent(current)].compareTo(Heap[current]) > 0) {
             swap(current, parent(current));
             current = parent(current);
         }
         size++;
     }
  
-     // To display heap
-     public void print() {
+    // To display heap
+    public void print() {
  
         for (int i = 0; i < size / 2; i++) {
  
@@ -365,12 +359,11 @@ class MinHeap {
             System.out.println(); // for new line
         }
     }
- 
-    // To remove and return the minimum
-    // element from the heap
+
+    // Remove an element from max heap
     public Saham extractMin() {
         Saham popped = Heap[0];
-        Heap[0] = Heap[size--];
+        Heap[0] = Heap[--size];
         minHeapify(0);
         return popped;
     }
