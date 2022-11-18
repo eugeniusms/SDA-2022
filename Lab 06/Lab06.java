@@ -17,6 +17,9 @@ public class Lab06 {
     // inisiasi minheap untuk data ke median - N
     static MinHeap minHeap = new MinHeap(200069);
 
+    // Map<key = nomorseri, value = saham> : menyimpan saham sesuai nomor seri
+    static HashMap<Integer, Saham> map = new HashMap<Integer, Saham>();
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -32,6 +35,7 @@ public class Lab06 {
                 int harga = in.nextInt();
                 Saham saham = new Saham(i,harga);
                 initialSaham[i-1] = saham;
+                map.put(i, saham); // menyimpan ke map
             }
 
             // sort saham
@@ -90,6 +94,8 @@ public class Lab06 {
 
     static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
+        map.put(id, sahamBaru); // menyimpan ke map
+        
         // cek apakah harga saham baru lebih besar dari median
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
