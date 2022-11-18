@@ -129,39 +129,29 @@ public class Lab06 {
     static void UBAH(int nomorSeri, int harga) {
         // get saham by id
         Saham sahamDipilih = sahamById[nomorSeri];
-        // cek apakah harga saham baru lebih besar dari median
+
+        // cek letak sahamDipilih
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
+			sahamDipilih.harga = harga; // update harga
+            maxHeap.sort(); // fix heap
+        } else { // jika lebih besar maka cek ke minheap
+            sahamDipilih.harga = harga; // update harga
+            minHeap.sort(); // fix heap
+		}
+		// cek apakah harga saham baru lebih besar dari median
+		if (maxHeap.size > 0 && minHeap.size > 0) {
+			// swap
+			if (maxHeap.getMax().compareTo(minHeap.getMin()) > 0) {
+				Saham max = maxHeap.extractMax();
+				Saham min = minHeap.extractMin();
+				maxHeap.insert(min);
+				minHeap.insert(max);
+			}
+		}
 
-            // System.out.println("SANA");
-            // VIEW(); // DEBUG
-            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
-            while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
-                temp.add(maxHeap.extractMax());
-            }
-            // remove sahamDipilih
-            maxHeap.extractMax();
-            // masukkan kembali ke maxHeap
-            while (!temp.isEmpty()) {
-                maxHeap.insert(temp.remove());
-            }
-
-        } else { // jika lebih besar maka cek ke inheap
-            
-            // System.out.println("SINI");
-            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
-            while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
-                temp.add(minHeap.extractMin());
-            }
-            // remove sahamDipilih
-            minHeap.extractMin();
-            // masukkan kembali ke minHeap
-            while (!temp.isEmpty()) {
-                minHeap.insert(temp.remove());
-            }
-        }
-
-        // TAMBAH NODE YANG AKAN DITIMPA
-        TAMBAH(nomorSeri, harga);
+        // update median
+		sahamMedian = minHeap.getMin();
+		out.println(sahamMedian.id); // RESULT
     }
 
     static void VIEW() {
@@ -317,6 +307,22 @@ class MaxHeap {
     public Saham getMax() {
         return Heap[0];
     }
+
+    // insertion sort from max to min in Heap
+    void sort(){
+        int n = size;
+        for (int i = 1; i < n; ++i) {
+            Saham key = Heap[i];
+            int j = i - 1;
+            
+            while (j >= 0 && Heap[j].isLessThan(key)) {
+                Heap[j + 1] = Heap[j];
+                j = j - 1;
+            }
+            Heap[j + 1] = key;
+        }
+    }
+    
 }
 
 class MinHeap {
@@ -427,6 +433,21 @@ class MinHeap {
     public Saham getMin() {
         return Heap[0];
     }
+
+    // insertion sort from min to max in Heap
+    void sort(){
+        int n = size;
+        for (int i = 1; i < n; ++i) {
+            Saham key = Heap[i];
+            int j = i - 1;
+            
+            while (j >= 0 && key.isLessThan(Heap[j])) {
+                Heap[j + 1] = Heap[j];
+                j = j - 1;
+            }
+            Heap[j + 1] = key;
+        }
+    }
 }
 
 
@@ -437,3 +458,4 @@ class MinHeap {
 // 4) https://stackoverflow.com/questions/13051568/making-your-own-class-comparable
 // 5) https://www.geeksforgeeks.org/merge-sort/
 // 6) https://www.javatpoint.com/understanding-toString()-method
+// 7) https://www.geeksforgeeks.org/insertion-sort/
