@@ -203,10 +203,12 @@ public class Lab06New {
 class Saham implements Comparable<Saham> {
     public int id; // nomor seri
     public int harga;
+	public int posisi;
 
     public Saham(int id, int harga) {
         this.id = id; 
         this.harga = harga;
+		this.posisi = 0;
     }
 
     @Override
