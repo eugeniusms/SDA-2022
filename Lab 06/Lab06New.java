@@ -11,8 +11,13 @@ public class Lab06New {
     private static InputReader in;
     private static PrintWriter out;
 
-    static MinHeap<Saham> minHeap = new MinHeap<Saham>();
+    static Saham sahamMedian;
+
+    // inisiasi maxheap untuk data ke 1 - median
     static MaxHeap<Saham> maxHeap = new MaxHeap<Saham>();
+    // inisiasi minheap untuk data ke median - N
+    static MinHeap<Saham> minHeap = new MinHeap<Saham>();
+    
     // Map<key = nomorseri, value = saham> : menyimpan saham sesuai nomor seri
     static HashMap<Integer, Saham> map = new HashMap<Integer, Saham>();
 
@@ -24,21 +29,35 @@ public class Lab06New {
 
         int N = in.nextInt();
 
-        // TODO
-        for (int i = 1; i <= N; i++) {
-            int harga = in.nextInt();
-            Saham saham = new Saham(i, harga);
-            map.put(i, saham);
-            minHeap.insert(saham);
-            maxHeap.insert(saham);
+        // inisiasi saham ke dalam array untuk disort dahulu
+        if (N > 0) {
+            Saham[] initialSaham = new Saham[N]; // initial saham
+            for (int i = 1; i <= N; i++) {
+                int harga = in.nextInt();
+                Saham saham = new Saham(i,harga);
+                initialSaham[i-1] = saham;
+                map.put(i, saham);
+            }
+
+            // sort saham
+            Arrays.sort(initialSaham);
+
+            // get median of initial saham
+            int median = getIndexMedian(N);
+            sahamMedian = initialSaham[median];
+
+            // insert node ke dalam heap
+            for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
+                maxHeap.insert(initialSaham[i]);
+            }
+            for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
+                minHeap.insert(initialSaham[i]);
+            }
+        } else {
+            // inisiasi sahamMedian saat N == 0
+            sahamMedian = new Saham(0,0);
         }
 
-
-        VIEW();
-
-        map.get(2).harga = 100;
-        minHeap.heapify();
-        maxHeap.heapify();
 
         VIEW();
 
@@ -58,6 +77,14 @@ public class Lab06New {
         //     }
         // }
         out.flush();
+    }
+
+    static int getIndexMedian (int length) {
+        if (length % 2 == 0) {
+            return length/2;
+        } else {
+            return (length-1)/2;
+        }
     }
 
     static void VIEW() {
