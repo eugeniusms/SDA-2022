@@ -17,8 +17,7 @@ public class Lab06 {
     // inisiasi minheap untuk data ke median - N
     static MinHeap minHeap = new MinHeap(200069);
 
-    // Map<key = nomorseri, value = saham> : menyimpan saham sesuai nomor seri
-    static HashMap<Integer, Saham> map = new HashMap<Integer, Saham>();
+    static Saham[] sahamById = new Saham[200069]; // save saham by id
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -35,7 +34,7 @@ public class Lab06 {
                 int harga = in.nextInt();
                 Saham saham = new Saham(i,harga);
                 initialSaham[i-1] = saham;
-                map.put(i, saham); // menyimpan ke map
+                sahamById[i] = saham;
             }
 
             // sort saham
@@ -77,7 +76,6 @@ public class Lab06 {
                 int harga = in.nextInt();
                 UBAH(nomorSeri, harga);
             }
-            // VIEW(); // DEBUG
         }
 
         // VIEW(); // DEBUG
@@ -93,19 +91,14 @@ public class Lab06 {
         }
     }
 
-    static void TAMBAH(int id, int harga) { // O(logN)
+    static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
-        map.put(id, sahamBaru); // menyimpan ke map
-
+        sahamById[id] = sahamBaru;
         // cek apakah harga saham baru lebih besar dari median
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
         } else { 
-            if (minHeap.size == 0) {
-                minHeap.insert(sahamBaru);
-            } else {
-                maxHeap.insert(sahamBaru);
-            }
+            maxHeap.insert(sahamBaru);
         }
 
         // transfer node dari heap yang lebih banyak ke heap yang kurang banyak
@@ -113,8 +106,19 @@ public class Lab06 {
             maxHeap.insert(minHeap.extractMin());
         } else if (maxHeap.size - minHeap.size == 2) { // saat selisih size heap = 2
             minHeap.insert(maxHeap.extractMax());
-        } else if (maxHeap.size > minHeap.size) { // saat selisih size heap = 1
+        } else if (maxHeap.size - minHeap.size == 1) { // saat selisih size heap = 1
             minHeap.insert(maxHeap.extractMax());
+        } else {
+            if (minHeap.size - maxHeap.size > 2) { // saat selisih size banyak
+                while (minHeap.size - maxHeap.size > 1) {
+                    maxHeap.insert(minHeap.extractMin());
+                }
+            }
+            if (maxHeap.size - minHeap.size > 2) { // saat selisih size banyak
+                while (maxHeap.size - minHeap.size > 0) {
+                    minHeap.insert(maxHeap.extractMax());
+                }
+            }
         }
 
         // update median
@@ -122,36 +126,42 @@ public class Lab06 {
         out.println(sahamMedian.id); // RESULT
     }
 
-    static void UBAH(int nomorSeri, int harga) { // O(logN)
-        // mengambil node saham
-        Saham sahamDipilih = map.get(nomorSeri);
-        sahamDipilih.harga = harga; // update harga
+    static void UBAH(int nomorSeri, int harga) {
+        // get saham by id
+        Saham sahamDipilih = sahamById[nomorSeri];
+        // cek apakah harga saham baru lebih besar dari median
+        if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
 
-        // lakukan heapify pada heap dengan node yang diubah
-        if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka heapify maxheap
-            maxHeap.maxHeapify(0); // KEKNYA HARUS TAHU POSISI sahamDipilih dalam Heap Array
-        } else { // jika lebih besar maka heapify minheap
-            minHeap.minHeapify(0);
-        }
+            // System.out.println("SANA");
+            // VIEW(); // DEBUG
+            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
+            while (maxHeap.size > 0 && !maxHeap.getMax().equals(sahamDipilih)) {
+                temp.add(maxHeap.extractMax());
+            }
+            // remove sahamDipilih
+            maxHeap.extractMax();
+            // masukkan kembali ke maxHeap
+            while (!temp.isEmpty()) {
+                maxHeap.insert(temp.remove());
+            }
 
-        // solve isu maxHeap[0] > minHeap[0] 
-        if (maxHeap.size > 0 && minHeap.size > 0) {
-            if (minHeap.getMin().isLessThan(maxHeap.getMax())) {
-                // swap
-                Saham maxi = maxHeap.getMax();
-                Saham mini = minHeap.getMin();
-                minHeap.Heap[0] = maxi;
-                maxHeap.Heap[0] = mini;
-    
-                // heapify/fixheap kedua heap
-                maxHeap.maxHeapify(0);
-                minHeap.minHeapify(0);
+        } else { // jika lebih besar maka cek ke inheap
+            
+            // System.out.println("SINI");
+            Queue<Saham> temp = new LinkedList<Saham>(); // queue penyimpan elemen diremove sementara
+            while (minHeap.size > 0 && !minHeap.getMin().equals(sahamDipilih)) {
+                temp.add(minHeap.extractMin());
+            }
+            // remove sahamDipilih
+            minHeap.extractMin();
+            // masukkan kembali ke minHeap
+            while (!temp.isEmpty()) {
+                minHeap.insert(temp.remove());
             }
         }
-       
-        // update median
-        sahamMedian = minHeap.getMin();
-        out.println(sahamMedian.id); // RESULT
+
+        // TAMBAH NODE YANG AKAN DITIMPA
+        TAMBAH(nomorSeri, harga);
     }
 
     static void VIEW() {
@@ -255,34 +265,22 @@ class MaxHeap {
     }
  
     // Recursive function to max heapify given subtree
-    void maxHeapify(int pos) {
+    private void maxHeapify(int pos) {
         if (isLeaf(pos))
             return;
  
-        if (Heap[leftChild(pos)] != null) {
-            if (Heap[pos].isLessThan(Heap[leftChild(pos)])) {
+        if (Heap[pos].isLessThan(Heap[leftChild(pos)])
+            || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
+ 
+            if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
                 swap(pos, leftChild(pos));
                 maxHeapify(leftChild(pos));
             }
-        }
-        if (Heap[rightChild(pos)] != null) {
-            if (Heap[pos].isLessThan(Heap[rightChild(pos)])) {
+            else {
                 swap(pos, rightChild(pos));
                 maxHeapify(rightChild(pos));
             }
         }
-        // if (Heap[pos].isLessThan(Heap[leftChild(pos)])
-        //     || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
- 
-        //     if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
-        //         swap(pos, leftChild(pos));
-        //         maxHeapify(leftChild(pos));
-        //     }
-        //     else {
-        //         swap(pos, rightChild(pos));
-        //         maxHeapify(rightChild(pos));
-        //     }
-        // }
     }
  
     // Inserts a new element to max heap
@@ -355,38 +353,44 @@ class MinHeap {
         Heap[fpos] = Heap[spos];
         Heap[spos] = tmp;
     }
- 
-    // Recursive function to min heapify given subtree
-    void minHeapify(int pos) {
+
+    // Recursive function to max heapify given subtree
+    private void maxHeapify(int pos) {
         if (isLeaf(pos))
             return;
-
-        if (Heap[leftChild(pos)] != null) {
-            if (Heap[leftChild(pos)].isLessThan(Heap[pos])) {
+ 
+        if (Heap[pos].isLessThan(Heap[leftChild(pos)])
+            || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
+ 
+            if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
                 swap(pos, leftChild(pos));
-                minHeapify(leftChild(pos));
+                maxHeapify(leftChild(pos));
+            }
+            else {
+                swap(pos, rightChild(pos));
+                maxHeapify(rightChild(pos));
             }
         }
-        if (Heap[rightChild(pos)] != null) {
-            if (Heap[rightChild(pos)].isLessThan(Heap[pos])) {
+    }
+ 
+    // Recursive function to min heapify given subtree
+    private void minHeapify(int pos) {
+        if (isLeaf(pos))
+            return;
+ 
+        // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
+        if (Heap[leftChild(pos)].isLessThan(Heap[pos])
+            || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
+ 
+            // jika child kiri lebih kecil dari child kanan maka lakukan penukaran dengan child kiri
+            if (Heap[leftChild(pos)].isLessThan(Heap[rightChild(pos)])) {
+                swap(pos, leftChild(pos));
+                minHeapify(leftChild(pos));
+            } else { // jika child kanan lebih kecil dari child kiri maka lakukan penukaran dengan child kanan
                 swap(pos, rightChild(pos));
                 minHeapify(rightChild(pos));
             }
         }
-
-        // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
-        // if (Heap[leftChild(pos)].isLessThan(Heap[pos])
-        //     || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
- 
-        //     // jika child kiri lebih kecil dari child kanan maka lakukan penukaran dengan child kiri
-        //     if (Heap[leftChild(pos)].isLessThan(Heap[rightChild(pos)])) {
-        //         swap(pos, leftChild(pos));
-        //         minHeapify(leftChild(pos));
-        //     } else { // jika child kanan lebih kecil dari child kiri maka lakukan penukaran dengan child kanan
-        //         swap(pos, rightChild(pos));
-        //         minHeapify(rightChild(pos));
-        //     }
-        // }
     }
  
     // Inserts a new element to min heap
