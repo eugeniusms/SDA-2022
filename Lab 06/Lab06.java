@@ -358,7 +358,7 @@ class MinHeap {
     private void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
- 
+            
         // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
         if (Heap[leftChild(pos)].isLessThan(Heap[pos])
             || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
