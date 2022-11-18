@@ -134,10 +134,17 @@ public class Lab06New {
 		// cek letak sahamDipilih
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka cek ke maxheap
 			sahamDipilih.harga = harga; // update harga
-            maxHeap.heapify(); // fix heap
+
+			int idx = maxHeap.data.indexOf(sahamDipilih);
+			maxHeap.percolateUp(idx);
+			maxHeap.percolateDown(idx);
+
         } else { // jika lebih besar maka cek ke minheap
             sahamDipilih.harga = harga; // update harga
-            minHeap.heapify(); // fix heap
+
+			int idx = minHeap.data.indexOf(sahamDipilih);
+            minHeap.percolateUp(idx);
+			minHeap.percolateDown(idx);
 		}
 		// cek apakah harga saham baru lebih besar dari median
 		if (maxHeap.getSize() > 0 && minHeap.getSize() > 0) {
@@ -257,7 +264,7 @@ class MinHeap<T extends Comparable<T>> {
 		return removedObject;
 	}
 
-	private void percolateDown(int idx) {
+	void percolateDown(int idx) {
 		T node = data.get(idx);
 		int heapSize = data.size();
 
@@ -283,7 +290,7 @@ class MinHeap<T extends Comparable<T>> {
 		}
 	}
 
-	private void percolateUp(int idx) {
+	void percolateUp(int idx) {
 		T node = data.get(idx);
 		int parentIdx = getParentIdx(idx);
 		while (idx > 0 && node.compareTo(data.get(parentIdx)) < 0) {
@@ -331,7 +338,7 @@ class MinHeap<T extends Comparable<T>> {
 		return removedObject;
 	}
 
-	private void percolateDown(int idx, int n) {
+	void percolateDown(int idx, int n) {
 		T node = data.get(idx);
 		int heapSize = n;
 
@@ -415,7 +422,7 @@ class MaxHeap<T extends Comparable<T>> {
 		return removedObject;
 	}
 
-	private void percolateDown(int idx) {
+	void percolateDown(int idx) {
 		T node = data.get(idx);
 		int heapSize = data.size();
 
@@ -442,7 +449,7 @@ class MaxHeap<T extends Comparable<T>> {
 		}
 	}
 
-	private void percolateUp(int idx) {
+	void percolateUp(int idx) {
 		T node = data.get(idx);
 		int parentIdx = getParentIdx(idx); // mendapatkan id parent
 		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) { // jika node lebih besar dari parent maka swap
@@ -490,7 +497,7 @@ class MaxHeap<T extends Comparable<T>> {
 		return removedObject;
 	}
 
-	private void percolateDown(int idx, int n) {
+	void percolateDown(int idx, int n) {
 		T node = data.get(idx);
 		int heapSize = n;
 
