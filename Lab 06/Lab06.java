@@ -252,18 +252,30 @@ class MaxHeap {
         if (isLeaf(pos))
             return;
  
-        if (Heap[pos].isLessThan(Heap[leftChild(pos)])
-            || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
- 
-            if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
+        if (Heap[leftChild(pos)] != null) {
+            if (Heap[pos].isLessThan(Heap[leftChild(pos)])) {
                 swap(pos, leftChild(pos));
                 maxHeapify(leftChild(pos));
             }
-            else {
+        }
+        if (Heap[rightChild(pos)] != null) {
+            if (Heap[pos].isLessThan(Heap[rightChild(pos)])) {
                 swap(pos, rightChild(pos));
                 maxHeapify(rightChild(pos));
             }
         }
+        // if (Heap[pos].isLessThan(Heap[leftChild(pos)])
+        //     || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
+ 
+        //     if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
+        //         swap(pos, leftChild(pos));
+        //         maxHeapify(leftChild(pos));
+        //     }
+        //     else {
+        //         swap(pos, rightChild(pos));
+        //         maxHeapify(rightChild(pos));
+        //     }
+        // }
     }
  
     // Inserts a new element to max heap
@@ -341,20 +353,33 @@ class MinHeap {
     void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
- 
-        // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
-        if (Heap[leftChild(pos)].isLessThan(Heap[pos])
-            || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
- 
-            // jika child kiri lebih kecil dari child kanan maka lakukan penukaran dengan child kiri
-            if (Heap[leftChild(pos)].isLessThan(Heap[rightChild(pos)])) {
+
+        if (Heap[leftChild(pos)] != null) {
+            if (Heap[leftChild(pos)].isLessThan(Heap[pos])) {
                 swap(pos, leftChild(pos));
                 minHeapify(leftChild(pos));
-            } else { // jika child kanan lebih kecil dari child kiri maka lakukan penukaran dengan child kanan
+            }
+        }
+        if (Heap[rightChild(pos)] != null) {
+            if (Heap[rightChild(pos)].isLessThan(Heap[pos])) {
                 swap(pos, rightChild(pos));
                 minHeapify(rightChild(pos));
             }
         }
+
+        // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
+        // if (Heap[leftChild(pos)].isLessThan(Heap[pos])
+        //     || Heap[rightChild(pos)].isLessThan(Heap[pos])) {
+ 
+        //     // jika child kiri lebih kecil dari child kanan maka lakukan penukaran dengan child kiri
+        //     if (Heap[leftChild(pos)].isLessThan(Heap[rightChild(pos)])) {
+        //         swap(pos, leftChild(pos));
+        //         minHeapify(leftChild(pos));
+        //     } else { // jika child kanan lebih kecil dari child kiri maka lakukan penukaran dengan child kanan
+        //         swap(pos, rightChild(pos));
+        //         minHeapify(rightChild(pos));
+        //     }
+        // }
     }
  
     // Inserts a new element to min heap
