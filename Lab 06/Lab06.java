@@ -87,7 +87,7 @@ public class Lab06 {
     static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
         // cek apakah harga saham baru lebih besar dari median
-        if (harga > sahamMedian.harga) { // jika lebih besar maka masuk ke minHeap
+        if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
         } else { 
             maxHeap.insert(sahamBaru);
