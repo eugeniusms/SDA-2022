@@ -77,6 +77,7 @@ public class Lab06 {
                 int harga = in.nextInt();
                 UBAH(nomorSeri, harga);
             }
+            VIEW(); // DEBUG
         }
 
         // VIEW(); // DEBUG
