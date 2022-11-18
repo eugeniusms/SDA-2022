@@ -95,7 +95,7 @@ public class Lab06 {
     static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
         map.put(id, sahamBaru); // menyimpan ke map
-        
+
         // cek apakah harga saham baru lebih besar dari median
         if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
@@ -118,7 +118,15 @@ public class Lab06 {
     }
 
     static void UBAH(int nomorSeri, int harga) {
-        // TODO
+        // mengambil node saham
+        Saham sahamDipilih = map.get(nomorSeri);
+        sahamDipilih.harga = harga; // update harga
+        // lakukan heapify pada heap dengan node yang diubah
+        if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka heapify maxheap
+            maxHeap.heapify(); // KEKNYA HARUS TAHU POSISI sahamDipilih dalam Heap Array
+        } else { // jika lebih besar maka heapify minheap
+            minHeap.heapify();
+        }
     }
 
     static void VIEW() {
