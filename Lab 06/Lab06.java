@@ -330,7 +330,7 @@ class MinHeap {
  
         // Traverse up and fix violated property
         int current = size;
-        while (Heap[parent(current)].compareTo(Heap[current]) > 0) {
+        while (Heap[parent(current)].isLessThan(Heap[current])) {
             swap(current, parent(current));
             current = parent(current);
         }
