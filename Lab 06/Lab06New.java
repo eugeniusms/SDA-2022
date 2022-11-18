@@ -11,6 +11,10 @@ public class Lab06New {
     private static InputReader in;
     private static PrintWriter out;
 
+    static BinaryHeap<Saham> minHeap = new BinaryHeap<Saham>();
+    // Map<key = nomorseri, value = saham> : menyimpan saham sesuai nomor seri
+    static HashMap<Integer, Saham> map = new HashMap<Integer, Saham>();
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -22,25 +26,37 @@ public class Lab06New {
         // TODO
         for (int i = 1; i <= N; i++) {
             int harga = in.nextInt();
-
+            Saham saham = new Saham(i, harga);
+            map.put(i, saham);
+            minHeap.insert(saham);
         }
 
-        int Q = in.nextInt();
 
-        // TODO
-        for (int i = 0; i < Q; i++) {
-            String q = in.next();
+        VIEW();
+        // int Q = in.nextInt();
 
-            if (q.equals("TAMBAH")) {
-                int harga = in.nextInt();
+        // // TODO
+        // for (int i = 0; i < Q; i++) {
+        //     String q = in.next();
 
-            } else if (q.equals("UBAH")) {
-                int nomorSeri = in.nextInt();
-                int harga = in.nextInt();
+        //     if (q.equals("TAMBAH")) {
+        //         int harga = in.nextInt();
 
-            }
-        }
+        //     } else if (q.equals("UBAH")) {
+        //         int nomorSeri = in.nextInt();
+        //         int harga = in.nextInt();
+
+        //     }
+        // }
         out.flush();
+    }
+
+    static void VIEW() {
+        // System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
+        // maxHeap.print(); // DEBUG
+        minHeap.print(); // DEBUG
+        // System.out.println(maxHeap.Heap[0]);
+        // System.out.println(minHeap.Heap[0]);
     }
 
     static class InputReader {
@@ -73,15 +89,42 @@ public class Lab06New {
     }
 }
 
+class Saham implements Comparable<Saham> {
+    public int id; // nomor seri
+    public int harga;
+
+    public Saham(int id, int harga) {
+        this.id = id; 
+        this.harga = harga;
+    }
+
+    @Override
+    public String toString() {
+        return "[HARGA: "+this.harga + " ID: " + this.id+"]";
+    }
+
+    @Override
+    public int compareTo(Saham other) {
+        if (this.harga == other.harga) {
+            return this.id - other.id; // id terkecil hingga terbesar
+        }
+        return this.harga - other.harga; // harga termurah hingga termahal
+    }
+
+    boolean isLessThan(Saham other) {
+        return this.compareTo(other) < 0;
+    }
+}
+
 class BinaryHeap<T extends Comparable<T>> {
 	ArrayList<T> data;
 
 	public BinaryHeap() {
-		data = new ArrayList<T>();
+		this.data = new ArrayList<T>();
 	}
 
 	public BinaryHeap(ArrayList<T> arr) {
-		data = arr;
+		this.data = arr;
 		heapify();
 	}
 
@@ -209,5 +252,16 @@ class BinaryHeap<T extends Comparable<T>> {
 			}
 		}
 	}
+
+    // To display heap
+    public void print() {
+ 
+        System.out.println("\nMINHEAP: ");
+        int counter = 0;
+        for (T s : this.data) {
+            System.out.println("["+counter+"]: "+s);
+        }
+        System.out.println(" ");
+    }
 
 }

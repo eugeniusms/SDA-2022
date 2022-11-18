@@ -140,7 +140,7 @@ public class Lab06 {
 
             sahamDipilih.harga = harga; // update harga
             // fix heap
-            maxHeap.fixHeap(sahamDipilih.posisi);
+            maxHeap.maxHeapify(sahamDipilih.posisi);
 
             // System.out.println("SANA");
             // VIEW(); // DEBUG
@@ -277,7 +277,7 @@ class MaxHeap {
     }
  
     // Recursive function to max heapify given subtree
-    private void maxHeapify(int pos) {
+    void maxHeapify(int pos) {
         if (isLeaf(pos))
             return;
  
@@ -367,7 +367,7 @@ class MinHeap {
     }
 
     // Recursive function to min heapify given subtree
-    private void minHeapify(int pos) {
+    void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
 
