@@ -58,24 +58,24 @@ public class Lab06New {
             sahamMedian = new Saham(0,0);
         }
 
+        // input query
+        int Q = in.nextInt();
+        for (int i = 0; i < Q; i++) {
+            String q = in.next();
 
-        VIEW();
+            if (q.equals("TAMBAH")) {
+                N += 1;
+                int harga = in.nextInt();
+                TAMBAH(N, harga);
+            } else if (q.equals("UBAH")) {
+                int nomorSeri = in.nextInt();
+                int harga = in.nextInt();
+                UBAH(nomorSeri, harga);
+            }
+        }
 
-        // int Q = in.nextInt();
+        // VIEW();
 
-        // // TODO
-        // for (int i = 0; i < Q; i++) {
-        //     String q = in.next();
-
-        //     if (q.equals("TAMBAH")) {
-        //         int harga = in.nextInt();
-
-        //     } else if (q.equals("UBAH")) {
-        //         int nomorSeri = in.nextInt();
-        //         int harga = in.nextInt();
-
-        //     }
-        // }
         out.flush();
     }
 
@@ -87,8 +87,49 @@ public class Lab06New {
         }
     }
 
+    static void TAMBAH(int id, int harga) {
+        Saham sahamBaru = new Saham(id, harga);
+        map.put(id, sahamBaru);
+        // cek apakah harga saham baru lebih besar dari median
+        if (sahamMedian.isLessThan(sahamBaru)) { // jika lebih besar maka masuk ke minHeap
+            minHeap.insert(sahamBaru);
+        } else { 
+            maxHeap.insert(sahamBaru);
+        }
+
+        // transfer node dari heap yang lebih banyak ke heap yang kurang banyak
+        int minHeapSize = minHeap.getSize();
+        int maxHeapSize = maxHeap.getSize();
+
+        if (minHeapSize - maxHeapSize == 2) { // saat selisih size heap = 2
+            maxHeap.insert(minHeap.remove());
+        } else if (maxHeapSize - minHeapSize == 2) { // saat selisih size heap = 2
+            minHeap.insert(maxHeap.remove());
+        } else if (maxHeapSize - minHeapSize == 1) { // saat selisih size heap = 1
+            minHeap.insert(maxHeap.remove());
+        } else {
+            if (minHeapSize - maxHeapSize > 1) { // saat selisih size banyak
+                while (minHeapSize - maxHeapSize > 1) {
+                    maxHeap.insert(minHeap.remove());
+                }
+            }
+            if (maxHeapSize - minHeapSize > 0) { // saat selisih size banyak
+                while (maxHeapSize - minHeapSize > 0) {
+                    minHeap.insert(maxHeap.remove());
+                }
+            }
+        }
+
+        // update median
+        sahamMedian = minHeap.getMin();
+        out.println(sahamMedian.id); // RESULT
+    }
+
+    static void UBAH(int nomorSeri, int harga) {
+    }
+
     static void VIEW() {
-        // System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
+        System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
         maxHeap.print(); // DEBUG
         minHeap.print(); // DEBUG
         // System.out.println(maxHeap.Heap[0]);
@@ -301,6 +342,13 @@ class MinHeap<T extends Comparable<T>> {
         System.out.println(" ");
     }
 
+    int getSize() {
+        return this.data.size();
+    }
+
+    T getMin() {
+        return this.data.get(0);
+    }
 }
 
 class MaxHeap<T extends Comparable<T>> {
@@ -453,6 +501,13 @@ class MaxHeap<T extends Comparable<T>> {
         System.out.println(" ");
     }
 
+    int getSize() {
+        return this.data.size();
+    }
+
+    T getMax() {
+        return this.data.get(0);
+    }
 }
 
 // MARIO'S REFERENCES:
