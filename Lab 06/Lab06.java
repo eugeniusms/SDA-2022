@@ -87,13 +87,12 @@ public class Lab06 {
     static void TAMBAH(int id, int harga) {
         Saham sahamBaru = new Saham(id, harga);
         // cek apakah harga saham baru lebih besar dari median
-        // STEP 1: CEK BANDINGKAN DENGAN MEDIAN
-        // STEP 2: CEK BANDINGKAN SIZE MAXHEAP DAN MINHEAP
         if (harga > sahamMedian.harga) { // jika lebih besar maka masuk ke minHeap
             minHeap.insert(sahamBaru);
         } else { 
             maxHeap.insert(sahamBaru);
         }
+
         // transfer node dari heap yang lebih banyak ke heap yang kurang banyak
         if (minHeap.size - maxHeap.size == 2) { // saat selisih size heap = 2
             maxHeap.insert(minHeap.extractMin());
@@ -102,8 +101,10 @@ public class Lab06 {
         } else if (maxHeap.size > minHeap.size) { // saat selisih size heap = 1
             minHeap.insert(maxHeap.extractMax());
         }
+
         // update median
         sahamMedian = minHeap.getMin();
+        out.println(sahamMedian.id); // RESULT
     }
 
     static void UBAH(int nomorSeri, int harga) {
