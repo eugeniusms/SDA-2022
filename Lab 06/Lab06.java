@@ -11,6 +11,12 @@ public class Lab06 {
     private static InputReader in;
     private static PrintWriter out;
 
+    static Saham sahamMedian;
+    // inisiasi maxheap untuk data ke 1 - median
+    static MaxHeap maxHeap = new MaxHeap(200069);
+    // inisiasi minheap untuk data ke median - N
+    static MinHeap minHeap = new MinHeap(200069);
+
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -37,21 +43,17 @@ public class Lab06 {
 
         // get median of initial saham
         int median = getIndexMedian(N);
-        Saham sahamMedian = initialSaham[median];
+        sahamMedian = initialSaham[median];
         System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
 
-        // inisiasi maxheap untuk data ke 1 - median
-        MaxHeap maxHeap = new MaxHeap(200069);
+        // insert node ke dalam heap
         for (int i = median-1; i >= 0; i--) { // berjalan dari kanan ke kiri (biar max duluan)
             maxHeap.insert(initialSaham[i]);
         }
-        maxHeap.print(); // DEBUG
-        // inisiasi minheap untuk data ke median - N
-        MinHeap minHeap = new MinHeap(200069);
         for (int i = median; i < N; i++) { // berjalan dari kiri ke kanan (biar min duluan)
             minHeap.insert(initialSaham[i]);
         }
-        minHeap.print(); // DEBUG
+        
 
         // input query
         int Q = in.nextInt();
@@ -59,16 +61,18 @@ public class Lab06 {
             String q = in.next();
 
             if (q.equals("TAMBAH")) {
+                N += 1;
                 int harga = in.nextInt();
-                TAMBAH(harga);
-
+                TAMBAH(N, harga);
             } else if (q.equals("UBAH")) {
                 int nomorSeri = in.nextInt();
                 int harga = in.nextInt();
                 UBAH(nomorSeri, harga);
-
             }
         }
+
+        VIEW(); // DEBUG
+
         out.flush();
     }
 
@@ -80,12 +84,34 @@ public class Lab06 {
         }
     }
 
-    static void TAMBAH(int harga) {
-        // TODO
+    static void TAMBAH(int id, int harga) {
+        Saham sahamBaru = new Saham(id, harga);
+        // cek apakah harga saham baru lebih besar dari median
+        // STEP 1: CEK BANDINGKAN DENGAN MEDIAN
+        // STEP 2: CEK BANDINGKAN SIZE MAXHEAP DAN MINHEAP
+        if (harga > sahamMedian.harga) { // jika lebih besar maka masuk ke minHeap
+            minHeap.insert(sahamBaru);
+        } else { 
+            maxHeap.insert(sahamBaru);
+        }
+        // transfer node dari heap yang lebih banyak ke heap yang kurang banyak
+        if (minHeap.size > maxHeap.size) {
+            maxHeap.insert(minHeap.extractMin());
+        } else if (maxHeap.size - minHeap.size == 2) {
+            minHeap.insert(maxHeap.extractMax());
+        }
+        // update median
+        sahamMedian = minHeap.getMin();
     }
 
     static void UBAH(int nomorSeri, int harga) {
         // TODO
+    }
+
+    static void VIEW() {
+        System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
+        maxHeap.print(); // DEBUG
+        minHeap.print(); // DEBUG
     }
 
     static class InputReader {
@@ -147,7 +173,7 @@ class Saham implements Comparable<Saham> {
 
 class MaxHeap {
     private Saham[] Heap;
-    private int size;
+    int size;
     private int maxsize;
  
     // Constructor to initialize an
@@ -247,7 +273,7 @@ class MaxHeap {
 class MinHeap {
     // Member variables of this class
     private Saham[] Heap;
-    private int size;
+    int size;
     private int maxsize;
 
     // Constructor of this class
@@ -286,7 +312,7 @@ class MinHeap {
 
     // SUSUN SENDIRI INI :")
     // Recursive function to min heapify given subtree
-    private void minHeapify(int pos) {
+    private void minHeapify(int pos) {  
         if (isLeaf(pos))
             return;
 
@@ -347,6 +373,10 @@ class MinHeap {
         Heap[0] = Heap[size--];
         minHeapify(0);
         return popped;
+    }
+
+    public Saham getMin() {
+        return Heap[0];
     }
 }
 
