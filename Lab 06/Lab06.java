@@ -123,9 +123,9 @@ public class Lab06 {
         sahamDipilih.harga = harga; // update harga
         // lakukan heapify pada heap dengan node yang diubah
         if (sahamDipilih.isLessThan(sahamMedian)) { // jika lebih kecil maka heapify maxheap
-            maxHeap.heapify(); // KEKNYA HARUS TAHU POSISI sahamDipilih dalam Heap Array
+            maxHeap.maxHeapify(0); // KEKNYA HARUS TAHU POSISI sahamDipilih dalam Heap Array
         } else { // jika lebih besar maka heapify minheap
-            minHeap.heapify();
+            minHeap.minHeapify(0);
         }
     }
 
@@ -230,7 +230,7 @@ class MaxHeap {
     }
  
     // Recursive function to max heapify given subtree
-    private void maxHeapify(int pos) {
+    void maxHeapify(int pos) {
         if (isLeaf(pos))
             return;
  
@@ -314,28 +314,9 @@ class MinHeap {
         Heap[fpos] = Heap[spos];
         Heap[spos] = tmp;
     }
-
-    // Recursive function to max heapify given subtree
-    private void maxHeapify(int pos) {
-        if (isLeaf(pos))
-            return;
- 
-        if (Heap[pos].isLessThan(Heap[leftChild(pos)])
-            || Heap[pos].isLessThan(Heap[rightChild(pos)])) {
- 
-            if (Heap[rightChild(pos)].isLessThan(Heap[leftChild(pos)])) {
-                swap(pos, leftChild(pos));
-                maxHeapify(leftChild(pos));
-            }
-            else {
-                swap(pos, rightChild(pos));
-                maxHeapify(rightChild(pos));
-            }
-        }
-    }
  
     // Recursive function to min heapify given subtree
-    private void minHeapify(int pos) {
+    void minHeapify(int pos) {
         if (isLeaf(pos))
             return;
  
