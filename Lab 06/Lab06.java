@@ -13,11 +13,11 @@ public class Lab06 {
 
     static Saham sahamMedian;
     // inisiasi maxheap untuk data ke 1 - median
-    static MaxHeap maxHeap = new MaxHeap(200069);
+    static MaxHeap maxHeap = new MaxHeap(400069);
     // inisiasi minheap untuk data ke median - N
-    static MinHeap minHeap = new MinHeap(200069);
+    static MinHeap minHeap = new MinHeap(400069);
 
-    static Saham[] sahamById = new Saham[200069]; // save saham by id
+    static Saham[] sahamById = new Saham[400069]; // save saham by id
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
