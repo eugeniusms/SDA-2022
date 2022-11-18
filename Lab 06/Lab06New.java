@@ -12,6 +12,7 @@ public class Lab06New {
     private static PrintWriter out;
 
     static MinHeap<Saham> minHeap = new MinHeap<Saham>();
+    static MaxHeap<Saham> maxHeap = new MaxHeap<Saham>();
     // Map<key = nomorseri, value = saham> : menyimpan saham sesuai nomor seri
     static HashMap<Integer, Saham> map = new HashMap<Integer, Saham>();
 
@@ -29,13 +30,14 @@ public class Lab06New {
             Saham saham = new Saham(i, harga);
             map.put(i, saham);
             minHeap.insert(saham);
+            maxHeap.insert(saham);
         }
 
 
         VIEW();
 
-        map.get(2).harga = 100;
-        minHeap.heapify();
+        // map.get(2).harga = 100;
+        // minHeap.heapify();
 
         VIEW();
 
@@ -59,7 +61,7 @@ public class Lab06New {
 
     static void VIEW() {
         // System.out.println("MEDIAN: [HARGA: "+sahamMedian.harga + " ID: " + sahamMedian.id+"]"); // DEBUG
-        // maxHeap.print(); // DEBUG
+        maxHeap.print(); // DEBUG
         minHeap.print(); // DEBUG
         // System.out.println(maxHeap.Heap[0]);
         // System.out.println(minHeap.Heap[0]);
@@ -293,7 +295,7 @@ class MaxHeap<T extends Comparable<T>> {
 
 	public void insert(T value) {
 		data.add(value);
-		percolateDown(data.size() - 1);
+		percolateUp(data.size() - 1);
 	}
 
 	public T remove() {
@@ -322,10 +324,10 @@ class MaxHeap<T extends Comparable<T>> {
 			} else {
 				int minChildIdx = leftIdx;
 				int rightIdx = getRightChildIdx(idx);
-				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) < 0)
+				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
 					minChildIdx = rightIdx;
 
-				if (node.compareTo(data.get(minChildIdx)) > 0) {
+				if (node.compareTo(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
@@ -339,7 +341,7 @@ class MaxHeap<T extends Comparable<T>> {
 	private void percolateUp(int idx) {
 		T node = data.get(idx);
 		int parentIdx = getParentIdx(idx);
-		while (idx > 0 && node.compareTo(data.get(parentIdx)) < 0) {
+		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) {
 			data.set(idx, data.get(parentIdx));
 			idx = parentIdx;
 			parentIdx = getParentIdx(idx);
@@ -396,10 +398,10 @@ class MaxHeap<T extends Comparable<T>> {
 			} else {
 				int minChildIdx = leftIdx;
 				int rightIdx = getRightChildIdx(idx);
-				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) < 0)
+				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
 					minChildIdx = rightIdx;
 
-				if (node.compareTo(data.get(minChildIdx)) > 0) {
+				if (node.compareTo(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
@@ -413,7 +415,7 @@ class MaxHeap<T extends Comparable<T>> {
     // To display heap
     public void print() {
  
-        System.out.println("\nMINHEAP: ");
+        System.out.println("\nMAXHEAP: ");
         int counter = 0;
         for (T s : this.data) {
             System.out.println("["+counter+"]: "+s);
