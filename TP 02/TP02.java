@@ -11,9 +11,10 @@ public class TP02 {
     private static InputReader in;
     static PrintWriter out;
 
-    static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>(); // include budi di dalamnya
-    static AVLTree tree = new AVLTree();
+    // Menyimpan daftar mesin di dalam Circular Doubly Linkedlist
+    static CircularDoublyLL<Mesin> daftarMesin = new CircularDoublyLL<Mesin>(); 
 
+    // Method main digunakan untuk mengambil input dan memprosesnya ke dalam struktur data
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -24,21 +25,25 @@ public class TP02 {
         int N = in.nextInt(); // banyak mesin
         for(int i = 1; i <= N; i++) {
             int M = in.nextInt(); // banyak score
+            // AVL Tree digunakan untuk menyimpan score suatu mesin
             AVLTree scoreTree = new AVLTree();
+            // Jumlah score diinisiasikan dengan 0 untuk pertama kali
             long sumScore = 0;
             for(int s = 1; s <= M; s++) {
                 int S = in.nextInt(); // daftar score
+                // Menambahkan score ke dalam AVL Tree
                 scoreTree.root = scoreTree.insert(scoreTree.root, S);
                 sumScore += S;
             }
+            // Menambahkan mesin ke dalam Circular Doubly Linkedlist
             Mesin mesin = new Mesin(i, scoreTree, M, sumScore);
             daftarMesin.addLast(mesin);
         }
 
-        // INISIALISASI BUDI
+        // INISISASI BUDI KE DALAM MESIN PALING KANAN
         daftarMesin.setBudiNow(daftarMesin.header.next);        
 
-        // QUERY
+        // MENGAMBIL QUERY
         int Q = in.nextInt();
         for(int i = 1; i <= Q; i++) {
             String query = in.next();
@@ -58,24 +63,26 @@ public class TP02 {
         out.close();
     }
 
-    // method
-
+    // Method MAIN digunakan untuk mendapatkan score yang lebih besar dari insertedKey
     static void MAIN() { 
+        // Mengambil insertedKey
         int insertedKey = in.nextInt();
-        // insert score to tree
+        // Masukkan score ke dalam AVL Tree
         AVLTree budiTree = daftarMesin.budiNow.scoreTree;
         budiTree.root = budiTree.insert(budiTree.root, insertedKey);
-        // get result
+        // Ambil banyak score pada root AVL Tree & banyak score sebelum insertedKey
         long sumOfCount = budiTree.root.count;
         long sumOfBefore = budiTree.countBefore(budiTree.root, insertedKey);
 
+        // Dapatkan score lebih besar dari insertedKey
         out.println(sumOfCount - sumOfBefore + 1);
-        // update budiTree popularity juga
+        // Update budiTree popularity juga
         daftarMesin.budiNow.popularity += 1;
-        // insert sumScore in mesin
+        // Insert sumScore in mesin
         daftarMesin.budiNow.sumScore += insertedKey;
     }
 
+    // Method GERAK digunakan untuk menggerakkan budi ke mesin sebelah kiri atau kanan
     static void GERAK() {
         String arah = in.next();
         if (arah.equals("KIRI")) {
@@ -85,60 +92,71 @@ public class TP02 {
         }
     }
 
+    // Method HAPUS digunakan untuk menghapus score tertentu dari AVL Tree sekaligus mengembalikan jumlahnya
     static void HAPUS() {
         int X = in.nextInt();
 
+        // Jika popularity mesin kurang dari atau sama dengan X maka dicek dulu
         if(daftarMesin.budiNow.popularity <= X) {
+            // Jika popularity mesin kurang dari 0 maka tidak ada score yang dihapus
             if (daftarMesin.budiNow.popularity <= 0) {
                 out.println("0");
-                daftarMesin.budiNow.popularity = 0; // test mana tau sampai minus
-                daftarMesin.budiNow.sumScore = 0;
-                daftarMesin.pindahMesin(daftarMesin.budiNow);  
+                daftarMesin.budiNow.popularity = 0; // Set ke 0
+                daftarMesin.budiNow.sumScore = 0; // Set ke 0
+                daftarMesin.pindahMesin(daftarMesin.budiNow); // Lakukan pindah mesin  
             } else {
-                out.println(daftarMesin.budiNow.sumScore);
-                // implement case
-                // update budiTree popularity juga
-                daftarMesin.budiNow.scoreTree = new AVLTree();; // set to null reset AVLTree
-                daftarMesin.budiNow.popularity = 0;
-                daftarMesin.budiNow.sumScore = 0;
-                // budi pindah dulu baru mesin dipindah
+                // Jika popularity mesin lebih dari 0
+                out.println(daftarMesin.budiNow.sumScore); // print sumScore dari suatu mesin
+                daftarMesin.budiNow.scoreTree = new AVLTree();; // Set reset to new AVLTree
+                daftarMesin.budiNow.popularity = 0; // Set ke 0
+                daftarMesin.budiNow.sumScore = 0; // Set ke 0
+                // Budi pindah dulu baru mesin dipindah
                 daftarMesin.pindahMesin(daftarMesin.budiNow);                
             }
         } else {
-            // update budiTree popularity juga
+            // Update budiNow popularity
             daftarMesin.budiNow.popularity -= X;
 
-            // masuk ke case yg di dalam soal
+            // Hitung jumlah node key yang akan dihapus
             long sum = 0;
             while(X > 0) {
+                // Mencari nilai max dari AVL Tree
                 Node maxi = daftarMesin.budiNow.scoreTree.findMax();
+                // Menjumlahkan nilai keynya
                 sum += maxi.key;
+                // Menghapus node dari AVL Tree
                 daftarMesin.budiNow.scoreTree.root = daftarMesin.budiNow.scoreTree.delete(daftarMesin.budiNow.scoreTree.root, maxi.key); // delete node
                 X--;
             }
+            // Update sumScore
             daftarMesin.budiNow.sumScore -= sum;
+            // Print sum
             out.println(sum);
         }      
     }
 
+    // Method LIHAT digunakan untuk melihat score tertentu dari AVL Tree dari L ke H
     static void LIHAT() {
         int lowkey = in.nextInt();
         int highkey = in.nextInt();
-        // get count before && count after
-        AVLTree budiTree = daftarMesin.budiNow.scoreTree;
-        long sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1);
-        long sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey);
-        // get result
+        AVLTree budiTree = daftarMesin.budiNow.scoreTree; // Ambil AVL Tree mesin saat ini
+
+        // Gunakan prefix-sum untuk mencari banyak score yang ada diantara lowkey dan highkey
+        long sumOfBeforeL = budiTree.countBefore(budiTree.root, lowkey-1); // hitung banyak score sebelum lowkey-1
+        long sumOfBeforeH = budiTree.countBefore(budiTree.root, highkey); // hitung banyak score sebelum highkey
+        // prefix-sum
         out.println(sumOfBeforeH - sumOfBeforeL);
     }
 
+    // Method EVALUASI digunakan untuk sorting semua mesin saat ini agar terurut sesuai dengan popularity
     static void EVALUASI() {
-        Mesin[] arr = daftarMesin.sort(); // wujud sorted adalah array
-        // insert new data sorted to daftarMesin after reset the list
+        Mesin[] arr = daftarMesin.sort(); // Ambil sorted data
+        // Insert new data sorted to daftarMesin after reset the list
         daftarMesin.clear();
         for(int i = 0; i < arr.length; i++) {
             daftarMesin.addLast(arr[i]);
         }
+        // Print urutan mesin budi saat ini
         out.println(daftarMesin.getBudiMesinSortedNow());
     }
 
@@ -168,8 +186,6 @@ public class TP02 {
         }
     }
 }
-
-// class
 
 // ================================== LINKEDLIST THINGS ==================================
 
