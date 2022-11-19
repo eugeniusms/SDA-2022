@@ -189,12 +189,13 @@ public class TP02 {
 
 // ================================== LINKEDLIST THINGS ==================================
 
+// Class Mesin digunakan untuk instance mesin
 class Mesin {
     Mesin prev, next;
-    AVLTree scoreTree; // penyimpan score
-    int popularity;
+    AVLTree scoreTree; // AVL Tree penyimpan score
+    int popularity; // popularity dari suatu mesin
     int id;
-    long sumScore;
+    long sumScore; // Jumlah score dari AVL Tree
     
     Mesin(int id, AVLTree scoreTree, int popularity, long sumScore) {
         this.id = id;
@@ -204,8 +205,9 @@ class Mesin {
     }
 }
 
+// Class DaftarMesin digunakan untuk menyimpan semua mesin
 class CircularDoublyLL<E> {
-    int size;
+    int size; // Jumlah mesin
     Mesin header, footer; // null node for easier add and remove
     Mesin budiNow; // untuk menyimpan lokasi budi
     
@@ -216,7 +218,7 @@ class CircularDoublyLL<E> {
         this.footer = new Mesin(0, null, 0, 0);
     }
 
-    // done
+    // Method digunakan untuk menambahkan node baru di akhir linkedlist
     void addLast(Mesin mesin) {
         if (this.size == 0) { // empty
             footer.prev = mesin;
@@ -234,6 +236,7 @@ class CircularDoublyLL<E> {
         this.size += 1;
     }
 
+    // Method digunakan untuk remove node mesin dari linkedlist
     Mesin remove(Mesin mesin) {
         if (this.size == 0) { // empty
             // do nothing
@@ -250,15 +253,16 @@ class CircularDoublyLL<E> {
         return mesin;
     }
 
+    // Method digunakan untuk set mesin depan budi saat ini
     void setBudiNow(Mesin mesin) {
         budiNow = mesin;
     }
 
+    // Method digunakan untuk mengecek letak urutan mesin depan budi saat ini
     int getBudiMesinSortedNow() {
         Mesin check = header.next;
         int counter = 0;
         while (!check.equals(budiNow)) {
-            // System.out.print(check.id + "[" + check + "]->");
             counter++;
             check = check.next;
         }
@@ -266,7 +270,7 @@ class CircularDoublyLL<E> {
         return counter + 1;
     }
 
-    // get kanan mesin untuk ditempati budi
+    // Menggerakan budi ke kanan
     Mesin gerakKanan() {
         if (this.size == 0) { // empty
             // do nothing
@@ -275,28 +279,28 @@ class CircularDoublyLL<E> {
             // do nothing
         } else if (budiNow.next.equals(footer)) { // elemen terakhir
             budiNow = header.next;
-        } else {
+        } else { // kasus normal
             budiNow = budiNow.next;
         }
         return budiNow;
     }
 
-    // get kiri mesin untuk ditempati budi
+    // Menggerakan budi ke kiri
     Mesin gerakKiri() {
-        if (this.size == 0) {
+        if (this.size == 0) { // empty
             // do nothing
             throw new NullPointerException("LinkedList Size is 0");
-        } else if (this.size == 1) {
+        } else if (this.size == 1) { // cuma satu elemen
             // do nothing
         } else if (budiNow.prev.equals(header)) { // elemen pertama
             budiNow = footer.prev;
-        } else {
+        } else { // kasus normal
             budiNow = budiNow.prev;
         }
         return budiNow;
     }
 
-    // pindah mesin sekaligus mereturn mesin untuk ditempati budi
+    // Pindah mesin sekaligus mereturn mesin untuk ditempati budi
     void pindahMesin(Mesin mesin) {
         if (this.size == 0) {
             // do nothing
@@ -315,7 +319,7 @@ class CircularDoublyLL<E> {
         }
     }
 
-    // clear all mesin
+    // Clear all mesin
     void clear() {
         header.next = footer;
         footer.prev = header;
@@ -402,26 +406,30 @@ class CircularDoublyLL<E> {
         }
     }
 
+    // Method yang digunakan untuk sort mesin
     Mesin[] sort() {
         // kalo ga 0 sizenya
+        // buat array kosong sesuai size of LinkedList
         Mesin[] arr = new Mesin[this.size];
         Mesin masuk = header.next;
+        // Masukin semua mesin ke array
         for(int i = 0; i < this.size; i++) {
             arr[i] = masuk;
             masuk = masuk.next;
         }
+        // Sort array pakai merge sort
         mergesort(arr, 0, this.size - 1);
-
         return arr;
     }
 }
 
 // ====================================== AVL THINGS ====================================
 
+// AVL Node digunakan untuk menyimpan Score
 class Node { // AVL Node
-    long key, height, count;// key => score
+    long key, height, count; // key => score, count => banyaknya node pada suatu subtree dengan root == node
     Node left, right;
-    long jumlahSama; // jumlah isi key yg sama // URUSAN TERKAIT DELETE & INSERT PADA AVLTREE
+    long jumlahSama; // jumlah isi key yg sama (duplicate)
 
     Node(long key) {
         this.key = key;
@@ -444,7 +452,7 @@ class AVLTree {
         x.right = y; 
         y.left = T2; 
   
-        // Update heights 
+        // Update heights & count
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
         y.count = y.jumlahSama + getCount(y.left) + getCount(y.right);
 
@@ -464,7 +472,7 @@ class AVLTree {
         x.left = y; 
         y.right = T2;   
   
-        // Update heights 
+        // Update heights & count
         y.height = max(getHeight(y.left), getHeight(y.right)) + 1; 
         y.count = y.jumlahSama + getCount(y.left) + getCount(y.right);
 
@@ -492,7 +500,7 @@ class AVLTree {
             return node;
         }
 
-        // Update height
+        // Update height & count
         node.height = 1 + max(getHeight(node.left), getHeight(node.right));
         node.count = node.jumlahSama + getCount(node.left) + getCount(node.right);
 
@@ -547,7 +555,7 @@ class AVLTree {
         // to be deleted 
         else
         { 
-            // if jumlah sama masih ada rootnya jangan diilangin dulu gan
+            // if jumlah sama masih ada rootnya jangan diilangin dulu gan, duplicatenya urusin
             if (root.jumlahSama > 1) {
                 root.jumlahSama -= 1;
                 root.count -= 1;
@@ -562,7 +570,7 @@ class AVLTree {
     
                     // Copy the inorder successor's data to this node 
                     root.key = temp.key; 
-                    // fixing yg keupdate ga cuma key doang
+                    // fixing yg keupdate ga cuma key doang, ada count juga
                     root.jumlahSama = temp.jumlahSama;
                     root.count = temp.count;
                     // Delete the inorder successor 
@@ -609,6 +617,7 @@ class AVLTree {
         return root; 
     } 
 
+    // Mencari lowerBound dari suatu node
     Node lowerBound(Node node) {
         // Return node with the lowest from this node
         Node current = node;
@@ -618,6 +627,7 @@ class AVLTree {
         return current;
     }
 
+    // Mencari upperBound dari suatu node
     Node upperBound(Node node) {
         // Return node with the greatest from this node
         Node current = node;
@@ -652,30 +662,36 @@ class AVLTree {
         return getHeight(node.left) - getHeight(node.right);
     }
     
+    // Utility function to get max of 2 longs
     long max(long a, long b) {
         return (a > b) ? a : b;
     }   
 
     // QUERY MAIN, LIHAT
+    // Method digunakan untuk mencari jumlah score yang kurang dari inserted key
     long countBefore(Node node, long insertedKey) {
-        if (node == null) {
+        if (node == null) { // Jika node kosong, return 0
             return 0;
         }
-        if (node.key == insertedKey) {
+        // Jika sudah didapat insertedKey sama dengan key node, maka cari count di subtree kiri dulu
+        if (node.key == insertedKey) { 
             return node.jumlahSama + getCount(node.left);
         }
+        // Jika insertedKey lebih kecil dari key node, maka cari di subtree kiri
         if (node.key < insertedKey) {
-            // cek kiri lalu, ke kanan
+            // Cek kiri lalu, ke kanan
             if (node.left != null) {
+                // Jika ada node di subtree kiri, maka cari count di subtree kiri + duplicatenya
                 return node.jumlahSama + node.left.count + countBefore(node.right, insertedKey);
             } else {
                 return node.jumlahSama + countBefore(node.right, insertedKey);
             }
         }
-        // ke kiri
+        // Ke kiri untuk cari key yang cocok
         return countBefore(node.left, insertedKey);
     }
 
+    // Method digunakan untuk mencari score max
     Node findMax() {
         Node temp = root;
         while (temp.right != null) {
