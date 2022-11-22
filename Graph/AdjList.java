@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import java.util.*;
 
-public class Game {
+public class AdjMatrix {
 
     private static InputReader in;
     static PrintWriter out;

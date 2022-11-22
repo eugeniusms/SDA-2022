@@ -1,0 +1,1 @@
+{"name":"Local: AdjMatrix","url":"/Users/eugeniusms/Development/SDA-2022/Graph/AdjMatrix.java","tests":[{"id":1669090382127,"input":"8\n3\n1 2\n2 3\n4 1","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/eugeniusms/Development/SDA-2022/Graph/AdjMatrix.java","group":"local","local":true}
