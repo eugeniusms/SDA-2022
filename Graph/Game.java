@@ -23,20 +23,16 @@ public class Game {
 
         // input
         int N = in.nextInt(); // jumlah node
-        adjMatrix = new boolean[N][N]; 
+        adjMatrix = new boolean[N+1][N+1]; // [0] dikosongin aja 
 
-        // int E = in.nextInt(); // jumlah edge (u,v)
-        // for (int i = 0; i < E; i++) {
-        //     int u = in.nextInt();
-        //     int v = in.nextInt();
-        //     adjMatrix = 
-        // }
+        int E = in.nextInt(); // jumlah edge (u,v)
+        for (int i = 0; i < E; i++) {
+            int u = in.nextInt();
+            int v = in.nextInt();
+            adjMatrix[u][v] = true;
+            adjMatrix[v][u] = true;
+        }
 
-        // for(int i = 0; i < N; i++) {
-        //     for(int j = 0;  j < N; j++) {
-        //         adjMatrix[i][j] = in.nextInt();
-        //     }
-        // }
         printAdjMatrix(N);
 
         out.close();
@@ -44,9 +40,9 @@ public class Game {
 
     // method
     static void printAdjMatrix(int size) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                out.print(adjMatrix[i][j]+" ");
+        for (int i = 1; i < size; i++) {
+            for (int j = 1; j < size; j++) {
+                out.print((adjMatrix[i][j] ? 1 : 0)+" ");
             }
             out.println();
         }
