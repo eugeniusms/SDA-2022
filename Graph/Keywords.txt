@@ -1,0 +1,12 @@
+Adjacency List vs Adjacency Matrix
+White Cloud/Gray Cloud/Black Cloud
+
+Dijkstra's Algorithm
+Breadth First Search (BFS)
+Shortest Path
+Floyd Warshall Algorithm
+Topological Sorting
+Minimum Spanning Tree (MST) -> Didapat dengan algoritma Prim's, bisa juga Kruskal's
+Prim's Algorithm
+Kruskal's Algorithm
+Union Find Disjoint Set
