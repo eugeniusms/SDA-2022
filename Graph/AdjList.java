@@ -8,12 +8,12 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import java.util.*;
 
-public class AdjMatrix {
+public class AdjList {
 
     private static InputReader in;
     static PrintWriter out;
 
-    static boolean[][] adjMatrix;
+    static HashMap<Integer, ArrayList<Integer>> adjList;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -23,31 +23,33 @@ public class AdjMatrix {
 
         // input
         int N = in.nextInt(); // jumlah node
-        adjMatrix = new boolean[N+1][N+1]; // [0] dikosongin aja 
+        adjList = new HashMap<Integer, ArrayList<Integer>>();
 
         int E = in.nextInt(); // jumlah edge (u,v)
         for (int i = 0; i < E; i++) {
             int u = in.nextInt();
             int v = in.nextInt();
-            adjMatrix[u][v] = true;
-            adjMatrix[v][u] = true;
+            if (adjList.containsKey(u)) { // map contains key
+                adjList.get(u).add(v);
+            } else { // not yet contains key
+                ArrayList<Integer> arrU = new ArrayList<Integer>();
+                arrU.add(v);
+                adjList.put(u, arrU);
+            }
+            
         }
 
-        printAdjMatrix(N);
+        printAdjList(N);
 
         out.close();
     }
 
     // method
-    static void printAdjMatrix(int size) {
-        for (int i = 0; i < size; i++) {
-            out.print("["+i+"]");
-        }
-        out.println();
-        for (int i = 1; i < size; i++) {
-            out.print("["+i+"]");
-            for (int j = 1; j < size; j++) {
-                out.print("["+(adjMatrix[i][j] ? 1 : 0)+"]");
+    static void printAdjList(int size) {
+        for (Integer key : adjList.keySet()) {
+            out.print(key+" : ");
+            for (Integer val : adjList.get(key)) {
+                out.print(val+",");
             }
             out.println();
         }
@@ -79,26 +81,3 @@ public class AdjMatrix {
         }
     }
 }
-
-// class
-class Node {
-    String label;
-
-    Node(String label) {
-        this.label = label;
-    }
-}
-
-class Edge {
-    String label;
-    int weight;
-}
-
-class Graph {
-    List<Node> nodeList;
-    Edge[][] adjacencyadjMatrix;
-}
-
-// references
-
-// Graph - <Key>,<Value1>...<ValueN>
