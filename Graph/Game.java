@@ -13,7 +13,7 @@ public class Game {
     private static InputReader in;
     static PrintWriter out;
 
-    static int[][] matrix;
+    static boolean[][] adjMatrix;
 
     public static void main(String[] args) {
         InputStream inputStream = System.in;
@@ -22,23 +22,31 @@ public class Game {
         out = new PrintWriter(outputStream);
 
         // input
-        int N = in.nextInt();
-        matrix = new int[N][N]; 
-        for(int i = 0; i < N; i++) {
-            for(int j = 0;  j < N; j++) {
-                matrix[i][j] = in.nextInt();
-            }
-        }
-        printMatrix(N);
+        int N = in.nextInt(); // jumlah node
+        adjMatrix = new boolean[N][N]; 
+
+        // int E = in.nextInt(); // jumlah edge (u,v)
+        // for (int i = 0; i < E; i++) {
+        //     int u = in.nextInt();
+        //     int v = in.nextInt();
+        //     adjMatrix = 
+        // }
+
+        // for(int i = 0; i < N; i++) {
+        //     for(int j = 0;  j < N; j++) {
+        //         adjMatrix[i][j] = in.nextInt();
+        //     }
+        // }
+        printAdjMatrix(N);
 
         out.close();
     }
 
     // method
-    static void printMatrix(int size) {
+    static void printAdjMatrix(int size) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                out.print(matrix[i][j]+" ");
+                out.print(adjMatrix[i][j]+" ");
             }
             out.println();
         }
@@ -87,7 +95,7 @@ class Edge {
 
 class Graph {
     List<Node> nodeList;
-    Edge[][] adjacencyMatrix;
+    Edge[][] adjacencyadjMatrix;
 }
 
 // references
