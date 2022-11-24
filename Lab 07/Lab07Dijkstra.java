@@ -76,15 +76,14 @@ public class Lab07Dijkstra {
         adj.get(7).add(new Node(8, 4));
         adj.get(8).add(new Node(6, 5));
 
-        
-        // Calculating the single source shortest path
-        Lab07Dijkstra dpq = new Lab07Dijkstra(V);
-
         // input query
         int Q = in.nextInt();
         for (int i = 0; i < Q; i++) {
             int S = in.nextInt(); 
             long K = in.nextInt();
+
+            // Calculating the single source shortest path
+            Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
 
             dpq.dijkstra(adj, S); // (adj, source)
  
@@ -93,22 +92,22 @@ public class Lab07Dijkstra {
             System.out.println("CEK QUERY: "+S);
 
             // // TESTING AJA NIE
-            // System.out.println("The shorted path from node :");
+            System.out.println("The shorted path from node :");
     
-            // for (int j = 0; j < dpq.dist.length; j++)
-            //     System.out.println(S + " to " + j + " is "
-            //                     + dpq.dist[j]);
+            for (int j = 0; j < dpq.dist.length; j++)
+                System.out.println(S + " to " + j + " is "
+                                + dpq.dist[j]);
 
             // JAWAB
-            boolean isPossible = false;
-            for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
-                System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
-                if (dpq.dist[attacked[j]] < K) {
-                    isPossible = true;
-                    break;
-                } 
-            }
-            System.out.println(isPossible ? "YES" : "NO");
+            // boolean isPossible = false;
+            // for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
+            //     System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
+            //     if (dpq.dist[attacked[j]] < K) {
+            //         isPossible = true;
+            //         break;
+            //     } 
+            // }
+            // System.out.println(isPossible ? "YES" : "NO");
         }
             
     }
