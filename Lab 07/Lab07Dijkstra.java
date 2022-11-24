@@ -53,7 +53,7 @@ public class Lab07Dijkstra {
             adj.add(item);
         }
  
-
+        // INPUT 1
         // 1 3 2
         // 1 4 1
         // 1 2 7
@@ -64,17 +64,30 @@ public class Lab07Dijkstra {
         // 7 5 3
         // 7 8 4
         // 8 6 5
-        // Inputs for the GFG(dpq) graph
-        adj.get(1).add(new Node(3, 2));
-        adj.get(1).add(new Node(4, 1));
-        adj.get(1).add(new Node(2, 7));
+        // Inputs for the dpq graph
+        // adj.get(1).add(new Node(3, 2));
+        // adj.get(1).add(new Node(4, 1));
+        // adj.get(1).add(new Node(2, 7));
+        // adj.get(3).add(new Node(4, 2));
+        // adj.get(1).add(new Node(5, 1));
+        // adj.get(5).add(new Node(6, 2));
+        // adj.get(6).add(new Node(7, 10));
+        // adj.get(7).add(new Node(5, 3));
+        // adj.get(7).add(new Node(8, 4));
+        // adj.get(8).add(new Node(6, 5));
+
+        // INPUT 2
+        // 1 2 3
+        // 3 4 2
+        // 4 2 4
+        // 5 4 6
+        // 5 6 4
+        // Inputs for the dpq graph
+        adj.get(1).add(new Node(2, 3));
         adj.get(3).add(new Node(4, 2));
-        adj.get(1).add(new Node(5, 1));
-        adj.get(5).add(new Node(6, 2));
-        adj.get(6).add(new Node(7, 10));
-        adj.get(7).add(new Node(5, 3));
-        adj.get(7).add(new Node(8, 4));
-        adj.get(8).add(new Node(6, 5));
+        adj.get(4).add(new Node(2, 4));
+        adj.get(5).add(new Node(4, 6));
+        adj.get(5).add(new Node(6, 4));
 
         // input query
         int Q = in.nextInt();
