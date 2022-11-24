@@ -1,8 +1,13 @@
+
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.util.*;
+import java.util.StringTokenizer;
 // Java Program to Implement Dijkstra's Algorithm
 // Using Priority Queue
- 
-// Importing utility classes
-import java.util.*;
+
  
 // Main class DPQ
 public class Lab07Dijkstra {
@@ -97,8 +102,7 @@ public class Lab07Dijkstra {
     }
  
     // Main driver method
-    public static void main(String arg[])
-    {
+    public static void main(String arg[]) {
  
         int V = 9; // 0+8 nodes = 9 nodes
         int source = 5;
@@ -150,6 +154,37 @@ public class Lab07Dijkstra {
         for (int i = 0; i < dpq.dist.length; i++)
             System.out.println(source + " to " + i + " is "
                                + dpq.dist[i]);
+    }
+
+    // taken from https://codeforces.com/submissions/Petr
+    // together with PrintWriter, these input-output (IO) is much faster than the
+    // usual Scanner(System.in) and System.out
+    // please use these classes to avoid your fast algorithm gets Time Limit
+    // Exceeded caused by slow input-output (IO)
+    static class InputReader {
+        public BufferedReader reader;
+        public StringTokenizer tokenizer;
+
+        public InputReader(InputStream stream) {
+            reader = new BufferedReader(new InputStreamReader(stream), 32768);
+            tokenizer = null;
+        }
+
+        public String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return tokenizer.nextToken();
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
     }
 }
  
