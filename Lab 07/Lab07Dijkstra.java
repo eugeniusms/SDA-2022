@@ -92,22 +92,22 @@ public class Lab07Dijkstra {
             System.out.println("CEK QUERY: "+S);
 
             // // TESTING AJA NIE
-            System.out.println("The shorted path from node :");
+            // System.out.println("The shorted path from node :");
     
-            for (int j = 0; j < dpq.dist.length; j++)
-                System.out.println(S + " to " + j + " is "
-                                + dpq.dist[j]);
+            // for (int j = 0; j < dpq.dist.length; j++)
+            //     System.out.println(S + " to " + j + " is "
+            //                     + dpq.dist[j]);
 
             // JAWAB
-            // boolean isPossible = false;
-            // for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
-            //     System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
-            //     if (dpq.dist[attacked[j]] < K) {
-            //         isPossible = true;
-            //         break;
-            //     } 
-            // }
-            // System.out.println(isPossible ? "YES" : "NO");
+            boolean isPossible = false;
+            for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
+                System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
+                if (dpq.dist[attacked[j]] < K) {
+                    isPossible = true;
+                    break;
+                } 
+            }
+            System.out.println(isPossible ? "YES" : "NO");
         }
             
     }
