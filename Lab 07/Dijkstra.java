@@ -7,7 +7,7 @@ import java.util.*;
 // Main class DPQ
 public class Dijkstra {
  
-    // Member variables ocf this class
+    // Member variables of this class
     private int dist[];
     private Set<Integer> settled;
     private PriorityQueue<Node> pq;

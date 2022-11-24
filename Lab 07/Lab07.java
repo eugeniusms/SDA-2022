@@ -1,4 +1,12 @@
+
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.*;
+import java.util.*;
 import java.util.StringTokenizer;
 
 public class Lab07 {
@@ -62,7 +70,7 @@ public class Lab07 {
                         dist[v] = dist[u] + w[u][v];
                         pred[v] = u;
                         // heap.insert(hdist[v], vi);
-;                    }
+                    }
                 }
             }
         }
@@ -97,6 +105,24 @@ public class Lab07 {
             return Integer.parseInt(next());
         }
 
+    }
+}
+
+class Node implements Comparable<Node> {
+    public int node;
+    public int cost;
+
+    public Node() {
+    }
+
+    public Node(int node, int cost) {
+        this.node = node;
+        this.cost = cost;
+    }
+
+    @Override
+    public int compareTo(Node other) {
+        return this.cost - other.cost; // harga termurah hingga termahal
     }
 }
 
