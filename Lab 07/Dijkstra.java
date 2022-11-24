@@ -100,8 +100,8 @@ public class Dijkstra {
     public static void main(String arg[])
     {
  
-        int V = 5;
-        int source = 0;
+        int V = 10;
+        int source = 1;
  
         // Adjacency list representation of the
         // connected edges by declaring List class object
@@ -115,15 +115,30 @@ public class Dijkstra {
             adj.add(item);
         }
  
+
+        // 1 3 2
+        // 1 4 1
+        // 1 2 7
+        // 3 4 2
+        // 1 5 1
+        // 5 6 2
+        // 6 7 10
+        // 7 5 3
+        // 7 8 4
+        // 8 6 5
         // Inputs for the GFG(dpq) graph
-        adj.get(0).add(new Node(1, 9));
-        adj.get(0).add(new Node(2, 6));
-        adj.get(0).add(new Node(3, 5));
-        adj.get(0).add(new Node(4, 3));
- 
-        adj.get(2).add(new Node(1, 2));
-        adj.get(2).add(new Node(3, 4));
- 
+        adj.get(1).add(new Node(3, 2));
+        adj.get(1).add(new Node(4, 1));
+        adj.get(1).add(new Node(2, 7));
+        adj.get(3).add(new Node(4, 2));
+        adj.get(1).add(new Node(5, 1));
+        adj.get(5).add(new Node(6, 2));
+        adj.get(6).add(new Node(7, 10));
+        adj.get(7).add(new Node(5, 3));
+        adj.get(7).add(new Node(8, 4));
+        adj.get(8).add(new Node(6, 5));
+
+        
         // Calculating the single source shortest path
         Dijkstra dpq = new Dijkstra(V);
         dpq.dijkstra(adj, source);
