@@ -84,18 +84,22 @@ public class Lab07Dijkstra {
         int Q = in.nextInt();
         for (int i = 0; i < Q; i++) {
             int S = in.nextInt(); 
-            // long K = in.nextInt();
+            long K = in.nextInt();
 
             dpq.dijkstra(adj, S); // (adj, source)
  
             // Printing the shortest path to all the nodes
             // from the source node
-            System.out.println("CEK: "+S);
-            System.out.println("The shorted path from node :");
+            System.out.println("CEK QUERY: "+S);
+
+            // // TESTING AJA NIE
+            // System.out.println("The shorted path from node :");
     
-            for (int j = 0; j < dpq.dist.length; j++)
-                System.out.println(S + " to " + j + " is "
-                                + dpq.dist[j]);
+            // for (int j = 0; j < dpq.dist.length; j++)
+            //     System.out.println(S + " to " + j + " is "
+            //                     + dpq.dist[j]);
+
+
         }
             
     }
