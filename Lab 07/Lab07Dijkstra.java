@@ -99,7 +99,16 @@ public class Lab07Dijkstra {
             //     System.out.println(S + " to " + j + " is "
             //                     + dpq.dist[j]);
 
-
+            // JAWAB
+            boolean isPossible = false;
+            for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
+                System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
+                if (dpq.dist[attacked[j]] < K) {
+                    isPossible = true;
+                    break;
+                } 
+            }
+            System.out.println(isPossible ? "YES" : "NO");
         }
             
     }
