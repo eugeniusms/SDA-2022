@@ -109,7 +109,7 @@ public class Lab07Dijkstra {
  
             // Printing the shortest path to all the nodes
             // from the source node
-            System.out.println("CEK QUERY: "+S);
+            // System.out.println("CEK QUERY: "+S);
 
             // // TESTING AJA NIE
             // System.out.println("The shorted path from node :");
@@ -121,7 +121,7 @@ public class Lab07Dijkstra {
             // JAWAB
             boolean isPossible = false;
             for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
-                System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
+                // System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
                 if (dpq.dist[attacked[j]] < K) {
                     isPossible = true;
                     break;
