@@ -24,16 +24,23 @@ public class Lab07Dijkstra {
     private int V;
     List<List<Node> > adj;
 
-    // Main driver method
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
- 
-        int V = 9; // 0+8 nodes = 9 nodes
-        int source = 5;
- 
+
+        // N = number of vertices
+        // M = number of vertices that ! (attacked)
+        int N = in.nextInt(), M = in.nextInt();
+        int V = 1+N; // ex: 0+8 nodes = 9 nodes
+
+        // input benteng yang diserang
+        int[] attacked = new int[M];
+        for(int i = 0; i < M; i++) {
+            attacked[i] = in.nextInt();
+        }
+
         // Adjacency list representation of the
         // connected edges by declaring List class object
         // Declaring object of type List<Node>
@@ -72,15 +79,18 @@ public class Lab07Dijkstra {
         
         // Calculating the single source shortest path
         Lab07Dijkstra dpq = new Lab07Dijkstra(V);
-        dpq.dijkstra(adj, source);
+
+        for(int i = 0; i < M; i++) {
+            dpq.dijkstra(adj, attacked[i]); // (adj, source)
  
-        // Printing the shortest path to all the nodes
-        // from the source node
-        System.out.println("The shorted path from node :");
- 
-        for (int i = 0; i < dpq.dist.length; i++)
-            System.out.println(source + " to " + i + " is "
-                               + dpq.dist[i]);
+            // Printing the shortest path to all the nodes
+            // from the source node
+            System.out.println("The shorted path from node :");
+    
+            for (int j = 0; j < dpq.dist.length; j++)
+                System.out.println(attacked[i] + " to " + j + " is "
+                                + dpq.dist[j]);
+            }
     }
  
     // Constructor of this class
