@@ -36,10 +36,10 @@ public class Lab07Dijkstra {
         int V = 1+N; // ex: 0+8 nodes = 9 nodes
 
         // input benteng yang diserang
-        int[] attacked = new int[M];
-        for(int i = 0; i < M; i++) {
-            attacked[i] = in.nextInt();
-        }
+        // // int[] attacked = new int[M];
+        // for(int i = 0; i < M; i++) {
+        //     attacked[i] = in.nextInt();
+        // }
 
         // Adjacency list representation of the
         // connected edges by declaring List class object
@@ -80,17 +80,23 @@ public class Lab07Dijkstra {
         // Calculating the single source shortest path
         Lab07Dijkstra dpq = new Lab07Dijkstra(V);
 
-        for(int i = 0; i < M; i++) {
-            dpq.dijkstra(adj, attacked[i]); // (adj, source)
+        // input query
+        int Q = in.nextInt();
+        for (int i = 0; i < Q; i++) {
+            int S = in.nextInt(); 
+            // long K = in.nextInt();
+
+            dpq.dijkstra(adj, S); // (adj, source)
  
             // Printing the shortest path to all the nodes
             // from the source node
             System.out.println("The shorted path from node :");
     
             for (int j = 0; j < dpq.dist.length; j++)
-                System.out.println(attacked[i] + " to " + j + " is "
+                System.out.println(S + " to " + j + " is "
                                 + dpq.dist[j]);
-            }
+        }
+            
     }
  
     // Constructor of this class
