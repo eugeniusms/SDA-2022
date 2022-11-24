@@ -91,6 +91,10 @@ class ShortestPath {
 	{
 		/* Let us create the example graph discussed above
 		*/
+        // adjacency matrix
+        // (0,1) = 4
+        // (0,7) = 8
+        // 
 		int graph[][]
 			= new int[][] { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
 							{ 4, 0, 8, 0, 0, 0, 0, 11, 0 },
