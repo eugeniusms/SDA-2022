@@ -17,7 +17,7 @@ public class Lab07Dijkstra {
     private static PrintWriter out;
  
     // Member variables of this class
-    private int dist[];
+    private long dist[];
     private Set<Integer> settled;
     private PriorityQueue<Node> pq;
     // Number of vertices
@@ -52,6 +52,13 @@ public class Lab07Dijkstra {
             List<Node> item = new ArrayList<Node>();
             adj.add(item);
         }
+
+        long E = in.nextInt();
+
+        for (int i = 0; i < E; i++) {
+            int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt();
+            adj.get(A).add(new Node(B, W));
+        }
  
         // INPUT 1
         // 1 3 2
@@ -83,11 +90,11 @@ public class Lab07Dijkstra {
         // 5 4 6
         // 5 6 4
         // Inputs for the dpq graph
-        adj.get(1).add(new Node(2, 3));
-        adj.get(3).add(new Node(4, 2));
-        adj.get(4).add(new Node(2, 4));
-        adj.get(5).add(new Node(4, 6));
-        adj.get(5).add(new Node(6, 4));
+        // adj.get(1).add(new Node(2, 3));
+        // adj.get(3).add(new Node(4, 2));
+        // adj.get(4).add(new Node(2, 4));
+        // adj.get(5).add(new Node(4, 6));
+        // adj.get(5).add(new Node(6, 4));
 
         // input query
         int Q = in.nextInt();
@@ -131,7 +138,7 @@ public class Lab07Dijkstra {
  
         // This keyword refers to current object itself
         this.V = V;
-        dist = new int[V];
+        dist = new long[V];
         settled = new HashSet<Integer>();
         pq = new PriorityQueue<Node>(V, new Node());
     }
@@ -184,8 +191,8 @@ public class Lab07Dijkstra {
     private void e_Neighbours(int u)
     {
  
-        int edgeDistance = -1;
-        int newDistance = -1;
+        long edgeDistance = -1;
+        long newDistance = -1;
  
         // All the neighbors of v
         for (int i = 0; i < adj.get(u).size(); i++) {
@@ -245,7 +252,7 @@ class Node implements Comparator<Node> {
  
     // Member variables of this class
     public int node;
-    public int cost;
+    public long cost;
  
     // Constructors of this class
  
@@ -253,7 +260,7 @@ class Node implements Comparator<Node> {
     public Node() {}
  
     // Constructor 2
-    public Node(int node, int cost)
+    public Node(int node, long cost)
     {
  
         // This keyword refers to current instance itself
