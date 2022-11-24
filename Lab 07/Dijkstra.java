@@ -100,8 +100,8 @@ public class Dijkstra {
     public static void main(String arg[])
     {
  
-        int V = 10;
-        int source = 1;
+        int V = 9; // 0+8 nodes = 9 nodes
+        int source = 5;
  
         // Adjacency list representation of the
         // connected edges by declaring List class object
