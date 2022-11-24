@@ -23,6 +23,65 @@ public class Lab07Dijkstra {
     // Number of vertices
     private int V;
     List<List<Node> > adj;
+
+    // Main driver method
+    public static void main(String arg[]) {
+        InputStream inputStream = System.in;
+        in = new InputReader(inputStream);
+        OutputStream outputStream = System.out;
+        out = new PrintWriter(outputStream);
+ 
+        int V = 9; // 0+8 nodes = 9 nodes
+        int source = 5;
+ 
+        // Adjacency list representation of the
+        // connected edges by declaring List class object
+        // Declaring object of type List<Node>
+        List<List<Node> > adj
+            = new ArrayList<List<Node> >();
+ 
+        // Initialize list for every node
+        for (int i = 0; i < V; i++) {
+            List<Node> item = new ArrayList<Node>();
+            adj.add(item);
+        }
+ 
+
+        // 1 3 2
+        // 1 4 1
+        // 1 2 7
+        // 3 4 2
+        // 1 5 1
+        // 5 6 2
+        // 6 7 10
+        // 7 5 3
+        // 7 8 4
+        // 8 6 5
+        // Inputs for the GFG(dpq) graph
+        adj.get(1).add(new Node(3, 2));
+        adj.get(1).add(new Node(4, 1));
+        adj.get(1).add(new Node(2, 7));
+        adj.get(3).add(new Node(4, 2));
+        adj.get(1).add(new Node(5, 1));
+        adj.get(5).add(new Node(6, 2));
+        adj.get(6).add(new Node(7, 10));
+        adj.get(7).add(new Node(5, 3));
+        adj.get(7).add(new Node(8, 4));
+        adj.get(8).add(new Node(6, 5));
+
+        
+        // Calculating the single source shortest path
+        Lab07Dijkstra dpq = new Lab07Dijkstra(V);
+        dpq.dijkstra(adj, source);
+ 
+        // Printing the shortest path to all the nodes
+        // from the source node
+        System.out.println("The shorted path from node :");
+ 
+        for (int i = 0; i < dpq.dist.length; i++)
+            System.out.println(source + " to " + i + " is "
+                               + dpq.dist[i]);
+    }
  
     // Constructor of this class
     public Lab07Dijkstra(int V)
@@ -103,61 +162,6 @@ public class Lab07Dijkstra {
                 pq.add(new Node(v.node, dist[v.node]));
             }
         }
-    }
- 
-    // Main driver method
-    public static void main(String arg[]) {
- 
-        int V = 9; // 0+8 nodes = 9 nodes
-        int source = 5;
- 
-        // Adjacency list representation of the
-        // connected edges by declaring List class object
-        // Declaring object of type List<Node>
-        List<List<Node> > adj
-            = new ArrayList<List<Node> >();
- 
-        // Initialize list for every node
-        for (int i = 0; i < V; i++) {
-            List<Node> item = new ArrayList<Node>();
-            adj.add(item);
-        }
- 
-
-        // 1 3 2
-        // 1 4 1
-        // 1 2 7
-        // 3 4 2
-        // 1 5 1
-        // 5 6 2
-        // 6 7 10
-        // 7 5 3
-        // 7 8 4
-        // 8 6 5
-        // Inputs for the GFG(dpq) graph
-        adj.get(1).add(new Node(3, 2));
-        adj.get(1).add(new Node(4, 1));
-        adj.get(1).add(new Node(2, 7));
-        adj.get(3).add(new Node(4, 2));
-        adj.get(1).add(new Node(5, 1));
-        adj.get(5).add(new Node(6, 2));
-        adj.get(6).add(new Node(7, 10));
-        adj.get(7).add(new Node(5, 3));
-        adj.get(7).add(new Node(8, 4));
-        adj.get(8).add(new Node(6, 5));
-
-        
-        // Calculating the single source shortest path
-        Lab07Dijkstra dpq = new Lab07Dijkstra(V);
-        dpq.dijkstra(adj, source);
- 
-        // Printing the shortest path to all the nodes
-        // from the source node
-        System.out.println("The shorted path from node :");
- 
-        for (int i = 0; i < dpq.dist.length; i++)
-            System.out.println(source + " to " + i + " is "
-                               + dpq.dist[i]);
     }
 
     // taken from https://codeforces.com/submissions/Petr
