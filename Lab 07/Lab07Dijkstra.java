@@ -150,7 +150,7 @@ public class Lab07Dijkstra {
         this.adj = adj;
  
         for (int i = 0; i < V; i++)
-            dist[i] = Integer.MAX_VALUE;
+            dist[i] = Long.MAX_VALUE;
  
         // Add source node to the priority queue
         pq.add(new Node(src, 0));
