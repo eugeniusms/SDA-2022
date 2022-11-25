@@ -71,10 +71,10 @@ public class Lab07Dijkstra {
             if (isExist[S]) {
                 // out.println("MASUK 1");
                 // memo the result
-                if (memoDist[S] <= K) {
+                if (memoDist[S] < K) {
                     out.println("YES");
                 } else {
-                    out.println("NO");
+                    out.println("NO"); // KAN BELUM TENTU NO, NO SAAT MINIMUM > K
                 }
             } else {
                 // out.println("MASUK 2");
