@@ -25,7 +25,12 @@ public class Lab07Dijkstra {
     List<List<Node> > adj;
 
     static boolean[] isExist = new boolean[10069];
-    static HashMap<Integer, ArrayList<Long>> memo = new HashMap<Integer, ArrayList<Long>>(); // <key: node, value: list of adjacent nodes attacked minimal>
+    static HashMap<Integer, ArrayList<Long>> memoDist = new HashMap<Integer, ArrayList<Long>>(); // <key: node, value: list of adjacent nodes attacked minimal
+
+    // memoHasil {key: node, value: cost maximal yg YES, dibawah itu pasti juga yes}
+    static HashMap<Integer, Long>[] memoHasil = new HashMap<Integer, ArrayList<Long>>(); 
+    // memoHasil by K {K : "YES/NO"}
+    // HashMap<Integer, Boolean> memoHasil = new HashMap<Integer, Boolean>();
 
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
@@ -69,7 +74,7 @@ public class Lab07Dijkstra {
                 // out.println("MASUK 1");
                 // memo the result
                 boolean isPossible = false;
-                ArrayList<Long> distResult = memo.get(S);
+                ArrayList<Long> distResult = memoDist.get(S);
                 for (int j = 0; j < distResult.size(); j++) {
                     if (distResult.get(j) < K) {
                         isPossible = true;
@@ -110,7 +115,13 @@ public class Lab07Dijkstra {
 
                 // save 
                 isExist[S] = true;
-                memo.put(S, distAttacked);
+                memoDist.put(S, distAttacked);
+
+                // memo the result
+                if (memoHasil[S] == null) {
+                    memoHasil[S] = new HashMap<Long, Boolean>();
+                }
+                memoHasil[S].put(K, isPossible);
             }
         }
 
@@ -262,7 +273,8 @@ class Node implements Comparator<Node> {
 
 // IDEA:
 
-// 0) INFINITE GAUSAH DIMASUKKAN KE MEMO KARENA PASTI GABISA DIJANGKAU
+// 0) INFINITE GAUSAH DIMASUKKAN KE MEMO KARENA PASTI GABISA DIJANGKAU (DONE)
 // 1) SIMPEN MEMO DIST OF ATTACKED BENTENG DI NODE SEKALIAN
 // 2) SIMPEN K JUGA DAN HASIL YES/NO NYA DI MEMO
 // 3) JIKA DIST[i] > 1.000.000.000, MAKA GABISA DIJANGKAU KARENA K MAX = 10^9
+// 4) GAUSAH DIITERASI SEMUA DIST, CUMA PERLU SIMPAN DIST YG TERKECIL UNTUK DIBANDINGKAN DENGAN K (MINIMALNYA)
