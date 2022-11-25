@@ -27,6 +27,9 @@ public class Lab07Dijkstra {
     static boolean[] isExist = new boolean[10069];
     static Long[] memoDist = new Long[10069]; // <index: node, value: minimum distance>
 
+    // key: dist, value: array[10069] node
+    static HashMap<Integer, long[]> memo = new HashMap<Integer, long[]>();
+
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -59,58 +62,28 @@ public class Lab07Dijkstra {
             adj.get(A).add(new Node(B, W));
         }
 
-        // ================================= INPUT QUERY ============================================
-        int Q = in.nextInt();
-        for (int i = 0; i < Q; i++) {
-            int S = in.nextInt(); 
-            long K = in.nextInt();
+        // ================================= CALCULATE DIJKSTRA ======================================
+        for (int i = 0; i < M; i++) {
+            // Calculating the single source shortest path
+            Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
+            dpq.dijkstra(adj, attacked[i]); // (adj, source)
 
-            if (isExist[S]) {
-                // out.println("MASUK 1");
-                // memo the result
-                if (memoDist[S] < K) {
-                    out.println("YES");
-                } else {
-                    out.println("NO"); // KAN BELUM TENTU NO, NO SAAT MINIMUM > K
-                }
-            } else {
-                // out.println("MASUK 2");
-                // Calculating the single source shortest path
-                Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
-                dpq.dijkstra(adj, S); // (adj, source)
-    
-                // Printing the shortest path to all the nodes
-                // from the source node
-                // System.out.println("CEK QUERY: "+S);
-
-                // // TESTING AJA NIE
-                // System.out.println("The shorted path from node :");
-        
-                // for (int j = 0; j < dpq.dist.length; j++)
-                //     System.out.println(S + " to " + j + " is "
-                //                     + dpq.dist[j]);
-
-                // JAWAB
-                boolean isPossible = false;
-                long minimumDist = Long.MAX_VALUE;
-                for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
-                    // System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
-                    if (dpq.dist[attacked[j]] < K) {
-                        isPossible = true;
-                    } 
-                    if (dpq.dist[attacked[j]] < minimumDist) {
-                        minimumDist = dpq.dist[attacked[j]];
-                    }
-                }
-                out.println(isPossible ? "YES" : "NO");
-
-                // save 
-                isExist[S] = true;
-                memoDist[S] = minimumDist;
+            System.out.println(attacked[i]);
+            long[] temp = new long[10069];
+            for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
+                System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
+                temp[j] = dpq.dist[j];
             }
+            memo.put(attacked[i], temp);
         }
 
 
+        // ================================= INPUT QUERY ============================================
+        // int Q = in.nextInt();
+        // for (int i = 0; i < Q; i++) {
+        //     int S = in.nextInt(); 
+        //     long K = in.nextInt();
+        // }
         out.close();    
     }
  
