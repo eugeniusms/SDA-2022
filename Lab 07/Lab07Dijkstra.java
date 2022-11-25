@@ -20,6 +20,7 @@ public class Lab07Dijkstra {
     private long dist[];
     private Set<Integer> settled;
     private PriorityQueue<Node> pq;
+    private MinHeap minHeap;
     // Number of vertices
     private int V;
     List<List<Node> > adj;
@@ -122,7 +123,8 @@ public class Lab07Dijkstra {
         this.V = V;
         dist = new long[V];
         settled = new HashSet<Integer>();
-        pq = new PriorityQueue<Node>(V, new Node());
+        // pq = new PriorityQueue<Node>(V, new Node());
+        minHeap = new MinHeap(V);
     }
  
     // Method 1
@@ -134,7 +136,8 @@ public class Lab07Dijkstra {
             dist[i] = Long.MAX_VALUE;
  
         // Add source node to the priority queue
-        pq.add(new Node(src, 0));
+        // pq.add(new Node(src, 0));
+        minHeap.insert(new Node(src, 0));
  
         // Distance to the source is 0
         dist[src] = 0;
@@ -143,12 +146,15 @@ public class Lab07Dijkstra {
  
             // Terminating condition check when
             // the priority queue is empty, return
-            if (pq.isEmpty())
+            // if (pq.isEmpty())
+            //     return;
+            if (minHeap.isEmpty())
                 return;
  
             // Removing the minimum distance node
             // from the priority queue
-            int u = pq.remove().node;
+            // int u = pq.remove().node;
+            int u = minHeap.extractMin().node;
  
             // Adding the node whose distance is
             // finalized
@@ -188,7 +194,8 @@ public class Lab07Dijkstra {
                     dist[v.node] = newDistance;
  
                 // Add the current node to the queue
-                pq.add(new Node(v.node, dist[v.node]));
+                // pq.add(new Node(v.node, dist[v.node]));
+                minHeap.insert(new Node(v.node, dist[v.node]));
             }
         }
     }
