@@ -24,6 +24,9 @@ public class Lab07Dijkstra {
     private int V;
     List<List<Node> > adj;
 
+    static boolean[] isExist = new boolean[10069];
+    static HashMap<Integer, ArrayList<Long>> memo = new HashMap<Integer, ArrayList<Long>>(); // <key: node, value: list of adjacent nodes attacked minimal>
+
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -102,32 +105,49 @@ public class Lab07Dijkstra {
             int S = in.nextInt(); 
             long K = in.nextInt();
 
-            // Calculating the single source shortest path
-            Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
-
-            dpq.dijkstra(adj, S); // (adj, source)
- 
-            // Printing the shortest path to all the nodes
-            // from the source node
-            // System.out.println("CEK QUERY: "+S);
-
-            // // TESTING AJA NIE
-            // System.out.println("The shorted path from node :");
+            if (isExist[S]) {
+                // memo the result
+                boolean isPossible = false;
+                ArrayList<Long> distResult = memo.get(S);
+                for (int j = 0; j < distResult.size(); j++) {
+                    if (distResult.get(j) < K) {
+                        isPossible = true;
+                        break;
+                    } 
+                }
+                out.println(isPossible ? "YES" : "NO");
+            } else {
+                // Calculating the single source shortest path
+                Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
+                dpq.dijkstra(adj, S); // (adj, source)
     
-            // for (int j = 0; j < dpq.dist.length; j++)
-            //     System.out.println(S + " to " + j + " is "
-            //                     + dpq.dist[j]);
+                // Printing the shortest path to all the nodes
+                // from the source node
+                // System.out.println("CEK QUERY: "+S);
 
-            // JAWAB
-            boolean isPossible = false;
-            for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
-                // System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
-                if (dpq.dist[attacked[j]] < K) {
-                    isPossible = true;
-                    break;
-                } 
+                // // TESTING AJA NIE
+                // System.out.println("The shorted path from node :");
+        
+                // for (int j = 0; j < dpq.dist.length; j++)
+                //     System.out.println(S + " to " + j + " is "
+                //                     + dpq.dist[j]);
+
+                // JAWAB
+                boolean isPossible = false;
+                ArrayList<Long> distAttacked = new ArrayList<Long>();
+                for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
+                    // System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
+                    if (dpq.dist[attacked[j]] < K) {
+                        isPossible = true;
+                    } 
+                    distAttacked.add(dpq.dist[attacked[j]]);
+                }
+                out.println(isPossible ? "YES" : "NO");
+
+                // save 
+                isExist[S] = true;
+                memo.put(S, distAttacked);
             }
-            out.println(isPossible ? "YES" : "NO");
         }
 
 
