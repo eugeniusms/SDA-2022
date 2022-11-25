@@ -27,9 +27,6 @@ public class Lab07Dijkstra {
     static boolean[] isExist = new boolean[10069];
     static Long[] memoDist = new Long[10069]; // <index: node, value: minimum distance>
 
-    // memoHasil by K {K : "YES/NO"}
-    // HashMap<Integer, Boolean> memoHasil = new HashMap<Integer, Boolean>();
-
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
