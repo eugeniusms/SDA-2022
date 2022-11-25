@@ -127,9 +127,11 @@ public class Lab07Dijkstra {
                     break;
                 } 
             }
-            System.out.println(isPossible ? "YES" : "NO");
+            out.println(isPossible ? "YES" : "NO");
         }
-            
+
+
+        out.close();    
     }
  
     // Constructor of this class
