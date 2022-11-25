@@ -59,7 +59,7 @@ public class Lab07Dijkstra {
         // Mendaftarkan edge yang ada melalui input
         for (int i = 0; i < E; i++) {
             int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt();
-            adj.get(A).add(new Node(B, W));
+            adj.get(B).add(new Node(A, W));
         }
 
         // ================================= CALCULATE DIJKSTRA ======================================
@@ -68,10 +68,10 @@ public class Lab07Dijkstra {
             Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
             dpq.dijkstra(adj, attacked[i]); // (adj, source)
 
-            System.out.println(attacked[i]);
+            // System.out.println(attacked[i]);
             long[] temp = new long[10069];
             for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
-                System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
+                // System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
                 temp[j] = dpq.dist[j];
             }
             memo.add(temp);
@@ -84,7 +84,15 @@ public class Lab07Dijkstra {
             int S = in.nextInt(); 
             long K = in.nextInt();
 
-            
+            boolean isPossible = false;
+            for (long[] dist : memo) {
+                // System.out.println(dist[S]);
+                if (dist[S] < K) {
+                    isPossible = true;
+                    break;
+                }
+            }
+            out.println(isPossible ? "YES" : "NO");
         }
         out.close();    
     }
