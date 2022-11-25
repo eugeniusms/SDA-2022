@@ -157,8 +157,7 @@ public class Lab07Dijkstra {
     }
  
     // Constructor of this class
-    public Lab07Dijkstra(int V)
-    {
+    public Lab07Dijkstra(int V) {
  
         // This keyword refers to current object itself
         this.V = V;
@@ -169,8 +168,7 @@ public class Lab07Dijkstra {
  
     // Method 1
     // Dijkstra's Algorithm
-    public void dijkstra(List<List<Node> > adj, int src)
-    {
+    public void dijkstra(List<List<Node> > adj, int src) {
         this.adj = adj;
  
         for (int i = 0; i < V; i++)
@@ -212,8 +210,7 @@ public class Lab07Dijkstra {
     // Method 2
     // To process all the neighbours
     // of the passed node
-    private void e_Neighbours(int u)
-    {
+    private void e_Neighbours(int u) {
  
         long edgeDistance = -1;
         long newDistance = -1;
@@ -279,29 +276,21 @@ class Node implements Comparator<Node> {
     public long cost;
  
     // Constructors of this class
- 
     // Constructor 1
     public Node() {}
- 
     // Constructor 2
-    public Node(int node, long cost)
-    {
- 
+    public Node(int node, long cost) {
         // This keyword refers to current instance itself
         this.node = node;
         this.cost = cost;
     }
  
     // Method 1
-    @Override public int compare(Node node1, Node node2)
-    {
- 
+    @Override public int compare(Node node1, Node node2) {
         if (node1.cost < node2.cost)
             return -1;
- 
         if (node1.cost > node2.cost)
             return 1;
- 
         return 0;
     }
 }
