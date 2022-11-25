@@ -28,7 +28,7 @@ public class Lab07Dijkstra {
     static Long[] memoDist = new Long[10069]; // <index: node, value: minimum distance>
 
     // key: dist, value: array[10069] node
-    static HashMap<Integer, long[]> memo = new HashMap<Integer, long[]>();
+    static ArrayList<long[]> memo = new ArrayList<long[]>();
 
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
@@ -74,16 +74,18 @@ public class Lab07Dijkstra {
                 System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
                 temp[j] = dpq.dist[j];
             }
-            memo.put(attacked[i], temp);
+            memo.add(temp);
         }
 
 
         // ================================= INPUT QUERY ============================================
-        // int Q = in.nextInt();
-        // for (int i = 0; i < Q; i++) {
-        //     int S = in.nextInt(); 
-        //     long K = in.nextInt();
-        // }
+        int Q = in.nextInt();
+        for (int i = 0; i < Q; i++) {
+            int S = in.nextInt(); 
+            long K = in.nextInt();
+
+            
+        }
         out.close();    
     }
  
