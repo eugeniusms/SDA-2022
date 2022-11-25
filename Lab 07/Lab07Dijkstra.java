@@ -33,73 +33,33 @@ public class Lab07Dijkstra {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
+        // ================================= INISIASI GRAPH ===========================================
         // N = number of vertices
         // M = number of vertices that ! (attacked)
         int N = in.nextInt(), M = in.nextInt();
         int V = 1+N; // ex: 0+8 nodes = 9 nodes
-
         // input benteng yang diserang
         int[] attacked = new int[M];
         for(int i = 0; i < M; i++) {
             attacked[i] = in.nextInt();
         }
 
-        // Adjacency list representation of the
-        // connected edges by declaring List class object
-        // Declaring object of type List<Node>
-        List<List<Node> > adj
-            = new ArrayList<List<Node> >();
- 
+        // ================================= INISIASI EDGE ===========================================
+        long E = in.nextInt();
+        // Adjacency list untuk edge yang ada
+        List<List<Node> > adj = new ArrayList<List<Node> >();
         // Initialize list for every node
         for (int i = 0; i < V; i++) {
             List<Node> item = new ArrayList<Node>();
             adj.add(item);
         }
-
-        long E = in.nextInt();
-
+        // Mendaftarkan edge yang ada melalui input
         for (int i = 0; i < E; i++) {
             int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt();
             adj.get(A).add(new Node(B, W));
         }
- 
-        // INPUT 1
-        // 1 3 2
-        // 1 4 1
-        // 1 2 7
-        // 3 4 2
-        // 1 5 1
-        // 5 6 2
-        // 6 7 10
-        // 7 5 3
-        // 7 8 4
-        // 8 6 5
-        // Inputs for the dpq graph
-        // adj.get(1).add(new Node(3, 2));
-        // adj.get(1).add(new Node(4, 1));
-        // adj.get(1).add(new Node(2, 7));
-        // adj.get(3).add(new Node(4, 2));
-        // adj.get(1).add(new Node(5, 1));
-        // adj.get(5).add(new Node(6, 2));
-        // adj.get(6).add(new Node(7, 10));
-        // adj.get(7).add(new Node(5, 3));
-        // adj.get(7).add(new Node(8, 4));
-        // adj.get(8).add(new Node(6, 5));
 
-        // INPUT 2
-        // 1 2 3
-        // 3 4 2
-        // 4 2 4
-        // 5 4 6
-        // 5 6 4
-        // Inputs for the dpq graph
-        // adj.get(1).add(new Node(2, 3));
-        // adj.get(3).add(new Node(4, 2));
-        // adj.get(4).add(new Node(2, 4));
-        // adj.get(5).add(new Node(4, 6));
-        // adj.get(5).add(new Node(6, 4));
-
-        // input query
+        // ================================= INPUT QUERY ============================================
         int Q = in.nextInt();
         for (int i = 0; i < Q; i++) {
             int S = in.nextInt(); 
@@ -158,7 +118,6 @@ public class Lab07Dijkstra {
  
     // Constructor of this class
     public Lab07Dijkstra(int V) {
- 
         // This keyword refers to current object itself
         this.V = V;
         dist = new long[V];
@@ -297,3 +256,7 @@ class Node implements Comparator<Node> {
 
 // References:
 // *) https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
+
+// IDEA:
+
+// 1) SIMPEN MEMO DIST OF ATTACKED BENTENG DI NODE SEKALIAN, INFINITE GAUSAH DIMASUKKAN KE MEMO KARENA PASTI GABISA DIJANGKAU
