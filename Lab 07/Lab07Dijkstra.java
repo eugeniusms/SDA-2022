@@ -25,10 +25,8 @@ public class Lab07Dijkstra {
     List<List<Node> > adj;
 
     static boolean[] isExist = new boolean[10069];
-    static HashMap<Integer, ArrayList<Long>> memoDist = new HashMap<Integer, ArrayList<Long>>(); // <key: node, value: list of adjacent nodes attacked minimal
+    static Long[] memoDist = new Long[10069]; // <index: node, value: minimum distance>
 
-    // memoHasil {key: node, value: cost maximal yg YES, dibawah itu pasti juga yes}
-    static HashMap<Integer, Long>[] memoHasil = new HashMap<Integer, ArrayList<Long>>(); 
     // memoHasil by K {K : "YES/NO"}
     // HashMap<Integer, Boolean> memoHasil = new HashMap<Integer, Boolean>();
 
@@ -73,15 +71,11 @@ public class Lab07Dijkstra {
             if (isExist[S]) {
                 // out.println("MASUK 1");
                 // memo the result
-                boolean isPossible = false;
-                ArrayList<Long> distResult = memoDist.get(S);
-                for (int j = 0; j < distResult.size(); j++) {
-                    if (distResult.get(j) < K) {
-                        isPossible = true;
-                        break;
-                    } 
+                if (memoDist[S] <= K) {
+                    out.println("YES");
+                } else {
+                    out.println("NO");
                 }
-                out.println(isPossible ? "YES" : "NO");
             } else {
                 // out.println("MASUK 2");
                 // Calculating the single source shortest path
@@ -101,27 +95,21 @@ public class Lab07Dijkstra {
 
                 // JAWAB
                 boolean isPossible = false;
-                ArrayList<Long> distAttacked = new ArrayList<Long>();
+                long minimumDist = Long.MAX_VALUE;
                 for (int j = 0; j < attacked.length; j++) { // mencari distance ke benteng yang diserang
                     // System.out.println("CEK attacked: "+attacked[j]+ " "+dpq.dist[attacked[j]]); // TEST
                     if (dpq.dist[attacked[j]] < K) {
                         isPossible = true;
                     } 
-                    if (dpq.dist[attacked[j]] < 1000000000) { // hanya memo yg bisa dijangkau max (10^9 pasukan aja)
-                        distAttacked.add(dpq.dist[attacked[j]]);
+                    if (dpq.dist[attacked[j]] < minimumDist) {
+                        minimumDist = dpq.dist[attacked[j]];
                     }
                 }
                 out.println(isPossible ? "YES" : "NO");
 
                 // save 
                 isExist[S] = true;
-                memoDist.put(S, distAttacked);
-
-                // memo the result
-                if (memoHasil[S] == null) {
-                    memoHasil[S] = new HashMap<Long, Boolean>();
-                }
-                memoHasil[S].put(K, isPossible);
+                memoDist[S] = minimumDist;
             }
         }
 
@@ -277,4 +265,4 @@ class Node implements Comparator<Node> {
 // 1) SIMPEN MEMO DIST OF ATTACKED BENTENG DI NODE SEKALIAN
 // 2) SIMPEN K JUGA DAN HASIL YES/NO NYA DI MEMO
 // 3) JIKA DIST[i] > 1.000.000.000, MAKA GABISA DIJANGKAU KARENA K MAX = 10^9
-// 4) GAUSAH DIITERASI SEMUA DIST, CUMA PERLU SIMPAN DIST YG TERKECIL UNTUK DIBANDINGKAN DENGAN K (MINIMALNYA)
+// 4) GAUSAH DIITERASI SEMUA DIST, CUMA PERLU SIMPAN DIST YG TERKECIL UNTUK DIBANDINGKAN DENGAN K (MINIMALNYA) (MEMO DIST)
