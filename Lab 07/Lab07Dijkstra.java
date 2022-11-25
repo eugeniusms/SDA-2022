@@ -102,7 +102,9 @@ public class Lab07Dijkstra {
                     if (dpq.dist[attacked[j]] < K) {
                         isPossible = true;
                     } 
-                    distAttacked.add(dpq.dist[attacked[j]]);
+                    if (dpq.dist[attacked[j]] < 1000000000) { // hanya memo yg bisa dijangkau max (10^9 pasukan aja)
+                        distAttacked.add(dpq.dist[attacked[j]]);
+                    }
                 }
                 out.println(isPossible ? "YES" : "NO");
 
