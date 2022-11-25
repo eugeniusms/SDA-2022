@@ -106,6 +106,7 @@ public class Lab07Dijkstra {
             long K = in.nextInt();
 
             if (isExist[S]) {
+                // out.println("MASUK 1");
                 // memo the result
                 boolean isPossible = false;
                 ArrayList<Long> distResult = memo.get(S);
@@ -117,6 +118,7 @@ public class Lab07Dijkstra {
                 }
                 out.println(isPossible ? "YES" : "NO");
             } else {
+                // out.println("MASUK 2");
                 // Calculating the single source shortest path
                 Lab07Dijkstra dpq = new Lab07Dijkstra(V); // RESET
                 dpq.dijkstra(adj, S); // (adj, source)
