@@ -20,7 +20,6 @@ public class Lab07Dijkstra {
     private long dist[];
     private Set<Integer> settled;
     private PriorityQueue<Node> pq;
-    private MinHeap minHeap;
     // Number of vertices
     private int V;
     List<List<Node> > adj;
@@ -123,8 +122,7 @@ public class Lab07Dijkstra {
         this.V = V;
         dist = new long[V];
         settled = new HashSet<Integer>();
-        // pq = new PriorityQueue<Node>(V, new Node());
-        minHeap = new MinHeap(V);
+        pq = new PriorityQueue<Node>(V, new Node());
     }
  
     // Method 1
@@ -136,8 +134,7 @@ public class Lab07Dijkstra {
             dist[i] = Long.MAX_VALUE;
  
         // Add source node to the priority queue
-        // pq.add(new Node(src, 0));
-        minHeap.insert(new Node(src, 0));
+        pq.add(new Node(src, 0));
  
         // Distance to the source is 0
         dist[src] = 0;
@@ -146,15 +143,12 @@ public class Lab07Dijkstra {
  
             // Terminating condition check when
             // the priority queue is empty, return
-            // if (pq.isEmpty())
-            //     return;
-            if (minHeap.isEmpty())
+            if (pq.isEmpty())
                 return;
  
             // Removing the minimum distance node
             // from the priority queue
-            // int u = pq.remove().node;
-            int u = minHeap.extractMin().node;
+            int u = pq.remove().node;
  
             // Adding the node whose distance is
             // finalized
@@ -194,8 +188,7 @@ public class Lab07Dijkstra {
                     dist[v.node] = newDistance;
  
                 // Add the current node to the queue
-                // pq.add(new Node(v.node, dist[v.node]));
-                minHeap.insert(new Node(v.node, dist[v.node]));
+                pq.add(new Node(v.node, dist[v.node]));
             }
         }
     }
@@ -258,116 +251,6 @@ class Node implements Comparator<Node> {
         if (node1.cost > node2.cost)
             return 1;
         return 0;
-    }
-}
-
-class MinHeap {
-    Node[] Heap;
-    int size;
-    private int maxsize;
- 
-    // Constructor to initialize an
-    // empty max heap with given maximum
-    // capacity
-    MinHeap(int maxsize) {
-        // This keyword refers to current instance itself
-        this.maxsize = maxsize;
-        this.size = 0;
-        Heap = new Node[this.maxsize];
-    }
- 
-    public boolean isEmpty() {
-        return (this.size == 0);
-    }
-
-    // Returning position of parent
-    private int parent(int pos) { return (pos - 1) / 2; }
- 
-    // Returning left children
-    private int leftChild(int pos) { return (2 * pos) + 1; }
-
-    // Returning right children
-    private int rightChild(int pos) { return (2 * pos) + 2; }
- 
-    // Returning true of given node is leaf
-    private boolean isLeaf(int pos) { return (pos >= (size / 2) && pos <= size); }
- 
-    // Swapping nodes
-    private void swap(int fpos, int spos) {
-        Node tmp;
-        tmp = Heap[fpos];
-        Heap[fpos] = Heap[spos];
-        Heap[spos] = tmp;
-    }
- 
-    // Recursive function to min heapify given subtree
-    private void minHeapify(int pos) {
-        if (isLeaf(pos))
-            return;
- 
-        // saat child ada yang lebih kecil dari parentnya maka lakukan penukaran sesuai child yang lebih kecil
-        if (Heap[leftChild(pos)].cost < (Heap[pos]).cost
-            || Heap[rightChild(pos)].cost < (Heap[pos]).cost) {
- 
-            // jika child kiri lebih kecil dari child kanan maka lakukan penukaran dengan child kiri
-            if (Heap[leftChild(pos)].cost < (Heap[rightChild(pos)]).cost) {
-                swap(pos, leftChild(pos));
-                minHeapify(leftChild(pos));
-            } else { // jika child kanan lebih kecil dari child kiri maka lakukan penukaran dengan child kanan
-                swap(pos, rightChild(pos));
-                minHeapify(rightChild(pos));
-            }
-        }
-    }
- 
-    // Inserts a new element to min heap
-    public void insert(Node element) {
-        Heap[size] = element;
- 
-        // Traverse up and fix violated property
-        int current = size;
-        while (Heap[current].cost < (Heap[parent(current)]).cost) {
-            swap(current, parent(current));
-            current = parent(current);
-        }
-        size++;
-    }
- 
-    // To display heap
-    public void print() {
- 
-        System.out.println("\nMINHEAP: ");
-        for (int i = 0; i < size; i++) {
-            System.out.println("["+i+"]: "+Heap[i]);
-        }
-        System.out.println(" ");
-    }
-
-    // Remove an element from min heap
-    public Node extractMin() {
-        Node popped = Heap[0];
-        Heap[0] = Heap[--size];
-        minHeapify(0);
-        return popped;
-    }
-
-    public Node getMin() {
-        return Heap[0];
-    }
-
-    // insertion sort from min to max in Heap
-    void sort(){
-        int n = size;
-        for (int i = 1; i < n; ++i) {
-            Node key = Heap[i];
-            int j = i - 1;
-            
-            while (j >= 0 && key.cost < (Heap[j]).cost) {
-                Heap[j + 1] = Heap[j];
-                j = j - 1;
-            }
-            Heap[j + 1] = key;
-        }
     }
 }
 
