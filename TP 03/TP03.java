@@ -54,14 +54,14 @@ public class TP03 {
         }
         // Mendaftarkan edge yang ada melalui input
         for (int i = 0; i < E; i++) {
-            int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt();
-            adj.get(B).add(new Node(A, W));
+            int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt(); long S = in.nextInt();
+            adj.get(B).add(new Node(A, W, S));
         }
 
         // Implement multisource destination
         // Menyambungkan node 0 dalam edge dengan bobot 0 terhubung ke setiap attacked (node 0 udah ada dalam 0 <- V)
         for (int i = 0; i < M; i++) {
-            adj.get(0).add(new Node(attacked[i], 0));
+            adj.get(0).add(new Node(attacked[i], 0, 0));
         }
         // Call Dijkstra
         inisiateDijkstra(VE); // RESET
@@ -111,7 +111,7 @@ public class TP03 {
     static void dijkstra(int src) {
         for (int i = 0; i < V; i++)
             dist[i] = Long.MAX_VALUE;
-        mh.insert(new Node(src, 0));
+        mh.insert(new Node(src, 0, 0));
         dist[src] = 0;
         while (settled.size() != V) {
             if (mh.isEmpty())
@@ -131,11 +131,11 @@ public class TP03 {
         for (int i = 0; i < adj.get(u).size(); i++) {
             Node v = adj.get(u).get(i);
             if (!settled.contains(v.node)) {
-                edgeDistance = v.cost;
+                edgeDistance = v.L;
                 newDistance = dist[u] + edgeDistance;
                 if (newDistance < dist[v.node])
                     dist[v.node] = newDistance;
-                mh.insert(new Node(v.node, dist[v.node]));
+                mh.insert(new Node(v.node, dist[v.node], v.S));
             }
         }
     }
@@ -177,19 +177,21 @@ public class TP03 {
 
 class Node implements Comparable<Node> {
     public int node;
-    public long cost;
+    public long L;
+    public long S;
  
     public Node() {}
-    public Node(int node, long cost) {
+    public Node(int node, long L, long S) {
         this.node = node;
-        this.cost = cost;
+        this.L = L;
+        this.S = S;
     }
 
     @Override 
     public int compareTo(Node other) {
-        if (this.cost < other.cost)
+        if (this.L < other.L)
             return -1;
-        if (this.cost > other.cost)
+        if (this.L > other.L)
             return 1;
         return 0;
     }
