@@ -61,16 +61,34 @@ public class MultisourceDijkstra {
             adj.get(B).add(new Node(A, W));
         }
 
-        // ================================= CALCULATE DIJKSTRA ======================================
+        // Implement multisource destination
+        // Menyambungkan node 0 dalam edge dengan bobot 0 terhubung ke setiap attacked (node 0 udah ada dalam 0 <- V)
         for (int i = 0; i < M; i++) {
-            // Calculating the single source shortest path
-            MultisourceDijkstra dpq = new MultisourceDijkstra(V); // RESET
-            dpq.dijkstra(adj, attacked[i]); // (adj, source)
+            adj.get(0).add(new Node(attacked[i], 0));
+        }
 
+        // ================================= CALCULATE DIJKSTRA ======================================
+        // for (int i = 0; i < M; i++) {
+        //     // Calculating the single source shortest path
+        //     MultisourceDijkstra dpq = new MultisourceDijkstra(V); // RESET
+        //     dpq.dijkstra(adj, attacked[i]); // (adj, source)
+
+        //     // System.out.println(attacked[i]);
+        //     long[] temp = new long[10069];
+        //     for (int j = 0; j < V; j++) { // mencari distance ke benteng yang diserang
+        //         System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
+        //         temp[j] = dpq.dist[j];
+        //     }
+        //     memo.add(temp);
+        // }
+
+        MultisourceDijkstra dpq = new MultisourceDijkstra(V); // RESET
+        dpq.dijkstra(adj, 0);
+        for (int i = 0; i < M; i++) {
             // System.out.println(attacked[i]);
             long[] temp = new long[10069];
-            for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
-                // System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
+            for (int j = 0; j < V; j++) { // mencari distance ke benteng yang diserang
+                System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
                 temp[j] = dpq.dist[j];
             }
             memo.add(temp);
