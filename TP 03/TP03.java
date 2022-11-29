@@ -15,7 +15,6 @@ public class TP03 {
     // Member variables of this class
     static long dist[];
     static Set<Integer> settled;
-    // static PriorityQueue<Node> pq;
     static MinHeap<Node> mh;
     // Number of vertices
     static int V;
@@ -104,7 +103,6 @@ public class TP03 {
         V = v;
         dist = new long[v];
         settled = new HashSet<Integer>();
-        // pq = new PriorityQueue<Node>(v, new Node());
         mh = new MinHeap<Node>();
     }
 
@@ -113,14 +111,11 @@ public class TP03 {
     static void dijkstra(int src) {
         for (int i = 0; i < V; i++)
             dist[i] = Long.MAX_VALUE;
-        // pq.add(new Node(src, 0));
         mh.insert(new Node(src, 0));
         dist[src] = 0;
         while (settled.size() != V) {
-            // if (pq.isEmpty())
             if (mh.isEmpty())
                 return;
-            // int u = pq.remove().node;
             int u = mh.remove().node;
             if (settled.contains(u))
                 continue;
@@ -140,7 +135,6 @@ public class TP03 {
                 newDistance = dist[u] + edgeDistance;
                 if (newDistance < dist[v.node])
                     dist[v.node] = newDistance;
-                // pq.add(new Node(v.node, dist[v.node]));
                 mh.insert(new Node(v.node, dist[v.node]));
             }
         }
