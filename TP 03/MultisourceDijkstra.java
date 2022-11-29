@@ -66,29 +66,15 @@ public class MultisourceDijkstra {
         for (int i = 0; i < M; i++) {
             adj.get(0).add(new Node(attacked[i], 0));
         }
-
-        // ================================= CALCULATE DIJKSTRA ======================================
-        // for (int i = 0; i < M; i++) {
-        //     // Calculating the single source shortest path
-        //     MultisourceDijkstra dpq = new MultisourceDijkstra(V); // RESET
-        //     dpq.dijkstra(adj, attacked[i]); // (adj, source)
-
-        //     // System.out.println(attacked[i]);
-        //     long[] temp = new long[10069];
-        //     for (int j = 0; j < V; j++) { // mencari distance ke benteng yang diserang
-        //         System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
-        //         temp[j] = dpq.dist[j];
-        //     }
-        //     memo.add(temp);
-        // }
-
+        // Call Dijkstra
         MultisourceDijkstra dpq = new MultisourceDijkstra(V); // RESET
         dpq.dijkstra(adj, 0);
+        // Memo Distance/Cost
         for (int i = 0; i < M; i++) {
             // System.out.println(attacked[i]);
             long[] temp = new long[10069];
             for (int j = 0; j < V; j++) { // mencari distance ke benteng yang diserang
-                System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
+                // System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
                 temp[j] = dpq.dist[j];
             }
             memo.add(temp);
