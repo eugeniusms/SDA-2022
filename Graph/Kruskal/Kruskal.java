@@ -51,14 +51,25 @@ public class Kruskal {
     }
 }
 
-class Edge {
+class Edge implements Comparable<Edge>{
     int start;
     int destination;
-    long cost;
+    int cost;
 
-    Edge(int start, int destination, long cost) {
+    Edge(int start, int destination, int cost) {
         this.start = start;
         this.destination = destination;
         this.cost = cost;
+    }
+
+    @Override
+    public int compareTo(Edge other) {
+        if (this.cost == other.cost) {
+            if (this.start == other.start) {
+                return this.destination - other.destination;
+            }
+            return this.start - other.start; 
+        }
+        return this.cost - other.cost;
     }
 }
