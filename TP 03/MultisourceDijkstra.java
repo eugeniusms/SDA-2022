@@ -16,12 +16,12 @@ public class MultisourceDijkstra {
     private static PrintWriter out;
  
     // Member variables of this class
-    private long dist[];
-    private Set<Integer> settled;
-    private PriorityQueue<Node> pq;
+    static long dist[];
+    static Set<Integer> settled;
+    static PriorityQueue<Node> pq;
     // Number of vertices
-    private int V;
-    List<List<Node> > adj;
+    static int V;
+    static List<List<Node> > adj;
 
     static boolean[] isExist = new boolean[10069];
     static Long[] memoDist = new Long[10069]; // <index: node, value: minimum distance>
@@ -39,7 +39,7 @@ public class MultisourceDijkstra {
         // N = number of vertices
         // M = number of vertices that ! (attacked)
         int N = in.nextInt(), M = in.nextInt();
-        int V = 1+N; // ex: 0+8 nodes = 9 nodes
+        int VE = 1+N; // ex: 0+8 nodes = 9 nodes
         // input benteng yang diserang
         int[] attacked = new int[M];
         for(int i = 0; i < M; i++) {
@@ -49,9 +49,9 @@ public class MultisourceDijkstra {
         // ================================= INISIASI EDGE ===========================================
         long E = in.nextInt();
         // Adjacency list untuk edge yang ada
-        List<List<Node> > adj = new ArrayList<List<Node> >();
+        adj = new ArrayList<List<Node> >();
         // Initialize list for every node
-        for (int i = 0; i < V; i++) {
+        for (int i = 0; i < VE; i++) {
             List<Node> item = new ArrayList<Node>();
             adj.add(item);
         }
@@ -67,15 +67,15 @@ public class MultisourceDijkstra {
             adj.get(0).add(new Node(attacked[i], 0));
         }
         // Call Dijkstra
-        MultisourceDijkstra dpq = new MultisourceDijkstra(V); // RESET
-        dpq.dijkstra(adj, 0);
+        inisiateDijkstra(VE); // RESET
+        dijkstra(0);
         // Memo Distance/Cost
         for (int i = 0; i < M; i++) {
             // System.out.println(attacked[i]);
             long[] temp = new long[10069];
-            for (int j = 0; j < V; j++) { // mencari distance ke benteng yang diserang
-                // System.out.println("CEK attacked: "+j+ " "+dpq.dist[j]); // TEST 
-                temp[j] = dpq.dist[j];
+            for (int j = 0; j < VE; j++) { // mencari distance ke benteng yang diserang
+                System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
+                temp[j] = dist[j];
             }
             memo.add(temp);
         }
@@ -99,21 +99,19 @@ public class MultisourceDijkstra {
         }
         out.close();    
     }
- 
-    // Constructor of this class
-    public MultisourceDijkstra(int V) {
-        // This keyword refers to current object itself
-        this.V = V;
-        dist = new long[V];
+
+    // inisiate Dijkstra
+    static void inisiateDijkstra(int v) {
+         // This keyword refers to current object itself
+        V = v;
+        dist = new long[v];
         settled = new HashSet<Integer>();
-        pq = new PriorityQueue<Node>(V, new Node());
+        pq = new PriorityQueue<Node>(v, new Node());
     }
  
     // Method 1
     // Dijkstra's Algorithm
-    public void dijkstra(List<List<Node> > adj, int src) {
-        this.adj = adj;
- 
+    static void dijkstra(int src) {
         for (int i = 0; i < V; i++)
             dist[i] = Long.MAX_VALUE;
  
@@ -153,7 +151,7 @@ public class MultisourceDijkstra {
     // Method 2
     // To process all the neighbours
     // of the passed node
-    private void e_Neighbours(int u) {
+    static void e_Neighbours(int u) {
  
         long edgeDistance = -1;
         long newDistance = -1;
