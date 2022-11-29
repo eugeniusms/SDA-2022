@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 import java.util.Arrays;
 
-public class Kruskal {
+public class TP03 {
     private static InputReader in;
     private static PrintWriter out;
 
@@ -12,7 +12,7 @@ public class Kruskal {
         OutputStream outputStream = System.out;
         out = new PrintWriter(outputStream);
 
-        int N = in.next
+        int N = in.nextInt();
 
         // Tutup OutputStream
         out.close();
