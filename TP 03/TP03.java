@@ -155,23 +155,16 @@ public class TP03 {
         for (int i = 0; i < K; i++) {
             gate[i] = in.nextInt();
         }
-       
-        long maxTime = 0;
-        for (long[] memoPos : memo) {
-            // find min between memoPos
+        for (long[] lo : memo) {
+            out.println("CEK");
             long minTime = Long.MAX_VALUE;
             for (int g : gate) {
-                if (memoPos[g] < minTime) {
-                    minTime = memoPos[g];
+                if (lo[g] < minTime) {
+                    minTime = lo[g];
                 }
             }
-            // update maxTime
-            if (minTime > maxTime) {
-                maxTime = minTime;
-            }
+            out.println(minTime);
         }
-
-        out.println(maxTime);
     }
 
     // taken from https://codeforces.com/submissions/Petr
