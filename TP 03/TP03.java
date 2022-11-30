@@ -35,14 +35,9 @@ public class TP03 {
         // ================================= INISIASI GRAPH ===========================================
         // N = number of vertices
         // M = number of vertices that ! (attacked)
-        int N = in.nextInt(), M = in.nextInt();
+        int N = in.nextInt();
         int VE = 1+N; // ex: 0+8 nodes = 9 nodes
-        // input benteng yang diserang
-        int[] attacked = new int[M];
-        for(int i = 0; i < M; i++) {
-            attacked[i] = in.nextInt();
-        }
-
+        
         // ================================= INISIASI EDGE ===========================================
         long E = in.nextInt();
         // Adjacency list untuk edge yang ada
@@ -55,23 +50,45 @@ public class TP03 {
         // Mendaftarkan edge yang ada melalui input
         for (int i = 0; i < E; i++) {
             int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt(); long S = in.nextInt();
+            // karena dijkstra undirected berlaku dua arah
+            adj.get(A).add(new Node(B, W, S));
             adj.get(B).add(new Node(A, W, S));
         }
 
+        // ================================= INISIASI NODE DENGAN KURCACI ===========================
+        int P = in.nextInt();
+        int[] pos = new int[P];
+        for (int i = 0; i < P; i++) {
+            pos[i] = in.nextInt();
+        }
         // Implement multisource destination
         // Menyambungkan node 0 dalam edge dengan bobot 0 terhubung ke setiap attacked (node 0 udah ada dalam 0 <- V)
-        for (int i = 0; i < M; i++) {
-            adj.get(0).add(new Node(attacked[i], 0, 0));
+        for (int i = 0; i < P; i++) {
+            adj.get(0).add(new Node(pos[i], 0, 0));
         }
+
+        // ================================= DEBUG ===========================
+        int counter = 0;
+        for (List<Node> l : adj) {
+            out.println("FOR["+counter+"]");
+            for (Node n : l) {
+                out.print(n.node+"[L:"+n.L+"] ");
+            }
+            counter++;
+            out.println();
+        }
+        // ===================================================================
+
         // Call Dijkstra
         inisiateDijkstra(VE); // RESET
         dijkstra(0);
+
         // Memo Distance/Cost
-        for (int i = 0; i < M; i++) {
-            // System.out.println(attacked[i]);
+        for (int i = 0; i < P; i++) {
+            System.out.println(pos[i]);
             long[] temp = new long[10069];
             for (int j = 0; j < VE; j++) { // mencari distance ke benteng yang diserang
-                // System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
+                System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
                 temp[j] = dist[j];
             }
             memo.add(temp);
@@ -81,18 +98,10 @@ public class TP03 {
         // ================================= INPUT QUERY ============================================
         int Q = in.nextInt();
         for (int i = 0; i < Q; i++) {
-            int S = in.nextInt(); 
-            long K = in.nextInt();
-
-            boolean isPossible = false;
-            for (long[] dist : memo) {
-                // System.out.println(dist[S]);
-                if (dist[S] < K) {
-                    isPossible = true;
-                    break;
-                }
+            String query = in.next();
+            if (query.equals("SIMULASI")) {
+                SIMULASI();
             }
-            out.println(isPossible ? "YES" : "NO");
         }
         out.close();    
     }
@@ -140,6 +149,23 @@ public class TP03 {
         }
     }
 
+    // QUERY 2 : SIMULASI
+    static void SIMULASI() {
+        int K = in.nextInt();
+        // input pintu keluar
+        int[] gate = new int[K];
+        for (int i = 0; i < K; i++) {
+            gate[i] = in.nextInt();
+        }
+        long maxTime = 0;
+        for (int i = 0; i < K; i++) {
+            if (dist[gate[i]] > maxTime) {
+                maxTime = dist[gate[i]];
+            }
+        }
+        out.println(maxTime);
+    }
+
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
     // usual Scanner(System.in) and System.out
@@ -179,6 +205,7 @@ class Node implements Comparable<Node> {
     public int node;
     public long L;
     public long S;
+    // public boolean isKurcaciExist = false;
  
     public Node() {}
     public Node(int node, long L, long S) {
