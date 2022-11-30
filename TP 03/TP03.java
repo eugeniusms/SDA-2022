@@ -78,7 +78,7 @@ public class TP03 {
         // ===================================================================
 
         for (int i = 0; i < P; i++) {
-            System.out.println("POS: "+i);
+            System.out.println("POS: "+pos[i]);
             // Calculating the single source shortest path
             // Call Dijkstra
             inisiateDijkstra(VE); // RESET
@@ -92,19 +92,6 @@ public class TP03 {
             }
             memo.add(temp);
         }
-
-        
-        // Memo Distance/Cost
-        // for (int i = 0; i < P; i++) {
-        //     System.out.println(pos[i]);
-        //     long[] temp = new long[10069];
-        //     for (int j = 0; j < VE; j++) { // mencari distance ke benteng yang diserang
-        //         System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
-        //         temp[j] = dist[j];
-        //     }
-        //     memo.add(temp);
-        // }
-
 
         // ================================= INPUT QUERY ============================================
         int Q = in.nextInt();
@@ -168,13 +155,23 @@ public class TP03 {
         for (int i = 0; i < K; i++) {
             gate[i] = in.nextInt();
         }
-        long minTime = 0;
-        for (int i = 0; i < K; i++) {
-            if (dist[gate[i]] > minTime) {
-                minTime = dist[gate[i]];
+       
+        long maxTime = 0;
+        for (long[] memoPos : memo) {
+            // find min between memoPos
+            long minTime = Long.MAX_VALUE;
+            for (int g : gate) {
+                if (memoPos[g] < minTime) {
+                    minTime = memoPos[g];
+                }
+            }
+            // update maxTime
+            if (minTime > maxTime) {
+                maxTime = minTime;
             }
         }
-        out.println(minTime);
+
+        out.println(maxTime);
     }
 
     // taken from https://codeforces.com/submissions/Petr
