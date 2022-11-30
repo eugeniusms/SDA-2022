@@ -20,9 +20,6 @@ public class TP03 {
     static int V;
     static List<List<Node> > adj;
 
-    static boolean[] isExist = new boolean[10069];
-    static Long[] memoDist = new Long[10069]; // <index: node, value: minimum distance>
-
     // key: dist, value: array[10069] node
     static ArrayList<long[]> memo = new ArrayList<long[]>();
 
@@ -68,6 +65,7 @@ public class TP03 {
         }
 
         // ================================= DEBUG ===========================
+        out.println("BEFORE DIJKSTRA: ");
         int counter = 0;
         for (List<Node> l : adj) {
             out.println("FOR["+counter+"]");
@@ -75,24 +73,37 @@ public class TP03 {
                 out.print(n.node+"[L:"+n.L+"] ");
             }
             counter++;
-            out.println();
+            out.println("\n");
         }
         // ===================================================================
 
-        // Call Dijkstra
-        inisiateDijkstra(VE); // RESET
-        dijkstra(0);
-
-        // Memo Distance/Cost
         for (int i = 0; i < P; i++) {
-            System.out.println(pos[i]);
+            System.out.println("POS: "+i);
+            // Calculating the single source shortest path
+            // Call Dijkstra
+            inisiateDijkstra(VE); // RESET
+            dijkstra(pos[i]);
+
+            // System.out.println(attacked[i]);
             long[] temp = new long[10069];
-            for (int j = 0; j < VE; j++) { // mencari distance ke benteng yang diserang
+            for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
                 System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
                 temp[j] = dist[j];
             }
             memo.add(temp);
         }
+
+        
+        // Memo Distance/Cost
+        // for (int i = 0; i < P; i++) {
+        //     System.out.println(pos[i]);
+        //     long[] temp = new long[10069];
+        //     for (int j = 0; j < VE; j++) { // mencari distance ke benteng yang diserang
+        //         System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
+        //         temp[j] = dist[j];
+        //     }
+        //     memo.add(temp);
+        // }
 
 
         // ================================= INPUT QUERY ============================================
@@ -157,13 +168,13 @@ public class TP03 {
         for (int i = 0; i < K; i++) {
             gate[i] = in.nextInt();
         }
-        long maxTime = 0;
+        long minTime = 0;
         for (int i = 0; i < K; i++) {
-            if (dist[gate[i]] > maxTime) {
-                maxTime = dist[gate[i]];
+            if (dist[gate[i]] > minTime) {
+                minTime = dist[gate[i]];
             }
         }
-        out.println(maxTime);
+        out.println(minTime);
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -378,6 +389,149 @@ class MinHeap<T extends Comparable<T>> {
 					minChildIdx = rightIdx;
 
 				if (node.compareTo(data.get(minChildIdx)) > 0) {
+					data.set(idx, data.get(minChildIdx));
+					idx = minChildIdx;
+				} else {
+					data.set(idx, node);
+					break;
+				}
+			}
+		}
+	}
+
+}
+
+class MaxHeap<T extends Comparable<T>> {
+	ArrayList<T> data;
+
+	public MaxHeap() {
+		data = new ArrayList<T>();
+	}
+
+	public MaxHeap(ArrayList<T> arr) {
+		data = arr;
+		heapify();
+	}
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+	public T peek() {
+		if (data.isEmpty())
+			return null;
+		return data.get(0);
+	}
+
+	public void insert(T value) {
+		data.add(value);
+		percolateUp(data.size() - 1);
+	}
+
+	public T remove() {
+		T removedObject = peek();
+
+		if (data.size() == 1)
+			data.clear();
+		else {
+			data.set(0, data.get(data.size() - 1));
+			data.remove(data.size() - 1);
+			percolateDown(0);
+		}
+
+		return removedObject;
+	}
+
+	private void percolateDown(int idx) {
+		T node = data.get(idx);
+		int heapSize = data.size();
+
+		while (true) {
+			int leftIdx = getLeftChildIdx(idx);
+			if (leftIdx >= heapSize) {
+				data.set(idx, node);
+				break;
+			} else {
+				int minChildIdx = leftIdx;
+				int rightIdx = getRightChildIdx(idx);
+				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
+					minChildIdx = rightIdx;
+
+				if (node.compareTo(data.get(minChildIdx)) < 0) {
+					data.set(idx, data.get(minChildIdx));
+					idx = minChildIdx;
+				} else {
+					data.set(idx, node);
+					break;
+				}
+			}
+		}
+	}
+
+	private void percolateUp(int idx) {
+		T node = data.get(idx);
+		int parentIdx = getParentIdx(idx);
+		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) {
+			data.set(idx, data.get(parentIdx));
+			idx = parentIdx;
+			parentIdx = getParentIdx(idx);
+		}
+
+		data.set(idx, node);
+	}
+
+	private int getParentIdx(int i) {
+		return (i - 1) / 2;
+	}
+
+	private int getLeftChildIdx(int i) {
+		return 2 * i + 1;
+	}
+
+	private int getRightChildIdx(int i) {
+		return 2 * i + 2;
+	}
+
+	private void heapify() {
+		for (int i = data.size() / 2 - 1; i >= 0; i--)
+			percolateDown(i);
+	}
+
+	public void sort() {
+		int n = data.size();
+		while (n > 1) {
+			data.set(n - 1, remove(n));
+			n--;
+		}
+	}
+
+	public T remove(int n) {
+		T removedObject = peek();
+
+		if (n > 1) {
+			data.set(0, data.get(n - 1));
+			percolateDown(0, n - 1);
+		}
+
+		return removedObject;
+	}
+
+	private void percolateDown(int idx, int n) {
+		T node = data.get(idx);
+		int heapSize = n;
+
+		while (true) {
+			int leftIdx = getLeftChildIdx(idx);
+			if (leftIdx >= heapSize) {
+				data.set(idx, node);
+				break;
+			} else {
+				int minChildIdx = leftIdx;
+				int rightIdx = getRightChildIdx(idx);
+				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
+					minChildIdx = rightIdx;
+
+				if (node.compareTo(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
