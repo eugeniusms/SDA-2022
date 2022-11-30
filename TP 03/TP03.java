@@ -14,7 +14,7 @@ public class TP03 {
  
     // Member variables of this class
     static long dist[];
-    static Set<Integer> settled;
+    static List<Integer> settled;
     static MinHeap<Node> mh;
     // Number of vertices
     static int V;
@@ -109,7 +109,7 @@ public class TP03 {
     static void inisiateDijkstra(int v) {
         V = v;
         dist = new long[v];
-        settled = new HashSet<Integer>();
+        settled = new ArrayList<Integer>();
         mh = new MinHeap<Node>();
     }
 
