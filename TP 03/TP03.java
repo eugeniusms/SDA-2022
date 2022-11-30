@@ -16,6 +16,10 @@ public class TP03 {
     static long dist[];
     static List<Integer> settled;
     static MinHeap<Node> mh;
+
+    static long distMax[];
+    static List<Integer> settledMax;
+    static MaxHeap<Node> maxH;
     // Number of vertices
     static int V;
     static List<List<Node> > adj;
@@ -97,9 +101,11 @@ public class TP03 {
         int Q = in.nextInt();
         for (int i = 0; i < Q; i++) {
             String query = in.next();
-            if (query.equals("SIMULASI")) {
+            if (query.equals("KABUR")) {
+                KABUR(VE);
+            } else if (query.equals("SIMULASI")) {
                 SIMULASI();
-            } else if (query.equals("SUPER")) {
+            } else {
                 SUPER(VE);
             }
         }
@@ -149,6 +155,53 @@ public class TP03 {
         }
     }
 
+    // DijkstraMax
+    static void inisiateDijkstraMax(int v) {
+        V = v;
+        distMax = new long[v];
+        settledMax = new ArrayList<Integer>();
+        maxH = new MaxHeap<Node>();
+    }
+
+    static void dijkstraMax(int src) {
+        for (int i = 0; i < V; i++)
+            distMax[i] = Long.MIN_VALUE;
+        maxH.insert(new Node(src, 0, 0));
+        distMax[src] = 0;
+        while (settledMax.size() != V) {
+            if (maxH.isEmpty())
+                return;
+            int u = maxH.remove().node;
+            if (settledMax.contains(u))
+                continue;
+            settledMax.add(u);
+            e_NeighboursMax(u);
+        }
+    }
+
+    static void e_NeighboursMax(int u) {
+        long edgeDistance = -1;
+        long newDistance = -1;
+        for (int i = 0; i < adj.get(u).size(); i++) {
+            Node v = adj.get(u).get(i);
+            if (!settledMax.contains(v.node)) {
+                edgeDistance = v.S;
+                newDistance = distMax[u] + edgeDistance;
+                if (newDistance > distMax[v.node])
+                    distMax[v.node] = newDistance;
+                maxH.insert(new Node(v.node, distMax[v.node], v.S));
+            }
+        }
+    }
+
+    // QUERY 1 : KABUR
+    static void KABUR(int VE) {
+        int source = in.nextInt(); int destination = in.nextInt();
+        inisiateDijkstraMax(VE); // reset
+        dijkstraMax(source);
+        out.println(distMax[destination]);
+    }
+
     // QUERY 2 : SIMULASI
     static void SIMULASI() {
         int K = in.nextInt();
@@ -178,23 +231,26 @@ public class TP03 {
     // QUERY 3 : SUPER
     static void SUPER(int VE) {
         int V1 = in.nextInt(); int V2 = in.nextInt(); int V3 = in.nextInt();
-        inisiateDijkstra(VE); // RESET
-        dijkstra(V2); // bisa dapat V1 & V3
+        // inisiateDijkstra(VE); // RESET
+        // dijkstra(V2); // bisa dapat V1 & V3
 
-        out.println("DIST V1-V2 : "+dist[V1]);
-        out.println("DIST V2-V3 : "+dist[V3]);
+        // out.println("DIST V1-V2 : "+dist[V1]);
+        // out.println("DIST V2-V3 : "+dist[V3]);
 
-        // ================================= DEBUG ===========================
-        out.println("SUPER DIJKSTRA: ");
-        int counter = 0;
-        for (List<Node> l : adj) {
-            out.println("FOR["+counter+"]");
-            for (Node n : l) {
-                out.print(n.node+"[L:"+n.L+"] ");
-            }
-            counter++;
-            out.println("\n");
-        }
+        // // SELECT EDGE WITH MAXIMUM DISTANCE BETWEEN V1 - V2 - V3
+
+        // // ================================= DEBUG ===========================
+        // out.println("SUPER DIJKSTRA: ");
+        // int counter = 0;
+        // for (List<Node> l : adj) {
+        //     out.println("FOR["+counter+"]");
+        //     for (Node n : l) {
+        //         out.print(n.node+"[L:"+n.L+"] ");
+        //     }
+        //     counter++;
+        //     out.println("\n");
+        // }
+        
         // ===================================================================
     }
 
