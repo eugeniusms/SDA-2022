@@ -99,6 +99,8 @@ public class TP03 {
             String query = in.next();
             if (query.equals("SIMULASI")) {
                 SIMULASI();
+            } else if (query.equals("SUPER")) {
+                SUPER(VE);
             }
         }
         out.close();    
@@ -171,6 +173,29 @@ public class TP03 {
         }
 
         out.println(maxTime);
+    }
+
+    // QUERY 3 : SUPER
+    static void SUPER(int VE) {
+        int V1 = in.nextInt(); int V2 = in.nextInt(); int V3 = in.nextInt();
+        inisiateDijkstra(VE); // RESET
+        dijkstra(V2); // bisa dapat V1 & V3
+
+        out.println("DIST V1-V2 : "+dist[V1]);
+        out.println("DIST V2-V3 : "+dist[V3]);
+
+        // ================================= DEBUG ===========================
+        out.println("SUPER DIJKSTRA: ");
+        int counter = 0;
+        for (List<Node> l : adj) {
+            out.println("FOR["+counter+"]");
+            for (Node n : l) {
+                out.print(n.node+"[L:"+n.L+"] ");
+            }
+            counter++;
+            out.println("\n");
+        }
+        // ===================================================================
     }
 
     // taken from https://codeforces.com/submissions/Petr
