@@ -65,20 +65,20 @@ public class TP03 {
         }
 
         // ================================= DEBUG ===========================
-        out.println("BEFORE DIJKSTRA: ");
-        int counter = 0;
-        for (List<Node> l : adj) {
-            out.println("FOR["+counter+"]");
-            for (Node n : l) {
-                out.print(n.node+"[L:"+n.L+"] ");
-            }
-            counter++;
-            out.println("\n");
-        }
+        // out.println("BEFORE DIJKSTRA: ");
+        // int counter = 0;
+        // for (List<Node> l : adj) {
+        //     out.println("FOR["+counter+"]");
+        //     for (Node n : l) {
+        //         out.print(n.node+"[L:"+n.L+"] ");
+        //     }
+        //     counter++;
+        //     out.println("\n");
+        // }
         // ===================================================================
 
         for (int i = 0; i < P; i++) {
-            System.out.println("POS: "+pos[i]);
+            // System.out.println("POS: "+pos[i]);
             // Calculating the single source shortest path
             // Call Dijkstra
             inisiateDijkstra(VE); // RESET
@@ -87,7 +87,7 @@ public class TP03 {
             // System.out.println(attacked[i]);
             long[] temp = new long[10069];
             for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
-                System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
+                // System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
                 temp[j] = dist[j];
             }
             memo.add(temp);
@@ -155,16 +155,22 @@ public class TP03 {
         for (int i = 0; i < K; i++) {
             gate[i] = in.nextInt();
         }
+        long maxTime = 0;
         for (long[] lo : memo) {
-            out.println("CEK");
+            // find min
             long minTime = Long.MAX_VALUE;
             for (int g : gate) {
                 if (lo[g] < minTime) {
                     minTime = lo[g];
                 }
             }
-            out.println(minTime);
+            // find max
+            if (minTime > maxTime) {
+                maxTime = minTime;
+            }
         }
+
+        out.println(maxTime);
     }
 
     // taken from https://codeforces.com/submissions/Petr
