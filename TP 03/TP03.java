@@ -52,6 +52,9 @@ public class TP03 {
             adj.get(B).add(new Node(A, W, S));
         }
 
+        // ================================= INISIASI MAX SPANNING TREE ===============================
+        findMaximumSpanningTree(VE);
+
         // ================================= INISIASI NODE DENGAN KURCACI ===========================
         int P = in.nextInt();
         int[] pos = new int[P];
@@ -154,7 +157,6 @@ public class TP03 {
     // QUERY 1 : KABUR
     static void KABUR(int VE) {
         int source = in.nextInt(); int destination = in.nextInt();
-        findMaximumSpanningTree(VE);
     }
 
 
