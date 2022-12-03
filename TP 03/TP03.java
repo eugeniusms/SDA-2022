@@ -170,10 +170,10 @@ public class TP03 {
         long minL = Long.MAX_VALUE;
         for(int i = 0; i < stack.size() - 1; i++) {
             System.out.println(stack.get(i)+" "+stack.get(i+1));
-            // long l = spanningTree.get(stack.get(i)).get(stack.get(i+1)).L;
-            // if (l < minL) {
-            //     minL = l;
-            // }
+            long l = spanningTreeEdges[stack.get(i)][stack.get(i+1)];
+            if (l < minL) {
+                minL = l;
+            }
         }
         System.out.println(minL);
     }
@@ -210,6 +210,7 @@ public class TP03 {
     }
 
     static List<List<Node>> spanningTree;
+    static long[][] spanningTreeEdges = new long[1069][1069]; // <source, [destination]=L>
     static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
         spanningTree = new ArrayList<List<Node> >();
         // Initialize list for every node
@@ -258,7 +259,7 @@ public class TP03 {
         for (int i = 0; i < spanningTree.size(); i++) {
             System.out.print(i+" : ");
             for (Node n : spanningTree.get(i)) {
-                System.out.print(n.node+"["+n.L+"]"+" ");
+                System.out.print(n.node+"["+n.L+"]"+" "); spanningTreeEdges[i][n.node] = n.L;
             }
             System.out.println();
         }
