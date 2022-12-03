@@ -215,10 +215,10 @@ public class TP03 {
                 }
             }
         }
-        // System.out.println("SORTED LIST: ");
-        // for (Edge e : edges) {
-        //     System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
-        // }
+        System.out.println("SORTED LIST: ");
+        for (Edge e : edges) {
+            System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
+        }
         // STEP 2 Kruskal's : Check cycle
         // Check cycle with Union Find
         UnionFind uf = new UnionFind(v);
@@ -230,14 +230,14 @@ public class TP03 {
             }
         }
         // print spanningTree
-        // System.out.println("SPANNING TREE: ");
-        // for (int i = 0; i < spanningTree.size(); i++) {
-        //     System.out.print(i+" : ");
-        //     for (Node n : spanningTree.get(i)) {
-        //         System.out.print(n.node+"["+n.L+"]"+" ");
-        //     }
-        //     System.out.println();
-        // }
+        System.out.println("SPANNING TREE: ");
+        for (int i = 0; i < spanningTree.size(); i++) {
+            System.out.print(i+" : ");
+            for (Node n : spanningTree.get(i)) {
+                System.out.print(n.node+"["+n.L+"]"+" ");
+            }
+            System.out.println();
+        }
         // SEPERTINYA SUDAH DAPAT SPANNING TREE
     }
  
