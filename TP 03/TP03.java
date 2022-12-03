@@ -299,10 +299,44 @@ public class TP03 {
     static void SUPER(int VE) {
         int V1 = in.nextInt(); int V2 = in.nextInt(); int V3 = in.nextInt();
         long[] DV1 = dijkstraSuper(V1, VE);
+        long[] DV2 = dijkstraSuper(V2, VE);
+        long[] DV3 = dijkstraSuper(V3, VE);
+        
+        // TESTING
         // print DV1
         for (int i = 0; i < DV1.length; i++) {
             System.out.print(DV1[i]+" ");
         }
+        // print DV2
+        for (int i = 0; i < DV2.length; i++) {
+            System.out.print(DV2[i]+" ");
+        }
+        // print DV3
+        for (int i = 0; i < DV3.length; i++) {
+            System.out.print(DV3[i]+" ");
+        }
+
+        // find minCostV1V2
+        long minCostV1V2 = Long.MAX_VALUE;
+        for (int i = 0; i < DV1.length; i++) {
+            if (DV1[i] != Long.MAX_VALUE && DV2[i] != Long.MAX_VALUE) {
+                if (DV1[i] - DV2[i] < minCostV1V2 && DV1[i] - DV2[i] >= 0) {
+                    minCostV1V2 = DV1[i] - DV2[i];
+                }
+            }
+        }
+        out.println("\n"+minCostV1V2);
+
+        long minCostV2V3 = Long.MAX_VALUE;
+        // find minCostV2V3
+        for (int i = 0; i < DV2.length; i++) {
+            if (DV2[i] != Long.MAX_VALUE && DV3[i] != Long.MAX_VALUE) {
+                if (DV3[i] - DV2[i] < minCostV2V3 && DV3[i] - DV2[i] >= 0) {
+                    minCostV2V3 = DV3[i] - DV2[i];
+                }
+            }
+        }
+        out.println(minCostV2V3);
     }
 
     // Method 1
