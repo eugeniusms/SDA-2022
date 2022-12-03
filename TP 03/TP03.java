@@ -178,6 +178,7 @@ public class TP03 {
                 break;
             } else {
                 minL = Math.min(minL, MSTDFS(n.node, destination));
+                System.out.println("minL : "+minL);
             }
         }
         return minL;
@@ -232,7 +233,7 @@ public class TP03 {
         for (int i = 0; i < spanningTree.size(); i++) {
             System.out.print(i+" : ");
             for (Node n : spanningTree.get(i)) {
-                System.out.print(n.node+" ");
+                System.out.print(n.node+"["+n.L+"]"+" ");
             }
             System.out.println();
         }
