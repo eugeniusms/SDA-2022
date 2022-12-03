@@ -179,11 +179,7 @@ public class TP03 {
                 edges.add(new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S));
             }
         }
-        // sorting edges
-        // print all edges
-        for (Edge e : edges) {
-            System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
-        }
+        // STEP 1 Kruskal's : Sorting edges
         // Sorting Edges with Bubble Sort
         for (int i = 0; i < edges.size(); i++) {
             for (int j = i+1; j < edges.size(); j++) {
