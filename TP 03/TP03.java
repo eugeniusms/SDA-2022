@@ -161,23 +161,24 @@ public class TP03 {
         // Memanfaatkan Kruskal's Maximum Spanning Tree (MST))
         // Gunakan DFS untuk mencari path dari source ke destination
         visited = new boolean[V]; // reset
+        minL = Long.MAX_VALUE;
         out.println(MSTDFS(source, destination));
     }
 
     static boolean[] visited;
+    static long minL;
     static long MSTDFS(int source, int destination) {
         if (visited[source]) { // base case saat ketemu visited
             return Long.MAX_VALUE;
         }
         visited[source] = true; // set visited
         // saat belum visited
-        long minL = Long.MAX_VALUE;
         for (Node n : spanningTree.get(source)) {
             if (n.node == destination) {
                 minL = Math.min(minL, n.L);
                 break;
             } else {
-                minL = Math.min(minL, MSTDFS(n.node, destination));
+                minL = Math.min(n.L, MSTDFS(n.node, destination));
                 System.out.println("minL : "+minL);
             }
         }
