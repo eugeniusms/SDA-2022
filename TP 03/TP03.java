@@ -167,14 +167,21 @@ public class TP03 {
             adj.add(item);
         }
         // Melakukan pencarian max spanning tree
-        // print adj (adj adalah graf penyimpan edge)
-        // for (int i = 0; i < adj.size(); i++) {
-        //     for (int j = 0; j < adj.get(i).size(); j++) {
-        //         System.out.println("CEK: "+i+" "+adj.get(i).get(j).node+" "+adj.get(i).get(j).L);
-        //     }
-        // }
-        
-
+        // print adj (adj adalah graf penyimpan edge)        
+        // Kruskal's Algorithms
+        // get all edges
+        List<Edge> edges = new ArrayList<Edge>();
+        for (int i = 0; i < adj.size(); i++) {
+            for (int j = 0; j < adj.get(i).size(); j++) {
+                // System.out.println("CEK: "+i+" "+adj.get(i).get(j).node+" "+adj.get(i).get(j).L);
+                edges.add(new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S));
+            }
+        }
+        // sorting edges
+        // print all edges
+        for (Edge e : edges) {
+            System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
+        }
     }
  
     // QUERY 2 : SIMULASI
