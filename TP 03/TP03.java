@@ -162,28 +162,27 @@ public class TP03 {
         // Gunakan DFS untuk mencari path dari source ke destination
         visited = new boolean[V]; // reset
         minL = Long.MAX_VALUE;
-        out.println(MSTDFS(source, destination));
+        DFS(source, destination);
+        out.println(minL);
     }
 
     static boolean[] visited;
     static long minL;
-    static long MSTDFS(int source, int destination) {
-        if (visited[source]) { // base case saat ketemu visited
-            return Long.MAX_VALUE;
+    // Find destination from source
+    static void DFS(int source, int destination) {
+        visited[source] = true;
+        if (source == destination) {
+            return;
         }
-        visited[source] = true; // set visited
-        // saat belum visited
-        for (Node n : spanningTree.get(source)) {
-            if (n.node == destination) {
-                return n.L;
-            } else {
-                minL = Math.min(n.L, MSTDFS(n.node, destination));
-                System.out.println("VISIT: "+n.node);
-                System.out.println("minL : "+minL);
+        for (int i = 0; i < adj.get(source).size(); i++) {
+            Node v = adj.get(source).get(i);
+            if (!visited[v.node]) {
+                out.println(v.node);
+                DFS(v.node, destination);
             }
         }
-        return minL;
     }
+
 
     static List<List<Node>> spanningTree;
     static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
