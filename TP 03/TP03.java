@@ -161,28 +161,78 @@ public class TP03 {
         // Memanfaatkan Kruskal's Maximum Spanning Tree (MST))
         // Gunakan DFS untuk mencari path dari source ke destination
         visited = new boolean[V]; // reset
-        minL = Long.MAX_VALUE;
-        DFS(source, destination);
-        out.println(minL);
+        DFS(source, destination, new Stack<Integer>());
+    }
+
+    // https://stackoverflow.com/questions/13787877/dfs-graph-recording-path-pathfinding
+    // static boolean[] visited;
+    // static Stack<Integer> DFS(int source, int destination) {
+    //     Stack<Integer> route = new Stack<Integer>();
+
+    //     while(source != destination) {
+    //         boolean found_non_visited = false;
+    //         // get adjacent list of source node
+    //         List<Node> sptList = spanningTree.get(source);
+    //         for (Node node : sptList) {
+    //             if (!visited[node.node]) {
+    //                 visited[node.node] = true;
+    //                 route.push(node.node);
+    //                 source = node.node;
+    //                 found_non_visited = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (found_non_visited) 
+    //             continue;
+    //         if (route.empty())
+    //             return route;
+    //         out.println("POP: "+route.peek());
+    //         source = route.pop();
+    //     }
+    //     route.push(destination);
+    //     return route;
+    // }
+
+    // https://www.geeksforgeeks.org/print-the-path-between-any-two-nodes-of-a-tree-dfs/
+    static void printPath(Vector<Integer> stack)
+    {
+        for(int i = 0; i < stack.size() - 1; i++)
+        {
+            System.out.print(stack.get(i) + " -> ");
+        }
+        System.out.println(stack.get(stack.size() - 1));
     }
 
     static boolean[] visited;
-    static long minL;
-    // Find destination from source
-    static void DFS(int source, int destination) {
-        visited[source] = true;
-        if (source == destination) {
+    static void DFS(int x, int y, Vector<Integer> stack)
+    {
+        stack.add(x);
+        if (x == y)
+        {
+           
+            // print the path and return on
+            // reaching the destination node
+            printPath(stack);
             return;
         }
-        for (int i = 0; i < adj.get(source).size(); i++) {
-            Node v = adj.get(source).get(i);
-            if (!visited[v.node]) {
-                out.println(v.node);
-                DFS(v.node, destination);
+        visited[x] = true;
+       
+        // if backtracking is taking place     
+        if (spanningTree.get(x).size() > 0)
+        {
+            for(int j = 0; j < spanningTree.get(x).size(); j++)
+            {
+               
+                // if the node is not visited
+                if (visited[spanningTree.get(x).get(j).node] == false)
+                {
+                    DFS(spanningTree.get(x).get(j).node, y, stack);
+                }
             }
         }
+         
+        stack.remove(stack.size() - 1);
     }
-
 
     static List<List<Node>> spanningTree;
     static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
