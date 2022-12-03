@@ -184,6 +184,20 @@ public class TP03 {
         for (Edge e : edges) {
             System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
         }
+        // Sorting Edges with Bubble Sort
+        for (int i = 0; i < edges.size(); i++) {
+            for (int j = i+1; j < edges.size(); j++) {
+                if (edges.get(i).compareTo(edges.get(j)) < 0) {
+                    Edge temp = edges.get(i);
+                    edges.set(i, edges.get(j));
+                    edges.set(j, temp);
+                }
+            }
+        }
+        System.out.println("SORTED LIST: ");
+        for (Edge e : edges) {
+            System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
+        }
     }
  
     // QUERY 2 : SIMULASI
@@ -311,9 +325,9 @@ class Edge implements Comparable<Edge>{
     public int compareTo(Edge other) {
         if (this.cost == other.cost) {
             if (this.start == other.start) {
-                return this.destination - other.destination;
+                return other.destination - this.destination;
             }
-            return this.start - other.start; 
+            return  other.start - this.start; 
         }
         return this.cost - other.cost;
     }
