@@ -169,7 +169,7 @@ public class TP03 {
     static void getMinL(Vector<Integer> stack) {
         long minL = Long.MAX_VALUE;
         for(int i = 0; i < stack.size() - 1; i++) {
-            System.out.println(stack.get(i)+" "+stack.get(i+1));
+            // System.out.println(stack.get(i)+" "+stack.get(i+1));
             long l = spanningTreeEdges[stack.get(i)][stack.get(i+1)];
             if (l < minL) {
                 minL = l;
@@ -179,12 +179,12 @@ public class TP03 {
     }
 
     // https://www.geeksforgeeks.org/print-the-path-between-any-two-nodes-of-a-tree-dfs/
-    static void printPath(Vector<Integer> stack) {
-        for(int i = 0; i < stack.size() - 1; i++) {
-            System.out.print(stack.get(i) + " -> ");
-        }
-        System.out.println(stack.get(stack.size() - 1));
-    }
+    // static void printPath(Vector<Integer> stack) {
+    //     for(int i = 0; i < stack.size() - 1; i++) {
+    //         System.out.print(stack.get(i) + " -> ");
+    //     }
+    //     System.out.println(stack.get(stack.size() - 1));
+    // }
 
     static boolean[] visited;
     static void DFS(int x, int y, Vector<Integer> stack) {
@@ -192,7 +192,7 @@ public class TP03 {
         if (x == y) {
             // print the path and return on
             // reaching the destination node
-            printPath(stack);
+            // printPath(stack);
             getMinL(stack);
             return;
         }
@@ -240,10 +240,10 @@ public class TP03 {
                 }
             }
         }
-        System.out.println("SORTED LIST: ");
-        for (Edge e : edges) {
-            System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
-        }
+        // System.out.println("SORTED LIST: ");
+        // for (Edge e : edges) {
+        //     System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
+        // }
         // STEP 2 Kruskal's : Check cycle
         // Check cycle with Union Find
         UnionFind uf = new UnionFind(v);
@@ -255,13 +255,15 @@ public class TP03 {
             }
         }
         // print spanningTree
-        System.out.println("SPANNING TREE: ");
+        // System.out.println("SPANNING TREE: ");
+        // input spanningTreeEdges
         for (int i = 0; i < spanningTree.size(); i++) {
-            System.out.print(i+" : ");
+            // System.out.print(i+" : ");
             for (Node n : spanningTree.get(i)) {
-                System.out.print(n.node+"["+n.L+"]"+" "); spanningTreeEdges[i][n.node] = n.L;
+                // System.out.print(n.node+"["+n.L+"]"+" "); 
+                spanningTreeEdges[i][n.node] = n.L;
             }
-            System.out.println();
+            // System.out.println();
         }
         // SEPERTINYA SUDAH DAPAT SPANNING TREE
     }
