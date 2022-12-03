@@ -213,6 +213,7 @@ public class TP03 {
             }
             System.out.println();
         }
+        // SEPERTINYA SUDAH DAPAT SPANNING TREE
     }
  
     // QUERY 2 : SIMULASI
