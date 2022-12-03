@@ -157,8 +157,31 @@ public class TP03 {
     // QUERY 1 : KABUR
     static void KABUR(int VE) {
         int source = in.nextInt(); int destination = in.nextInt();
+
+        // Memanfaatkan Kruskal's Maximum Spanning Tree (MST))
+        // Gunakan DFS untuk mencari path dari source ke destination
+        visited = new boolean[V]; // reset
+        out.println(MSTDFS(source, destination));
     }
 
+    static boolean[] visited;
+    static long MSTDFS(int source, int destination) {
+        if (visited[source]) { // base case saat ketemu visited
+            return Long.MAX_VALUE;
+        }
+        visited[source] = true; // set visited
+        // saat belum visited
+        long minL = Long.MAX_VALUE;
+        for (Node n : spanningTree.get(source)) {
+            if (n.node == destination) {
+                minL = Math.min(minL, n.L);
+                break;
+            } else {
+                minL = Math.min(minL, MSTDFS(n.node, destination));
+            }
+        }
+        return minL;
+    }
 
     static List<List<Node>> spanningTree;
     static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
