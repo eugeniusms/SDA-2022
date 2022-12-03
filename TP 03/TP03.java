@@ -166,6 +166,18 @@ public class TP03 {
         // TODO: CARI MINL DI DALAM PATH TERSEBUT
     }
 
+    static void getMinL(Vector<Integer> stack) {
+        long minL = Long.MAX_VALUE;
+        for(int i = 0; i < stack.size() - 1; i++) {
+            System.out.println(stack.get(i)+" "+stack.get(i+1));
+            // long l = spanningTree.get(stack.get(i)).get(stack.get(i+1)).L;
+            // if (l < minL) {
+            //     minL = l;
+            // }
+        }
+        System.out.println(minL);
+    }
+
     // https://www.geeksforgeeks.org/print-the-path-between-any-two-nodes-of-a-tree-dfs/
     static void printPath(Vector<Integer> stack) {
         for(int i = 0; i < stack.size() - 1; i++) {
@@ -181,6 +193,7 @@ public class TP03 {
             // print the path and return on
             // reaching the destination node
             printPath(stack);
+            getMinL(stack);
             return;
         }
         visited[x] = true;
