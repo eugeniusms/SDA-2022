@@ -301,42 +301,59 @@ public class TP03 {
         long[] DV1 = dijkstraSuper(V1, VE);
         long[] DV2 = dijkstraSuper(V2, VE);
         long[] DV3 = dijkstraSuper(V3, VE);
+        // minCost between V1-V2 && V2-V3
+        long minCostV1V2 = DV1[V2];
+        long minCostV2V3 = DV2[V3];
+        // out.println(minCostV1V2);
+        // out.println(minCostV2V3);
         
         // TESTING
         // print DV1
-        for (int i = 0; i < DV1.length; i++) {
-            System.out.print(DV1[i]+" ");
-        }
-        // print DV2
-        for (int i = 0; i < DV2.length; i++) {
-            System.out.print(DV2[i]+" ");
-        }
-        // print DV3
-        for (int i = 0; i < DV3.length; i++) {
-            System.out.print(DV3[i]+" ");
-        }
+        // for (int i = 0; i < DV1.length; i++) {
+        //     System.out.print(DV1[i]+" ");
+        // }
+        // // print DV2
+        // for (int i = 0; i < DV2.length; i++) {
+        //     System.out.print(DV2[i]+" ");
+        // }
+        // // print DV3
+        // for (int i = 0; i < DV3.length; i++) {
+        //     System.out.print(DV3[i]+" ");
+        // }
 
-        // find minCostV1V2
-        long minCostV1V2 = Long.MAX_VALUE;
+        // find skippedCostV1V2
+        long skippedCostV1V2 = Long.MAX_VALUE;
         for (int i = 0; i < DV1.length; i++) {
             if (DV1[i] != Long.MAX_VALUE && DV2[i] != Long.MAX_VALUE) {
-                if (DV1[i] - DV2[i] < minCostV1V2 && DV1[i] - DV2[i] >= 0) {
-                    minCostV1V2 = DV1[i] - DV2[i];
+                if (DV1[i] - DV2[i] < skippedCostV1V2 && DV1[i] - DV2[i] >= 0) {
+                    skippedCostV1V2 = DV1[i] - DV2[i];
                 }
             }
         }
-        out.println("\n"+minCostV1V2);
+        // out.println(skippedCostV1V2);
 
-        long minCostV2V3 = Long.MAX_VALUE;
-        // find minCostV2V3
+        long skippedCostV2V3 = Long.MAX_VALUE;
+        // find skippedCostV2V3
         for (int i = 0; i < DV2.length; i++) {
             if (DV2[i] != Long.MAX_VALUE && DV3[i] != Long.MAX_VALUE) {
-                if (DV3[i] - DV2[i] < minCostV2V3 && DV3[i] - DV2[i] >= 0) {
-                    minCostV2V3 = DV3[i] - DV2[i];
+                if (DV3[i] - DV2[i] < skippedCostV2V3 && DV3[i] - DV2[i] >= 0) {
+                    skippedCostV2V3 = DV3[i] - DV2[i];
                 }
             }
         }
-        out.println(minCostV2V3);
+        // out.println(skippedCostV2V3);
+
+        // Melakukan comparing combine
+        // V1 -> skipped -> V2 -> V3
+        long versi1 = skippedCostV1V2 + minCostV2V3;
+        // V1 -> V2 -> skipped -> V3
+        long versi2 = minCostV1V2 + skippedCostV2V3;
+        // Mencetak yang terkecil di antara kedua versi
+        if (versi1 < versi2) {
+            out.println(versi1);
+        } else {
+            out.println(versi2);
+        }
     }
 
     // Method 1
