@@ -175,7 +175,7 @@ public class TP03 {
                 minL = l;
             }
         }
-        System.out.println(minL);
+        out.println(minL);
     }
 
     // https://www.geeksforgeeks.org/print-the-path-between-any-two-nodes-of-a-tree-dfs/
