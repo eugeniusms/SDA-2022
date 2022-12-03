@@ -175,11 +175,11 @@ public class TP03 {
         // saat belum visited
         for (Node n : spanningTree.get(source)) {
             if (n.node == destination) {
-                minL = Math.min(minL, n.L);
-                break;
+                return n.L;
             } else {
                 minL = Math.min(n.L, MSTDFS(n.node, destination));
-                // System.out.println("minL : "+minL);
+                System.out.println("VISIT: "+n.node);
+                System.out.println("minL : "+minL);
             }
         }
         return minL;
