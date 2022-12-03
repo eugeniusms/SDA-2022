@@ -166,7 +166,7 @@ public class TP03 {
         // Initialize list for every node
         for (int i = 0; i < v; i++) {
             List<Node> item = new ArrayList<Node>();
-            adj.add(item);
+            spanningTree.add(item);
         }
         // Melakukan pencarian max spanning tree
         // print adj (adj adalah graf penyimpan edge)        
@@ -193,6 +193,25 @@ public class TP03 {
         System.out.println("SORTED LIST: ");
         for (Edge e : edges) {
             System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
+        }
+        // STEP 2 Kruskal's : Check cycle
+        // Check cycle with Union Find
+        UnionFind uf = new UnionFind(v);
+        for (Edge e : edges) {
+            if (!uf.isSameSet(e.start, e.destination)) {
+                uf.unionSet(e.start, e.destination);
+                spanningTree.get(e.start).add(new Node(e.destination, e.cost, 0));
+                spanningTree.get(e.destination).add(new Node(e.start, e.cost, 0));
+            }
+        }
+        // print spanningTree
+        System.out.println("SPANNING TREE: ");
+        for (int i = 0; i < spanningTree.size(); i++) {
+            System.out.print(i+" : ");
+            for (Node n : spanningTree.get(i)) {
+                System.out.print(n.node+" ");
+            }
+            System.out.println();
         }
     }
  
@@ -326,6 +345,54 @@ class Edge implements Comparable<Edge>{
             return  other.start - this.start; 
         }
         return this.cost - other.cost;
+    }
+}
+
+// Union Find Disjoint Set for Kruskal's Algorithm
+class UnionFind {
+    private int[] p, rank, setSize;
+    private int numSets;
+ 
+    public UnionFind(int N) {
+        p = new int[numSets = N];
+        rank = new int[N];
+        setSize = new int[N];
+        for (int i = 0; i < N; i++) {
+            p[i] = i;
+            setSize[i] = 1;
+        }
+    }
+ 
+    public int findSet(int i) {
+        return p[i] == i ? i : (p[i] = findSet(p[i]));
+    }
+ 
+    public boolean isSameSet(int i, int j) {
+        return findSet(i) == findSet(j);
+    }
+ 
+    public void unionSet(int i, int j) {
+        if (isSameSet(i, j))
+            return;
+        numSets--;
+        int x = findSet(i), y = findSet(j);
+        if (rank[x] > rank[y]) {
+            p[y] = x;
+            setSize[x] += setSize[y];
+        } else {
+            p[x] = y;
+            setSize[y] += setSize[x];
+            if (rank[x] == rank[y])
+                rank[y]++;
+        }
+    }
+ 
+    public int numDisjointSets() {
+        return numSets;
+    }
+ 
+    public int sizeOfSet(int i) {
+        return setSize[findSet(i)];
     }
 }
 
