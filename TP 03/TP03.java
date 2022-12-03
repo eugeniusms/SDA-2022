@@ -295,29 +295,50 @@ public class TP03 {
     }
 
     // QUERY 3 : SUPER
+
     static void SUPER(int VE) {
         int V1 = in.nextInt(); int V2 = in.nextInt(); int V3 = in.nextInt();
-        // inisiateDijkstra(VE); // RESET
-        // dijkstra(V2); // bisa dapat V1 & V3
+        long[] DV1 = dijkstraSuper(V1, VE);
+        // print DV1
+        for (int i = 0; i < DV1.length; i++) {
+            System.out.print(DV1[i]+" ");
+        }
+    }
 
-        // out.println("DIST V1-V2 : "+dist[V1]);
-        // out.println("DIST V2-V3 : "+dist[V3]);
-
-        // // SELECT EDGE WITH MAXIMUM DISTANCE BETWEEN V1 - V2 - V3
-
-        // // ================================= DEBUG ===========================
-        // out.println("SUPER DIJKSTRA: ");
-        // int counter = 0;
-        // for (List<Node> l : adj) {
-        //     out.println("FOR["+counter+"]");
-        //     for (Node n : l) {
-        //         out.print(n.node+"[L:"+n.L+"] ");
-        //     }
-        //     counter++;
-        //     out.println("\n");
-        // }
-        
-        // ===================================================================
+    // Method 1
+    // Dijkstra's Algorithm
+    static long[] dijkstraSuper(int src, int numnodes) { // return src(v) to all nodes
+        // inisiate
+        long[] D = new long[numnodes];
+        List<Integer> sett = new ArrayList<Integer>();
+        MinHeap<Node> minHeap = new MinHeap<Node>();
+        // dijkstra
+        for (int i = 0; i < V; i++)
+            D[i] = Long.MAX_VALUE;
+        minHeap.insert(new Node(src, 0, 0));
+        D[src] = 0;
+        while (sett.size() != V) {
+            if (minHeap.isEmpty())
+                break;
+            int u = minHeap.remove().node;
+            if (sett.contains(u))
+                continue;
+            sett.add(u);
+            // e_neighbours
+            long edgeDistance = -1;
+            long newDistance = -1;
+            for (int i = 0; i < adj.get(u).size(); i++) {
+                Node v = adj.get(u).get(i);
+                if (!sett.contains(v.node)) {
+                    edgeDistance = v.L;
+                    newDistance = D[u] + edgeDistance;
+                    if (newDistance < D[v.node])
+                        D[v.node] = newDistance;
+                    minHeap.insert(new Node(v.node, D[v.node], v.S));
+                }
+            }
+        }
+        return D;
     }
 
     // taken from https://codeforces.com/submissions/Petr
