@@ -304,22 +304,25 @@ public class TP03 {
         // minCost between V1-V2 && V2-V3
         long minCostV1V2 = DV1[V2];
         long minCostV2V3 = DV2[V3];
-        // out.println(minCostV1V2);
-        // out.println(minCostV2V3);
+        out.println(minCostV1V2);
+        out.println(minCostV2V3);
         
         // TESTING
         // print DV1
-        // for (int i = 0; i < DV1.length; i++) {
-        //     System.out.print(DV1[i]+" ");
-        // }
+        for (int i = 1; i < DV1.length; i++) {
+            System.out.print(DV1[i]+" ");
+        }
+        System.out.println();
         // // print DV2
-        // for (int i = 0; i < DV2.length; i++) {
-        //     System.out.print(DV2[i]+" ");
-        // }
+        for (int i = 1; i < DV2.length; i++) {
+            System.out.print(DV2[i]+" ");
+        }
+        System.out.println();
         // // print DV3
-        // for (int i = 0; i < DV3.length; i++) {
-        //     System.out.print(DV3[i]+" ");
-        // }
+        for (int i = 1; i < DV3.length; i++) {
+            System.out.print(DV3[i]+" ");
+        }
+        System.out.println();
 
         // find skippedCostV1V2
         long skippedCostV1V2 = Long.MAX_VALUE;
@@ -330,7 +333,7 @@ public class TP03 {
                 }
             }
         }
-        // out.println(skippedCostV1V2);
+        out.println(skippedCostV1V2);
 
         long skippedCostV2V3 = Long.MAX_VALUE;
         // find skippedCostV2V3
@@ -341,7 +344,7 @@ public class TP03 {
                 }
             }
         }
-        // out.println(skippedCostV2V3);
+        out.println(skippedCostV2V3);
 
         // Melakukan comparing combine
         // V1 -> skipped -> V2 -> V3
