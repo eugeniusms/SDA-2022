@@ -154,8 +154,29 @@ public class TP03 {
     // QUERY 1 : KABUR
     static void KABUR(int VE) {
         int source = in.nextInt(); int destination = in.nextInt();
+        findMaximumSpanningTree(VE);
     }
 
+
+    static List<List<Node>> spanningTree;
+    static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
+        spanningTree = new ArrayList<List<Node> >();
+        // Initialize list for every node
+        for (int i = 0; i < v; i++) {
+            List<Node> item = new ArrayList<Node>();
+            adj.add(item);
+        }
+        // Melakukan pencarian max spanning tree
+        // print adj (adj adalah graf penyimpan edge)
+        // for (int i = 0; i < adj.size(); i++) {
+        //     for (int j = 0; j < adj.get(i).size(); j++) {
+        //         System.out.println("CEK: "+i+" "+adj.get(i).get(j).node+" "+adj.get(i).get(j).L);
+        //     }
+        // }
+        
+
+    }
+ 
     // QUERY 2 : SIMULASI
     static void SIMULASI() {
         int K = in.nextInt();
