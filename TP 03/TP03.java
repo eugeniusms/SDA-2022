@@ -298,72 +298,66 @@ public class TP03 {
     // QUERY 3 : SUPER
 
     static void SUPER(int VE) {
-        int V1 = in.nextInt(); int V2 = in.nextInt(); int V3 = in.nextInt();
-        long[] S = dijkstraSuper(V1, VE);
-        long[] T = dijkstraSuper(V2, VE);
-        long[] DV3 = dijkstraSuper(V3, VE);
-        // minCost between V1-V2 && V2-V3
-        long minCostV1V2 = S[V2];
-        long minCostV2V3 = T[V3];
-        out.println(minCostV1V2);
-        out.println(minCostV2V3);
+        int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
+        // find D(s,v) == D(v,s)
+        long[] S = dijkstraSuper(s, VE);
+        // find D(t,v) == D(v,t)
+        long[] T = dijkstraSuper(t, VE);
+        // find D(x,v) == D(v,x)
+        long[] X = dijkstraSuper(x, VE);
         
         // TESTING
-        // print DV1
+        // print S
         System.out.println("D(s,u) with u is all other nodes");
         for (int i = 1; i < S.length; i++) {
             System.out.print(S[i]+" ");
         }
         System.out.println();
-        // find cost from all edges to to w
-
-        // // print DV2
+        // print T
         System.out.println("D(t,w) with u is all other nodes");
         for (int i = 1; i < T.length; i++) {
             System.out.print(T[i]+" ");
         }
         System.out.println();
         // // print DV3
-        for (int i = 1; i < DV3.length; i++) {
-            System.out.print(DV3[i]+" ");
+        for (int i = 1; i < X.length; i++) {
+            System.out.print(X[i]+" ");
         }
         System.out.println();
 
+        // find minCost (s,t)
+        // operate min (D(s,u) - D(w,t)) for all edges (u,w)
+        long minCostST = Long.MAX_VALUE;
+        for (Edge e : edges) {
+            long cost = S[e.start] + T[e.destination]; // (D(s,u) - D(w,t))
+            if (cost < minCostST) {
+                minCostST = cost;
+            }
+        }
+        // find minCost (t,x)
+        // operate min (D(t,u) - D(w,x)) for all edges (u,w)
+        long minCostTX = Long.MAX_VALUE;
+        for (Edge e : edges) {
+            long cost = T[e.start] + X[e.destination]; // (D(t,u) - D(w,x))
+            if (cost < minCostTX) {
+                minCostTX = cost;
+            }
+        }
 
-
-        // find skippedCostV1V2
-        // long skippedCostV1V2 = Long.MAX_VALUE;
-        // for (int i = 0; i < DV1.length; i++) {
-        //     if (DV1[i] != Long.MAX_VALUE && DV2[i] != Long.MAX_VALUE) {
-        //         if (DV1[i] - DV2[i] < skippedCostV1V2 && DV1[i] - DV2[i] >= 0) {
-        //             skippedCostV1V2 = DV1[i] - DV2[i];
-        //         }
-        //     }
-        // }
-        // out.println(skippedCostV1V2);
-
-        // long skippedCostV2V3 = Long.MAX_VALUE;
-        // // find skippedCostV2V3
-        // for (int i = 0; i < DV2.length; i++) {
-        //     if (DV2[i] != Long.MAX_VALUE && DV3[i] != Long.MAX_VALUE) {
-        //         if (DV3[i] - DV2[i] < skippedCostV2V3 && DV3[i] - DV2[i] >= 0) {
-        //             skippedCostV2V3 = DV3[i] - DV2[i];
-        //         }
-        //     }
-        // }
-        // out.println(skippedCostV2V3);
+        System.out.println("Min(D(s,u) + D(w,t)) for all edges (u,w): "+minCostST);
+        System.out.println("Min(D(t,u) + D(w,x)) for all edges (u,w): "+minCostTX);
 
         // Melakukan comparing combine
-        // V1 -> skipped -> V2 -> V3
-        // long versi1 = skippedCostV1V2 + minCostV2V3;
-        // // V1 -> V2 -> skipped -> V3
-        // long versi2 = minCostV1V2 + skippedCostV2V3;
-        // // Mencetak yang terkecil di antara kedua versi
-        // if (versi1 <= versi2) {
-        //     out.println("Hasil: "+versi1);
-        // } else {
-        //     out.println("Hasil: "+versi2);
-        // }
+        // S -> skipped -> T -> X
+        long versi1 = minCostST + T[x];
+        // S -> T -> skipped -> X
+        long versi2 = S[t] + minCostTX;
+        // Mencetak yang terkecil di antara kedua versi
+        if (versi1 <= versi2) {
+            out.println("Hasil: "+versi1);
+        } else {
+            out.println("Hasil: "+versi2);
+        }
     }
 
     // Method 1
