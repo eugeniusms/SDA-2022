@@ -19,6 +19,7 @@ public class TP03 {
     // Number of vertices
     static int V;
     static List<List<Node> > adj;
+    static List<Edge> edges;
 
     // key: dist, value: array[10069] node
     static ArrayList<long[]> memo = new ArrayList<long[]>();
@@ -222,7 +223,7 @@ public class TP03 {
         // print adj (adj adalah graf penyimpan edge)        
         // Kruskal's Algorithms
         // get all edges
-        List<Edge> edges = new ArrayList<Edge>();
+        edges = new ArrayList<Edge>();
         for (int i = 0; i < adj.size(); i++) {
             for (int j = 0; j < adj.get(i).size(); j++) {
                 // System.out.println("CEK: "+i+" "+adj.get(i).get(j).node+" "+adj.get(i).get(j).L);
@@ -298,24 +299,28 @@ public class TP03 {
 
     static void SUPER(int VE) {
         int V1 = in.nextInt(); int V2 = in.nextInt(); int V3 = in.nextInt();
-        long[] DV1 = dijkstraSuper(V1, VE);
-        long[] DV2 = dijkstraSuper(V2, VE);
+        long[] S = dijkstraSuper(V1, VE);
+        long[] T = dijkstraSuper(V2, VE);
         long[] DV3 = dijkstraSuper(V3, VE);
         // minCost between V1-V2 && V2-V3
-        long minCostV1V2 = DV1[V2];
-        long minCostV2V3 = DV2[V3];
+        long minCostV1V2 = S[V2];
+        long minCostV2V3 = T[V3];
         out.println(minCostV1V2);
         out.println(minCostV2V3);
         
         // TESTING
         // print DV1
-        for (int i = 1; i < DV1.length; i++) {
-            System.out.print(DV1[i]+" ");
+        System.out.println("D(s,u) with u is all other nodes");
+        for (int i = 1; i < S.length; i++) {
+            System.out.print(S[i]+" ");
         }
         System.out.println();
+        // find cost from all edges to to w
+
         // // print DV2
-        for (int i = 1; i < DV2.length; i++) {
-            System.out.print(DV2[i]+" ");
+        System.out.println("D(t,w) with u is all other nodes");
+        for (int i = 1; i < T.length; i++) {
+            System.out.print(T[i]+" ");
         }
         System.out.println();
         // // print DV3
@@ -324,39 +329,41 @@ public class TP03 {
         }
         System.out.println();
 
-        // find skippedCostV1V2
-        long skippedCostV1V2 = Long.MAX_VALUE;
-        for (int i = 0; i < DV1.length; i++) {
-            if (DV1[i] != Long.MAX_VALUE && DV2[i] != Long.MAX_VALUE) {
-                if (DV1[i] - DV2[i] < skippedCostV1V2 && DV1[i] - DV2[i] >= 0) {
-                    skippedCostV1V2 = DV1[i] - DV2[i];
-                }
-            }
-        }
-        out.println(skippedCostV1V2);
 
-        long skippedCostV2V3 = Long.MAX_VALUE;
-        // find skippedCostV2V3
-        for (int i = 0; i < DV2.length; i++) {
-            if (DV2[i] != Long.MAX_VALUE && DV3[i] != Long.MAX_VALUE) {
-                if (DV3[i] - DV2[i] < skippedCostV2V3 && DV3[i] - DV2[i] >= 0) {
-                    skippedCostV2V3 = DV3[i] - DV2[i];
-                }
-            }
-        }
-        out.println(skippedCostV2V3);
+
+        // find skippedCostV1V2
+        // long skippedCostV1V2 = Long.MAX_VALUE;
+        // for (int i = 0; i < DV1.length; i++) {
+        //     if (DV1[i] != Long.MAX_VALUE && DV2[i] != Long.MAX_VALUE) {
+        //         if (DV1[i] - DV2[i] < skippedCostV1V2 && DV1[i] - DV2[i] >= 0) {
+        //             skippedCostV1V2 = DV1[i] - DV2[i];
+        //         }
+        //     }
+        // }
+        // out.println(skippedCostV1V2);
+
+        // long skippedCostV2V3 = Long.MAX_VALUE;
+        // // find skippedCostV2V3
+        // for (int i = 0; i < DV2.length; i++) {
+        //     if (DV2[i] != Long.MAX_VALUE && DV3[i] != Long.MAX_VALUE) {
+        //         if (DV3[i] - DV2[i] < skippedCostV2V3 && DV3[i] - DV2[i] >= 0) {
+        //             skippedCostV2V3 = DV3[i] - DV2[i];
+        //         }
+        //     }
+        // }
+        // out.println(skippedCostV2V3);
 
         // Melakukan comparing combine
         // V1 -> skipped -> V2 -> V3
-        long versi1 = skippedCostV1V2 + minCostV2V3;
-        // V1 -> V2 -> skipped -> V3
-        long versi2 = minCostV1V2 + skippedCostV2V3;
-        // Mencetak yang terkecil di antara kedua versi
-        if (versi1 <= versi2) {
-            out.println("Hasil: "+versi1);
-        } else {
-            out.println("Hasil: "+versi2);
-        }
+        // long versi1 = skippedCostV1V2 + minCostV2V3;
+        // // V1 -> V2 -> skipped -> V3
+        // long versi2 = minCostV1V2 + skippedCostV2V3;
+        // // Mencetak yang terkecil di antara kedua versi
+        // if (versi1 <= versi2) {
+        //     out.println("Hasil: "+versi1);
+        // } else {
+        //     out.println("Hasil: "+versi2);
+        // }
     }
 
     // Method 1
