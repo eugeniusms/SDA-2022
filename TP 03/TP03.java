@@ -352,10 +352,10 @@ public class TP03 {
         // V1 -> V2 -> skipped -> V3
         long versi2 = minCostV1V2 + skippedCostV2V3;
         // Mencetak yang terkecil di antara kedua versi
-        if (versi1 < versi2) {
-            out.println(versi1);
+        if (versi1 <= versi2) {
+            out.println("Hasil: "+versi1);
         } else {
-            out.println(versi2);
+            out.println("Hasil: "+versi2);
         }
     }
 
