@@ -308,22 +308,22 @@ public class TP03 {
         
         // TESTING
         // print S
-        System.out.println("D(s,u) with u is all other nodes");
-        for (int i = 1; i < S.length; i++) {
-            System.out.print(S[i]+" ");
-        }
-        System.out.println();
-        // print T
-        System.out.println("D(t,w) with u is all other nodes");
-        for (int i = 1; i < T.length; i++) {
-            System.out.print(T[i]+" ");
-        }
-        System.out.println();
-        // // print DV3
-        for (int i = 1; i < X.length; i++) {
-            System.out.print(X[i]+" ");
-        }
-        System.out.println();
+        // System.out.println("D(s,u) with u is all other nodes");
+        // for (int i = 1; i < S.length; i++) {
+        //     System.out.print(S[i]+" ");
+        // }
+        // System.out.println();
+        // // print T
+        // System.out.println("D(t,w) with u is all other nodes");
+        // for (int i = 1; i < T.length; i++) {
+        //     System.out.print(T[i]+" ");
+        // }
+        // System.out.println();
+        // // // print DV3
+        // for (int i = 1; i < X.length; i++) {
+        //     System.out.print(X[i]+" ");
+        // }
+        // System.out.println();
 
         // find minCost (s,t)
         // operate min (D(s,u) - D(w,t)) for all edges (u,w)
@@ -344,8 +344,8 @@ public class TP03 {
             }
         }
 
-        System.out.println("Min(D(s,u) + D(w,t)) for all edges (u,w): "+minCostST);
-        System.out.println("Min(D(t,u) + D(w,x)) for all edges (u,w): "+minCostTX);
+        // System.out.println("Min(D(s,u) + D(w,t)) for all edges (u,w): "+minCostST);
+        // System.out.println("Min(D(t,u) + D(w,x)) for all edges (u,w): "+minCostTX);
 
         // Melakukan comparing combine
         // S -> skipped -> T -> X
@@ -354,9 +354,9 @@ public class TP03 {
         long versi2 = S[t] + minCostTX;
         // Mencetak yang terkecil di antara kedua versi
         if (versi1 <= versi2) {
-            out.println("Hasil: "+versi1);
+            out.println(versi1);
         } else {
-            out.println("Hasil: "+versi2);
+            out.println(versi2);
         }
     }
 
