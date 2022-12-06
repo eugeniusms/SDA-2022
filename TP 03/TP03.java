@@ -17,6 +17,10 @@ public class TP03 {
     static List<List<Node> > adj;
     static List<Edge> edges = new ArrayList<Edge>();
 
+    // memo kabur
+    static Dist[] memoKabur = new Dist[1069];
+    static boolean[] isMemoKabur = new boolean[1069];
+
     // memo shortest path by node
     static ArrayList<Integer> kurcaci = new ArrayList<Integer>();
     static Dist[] memoByNode = new Dist[1069]; // [node][Dist[i]]
@@ -83,41 +87,50 @@ public class TP03 {
 
     static void KABUR() {
         int source = in.nextInt(); int destination = in.nextInt();
-        // inisiate
-        long[] D = new long[V];
-        List<Integer> green = new ArrayList<Integer>();
-        MaxHeap maxHeap = new MaxHeap();
-        // dijkstra
-        for (int i = 0; i < V; i++)
-            D[i] = Long.MIN_VALUE;
+        if (isMemoKabur[source]) {
+            out.println(memoKabur[source].dist[destination]);
+        } else {
+            // saat belum ada di dalam memo
+            // inisiate
+            long[] D = new long[V];
+            List<Integer> green = new ArrayList<Integer>();
+            MaxHeap maxHeap = new MaxHeap();
+            // dijkstra
+            for (int i = 0; i < V; i++)
+                D[i] = Long.MIN_VALUE;
 
-        maxHeap.insert(new Node(source, 0, Long.MAX_VALUE));
-        D[source] = 0;
-        while (green.size() != V) {
-            if (maxHeap.isEmpty())
-                break;
-            int u = maxHeap.remove().node;
-            if (green.contains(u))
-                continue;
-            green.add(u);
-            // e_neighbours
-            long edgeDistance = -1;
-            long newDistance = -1;
-            for (int i = 0; i < adj.get(u).size(); i++) {
-                Node v = adj.get(u).get(i);
-                if (!green.contains(v.node)) {
-                    edgeDistance = v.S;
-                    newDistance = Math.min(D[u],edgeDistance);
-                    if (newDistance == 0) {
-                        newDistance = edgeDistance;
-                    }
-                    if (newDistance > D[v.node])
-                        D[v.node] = newDistance;
-                    maxHeap.insert(new Node(v.node, v.L , D[v.node]));
-                    }
+            maxHeap.insert(new Node(source, 0, Long.MAX_VALUE));
+            D[source] = 0;
+            while (green.size() != V) {
+                if (maxHeap.isEmpty())
+                    break;
+                int u = maxHeap.remove().node;
+                if (green.contains(u))
+                    continue;
+                green.add(u);
+                // e_neighbours
+                long edgeDistance = -1;
+                long newDistance = -1;
+                for (int i = 0; i < adj.get(u).size(); i++) {
+                    Node v = adj.get(u).get(i);
+                    if (!green.contains(v.node)) {
+                        edgeDistance = v.S;
+                        newDistance = Math.min(D[u],edgeDistance);
+                        if (newDistance == 0) {
+                            newDistance = edgeDistance;
+                        }
+                        if (newDistance > D[v.node])
+                            D[v.node] = newDistance;
+                        maxHeap.insert(new Node(v.node, v.L , D[v.node]));
+                        }
+                }
             }
+            out.println(D[destination]);
+            // memo kabur
+            Dist dist = new Dist(D);
+            memoKabur[source] = dist;
+            isMemoKabur[source] = true;
         }
-        out.println(D[destination]);
     }
  
     // QUERY 2 : SIMULASI
