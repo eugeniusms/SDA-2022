@@ -18,3 +18,4 @@ SISA         : [TLE] - TIME LIMIT 3s
 92,96,98-100 : KABUR, SIMULASI, SUPER
 SISA         : [WA] - No[36]
 
+[SUBMITTED 07] [88/100]
