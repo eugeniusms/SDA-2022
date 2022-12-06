@@ -90,15 +90,11 @@ public class TP03 {
         // inisiate
         long[] D = new long[V];
         List<Integer> green = new ArrayList<Integer>();
-        MaxHeap<Node> maxHeap = new MaxHeap<Node>();
+        MaxHeap maxHeap = new MaxHeap();
         // dijkstra
         for (int i = 0; i < V; i++)
             D[i] = Long.MIN_VALUE;
 
-        // input tetangga dari source ke dalam maxheap
-        // for (Node node : adj.get(source)) {
-        //     maxHeap.insert(node);
-        // }
         maxHeap.insert(new Node(source, 0, Long.MAX_VALUE));
         D[source] = 0;
         while (green.size() != V) {
@@ -108,28 +104,13 @@ public class TP03 {
             if (green.contains(u))
                 continue;
             green.add(u);
-            out.println("MENGGREEN: " + u + " dengan D[" + u + "] = " + D[u]);
+            // out.println("MENGGREEN: " + u + " dengan D[" + u + "] = " + D[u]);
             // e_neighbours
             long edgeDistance = -1;
             long newDistance = -1;
             for (int i = 0; i < adj.get(u).size(); i++) {
                 Node v = adj.get(u).get(i);
                 if (!green.contains(v.node)) {
-                    out.println(v.node + " | " + v.S + " | " + D[u]);
-                    // newDistance = Math.min(D[u], v.S);
-
-                    // if (newDistance <= 0) {
-                    //     newDistance = v.S;
-                    // }
-                    // if (D[v.node] < newDistance) {
-                    //     D[v.node] = newDistance;
-                    // }
-                    // // out.println("newDistance: " + newDistance);
-                    // maxHeap.insert(new Node(v.node, v.L , newDistance));
-
-                    // print D
-                    // for (int j = 0; j < V; j++) {
-                    //     out.println(j+" : ["+D[j]+"]");
                     edgeDistance = v.S;
                     newDistance = Math.min(D[u],edgeDistance);
                     if (newDistance == 0) {
@@ -139,13 +120,6 @@ public class TP03 {
                         D[v.node] = newDistance;
                     maxHeap.insert(new Node(v.node, v.L , D[v.node]));
                     }
-                // }
-
-            // print D
-            out.println("ITERASI");
-            for (int j = 1; j < V; j++) {
-                out.println(j+" : ["+D[j]+"]");
-            }
             }
         }
         out.println(D[destination]);
@@ -431,6 +405,14 @@ class Node implements Comparable<Node> {
             return 1;
         return 0;
     }
+
+    public int compareToS(Node other) {
+        if (this.S < other.S)
+            return -1;
+        if (this.S > other.S)
+            return 1;
+        return 0;
+    }
 }
 
 class Edge implements Comparable<Edge>{
@@ -646,14 +628,14 @@ class MinHeap<T extends Comparable<T>> {
 	}
 }
 
-class MaxHeap<T extends Comparable<T>> {
-	ArrayList<T> data;
+class MaxHeap {
+	ArrayList<Node> data;
 
 	public MaxHeap() {
-		data = new ArrayList<T>();
+		data = new ArrayList<Node>();
 	}
 
-	public MaxHeap(ArrayList<T> arr) {
+	public MaxHeap(ArrayList<Node> arr) {
 		data = arr;
 		heapify();
 	}
@@ -662,19 +644,19 @@ class MaxHeap<T extends Comparable<T>> {
         return data.isEmpty();
     }
 
-	public T peek() {
+	public Node peek() {
 		if (data.isEmpty())
 			return null;
 		return data.get(0);
 	}
 
-	public void insert(T value) {
+	public void insert(Node value) {
 		data.add(value);
 		percolateUp(data.size() - 1);
 	}
 
-	public T remove() {
-		T removedObject = peek();
+	public Node remove() {
+		Node removedObject = peek();
 
 		if (data.size() == 1)
 			data.clear();
@@ -688,7 +670,7 @@ class MaxHeap<T extends Comparable<T>> {
 	}
 
 	private void percolateDown(int idx) {
-		T node = data.get(idx);
+		Node node = data.get(idx);
 		int heapSize = data.size();
 
 		while (true) {
@@ -699,10 +681,10 @@ class MaxHeap<T extends Comparable<T>> {
 			} else {
 				int minChildIdx = leftIdx;
 				int rightIdx = getRightChildIdx(idx);
-				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
+				if (rightIdx < heapSize && data.get(rightIdx).compareToS(data.get(leftIdx)) > 0)
 					minChildIdx = rightIdx;
 
-				if (node.compareTo(data.get(minChildIdx)) < 0) {
+				if (node.compareToS(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
@@ -714,9 +696,9 @@ class MaxHeap<T extends Comparable<T>> {
 	}
 
 	private void percolateUp(int idx) {
-		T node = data.get(idx);
+		Node node = data.get(idx);
 		int parentIdx = getParentIdx(idx);
-		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) {
+		while (idx > 0 && node.compareToS(data.get(parentIdx)) > 0) {
 			data.set(idx, data.get(parentIdx));
 			idx = parentIdx;
 			parentIdx = getParentIdx(idx);
@@ -750,8 +732,8 @@ class MaxHeap<T extends Comparable<T>> {
 		}
 	}
 
-	public T remove(int n) {
-		T removedObject = peek();
+	public Node remove(int n) {
+		Node removedObject = peek();
 
 		if (n > 1) {
 			data.set(0, data.get(n - 1));
@@ -762,7 +744,7 @@ class MaxHeap<T extends Comparable<T>> {
 	}
 
 	private void percolateDown(int idx, int n) {
-		T node = data.get(idx);
+		Node node = data.get(idx);
 		int heapSize = n;
 
 		while (true) {
@@ -773,10 +755,10 @@ class MaxHeap<T extends Comparable<T>> {
 			} else {
 				int minChildIdx = leftIdx;
 				int rightIdx = getRightChildIdx(idx);
-				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
+				if (rightIdx < heapSize && data.get(rightIdx).compareToS(data.get(leftIdx)) > 0)
 					minChildIdx = rightIdx;
 
-				if (node.compareTo(data.get(minChildIdx)) < 0) {
+				if (node.compareToS(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
