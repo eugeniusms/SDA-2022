@@ -13,7 +13,7 @@ public class TP03 {
     private static PrintWriter out;
  
     // Number of vertices
-    static int V;
+    static int V = 1; // default = 1
     static List<List<Node> > adj;
     static Edge[] edges; 
 
@@ -34,8 +34,7 @@ public class TP03 {
         // ================================= INISIASI GRAPH ===========================================
         // N = number of vertices
         // M = number of vertices that ! (attacked)
-        int N = in.nextInt();
-        V = 1+N; // ex: 0+8 nodes = 9 nodes
+        V += in.nextInt();
         
         // ================================= INISIASI EDGE ===========================================
         int E = in.nextInt();
@@ -64,7 +63,7 @@ public class TP03 {
             kurcaci.add(in.nextInt());
         }
 
-        // Inisiate Dijkstra First Time
+        // Inisiate Dijkstra First Time (Pos Kurcaci)
         for (int k : kurcaci) {
             Dist dist = dijkstra(k);
             memoByNode[k] = dist; // memoize
