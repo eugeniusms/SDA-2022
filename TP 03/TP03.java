@@ -54,8 +54,8 @@ public class TP03 {
         for (int i = 0; i < E; i++) {
             int A = in.nextInt(); int B = in.nextInt(); long W = in.nextInt(); long S = in.nextInt();
             // karena dijkstra undirected berlaku dua arah
-            adj.get(A).add(new Node(B, W, S));
-            adj.get(B).add(new Node(A, W, S));
+            adj.get(A).add(new Node(B, W, S, 0));
+            adj.get(B).add(new Node(A, W, S, 0));
         }
 
         // ================================= INISIASI MAX SPANNING TREE ===============================
@@ -273,8 +273,8 @@ public class TP03 {
         for (Edge e : edges) {
             if (!uf.isSameSet(e.start, e.destination)) {
                 uf.unionSet(e.start, e.destination);
-                spanningTree.get(e.start).add(new Node(e.destination, e.cost, 0));
-                spanningTree.get(e.destination).add(new Node(e.start, e.cost, 0));
+                spanningTree.get(e.start).add(new Node(e.destination, e.cost, 0, 0));
+                spanningTree.get(e.destination).add(new Node(e.start, e.cost, 0, 0));
             }
         }
         // print spanningTree
@@ -415,7 +415,7 @@ public class TP03 {
             D[i] = Long.MAX_VALUE;
             M[i] = Long.MIN_VALUE;
         }
-        minHeap.insert(new Node(src, 0, 0));
+        minHeap.insert(new Node(src, 0, 0, 0));
         D[src] = 0;
         M[src] = 0;
         while (sett.size() != V) {
@@ -440,7 +440,7 @@ public class TP03 {
                     if (newMaximal > M[v.node])
                         D[v.node] = newDistance;
                         M[v.node] = newMaximal;
-                    minHeap.insert(new Node(v.node, D[v.node], v.S));
+                    minHeap.insert(new Node(v.node, D[v.node], v.S, 0));
                 }
             }
         }
@@ -473,11 +473,17 @@ public class TP03 {
         return DM;
     }
 
-    static long[][] dp = new long[10][10];
+    static long[][] dp = new long[10][2];
     static void dijkstra(int src){
+        // fill dp with infinity
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 2; j++) {
+                dp[i][j] = Long.MAX_VALUE;
+            }
+        }
         dp[src][0] = 0; // distance from src to src after using 0 coupon is 0
         MinHeap<Node> mh = new MinHeap<Node>();
-        mh.insert(new Node(src, 0, 0));
+        mh.insert(new Node(src, 0, 0, 0));
         
         Node tp;
         int from, to, k;
@@ -491,13 +497,13 @@ public class TP03 {
                 to = p.node; edgew = p.L;
                 if(dist + edgew < dp[to][k]){
                     dp[to][k] = dist + edgew;
-                    mh.insert(new Node(to, k, dp[to][k]));
+                    mh.insert(new Node(to, k, dp[to][k], k));
                 }   
     
     
                 if(k+1 <= 1 && dist < dp[to][k+1]){
                     dp[to][k+1] = dist;
-                    mh.insert(new Node(to, k+1, dp[to][k+1]));
+                    mh.insert(new Node(to, k+1, dp[to][k+1], k+1));
                 }
             }
         }
@@ -554,11 +560,11 @@ class Node implements Comparable<Node> {
     // public boolean isKurcaciExist = false;
  
     public Node() {}
-    public Node(int node, long L, long S) {
+    public Node(int node, long L, long S, int k) {
         this.node = node;
         this.L = L;
         this.S = S;
-        this.k = 0;
+        this.k = k;
     }
 
     @Override 
