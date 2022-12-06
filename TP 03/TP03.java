@@ -302,7 +302,8 @@ public class TP03 {
     }
 
     // QUERY 3 : SUPER
-
+    // IDE : DIJKSTRA 1x dengan modifikasi tambahan array maximal cost between T -> v (v = 1..V) 
+    // Then, cek D[s] & M[s] dan D[t] & M[t]
     static void SUPER(int VE) {
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
         // find D(s,v) == D(v,s)
@@ -398,14 +399,18 @@ public class TP03 {
     // Dijkstra's Algorithm
     static long[] dijkstraSuper(int src, int numnodes) { // return src(v) to all nodes
         // inisiate
-        long[] D = new long[numnodes];
+        long[] D = new long[numnodes]; // array of distance from src to all nodes
+        long[] M = new long[numnodes]; // array of maximal edge .L (cost) from src to all nodes
         List<Integer> sett = new ArrayList<Integer>();
         MinHeap<Node> minHeap = new MinHeap<Node>();
         // dijkstra
-        for (int i = 0; i < V; i++)
+        for (int i = 0; i < V; i++) {
             D[i] = Long.MAX_VALUE;
+            M[i] = Long.MIN_VALUE;
+        }
         minHeap.insert(new Node(src, 0, 0));
         D[src] = 0;
+        M[src] = 0;
         while (sett.size() != V) {
             if (minHeap.isEmpty())
                 break;
@@ -416,16 +421,32 @@ public class TP03 {
             // e_neighbours
             long edgeDistance = -1;
             long newDistance = -1;
+            long newMaximal = -1;
             for (int i = 0; i < adj.get(u).size(); i++) {
                 Node v = adj.get(u).get(i);
                 if (!sett.contains(v.node)) {
                     edgeDistance = v.L;
                     newDistance = D[u] + edgeDistance;
+                    newMaximal = Math.max(M[u], edgeDistance);
                     if (newDistance < D[v.node])
                         D[v.node] = newDistance;
+                    if (newMaximal > M[v.node])
+                        M[v.node] = newMaximal;
                     minHeap.insert(new Node(v.node, D[v.node], v.S));
                 }
             }
+        }
+
+        // print D
+        System.out.println("D(v,u) with u is all other nodes");
+        for (int i = 0; i < D.length; i++) {
+            System.out.print(D[i]+" ");
+        }
+        System.out.println();
+        // print M
+        System.out.println("M(v,u) with u is all other nodes");
+        for (int i = 0; i < M.length; i++) {
+            System.out.print(M[i]+" ");
         }
         return D;
     }
