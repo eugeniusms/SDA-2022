@@ -408,10 +408,13 @@ public class TP03 {
                     }
 
                     // mencoba skip saat state 0 lebih kecil dari hasil skip state 1
-                    if (dp[start.node][0] < dp[start.node][1] + edgeDistance) {
-                        // masukkan ke skip = true
-                        dp[start.node][1] = dp[start.node][0];
-                        minHeap.insert(new Node(start.node, dp[start.node][1], start.S, true));
+                    if (dp[start.node][0] < dp[start.node][1]) {
+                        edgeDistance = desti.L;
+                        newDistance = dp[start.node][0] + edgeDistance;
+                        if (newDistance < dp[desti.node][1]) {
+                            dp[desti.node][1] = newDistance;
+                            minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
+                        }
                     }
                     
                 }
