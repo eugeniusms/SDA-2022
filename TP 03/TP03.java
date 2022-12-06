@@ -72,23 +72,7 @@ public class TP03 {
             adj.get(0).add(new Node(pos[i], 0, 0));
         }
 
-        // ================================= DEBUG ===========================
-        // out.println("BEFORE DIJKSTRA: ");
-        // int counter = 0;
-        // for (List<Node> l : adj) {
-        //     out.println("FOR["+counter+"]");
-        //     for (Node n : l) {
-        //         out.print(n.node+"[L:"+n.L+"] ");
-        //     }
-        //     counter++;
-        //     out.println("\n");
-        // }
-        // ===================================================================
-
         for (int i = 0; i < P; i++) {
-            // System.out.println("POS: "+pos[i]);
-            // Calculating the single source shortest path
-            // Call Dijkstra
             inisiateDijkstra(VE); // RESET
             dijkstra(pos[i]);
 
@@ -185,14 +169,6 @@ public class TP03 {
         out.println(minL);
     }
 
-    // https://www.geeksforgeeks.org/print-the-path-between-any-two-nodes-of-a-tree-dfs/
-    // static void printPath(Vector<Integer> stack) {
-    //     for(int i = 0; i < stack.size() - 1; i++) {
-    //         System.out.print(stack.get(i) + " -> ");
-    //     }
-    //     System.out.println(stack.get(stack.size() - 1));
-    // }
-
     static boolean[] visited;
     static void DFS(int x, int y, Vector<Integer> stack) {
         stack.add(x);
@@ -232,7 +208,6 @@ public class TP03 {
         edges = new ArrayList<Edge>();
         for (int i = 0; i < adj.size(); i++) {
             for (int j = 0; j < adj.get(i).size(); j++) {
-                // System.out.println("CEK: "+i+" "+adj.get(i).get(j).node+" "+adj.get(i).get(j).L);
                 edges.add(new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S));
             }
         }
@@ -247,10 +222,7 @@ public class TP03 {
                 }
             }
         }
-        // System.out.println("SORTED LIST: ");
-        // for (Edge e : edges) {
-        //     System.out.println("CEK: "+e.start+" "+e.destination+" "+e.cost);
-        // }
+
         // STEP 2 Kruskal's : Check cycle
         // Check cycle with Union Find
         UnionFind uf = new UnionFind(v);
@@ -261,18 +233,13 @@ public class TP03 {
                 spanningTree.get(e.destination).add(new Node(e.start, e.cost, 0));
             }
         }
-        // print spanningTree
-        // System.out.println("SPANNING TREE: ");
+
         // input spanningTreeEdges
         for (int i = 0; i < spanningTree.size(); i++) {
-            // System.out.print(i+" : ");
             for (Node n : spanningTree.get(i)) {
-                // System.out.print(n.node+"["+n.L+"]"+" "); 
                 spanningTreeEdges[i][n.node] = n.L;
             }
-            // System.out.println();
         }
-        // SEPERTINYA SUDAH DAPAT SPANNING TREE
     }
  
     // QUERY 2 : SIMULASI
@@ -339,25 +306,6 @@ public class TP03 {
             }
             isMemo[x] = true;
         }
-        
-        // TESTING
-        // print S
-        // System.out.println("D(s,u) with u is all other nodes");
-        // for (int i = 1; i < S.length; i++) {
-        //     System.out.print(S[i]+" ");
-        // }
-        // System.out.println();
-        // // print T
-        // System.out.println("D(t,w) with u is all other nodes");
-        // for (int i = 1; i < T.length; i++) {
-        //     System.out.print(T[i]+" ");
-        // }
-        // System.out.println();
-        // // // print DV3
-        // for (int i = 1; i < X.length; i++) {
-        //     System.out.print(X[i]+" ");
-        // }
-        // System.out.println();
 
         // find minCost (s,t)
         // operate min (D(s,u) - D(w,t)) for all edges (u,w)
@@ -377,9 +325,6 @@ public class TP03 {
                 minCostTX = cost;
             }
         }
-
-        // System.out.println("Min(D(s,u) + D(w,t)) for all edges (u,w): "+minCostST);
-        // System.out.println("Min(D(t,u) + D(w,x)) for all edges (u,w): "+minCostTX);
 
         // Melakukan comparing combine
         // S -> skipped -> T -> X
