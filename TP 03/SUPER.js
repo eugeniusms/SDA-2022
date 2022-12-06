@@ -63,7 +63,7 @@ function findKShortest(edges, n, m, k)
 // Driver Code
  
 // Given Input
-var N = 4, M = 6, K = 3;
+var N = 4, M = 6, K = 1;
 var edges = [ [ 1, 2, 1 ], [ 1, 3, 3 ],
               [ 2, 3, 2 ], [ 2, 4, 6 ],
               [ 3, 2, 8 ], [ 3, 4, 1 ] ];

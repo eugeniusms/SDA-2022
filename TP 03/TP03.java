@@ -752,3 +752,6 @@ class DistMax {
         this.max = max;
     }
 }
+
+// KEKNYA REFERENSINYA YG INI GA SI:
+// 1) https://codeforces.com/blog/entry/70589
