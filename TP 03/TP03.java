@@ -12,20 +12,17 @@ public class TP03 {
     private static InputReader in;
     private static PrintWriter out;
  
-    // Member variables of this class
-    static long dist[];
-    static List<Integer> settled;
-    static MinHeap<Node> mh;
     // Number of vertices
     static int V;
     static List<List<Node> > adj;
     static List<Edge> edges;
 
     // key: dist, value: array[1069] node
-    static ArrayList<long[]> memo = new ArrayList<long[]>();
+    // static ArrayList<long[]> memo = new ArrayList<long[]>();
 
     // memo shortest path by node
-    static long[][] memoByNode = new long[1069][1069]; // [node][dist]
+    static ArrayList<Integer> kurcaci = new ArrayList<Integer>();
+    static Dist[] memoByNode = new Dist[1069]; // [node][Dist[i]]
     static boolean[] isMemo = new boolean[1069]; // [node]
 
     public static void main(String arg[]) {
@@ -38,14 +35,14 @@ public class TP03 {
         // N = number of vertices
         // M = number of vertices that ! (attacked)
         int N = in.nextInt();
-        int VE = 1+N; // ex: 0+8 nodes = 9 nodes
+        V = 1+N; // ex: 0+8 nodes = 9 nodes
         
         // ================================= INISIASI EDGE ===========================================
         int E = in.nextInt();
         // Adjacency list untuk edge yang ada
         adj = new ArrayList<List<Node> >();
         // Initialize list for every node
-        for (int i = 0; i < VE; i++) {
+        for (int i = 0; i < V; i++) {
             List<Node> item = new ArrayList<Node>();
             adj.add(item);
         }
@@ -58,33 +55,19 @@ public class TP03 {
         }
 
         // ================================= INISIASI MAX SPANNING TREE ===============================
-        findMaximumSpanningTree(VE);
+        findMaximumSpanningTree(V);
 
         // ================================= INISIASI NODE DENGAN KURCACI ===========================
         int P = in.nextInt();
-        int[] pos = new int[P];
         for (int i = 0; i < P; i++) {
-            pos[i] = in.nextInt();
-        }
-        // Implement multisource destination
-        // Menyambungkan node 0 dalam edge dengan bobot 0 terhubung ke setiap attacked (node 0 udah ada dalam 0 <- V)
-        for (int i = 0; i < P; i++) {
-            adj.get(0).add(new Node(pos[i], 0, 0));
+            kurcaci.add(in.nextInt());
         }
 
-        for (int i = 0; i < P; i++) {
-            inisiateDijkstra(VE); // RESET
-            dijkstra(pos[i]);
-
-            // System.out.println(attacked[i]);
-            long[] temp = new long[10069];
-            for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
-                // System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
-                temp[j] = dist[j];
-                memoByNode[pos[i]][j] = dist[j]; // memoize
-            }
-            memo.add(temp);
-            isMemo[pos[i]] = true; // memoized
+        // Inisiate Dijkstra First Time
+        for (int k : kurcaci) {
+            Dist dist = dijkstra(k);
+            memoByNode[k] = dist; // memoize
+            isMemo[k] = true; // memoized
         }
 
         // ================================= INPUT QUERY ============================================
@@ -92,69 +75,24 @@ public class TP03 {
         for (int i = 0; i < Q; i++) {
             String query = in.next();
             if (query.equals("KABUR")) {
-                KABUR(VE);
+                KABUR();
             } else if (query.equals("SIMULASI")) {
                 SIMULASI();
             } else {
-                SUPER(VE);
+                SUPER();
             }
         }
         out.close();    
     }
 
-    // =========================== DIJKSTRA ==================================  
-    // inisiate Dijkstra
-    static void inisiateDijkstra(int v) {
-        V = v;
-        dist = new long[v];
-        settled = new ArrayList<Integer>();
-        mh = new MinHeap<Node>();
-    }
-
-    // Method 1
-    // Dijkstra's Algorithm
-    static void dijkstra(int src) {
-        for (int i = 0; i < V; i++)
-            dist[i] = Long.MAX_VALUE;
-        mh.insert(new Node(src, 0, 0));
-        dist[src] = 0;
-        while (settled.size() != V) {
-            if (mh.isEmpty())
-                return;
-            int u = mh.remove().node;
-            if (settled.contains(u))
-                continue;
-            settled.add(u);
-            e_Neighbours(u);
-        }
-    }
-
-    // Method 2
-    static void e_Neighbours(int u) {
-        long edgeDistance = -1;
-        long newDistance = -1;
-        for (int i = 0; i < adj.get(u).size(); i++) {
-            Node v = adj.get(u).get(i);
-            if (!settled.contains(v.node)) {
-                edgeDistance = v.L;
-                newDistance = dist[u] + edgeDistance;
-                if (newDistance < dist[v.node])
-                    dist[v.node] = newDistance;
-                mh.insert(new Node(v.node, dist[v.node], v.S));
-            }
-        }
-    }
-
     // QUERY 1 : KABUR
-    static void KABUR(int VE) {
+    static void KABUR() {
         int source = in.nextInt(); int destination = in.nextInt();
 
         // Memanfaatkan Kruskal's Maximum Spanning Tree (MST))
         // Gunakan DFS untuk mencari path dari source ke destination
         visited = new boolean[V]; // reset
         DFS(source, destination, new Stack<Integer>());
-
-        // TODO: CARI MINL DI DALAM PATH TERSEBUT
     }
 
     static void getMinL(Vector<Integer> stack) {
@@ -251,12 +189,13 @@ public class TP03 {
             gate[i] = in.nextInt();
         }
         long maxTime = 0;
-        for (long[] lo : memo) {
+        for (int k : kurcaci) {
             // find min
+            long[] dist = memoByNode[k].dist;
             long minTime = Long.MAX_VALUE;
             for (int g : gate) {
-                if (lo[g] < minTime) {
-                    minTime = lo[g];
+                if (dist[g] < minTime) {
+                    minTime = dist[g];
                 }
             }
             // find max
@@ -270,48 +209,42 @@ public class TP03 {
 
     // QUERY 3 : SUPER
 
-    static void SUPER(int VE) {
+    static void SUPER() {
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
         // find D(s,v) == D(v,s)
         // cek isMemoized
-        long[] S;
+        Dist S;
         if (isMemo[s]) {
             S = memoByNode[s]; 
         } else {
-            S = dijkstraSuper(s, VE);
-            for (int i = 1; i < S.length; i++) {
-                memoByNode[s][i] = S[i]; // memoize
-            }
-            isMemo[s] = true;
+            S = dijkstra(s);
+            memoByNode[s] = S; // memoize
+            isMemo[s] = true; // memoized
         }
         // find D(t,v) == D(v,t)
-        long[] T;
+        Dist T;
         if (isMemo[t]) {
             T = memoByNode[t]; 
         } else {
-            T = dijkstraSuper(t, VE);
-            for (int i = 1; i < T.length; i++) {
-                memoByNode[t][i] = T[i]; // memoize
-            }
-            isMemo[t] = true;
+            T = dijkstra(t);
+            memoByNode[t] = T; // memoize
+            isMemo[t] = true; // memoized
         }
         // find D(x,v) == D(v,x)
-        long[] X;
+        Dist X;
         if (isMemo[x]) {
             X = memoByNode[x];
         } else {
-            X = dijkstraSuper(x, VE);
-            for (int i = 1; i < X.length; i++) {
-                memoByNode[x][i] = X[i]; // memoize
-            }
-            isMemo[x] = true;
+            X = dijkstra(x);
+            memoByNode[x] = X; // memoize
+            isMemo[x] = true; // memoized
         }
 
         // find minCost (s,t)
         // operate min (D(s,u) - D(w,t)) for all edges (u,w)
         long minCostST = Long.MAX_VALUE;
         for (Edge e : edges) {
-            long cost = S[e.start] + T[e.destination]; // (D(s,u) - D(w,t))
+            long cost = S.dist[e.start] + T.dist[e.destination]; // (D(s,u) - D(w,t))
             if (cost < minCostST) {
                 minCostST = cost;
             }
@@ -320,7 +253,7 @@ public class TP03 {
         // operate min (D(t,u) - D(w,x)) for all edges (u,w)
         long minCostTX = Long.MAX_VALUE;
         for (Edge e : edges) {
-            long cost = T[e.start] + X[e.destination]; // (D(t,u) - D(w,x))
+            long cost = T.dist[e.start] + X.dist[e.destination]; // (D(t,u) - D(w,x))
             if (cost < minCostTX) {
                 minCostTX = cost;
             }
@@ -328,9 +261,9 @@ public class TP03 {
 
         // Melakukan comparing combine
         // S -> skipped -> T -> X
-        long versi1 = minCostST + T[x];
+        long versi1 = minCostST + T.dist[x];
         // S -> T -> skipped -> X
-        long versi2 = S[t] + minCostTX;
+        long versi2 = S.dist[t] + minCostTX;
         // Mencetak yang terkecil di antara kedua versi
         if (versi1 <= versi2) {
             out.println(versi1);
@@ -341,9 +274,9 @@ public class TP03 {
 
     // Method 1
     // Dijkstra's Algorithm
-    static long[] dijkstraSuper(int src, int numnodes) { // return src(v) to all nodes
+    static Dist dijkstra(int src) { // return Dist with isi [src[v]] to all nodes
         // inisiate
-        long[] D = new long[numnodes];
+        long[] D = new long[V];
         List<Integer> sett = new ArrayList<Integer>();
         MinHeap<Node> minHeap = new MinHeap<Node>();
         // dijkstra
@@ -372,7 +305,8 @@ public class TP03 {
                 }
             }
         }
-        return D;
+        Dist dist = new Dist(D);
+        return dist;
     }
 
     // taken from https://codeforces.com/submissions/Petr
@@ -644,5 +578,12 @@ class MinHeap<T extends Comparable<T>> {
 			}
 		}
 	}
+}
 
+// Class untuk menyimpan distance
+class Dist {
+    long[] dist;
+    Dist (long[] dist) {
+        this.dist = dist;
+    }
 }
