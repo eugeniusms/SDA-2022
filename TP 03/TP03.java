@@ -15,7 +15,7 @@ public class TP03 {
     // Number of vertices
     static int V;
     static List<List<Node> > adj;
-    static List<Edge> edges;
+    static Edge[] edges; 
 
     // key: dist, value: array[1069] node
     // static ArrayList<long[]> memo = new ArrayList<long[]>();
@@ -39,6 +39,7 @@ public class TP03 {
         
         // ================================= INISIASI EDGE ===========================================
         int E = in.nextInt();
+        edges = new Edge[E*2]; // kali 2 karena undirected
         // Adjacency list untuk edge yang ada
         adj = new ArrayList<List<Node> >();
         // Initialize list for every node
@@ -143,23 +144,17 @@ public class TP03 {
         // print adj (adj adalah graf penyimpan edge)        
         // Kruskal's Algorithms
         // get all edges
-        edges = new ArrayList<Edge>();
+
+        int counter = 0;
         for (int i = 0; i < adj.size(); i++) {
             for (int j = 0; j < adj.get(i).size(); j++) {
-                edges.add(new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S));
+                edges[counter] = new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S);
+                counter++;
             }
         }
         // STEP 1 Kruskal's : Sorting edges
-        // Sorting Edges with Bubble Sort
-        for (int i = 0; i < edges.size(); i++) {
-            for (int j = i+1; j < edges.size(); j++) {
-                if (edges.get(i).compareTo(edges.get(j)) < 0) {
-                    Edge temp = edges.get(i);
-                    edges.set(i, edges.get(j));
-                    edges.set(j, temp);
-                }
-            }
-        }
+        // Sorting Edges with Merge Sort
+        sort(edges, 0, edges.length-1);
 
         // STEP 2 Kruskal's : Check cycle
         // Check cycle with Union Find
@@ -177,6 +172,74 @@ public class TP03 {
             for (Node n : spanningTree.get(i)) {
                 spanningTreeEdges[i][n.node] = n.L;
             }
+        }
+    }
+
+    // REFERENCE : https://www.geeksforgeeks.org/merge-sort/
+    static void merge(Edge arr[], int l, int m, int r)
+    {
+        // Find sizes of two subarrays to be merged
+        int n1 = m - l + 1;
+        int n2 = r - m;
+ 
+        /* Create temp arrays */
+        Edge L[] = new Edge[n1];
+        Edge R[] = new Edge[n2];
+ 
+        /*Copy data to temp arrays*/
+        for (int i = 0; i < n1; ++i)
+            L[i] = arr[l + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = arr[m + 1 + j];
+ 
+        /* Merge the temp arrays */
+ 
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+ 
+        // Initial index of merged subarray array
+        int k = l;
+        while (i < n1 && j < n2) {
+            if (L[i].compareTo(R[j]) > 0) {
+                arr[k] = L[i];
+                i++;
+            }
+            else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+ 
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+ 
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+ 
+    // Main function that sorts arr[l..r] using
+    // merge()
+    static void sort(Edge arr[], int l, int r)
+    {
+        if (l < r) {
+            // Find the middle point
+            int m = l + (r - l) / 2;
+ 
+            // Sort first and second halves
+            sort(arr, l, m);
+            sort(arr, m + 1, r);
+ 
+            // Merge the sorted halves
+            merge(arr, l, m, r);
         }
     }
  
@@ -587,3 +650,6 @@ class Dist {
         this.dist = dist;
     }
 }
+
+// References:
+// 1) https://www.geeksforgeeks.org/merge-sort/
