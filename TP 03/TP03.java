@@ -383,23 +383,40 @@ public class TP03 {
         MinHeap<Node> minHeap = new MinHeap<Node>();
         minHeap.insert(new Node(s, 0, 0));
         while (!minHeap.isEmpty()) {
-            Node u = minHeap.remove();
+            Node start = minHeap.remove();
             // e_neighbours
             long edgeDistance = -1;
             long newDistance = -1;
-            for (int i = 0; i < adj.get(u.node).size(); i++) { // untuk setiap edges di node u
-                Node v = adj.get(u.node).get(i); // ambil node tujuan
-                if (u.skip) { // saat sudah pernah diskip
-                    edgeDistance = v.L; // cost ke v
-                    long belumskip = dp[u.node][0]; // cost belum pernah skip tapi mencoba skip saat ini 
-                    long sudahskip = dp[u.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
-                    if (Math.min(belumskip, sudahskip) < dp[v.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
-                        dp[v.node][1] = Math.min(belumskip, sudahskip); // update cost
-                        minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true)); // masukkan ke minHeap
+            for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
+                Node desti = adj.get(start.node).get(i); // ambil node tujuan
+                if (start.skip) { // saat sudah pernah diskip
+                    edgeDistance = desti.L; // cost ke v
+                    long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini 
+                    long sudahskip = dp[start.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
+                    if (Math.min(belumskip, sudahskip) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                        dp[desti.node][1] = Math.min(belumskip, sudahskip); // update cost
+                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true)); // masukkan ke minHeap
                     }
                 } else { // belum pernah diskip
+                    // dijkstra biasa
+                    edgeDistance = desti.L;
+                    newDistance = dp[start.node][0] + edgeDistance;
+                    if (newDistance < dp[desti.node][0]) {
+                        dp[desti.node][0] = newDistance;
+                        minHeap.insert(new Node(desti.node, dp[desti.node][0], desti.S, false));
+                    }
+
+                    // mencoba skip saat state 0 lebih kecil dari hasil skip state 1
+                    if (dp[start.node][0] < dp[start.node][1] + edgeDistance) {
+                        // masukkan ke skip = true
+                        dp[start.node][1] = dp[start.node][0];
+                        minHeap.insert(new Node(start.node, dp[start.node][1], start.S, true));
+                    }
                     
-                }   
+                }
+
+            }
+        }   
                 // if (!u.skip) { // Take
                 //     edgeDistance = v.L;
                 //     newDistance = dp[u.node][0] + edgeDistance;
@@ -420,8 +437,8 @@ public class TP03 {
                 //         minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true));
                 //     }
                 // }
-            }
-        }
+            // }
+        // }
         // print
         // long versi1 = dp[t][0] + dp[x][0];
         // long versi2 = dp[s][0] + dp[t][1] + dp[x][0];
