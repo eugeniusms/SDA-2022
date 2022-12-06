@@ -75,7 +75,7 @@ public class TP03 {
         for (int i = 0; i < Q; i++) {
             String query = in.next();
             if (query.equals("KABUR")) {
-                KABUR();
+                KABURI();
             } else if (query.equals("SIMULASI")) {
                 SIMULASI();
             } else {
@@ -83,6 +83,65 @@ public class TP03 {
             }
         }
         out.close();    
+    }
+
+    static void KABURI() {
+        int source = in.nextInt(); int destination = in.nextInt();
+        // inisiate
+        long[] D = new long[V];
+        List<Integer> green = new ArrayList<Integer>();
+        MaxHeap<Node> maxHeap = new MaxHeap<Node>();
+        // dijkstra
+        for (int i = 0; i < V; i++)
+            D[i] = Long.MIN_VALUE;
+
+        // input tetangga dari source ke dalam maxheap
+        // for (Node node : adj.get(source)) {
+        //     maxHeap.insert(node);
+        // }
+        maxHeap.insert(new Node(source, 0, Long.MAX_VALUE));
+        D[source] = 0;
+        while (green.size() != V) {
+            if (maxHeap.isEmpty())
+                break;
+            int u = maxHeap.remove().node;
+            if (green.contains(u))
+                continue;
+            green.add(u);
+            out.println("MENGGREEN: " + u);
+            // e_neighbours
+            long edgeDistance = -1;
+            long newDistance = -1;
+            for (int i = 0; i < adj.get(u).size(); i++) {
+                Node v = adj.get(u).get(i);
+                if (!green.contains(v.node)) {
+                    out.println(v.node + " | " + v.S + " | " + D[u]);
+                    edgeDistance = v.S;
+                    newDistance = Math.min(D[u], v.S);
+
+                    if (newDistance <= 0) {
+                        newDistance = edgeDistance;
+                    }
+                    if (D[v.node] < newDistance) {
+                        D[v.node] = newDistance;
+                    }
+                    // out.println("newDistance: " + newDistance);
+                    maxHeap.insert(new Node(v.node, v.L , newDistance));
+
+                    // print D
+                    // for (int j = 0; j < V; j++) {
+                    //     out.println(j+" : ["+D[j]+"]");
+                    }
+                // }
+
+            // print D
+            out.println("ITERASI");
+            for (int j = 1; j < V; j++) {
+                out.println(j+" : ["+D[j]+"]");
+            }
+            }
+        }
+        out.println(D[destination]);
     }
 
     // QUERY 1 : KABUR
@@ -569,6 +628,148 @@ class MinHeap<T extends Comparable<T>> {
 					minChildIdx = rightIdx;
 
 				if (node.compareTo(data.get(minChildIdx)) > 0) {
+					data.set(idx, data.get(minChildIdx));
+					idx = minChildIdx;
+				} else {
+					data.set(idx, node);
+					break;
+				}
+			}
+		}
+	}
+}
+
+class MaxHeap<T extends Comparable<T>> {
+	ArrayList<T> data;
+
+	public MaxHeap() {
+		data = new ArrayList<T>();
+	}
+
+	public MaxHeap(ArrayList<T> arr) {
+		data = arr;
+		heapify();
+	}
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+	public T peek() {
+		if (data.isEmpty())
+			return null;
+		return data.get(0);
+	}
+
+	public void insert(T value) {
+		data.add(value);
+		percolateUp(data.size() - 1);
+	}
+
+	public T remove() {
+		T removedObject = peek();
+
+		if (data.size() == 1)
+			data.clear();
+		else {
+			data.set(0, data.get(data.size() - 1));
+			data.remove(data.size() - 1);
+			percolateDown(0);
+		}
+
+		return removedObject;
+	}
+
+	private void percolateDown(int idx) {
+		T node = data.get(idx);
+		int heapSize = data.size();
+
+		while (true) {
+			int leftIdx = getLeftChildIdx(idx);
+			if (leftIdx >= heapSize) {
+				data.set(idx, node);
+				break;
+			} else {
+				int minChildIdx = leftIdx;
+				int rightIdx = getRightChildIdx(idx);
+				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
+					minChildIdx = rightIdx;
+
+				if (node.compareTo(data.get(minChildIdx)) < 0) {
+					data.set(idx, data.get(minChildIdx));
+					idx = minChildIdx;
+				} else {
+					data.set(idx, node);
+					break;
+				}
+			}
+		}
+	}
+
+	private void percolateUp(int idx) {
+		T node = data.get(idx);
+		int parentIdx = getParentIdx(idx);
+		while (idx > 0 && node.compareTo(data.get(parentIdx)) > 0) {
+			data.set(idx, data.get(parentIdx));
+			idx = parentIdx;
+			parentIdx = getParentIdx(idx);
+		}
+
+		data.set(idx, node);
+	}
+
+	private int getParentIdx(int i) {
+		return (i - 1) / 2;
+	}
+
+	private int getLeftChildIdx(int i) {
+		return 2 * i + 1;
+	}
+
+	private int getRightChildIdx(int i) {
+		return 2 * i + 2;
+	}
+
+	private void heapify() {
+		for (int i = data.size() / 2 - 1; i >= 0; i--)
+			percolateDown(i);
+	}
+
+	public void sort() {
+		int n = data.size();
+		while (n > 1) {
+			data.set(n - 1, remove(n));
+			n--;
+		}
+	}
+
+	public T remove(int n) {
+		T removedObject = peek();
+
+		if (n > 1) {
+			data.set(0, data.get(n - 1));
+			percolateDown(0, n - 1);
+		}
+
+		return removedObject;
+	}
+
+	private void percolateDown(int idx, int n) {
+		T node = data.get(idx);
+		int heapSize = n;
+
+		while (true) {
+			int leftIdx = getLeftChildIdx(idx);
+			if (leftIdx >= heapSize) {
+				data.set(idx, node);
+				break;
+			} else {
+				int minChildIdx = leftIdx;
+				int rightIdx = getRightChildIdx(idx);
+				if (rightIdx < heapSize && data.get(rightIdx).compareTo(data.get(leftIdx)) > 0)
+					minChildIdx = rightIdx;
+
+				if (node.compareTo(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
