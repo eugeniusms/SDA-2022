@@ -377,7 +377,7 @@ public class TP03 {
             dp[i][0] = Long.MAX_VALUE;
             dp[i][1] = Long.MAX_VALUE;
         }
-        dp[s][0] = 0; // state 0 -> Take
+        dp[s][0] = 0; // state 0 -> take
         dp[s][1] = 0; // state 1 -> skip
         // dijkstra with 1 is k-skip edge
         MinHeap<Node> minHeap = new MinHeap<Node>();
@@ -401,6 +401,7 @@ public class TP03 {
                     // dijkstra biasa
                     edgeDistance = desti.L;
                     newDistance = dp[start.node][0] + edgeDistance;
+
                     if (newDistance < dp[desti.node][0]) {
                         dp[desti.node][0] = newDistance;
                         minHeap.insert(new Node(desti.node, dp[desti.node][0], desti.S, false));
