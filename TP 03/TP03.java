@@ -108,7 +108,7 @@ public class TP03 {
             if (green.contains(u))
                 continue;
             green.add(u);
-            out.println("MENGGREEN: " + u);
+            out.println("MENGGREEN: " + u + " dengan D[" + u + "] = " + D[u]);
             // e_neighbours
             long edgeDistance = -1;
             long newDistance = -1;
@@ -116,21 +116,28 @@ public class TP03 {
                 Node v = adj.get(u).get(i);
                 if (!green.contains(v.node)) {
                     out.println(v.node + " | " + v.S + " | " + D[u]);
-                    edgeDistance = v.S;
-                    newDistance = Math.min(D[u], v.S);
+                    // newDistance = Math.min(D[u], v.S);
 
-                    if (newDistance <= 0) {
-                        newDistance = edgeDistance;
-                    }
-                    if (D[v.node] < newDistance) {
-                        D[v.node] = newDistance;
-                    }
-                    // out.println("newDistance: " + newDistance);
-                    maxHeap.insert(new Node(v.node, v.L , newDistance));
+                    // if (newDistance <= 0) {
+                    //     newDistance = v.S;
+                    // }
+                    // if (D[v.node] < newDistance) {
+                    //     D[v.node] = newDistance;
+                    // }
+                    // // out.println("newDistance: " + newDistance);
+                    // maxHeap.insert(new Node(v.node, v.L , newDistance));
 
                     // print D
                     // for (int j = 0; j < V; j++) {
                     //     out.println(j+" : ["+D[j]+"]");
+                    edgeDistance = v.S;
+                    newDistance = Math.min(D[u],edgeDistance);
+                    if (newDistance == 0) {
+                        newDistance = edgeDistance;
+                    }
+                    if (newDistance > D[v.node])
+                        D[v.node] = newDistance;
+                    maxHeap.insert(new Node(v.node, v.L , D[v.node]));
                     }
                 // }
 
