@@ -43,8 +43,7 @@ public class TP03 {
         adj = new ArrayList<List<Node> >();
         // Initialize list for every node
         for (int i = 0; i < V; i++) {
-            List<Node> item = new ArrayList<Node>();
-            adj.add(item);
+            adj.add(new ArrayList<Node>());
         }
         // Mendaftarkan edge yang ada melalui input
         for (int i = 0; i < E; i++) {
@@ -98,7 +97,6 @@ public class TP03 {
     static void getMinL(Vector<Integer> stack) {
         long minL = Long.MAX_VALUE;
         for(int i = 0; i < stack.size() - 1; i++) {
-            // System.out.println(stack.get(i)+" "+stack.get(i+1));
             long l = spanningTreeEdges[stack.get(i)][stack.get(i+1)];
             if (l < minL) {
                 minL = l;
@@ -113,17 +111,18 @@ public class TP03 {
         if (x == y) {
             // print the path and return on
             // reaching the destination node
-            // printPath(stack);
             getMinL(stack);
             return;
         }
         visited[x] = true;
         // if backtracking is taking place     
-        if (spanningTree.get(x).size() > 0) {
-            for(int j = 0; j < spanningTree.get(x).size(); j++) {
+        List<Node> spanningTreeX = spanningTree.get(x);
+        if (spanningTreeX.size() > 0) {
+            for(int j = 0; j < spanningTreeX.size(); j++) {
                 // if the node is not visited
-                if (visited[spanningTree.get(x).get(j).node] == false) {
-                    DFS(spanningTree.get(x).get(j).node, y, stack);
+                int node = spanningTreeX.get(j).node;
+                if (visited[node] == false) {
+                    DFS(node, y, stack);
                 }
             }
         }
@@ -136,8 +135,7 @@ public class TP03 {
         spanningTree = new ArrayList<List<Node> >();
         // Initialize list for every node
         for (int i = 0; i < v; i++) {
-            List<Node> item = new ArrayList<Node>();
-            spanningTree.add(item);
+            spanningTree.add(new ArrayList<Node>());
         }
         // Melakukan pencarian max spanning tree
         // print adj (adj adalah graf penyimpan edge)        
@@ -175,8 +173,7 @@ public class TP03 {
     }
 
     // REFERENCE : https://www.geeksforgeeks.org/merge-sort/
-    static void merge(Edge arr[], int l, int m, int r)
-    {
+    static void merge(Edge arr[], int l, int m, int r) {
         // Find sizes of two subarrays to be merged
         int n1 = m - l + 1;
         int n2 = r - m;
@@ -227,8 +224,7 @@ public class TP03 {
  
     // Main function that sorts arr[l..r] using
     // merge()
-    static void sort(Edge arr[], int l, int r)
-    {
+    static void sort(Edge arr[], int l, int r) {
         if (l < r) {
             // Find the middle point
             int m = l + (r - l) / 2;
@@ -339,26 +335,26 @@ public class TP03 {
     static Dist dijkstra(int src) { // return Dist with isi [src[v]] to all nodes
         // inisiate
         long[] D = new long[V];
-        List<Integer> sett = new ArrayList<Integer>();
+        List<Integer> green = new ArrayList<Integer>();
         MinHeap<Node> minHeap = new MinHeap<Node>();
         // dijkstra
         for (int i = 0; i < V; i++)
             D[i] = Long.MAX_VALUE;
         minHeap.insert(new Node(src, 0, 0));
         D[src] = 0;
-        while (sett.size() != V) {
+        while (green.size() != V) {
             if (minHeap.isEmpty())
                 break;
             int u = minHeap.remove().node;
-            if (sett.contains(u))
+            if (green.contains(u))
                 continue;
-            sett.add(u);
+            green.add(u);
             // e_neighbours
             long edgeDistance = -1;
             long newDistance = -1;
             for (int i = 0; i < adj.get(u).size(); i++) {
                 Node v = adj.get(u).get(i);
-                if (!sett.contains(v.node)) {
+                if (!green.contains(v.node)) {
                     edgeDistance = v.L;
                     newDistance = D[u] + edgeDistance;
                     if (newDistance < D[v.node])
