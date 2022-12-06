@@ -447,7 +447,7 @@ public class TP03 {
         // long versi1 = dp[t][0] + dp[x][0];
         // long versi2 = dp[s][0] + dp[t][1] + dp[x][0];
         // print dp table
-        for (int i = 0; i < V; i++) {
+        for (int i = 1; i < V; i++) {
             out.println("dp[" + i + "][0] = " + dp[i][0]);
             out.println("dp[" + i + "][1] = " + dp[i][1]);
         }
