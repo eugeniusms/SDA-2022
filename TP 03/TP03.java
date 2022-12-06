@@ -86,6 +86,9 @@ public class TP03 {
         // }
         // ===================================================================
 
+
+        dijkstra(1);
+
         for (int i = 0; i < P; i++) {
             // System.out.println("POS: "+pos[i]);
             // Calculating the single source shortest path
@@ -470,6 +473,44 @@ public class TP03 {
         return DM;
     }
 
+    static long[][] dp = new long[10][10];
+    static void dijkstra(int src){
+        dp[src][0] = 0; // distance from src to src after using 0 coupon is 0
+        MinHeap<Node> mh = new MinHeap<Node>();
+        mh.insert(new Node(src, 0, 0));
+        
+        Node tp;
+        int from, to, k;
+        long dist, edgew;
+        while(!mh.isEmpty()){
+            tp = mh.remove();
+            from = tp.node; k = tp.k; dist = tp.L;
+            if(dp[from][k] < dist) continue;
+    
+            for(Node p: adj.get(from)){
+                to = p.node; edgew = p.L;
+                if(dist + edgew < dp[to][k]){
+                    dp[to][k] = dist + edgew;
+                    mh.insert(new Node(to, k, dp[to][k]));
+                }   
+    
+    
+                if(k+1 <= 1 && dist < dp[to][k+1]){
+                    dp[to][k+1] = dist;
+                    mh.insert(new Node(to, k+1, dp[to][k+1]));
+                }
+            }
+        }
+        // print DP
+        System.out.println("DP(v,u) with u is all other nodes");
+        for (int i = 0; i < dp.length; i++) {
+            for (int j = 0; j < dp[i].length; j++) {
+                System.out.print(dp[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
     // usual Scanner(System.in) and System.out
@@ -509,6 +550,7 @@ class Node implements Comparable<Node> {
     public int node;
     public long L;
     public long S;
+    public int k;
     // public boolean isKurcaciExist = false;
  
     public Node() {}
@@ -516,6 +558,7 @@ class Node implements Comparable<Node> {
         this.node = node;
         this.L = L;
         this.S = S;
+        this.k = 0;
     }
 
     @Override 
