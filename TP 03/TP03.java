@@ -21,8 +21,12 @@ public class TP03 {
     static List<List<Node> > adj;
     static List<Edge> edges;
 
-    // key: dist, value: array[10069] node
+    // key: dist, value: array[1069] node
     static ArrayList<long[]> memo = new ArrayList<long[]>();
+
+    // memo shortest path by node
+    static long[][] memoByNode = new long[1069][1069]; // [node][dist]
+    static boolean[] isMemo = new boolean[1069]; // [node]
 
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
@@ -93,8 +97,10 @@ public class TP03 {
             for (int j = 1; j < V; j++) { // mencari distance ke benteng yang diserang
                 // System.out.println("CEK attacked: "+j+ " "+dist[j]); // TEST 
                 temp[j] = dist[j];
+                memoByNode[pos[i]][j] = dist[j]; // memoize
             }
             memo.add(temp);
+            isMemo[pos[i]] = true; // memoized
         }
 
         // ================================= INPUT QUERY ============================================
@@ -300,11 +306,39 @@ public class TP03 {
     static void SUPER(int VE) {
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
         // find D(s,v) == D(v,s)
-        long[] S = dijkstraSuper(s, VE);
+        // cek isMemoized
+        long[] S;
+        if (isMemo[s]) {
+            S = memoByNode[s]; 
+        } else {
+            S = dijkstraSuper(s, VE);
+            for (int i = 1; i < S.length; i++) {
+                memoByNode[s][i] = S[i]; // memoize
+            }
+            isMemo[s] = true;
+        }
         // find D(t,v) == D(v,t)
-        long[] T = dijkstraSuper(t, VE);
+        long[] T;
+        if (isMemo[t]) {
+            T = memoByNode[t]; 
+        } else {
+            T = dijkstraSuper(t, VE);
+            for (int i = 1; i < T.length; i++) {
+                memoByNode[t][i] = T[i]; // memoize
+            }
+            isMemo[t] = true;
+        }
         // find D(x,v) == D(v,x)
-        long[] X = dijkstraSuper(x, VE);
+        long[] X;
+        if (isMemo[x]) {
+            X = memoByNode[x];
+        } else {
+            X = dijkstraSuper(x, VE);
+            for (int i = 1; i < X.length; i++) {
+                memoByNode[x][i] = X[i]; // memoize
+            }
+            isMemo[x] = true;
+        }
         
         // TESTING
         // print S
