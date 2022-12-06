@@ -78,7 +78,8 @@ public class TP03 {
             } else if (query.equals("SIMULASI")) {
                 SIMULASI();
             } else {
-                SUPER();
+                // SUPER();
+                dijkstraSuper();
             }
         }
         out.close();    
@@ -367,6 +368,70 @@ public class TP03 {
         return dist;
     }
 
+    static void dijkstraSuper() {
+        int s = in.nextInt(); int t = in.nextInt();
+
+        // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
+        long[][] dp = new long[V][2];
+        for (int i = 0; i < V; i++) {
+            dp[i][0] = Long.MAX_VALUE;
+            dp[i][1] = Long.MAX_VALUE;
+        }
+        dp[s][0] = 0; // state 0 -> Take
+        dp[s][1] = 0; // state 1 -> skip
+        // dijkstra with 1 is k-skip edge
+        MinHeap<Node> minHeap = new MinHeap<Node>();
+        minHeap.insert(new Node(s, 0, 0));
+        while (!minHeap.isEmpty()) {
+            Node u = minHeap.remove();
+            // e_neighbours
+            long edgeDistance = -1;
+            long newDistance = -1;
+            for (int i = 0; i < adj.get(u.node).size(); i++) { // untuk setiap edges di node u
+                Node v = adj.get(u.node).get(i); // ambil node tujuan
+                if (u.skip) { // saat sudah pernah diskip
+                    edgeDistance = v.L; // cost ke v
+                    long belumskip = dp[u.node][0]; // cost belum pernah skip tapi mencoba skip saat ini 
+                    long sudahskip = dp[u.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
+                    if (Math.min(belumskip, sudahskip) < dp[v.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                        dp[v.node][1] = Math.min(belumskip, sudahskip); // update cost
+                        minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true)); // masukkan ke minHeap
+                    }
+                } else { // belum pernah diskip
+                    
+                }   
+                // if (!u.skip) { // Take
+                //     edgeDistance = v.L;
+                //     newDistance = dp[u.node][0] + edgeDistance;
+                //     if (newDistance < dp[v.node][0]) {
+                //         dp[v.node][0] = newDistance;
+                //         minHeap.insert(new Node(v.node, dp[v.node][0], v.S, false));
+                //     }
+                //     newDistance = dp[u.node][0] + edgeDistance;
+                //     if (newDistance < dp[v.node][1]) {
+                //         dp[v.node][1] = newDistance;
+                //         minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true));
+                //     }
+                // } else { // Skip
+                //     edgeDistance = v.L;
+                //     newDistance = dp[u.node][1] + edgeDistance;
+                //     if (newDistance < dp[v.node][1]) {
+                //         dp[v.node][1] = newDistance;
+                //         minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true));
+                //     }
+                // }
+            }
+        }
+        // print
+        // long versi1 = dp[t][0] + dp[x][0];
+        // long versi2 = dp[s][0] + dp[t][1] + dp[x][0];
+        // print dp table
+        for (int i = 0; i < V; i++) {
+            out.println("dp[" + i + "][0] = " + dp[i][0]);
+            out.println("dp[" + i + "][1] = " + dp[i][1]);
+        }
+    }
+
     // taken from https://codeforces.com/submissions/Petr
     // together with PrintWriter, these input-output (IO) is much faster than the
     // usual Scanner(System.in) and System.out
@@ -406,13 +471,21 @@ class Node implements Comparable<Node> {
     public int node;
     public long L;
     public long S;
-    // public boolean isKurcaciExist = false;
+    public boolean skip;
  
+    // 3 parameter constructor
     public Node() {}
     public Node(int node, long L, long S) {
         this.node = node;
         this.L = L;
         this.S = S;
+        this.skip = false;
+    }
+    public Node(int node, long L, long S, boolean skip) {
+        this.node = node;
+        this.L = L;
+        this.S = S;
+        this.skip = skip;
     }
 
     @Override 
