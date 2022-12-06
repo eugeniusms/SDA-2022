@@ -15,10 +15,7 @@ public class TP03 {
     // Number of vertices
     static int V;
     static List<List<Node> > adj;
-    static List<Edge> edges;
-
-    // key: dist, value: array[1069] node
-    // static ArrayList<long[]> memo = new ArrayList<long[]>();
+    static List<Edge> edges = new ArrayList<Edge>();
 
     // memo shortest path by node
     static ArrayList<Integer> kurcaci = new ArrayList<Integer>();
@@ -52,10 +49,9 @@ public class TP03 {
             // karena dijkstra undirected berlaku dua arah
             adj.get(A).add(new Node(B, W, S));
             adj.get(B).add(new Node(A, W, S));
+            edges.add(new Edge(A, B, (int) W));
+            edges.add(new Edge(B, A, (int) W));
         }
-
-        // ================================= INISIASI MAX SPANNING TREE ===============================
-        findMaximumSpanningTree(V);
 
         // ================================= INISIASI NODE DENGAN KURCACI ===========================
         int P = in.nextInt();
@@ -75,7 +71,7 @@ public class TP03 {
         for (int i = 0; i < Q; i++) {
             String query = in.next();
             if (query.equals("KABUR")) {
-                KABURI();
+                KABUR();
             } else if (query.equals("SIMULASI")) {
                 SIMULASI();
             } else {
@@ -85,7 +81,7 @@ public class TP03 {
         out.close();    
     }
 
-    static void KABURI() {
+    static void KABUR() {
         int source = in.nextInt(); int destination = in.nextInt();
         // inisiate
         long[] D = new long[V];
@@ -104,7 +100,6 @@ public class TP03 {
             if (green.contains(u))
                 continue;
             green.add(u);
-            // out.println("MENGGREEN: " + u + " dengan D[" + u + "] = " + D[u]);
             // e_neighbours
             long edgeDistance = -1;
             long newDistance = -1;
@@ -123,101 +118,6 @@ public class TP03 {
             }
         }
         out.println(D[destination]);
-    }
-
-    // QUERY 1 : KABUR
-    static void KABUR() {
-        int source = in.nextInt(); int destination = in.nextInt();
-
-        // Memanfaatkan Kruskal's Maximum Spanning Tree (MST))
-        // Gunakan DFS untuk mencari path dari source ke destination
-        visited = new boolean[V]; // reset
-        DFS(source, destination, new Stack<Integer>());
-    }
-
-    static void getMinL(Vector<Integer> stack) {
-        long minL = Long.MAX_VALUE;
-        for(int i = 0; i < stack.size() - 1; i++) {
-            // System.out.println(stack.get(i)+" "+stack.get(i+1));
-            long l = spanningTreeEdges[stack.get(i)][stack.get(i+1)];
-            if (l < minL) {
-                minL = l;
-            }
-        }
-        out.println(minL);
-    }
-
-    static boolean[] visited;
-    static void DFS(int x, int y, Vector<Integer> stack) {
-        stack.add(x);
-        if (x == y) {
-            // print the path and return on
-            // reaching the destination node
-            // printPath(stack);
-            getMinL(stack);
-            return;
-        }
-        visited[x] = true;
-        // if backtracking is taking place     
-        if (spanningTree.get(x).size() > 0) {
-            for(int j = 0; j < spanningTree.get(x).size(); j++) {
-                // if the node is not visited
-                if (visited[spanningTree.get(x).get(j).node] == false) {
-                    DFS(spanningTree.get(x).get(j).node, y, stack);
-                }
-            }
-        }
-        stack.remove(stack.size() - 1);
-    }
-
-    static List<List<Node>> spanningTree;
-    static long[][] spanningTreeEdges = new long[1069][1069]; // <source, [destination]=L>
-    static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
-        spanningTree = new ArrayList<List<Node> >();
-        // Initialize list for every node
-        for (int i = 0; i < v; i++) {
-            List<Node> item = new ArrayList<Node>();
-            spanningTree.add(item);
-        }
-        // Melakukan pencarian max spanning tree
-        // print adj (adj adalah graf penyimpan edge)        
-        // Kruskal's Algorithms
-        // get all edges
-        edges = new ArrayList<Edge>();
-        for (int i = 0; i < adj.size(); i++) {
-            for (int j = 0; j < adj.get(i).size(); j++) {
-                edges.add(new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S));
-            }
-        }
-        // STEP 1 Kruskal's : Sorting edges
-        // Sorting Edges with Bubble Sort
-        for (int i = 0; i < edges.size(); i++) {
-            for (int j = i+1; j < edges.size(); j++) {
-                if (edges.get(i).compareTo(edges.get(j)) < 0) {
-                    Edge temp = edges.get(i);
-                    edges.set(i, edges.get(j));
-                    edges.set(j, temp);
-                }
-            }
-        }
-
-        // STEP 2 Kruskal's : Check cycle
-        // Check cycle with Union Find
-        UnionFind uf = new UnionFind(v);
-        for (Edge e : edges) {
-            if (!uf.isSameSet(e.start, e.destination)) {
-                uf.unionSet(e.start, e.destination);
-                spanningTree.get(e.start).add(new Node(e.destination, e.cost, 0));
-                spanningTree.get(e.destination).add(new Node(e.start, e.cost, 0));
-            }
-        }
-
-        // input spanningTreeEdges
-        for (int i = 0; i < spanningTree.size(); i++) {
-            for (Node n : spanningTree.get(i)) {
-                spanningTreeEdges[i][n.node] = n.L;
-            }
-        }
     }
  
     // QUERY 2 : SIMULASI
