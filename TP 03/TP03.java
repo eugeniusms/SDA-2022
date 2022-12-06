@@ -432,9 +432,10 @@ public class TP03 {
                     edgeDistance = v.L;
                     newDistance = D[u] + edgeDistance;
                     newMaximal = Math.max(M[u], edgeDistance);
-                    if (newDistance < D[v.node])
-                        D[v.node] = newDistance;
+                    // if (newDistance - M[u] < D[v.node])
+                    //     D[v.node] = newDistance;
                     if (newMaximal > M[v.node])
+                        D[v.node] = newDistance;
                         M[v.node] = newMaximal;
                     minHeap.insert(new Node(v.node, D[v.node], v.S));
                 }
@@ -453,17 +454,19 @@ public class TP03 {
         //     System.out.print(M[i]+" ");
         // }
         DistMax DM = new DistMax(D, M); // gabungkan D and M on DM
+        System.out.println("SOURCE: "+src);
         // print dist on DM
-        // System.out.println("D(v,u) with u is all other nodes");
-        // for (int i = 0; i < DM.dist.length; i++) {
-        //     System.out.print(DM.dist[i]+" ");
-        // }
-        // System.out.println();
-        // // print max on DM
-        // System.out.println("M(v,u) with u is all other nodes");
-        // for (int i = 0; i < DM.max.length; i++) {
-        //     System.out.print(DM.max[i]+" ");
-        // }
+        System.out.println("D(src) to is all other nodes");
+        for (int i = 1; i < DM.dist.length; i++) {
+            System.out.print(DM.dist[i]+" ");
+        }
+        System.out.println();
+        // print max on DM
+        System.out.println("M(src) to all other nodes");
+        for (int i = 1; i < DM.max.length; i++) {
+            System.out.print(DM.max[i]+" ");
+        }
+        System.out.println();
         return DM;
     }
 
