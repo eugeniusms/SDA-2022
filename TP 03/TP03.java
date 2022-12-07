@@ -17,10 +17,6 @@ public class TP03 {
     static List<List<Node> > adj;
     static Edge[] edges; 
 
-    // memo kabur
-    static Dist[] memoKabur = new Dist[1069];
-    static boolean[] isMemoKabur = new boolean[1069];
-
     // memo shortest path by node
     static ArrayList<Integer> kurcaci = new ArrayList<Integer>();
     static Dist[] memoByNode = new Dist[1069]; // [node][Dist[i]]
@@ -58,6 +54,9 @@ public class TP03 {
             adj.get(B).add(new Node(A, W, S));
         }
 
+        // ================================= INISIASI MAX SPANNING TREE ===============================
+        findMaximumSpanningTree(V);
+
         // ================================= INISIASI NODE DENGAN KURCACI ===========================
         int P = in.nextInt();
         for (int i = 0; i < P; i++) {
@@ -90,49 +89,154 @@ public class TP03 {
     // QUERY 1 : KABUR
     static void KABUR() {
         int source = in.nextInt(); int destination = in.nextInt();
-        if (isMemoKabur[source]) {
-            out.println(memoKabur[source].dist[destination]);
-        } else {
-            // saat belum ada di dalam memo
-            // inisiate
-            long[] Ds = new long[V];
-            List<Integer> green = new ArrayList<Integer>();
-            MaxHeap maxHeap = new MaxHeap();
-            // dijkstra
-            for (int i = 0; i < V; i++)
-                Ds[i] = Long.MIN_VALUE;
 
-            maxHeap.insert(new Node(source, 0, Long.MAX_VALUE));
-            Ds[source] = 0;
-            while (green.size() != V) {
-                if (maxHeap.isEmpty())
-                    break;
-                int u = maxHeap.remove().node;
-                if (green.contains(u))
-                    continue;
-                green.add(u);
-                // e_neighbours
-                long edgeDistance = -1;
-                long newDistance = -1;
-                for (int i = 0; i < adj.get(u).size(); i++) {
-                    Node v = adj.get(u).get(i);
-                    if (!green.contains(v.node)) {
-                        edgeDistance = v.S;
-                        newDistance = Math.min(Ds[u],edgeDistance);
-                        if (newDistance == 0) {
-                            newDistance = edgeDistance;
-                        }
-                        if (newDistance > Ds[v.node])
-                            Ds[v.node] = newDistance;
-                        maxHeap.insert(new Node(v.node, v.L , Ds[v.node]));
-                        }
+        // Memanfaatkan Kruskal's Maximum Spanning Tree (MST))
+        // Gunakan DFS untuk mencari path dari source ke destination
+        visited = new boolean[V]; // reset
+        DFS(source, destination, new Stack<Integer>());
+    }
+
+    static void getMinL(Vector<Integer> stack) {
+        long minL = Long.MAX_VALUE;
+        for(int i = 0; i < stack.size() - 1; i++) {
+            long l = spanningTreeEdges[stack.get(i)][stack.get(i+1)];
+            if (l < minL) {
+                minL = l;
+            }
+        }
+        out.println(minL);
+    }
+
+    static boolean[] visited;
+    static void DFS(int x, int y, Vector<Integer> stack) {
+        stack.add(x);
+        if (x == y) {
+            // print the path and return on
+            // reaching the destination node
+            getMinL(stack);
+            return;
+        }
+        visited[x] = true;
+        // if backtracking is taking place     
+        List<Node> spanningTreeX = spanningTree.get(x);
+        if (spanningTreeX.size() > 0) {
+            for(int j = 0; j < spanningTreeX.size(); j++) {
+                // if the node is not visited
+                int node = spanningTreeX.get(j).node;
+                if (visited[node] == false) {
+                    DFS(node, y, stack);
                 }
             }
-            out.println(Ds[destination]);
-            // memo kabur
-            Dist dist = new Dist(Ds);
-            memoKabur[source] = dist;
-            isMemoKabur[source] = true;
+        }
+        stack.remove(stack.size() - 1);
+    }
+
+    static List<List<Node>> spanningTree;
+    static long[][] spanningTreeEdges = new long[1069][1069]; // <source, [destination]=L>
+    static void findMaximumSpanningTree(int v) { // v : jumlah nodes (include 0)
+        spanningTree = new ArrayList<List<Node> >();
+        // Initialize list for every node
+        for (int i = 0; i < v; i++) {
+            spanningTree.add(new ArrayList<Node>());
+        }
+        // Melakukan pencarian max spanning tree
+        // print adj (adj adalah graf penyimpan edge)        
+        // Kruskal's Algorithms
+        // get all edges
+
+        int counter = 0;
+        for (int i = 0; i < adj.size(); i++) {
+            for (int j = 0; j < adj.get(i).size(); j++) {
+                edges[counter] = new Edge(i, adj.get(i).get(j).node, (int) adj.get(i).get(j).S);
+                counter++;
+            }
+        }
+        // STEP 1 Kruskal's : Sorting edges
+        // Sorting Edges with Merge Sort
+        sort(edges, 0, edges.length-1);
+
+        // STEP 2 Kruskal's : Check cycle
+        // Check cycle with Union Find
+        UnionFind uf = new UnionFind(v);
+        for (Edge e : edges) {
+            if (!uf.isSameSet(e.start, e.destination)) {
+                uf.unionSet(e.start, e.destination);
+                spanningTree.get(e.start).add(new Node(e.destination, e.cost, 0));
+                spanningTree.get(e.destination).add(new Node(e.start, e.cost, 0));
+            }
+        }
+
+        // input spanningTreeEdges
+        for (int i = 0; i < spanningTree.size(); i++) {
+            for (Node n : spanningTree.get(i)) {
+                spanningTreeEdges[i][n.node] = n.L;
+            }
+        }
+    }
+
+    // REFERENCE : https://www.geeksforgeeks.org/merge-sort/
+    static void merge(Edge arr[], int l, int m, int r) {
+        // Find sizes of two subarrays to be merged
+        int n1 = m - l + 1;
+        int n2 = r - m;
+ 
+        /* Create temp arrays */
+        Edge L[] = new Edge[n1];
+        Edge R[] = new Edge[n2];
+ 
+        /*Copy data to temp arrays*/
+        for (int i = 0; i < n1; ++i)
+            L[i] = arr[l + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = arr[m + 1 + j];
+ 
+        /* Merge the temp arrays */
+ 
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+ 
+        // Initial index of merged subarray array
+        int k = l;
+        while (i < n1 && j < n2) {
+            if (L[i].compareTo(R[j]) > 0) {
+                arr[k] = L[i];
+                i++;
+            }
+            else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+ 
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+ 
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+ 
+    // Main function that sorts arr[l..r] using
+    // merge()
+    static void sort(Edge arr[], int l, int r) {
+        if (l < r) {
+            // Find the middle point
+            int m = l + (r - l) / 2;
+ 
+            // Sort first and second halves
+            sort(arr, l, m);
+            sort(arr, m + 1, r);
+ 
+            // Merge the sorted halves
+            merge(arr, l, m, r);
         }
     }
  
@@ -342,14 +446,6 @@ class Node implements Comparable<Node> {
             return 1;
         return 0;
     }
-
-    public int compareToS(Node other) {
-        if (this.S < other.S)
-            return -1;
-        if (this.S > other.S)
-            return 1;
-        return 0;
-    }
 }
 
 class Edge implements Comparable<Edge>{
@@ -372,6 +468,54 @@ class Edge implements Comparable<Edge>{
             return  other.start - this.start; 
         }
         return this.cost - other.cost;
+    }
+}
+
+// Union Find Disjoint Set for Kruskal's Algorithm
+class UnionFind {
+    private int[] p, rank, setSize;
+    private int numSets;
+ 
+    public UnionFind(int N) {
+        p = new int[numSets = N];
+        rank = new int[N];
+        setSize = new int[N];
+        for (int i = 0; i < N; i++) {
+            p[i] = i;
+            setSize[i] = 1;
+        }
+    }
+ 
+    public int findSet(int i) {
+        return p[i] == i ? i : (p[i] = findSet(p[i]));
+    }
+ 
+    public boolean isSameSet(int i, int j) {
+        return findSet(i) == findSet(j);
+    }
+ 
+    public void unionSet(int i, int j) {
+        if (isSameSet(i, j))
+            return;
+        numSets--;
+        int x = findSet(i), y = findSet(j);
+        if (rank[x] > rank[y]) {
+            p[y] = x;
+            setSize[x] += setSize[y];
+        } else {
+            p[x] = y;
+            setSize[y] += setSize[x];
+            if (rank[x] == rank[y])
+                rank[y]++;
+        }
+    }
+ 
+    public int numDisjointSets() {
+        return numSets;
+    }
+ 
+    public int sizeOfSet(int i) {
+        return setSize[findSet(i)];
     }
 }
 
@@ -506,148 +650,6 @@ class MinHeap<T extends Comparable<T>> {
 					minChildIdx = rightIdx;
 
 				if (node.compareTo(data.get(minChildIdx)) > 0) {
-					data.set(idx, data.get(minChildIdx));
-					idx = minChildIdx;
-				} else {
-					data.set(idx, node);
-					break;
-				}
-			}
-		}
-	}
-}
-
-class MaxHeap {
-	ArrayList<Node> data;
-
-	public MaxHeap() {
-		data = new ArrayList<Node>();
-	}
-
-	public MaxHeap(ArrayList<Node> arr) {
-		data = arr;
-		heapify();
-	}
-
-    public boolean isEmpty() {
-        return data.isEmpty();
-    }
-
-	public Node peek() {
-		if (data.isEmpty())
-			return null;
-		return data.get(0);
-	}
-
-	public void insert(Node value) {
-		data.add(value);
-		percolateUp(data.size() - 1);
-	}
-
-	public Node remove() {
-		Node removedObject = peek();
-
-		if (data.size() == 1)
-			data.clear();
-		else {
-			data.set(0, data.get(data.size() - 1));
-			data.remove(data.size() - 1);
-			percolateDown(0);
-		}
-
-		return removedObject;
-	}
-
-	private void percolateDown(int idx) {
-		Node node = data.get(idx);
-		int heapSize = data.size();
-
-		while (true) {
-			int leftIdx = getLeftChildIdx(idx);
-			if (leftIdx >= heapSize) {
-				data.set(idx, node);
-				break;
-			} else {
-				int minChildIdx = leftIdx;
-				int rightIdx = getRightChildIdx(idx);
-				if (rightIdx < heapSize && data.get(rightIdx).compareToS(data.get(leftIdx)) > 0)
-					minChildIdx = rightIdx;
-
-				if (node.compareToS(data.get(minChildIdx)) < 0) {
-					data.set(idx, data.get(minChildIdx));
-					idx = minChildIdx;
-				} else {
-					data.set(idx, node);
-					break;
-				}
-			}
-		}
-	}
-
-	private void percolateUp(int idx) {
-		Node node = data.get(idx);
-		int parentIdx = getParentIdx(idx);
-		while (idx > 0 && node.compareToS(data.get(parentIdx)) > 0) {
-			data.set(idx, data.get(parentIdx));
-			idx = parentIdx;
-			parentIdx = getParentIdx(idx);
-		}
-
-		data.set(idx, node);
-	}
-
-	private int getParentIdx(int i) {
-		return (i - 1) / 2;
-	}
-
-	private int getLeftChildIdx(int i) {
-		return 2 * i + 1;
-	}
-
-	private int getRightChildIdx(int i) {
-		return 2 * i + 2;
-	}
-
-	private void heapify() {
-		for (int i = data.size() / 2 - 1; i >= 0; i--)
-			percolateDown(i);
-	}
-
-	public void sort() {
-		int n = data.size();
-		while (n > 1) {
-			data.set(n - 1, remove(n));
-			n--;
-		}
-	}
-
-	public Node remove(int n) {
-		Node removedObject = peek();
-
-		if (n > 1) {
-			data.set(0, data.get(n - 1));
-			percolateDown(0, n - 1);
-		}
-
-		return removedObject;
-	}
-
-	private void percolateDown(int idx, int n) {
-		Node node = data.get(idx);
-		int heapSize = n;
-
-		while (true) {
-			int leftIdx = getLeftChildIdx(idx);
-			if (leftIdx >= heapSize) {
-				data.set(idx, node);
-				break;
-			} else {
-				int minChildIdx = leftIdx;
-				int rightIdx = getRightChildIdx(idx);
-				if (rightIdx < heapSize && data.get(rightIdx).compareToS(data.get(leftIdx)) > 0)
-					minChildIdx = rightIdx;
-
-				if (node.compareToS(data.get(minChildIdx)) < 0) {
 					data.set(idx, data.get(minChildIdx));
 					idx = minChildIdx;
 				} else {
