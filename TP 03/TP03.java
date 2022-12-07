@@ -25,6 +25,10 @@ public class TP03 {
     static Dist[] memoByNode = new Dist[1069]; // [node][Dist[i]]
     static boolean[] isMemo = new boolean[1069]; // [node]
 
+    // SUPER
+    static Dist[] memoSkip = new Dist[1069]; // [node][skip1Dist[i]]
+    static boolean[] isMemoSkip = new boolean[1069]; // [node]
+
     public static void main(String arg[]) {
         InputStream inputStream = System.in;
         in = new InputReader(inputStream);
@@ -371,104 +375,129 @@ public class TP03 {
     static void dijkstraSuper() {
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
 
-        // =============================== DIJKSTRA PERTAMA DARI S KE T ==============================
-        // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
-        long[][] dp = new long[V][2];
-        for (int i = 0; i < V; i++) {
-            dp[i][0] = Long.MAX_VALUE;
-            dp[i][1] = Long.MAX_VALUE;
-        }
-        dp[s][0] = 0; // state 0 -> take
-        dp[s][1] = 0; // state 1 -> skip
-        // dijkstra with 1 is k-skip edge
-        MinHeap<Node> minHeap = new MinHeap<Node>();
-        minHeap.insert(new Node(s, 0, 0));
-        while (!minHeap.isEmpty()) {
-            Node start = minHeap.remove();
-            // e_neighbours
-            long edgeDistance = -1;
-            long noSkip = -1;
-            for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
-                Node desti = adj.get(start.node).get(i); // ambil node tujuan
-                edgeDistance = desti.L; // cost ke v
-
-                if (start.skip) { // saat sudah pernah diskip                    
-                    long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
-                    long sudahskip = dp[start.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
-                    if (Math.min(belumskip, sudahskip) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
-                        dp[desti.node][1] = Math.min(belumskip, sudahskip); // update cost
-                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true)); // masukkan ke minHeap
-                    }
-
-                } else { // belum pernah diskip
-                    noSkip = dp[start.node][0] + edgeDistance;
-                    // dijkstra biasa
-                    // dijkstra ini biasa state[0] udah bener
-                    if (noSkip < dp[desti.node][0]) {
-                        dp[desti.node][0] = noSkip;
-                        minHeap.insert(new Node(desti.node, dp[desti.node][0], desti.S, false));
-                    }
-
-                    // skip jika state 1 lebih kecil dari state 0
-                    if (dp[desti.node][1] < noSkip) {
-                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
-                    }
-                    
-                }
-
+        // CEK SUDAH PERNAH DIMEMO DI SUPER BELUM
+        long[][] dp; MinHeap<Node> minHeap;
+        long minCostST;
+        long skipCostST;
+        if (isMemoSkip[s]) {
+            minCostST = memoByNode[s].dist[t];
+            skipCostST = memoSkip[s].dist[t];
+        } else { // GENERATE DP SKIP
+            // =============================== DIJKSTRA PERTAMA DARI S KE T ==============================
+            // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
+            dp = new long[2][V];
+            for (int i = 0; i < V; i++) {
+                dp[0][i] = Long.MAX_VALUE;
+                dp[1][i] = Long.MAX_VALUE;
             }
-        }   
-        long minCostST = dp[t][0]; // cost dari s ke t tanpa skip
-        long skipCostST = dp[t][1]; // cost dari s ke t dengan skip
+            dp[0][s] = 0; // state 0 -> take
+            dp[1][s] = 0; // state 1 -> skip
+            // dijkstra with 1 is k-skip edge
+            minHeap = new MinHeap<Node>();
+            minHeap.insert(new Node(s, 0, 0));
+            while (!minHeap.isEmpty()) {
+                Node start = minHeap.remove();
+                // e_neighbours
+                long edgeDistance = -1;
+                long noSkip = -1;
+                for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
+                    Node desti = adj.get(start.node).get(i); // ambil node tujuan
+                    edgeDistance = desti.L; // cost ke v
+
+                    if (start.skip) { // saat sudah pernah diskip                    
+                        long belumskip = dp[0][start.node]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
+                        long sudahskip = dp[1][start.node] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
+                        if (Math.min(belumskip, sudahskip) < dp[1][desti.node]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                            dp[1][desti.node] = Math.min(belumskip, sudahskip); // update cost
+                            minHeap.insert(new Node(desti.node, dp[1][desti.node], desti.S, true)); // masukkan ke minHeap
+                        }
+
+                    } else { // belum pernah diskip
+                        noSkip = dp[0][start.node] + edgeDistance;
+                        // dijkstra biasa
+                        // dijkstra ini biasa state[0] udah bener
+                        if (noSkip < dp[0][desti.node]) {
+                            dp[0][desti.node] = noSkip;
+                            minHeap.insert(new Node(desti.node, dp[0][desti.node], desti.S, false));
+                        }
+
+                        // skip jika state 1 lebih kecil dari state 0
+                        if (dp[1][desti.node] < noSkip) {
+                            minHeap.insert(new Node(desti.node, dp[1][desti.node], desti.S, true));
+                        }
+                        
+                    }
+
+                }
+            }   
+            minCostST = dp[0][t]; // cost dari s ke t tanpa skip
+            skipCostST = dp[1][t]; // cost dari s ke t dengan skip
+            // memoize
+            memoByNode[s] = new Dist(dp[0]); isMemo[s] = true;
+            memoSkip[s] = new Dist(dp[1]); isMemoSkip[s] = true;
+        }
+        
         // ============================= DIJKSTRA KEDUA DARI T KE X ===============================
-        // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
-        dp = new long[V][2]; // reset dp table
-        for (int i = 0; i < V; i++) {
-            dp[i][0] = Long.MAX_VALUE;
-            dp[i][1] = Long.MAX_VALUE;
-        }
-        dp[t][0] = 0; // state 0 -> take
-        dp[t][1] = 0; // state 1 -> skip
-        // dijkstra with 1 is k-skip edge
-        minHeap = new MinHeap<Node>();
-        minHeap.insert(new Node(t, 0, 0));
-        while (!minHeap.isEmpty()) {
-            Node start = minHeap.remove();
-            // e_neighbours
-            long edgeDistance = -1;
-            long noSkip = -1;
-            for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
-                Node desti = adj.get(start.node).get(i); // ambil node tujuan
-                edgeDistance = desti.L; // cost ke v
-
-                if (start.skip) { // saat sudah pernah diskip                    
-                    long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
-                    long sudahskip = dp[start.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
-                    if (Math.min(belumskip, sudahskip) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
-                        dp[desti.node][1] = Math.min(belumskip, sudahskip); // update cost
-                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true)); // masukkan ke minHeap
-                    }
-
-                } else { // belum pernah diskip
-                    noSkip = dp[start.node][0] + edgeDistance;
-                    // dijkstra biasa
-                    // dijkstra ini biasa state[0] udah bener
-                    if (noSkip < dp[desti.node][0]) {
-                        dp[desti.node][0] = noSkip;
-                        minHeap.insert(new Node(desti.node, dp[desti.node][0], desti.S, false));
-                    }
-
-                    // skip jika state 1 lebih kecil dari state 0
-                    if (dp[desti.node][1] < noSkip) {
-                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
-                    }
-                    
-                }
-
+        
+        long minCostTX;
+        long skipCostTX;
+        if (isMemoSkip[t]) {
+            minCostTX = memoByNode[t].dist[x];
+            skipCostTX = memoSkip[t].dist[x];
+        } else { // GENERATE DP SKIP
+            // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
+            dp = new long[2][V];
+            for (int i = 0; i < V; i++) {
+                dp[0][i] = Long.MAX_VALUE;
+                dp[1][i] = Long.MAX_VALUE;
             }
-        }   
-        long minCostTX = dp[x][0]; // cost dari t ke x tanpa skip
-        long skipCostTX = dp[x][1]; // cost dari t ke x dengan skip
+            dp[0][t] = 0; // state 0 -> take
+            dp[1][t] = 0; // state 1 -> skip
+            // dijkstra with 1 is k-skip edge 
+            minHeap = new MinHeap<Node>();
+            minHeap.insert(new Node(t, 0, 0));
+            while (!minHeap.isEmpty()) {
+                Node start = minHeap.remove();
+                // e_neighbours
+                long edgeDistance = -1;
+                long noSkip = -1;
+                for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
+                    Node desti = adj.get(start.node).get(i); // ambil node tujuan
+                    edgeDistance = desti.L; // cost ke v
+
+                    if (start.skip) { // saat sudah pernah diskip                    
+                        long belumskip = dp[0][start.node]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
+                        long sudahskip = dp[1][start.node] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
+                        if (Math.min(belumskip, sudahskip) < dp[1][desti.node]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                            dp[1][desti.node] = Math.min(belumskip, sudahskip); // update cost
+                            minHeap.insert(new Node(desti.node, dp[1][desti.node], desti.S, true)); // masukkan ke minHeap
+                        }
+
+                    } else { // belum pernah diskip
+                        noSkip = dp[0][start.node] + edgeDistance;
+                        // dijkstra biasa
+                        // dijkstra ini biasa state[0] udah bener
+                        if (noSkip < dp[0][desti.node]) {
+                            dp[0][desti.node] = noSkip;
+                            minHeap.insert(new Node(desti.node, dp[0][desti.node], desti.S, false));
+                        }
+
+                        // skip jika state 1 lebih kecil dari state 0
+                        if (dp[1][desti.node] < noSkip) {
+                            minHeap.insert(new Node(desti.node, dp[1][desti.node], desti.S, true));
+                        }
+                        
+                    }
+
+                }
+            }   
+            minCostTX = dp[0][x]; // cost dari t ke x tanpa skip
+            skipCostTX = dp[1][x]; // cost dari t ke x dengan skip
+            // memoize
+            memoByNode[t] = new Dist(dp[0]); isMemo[t] = true;
+            memoSkip[t] = new Dist(dp[1]); isMemoSkip[t] = true;
+        }
+
         // Cari versi terpendek between
         // S -> T -> Skip -> X && S -> Skip -> T -> X
         long result = Math.min(minCostST + skipCostTX, skipCostST + minCostTX);
