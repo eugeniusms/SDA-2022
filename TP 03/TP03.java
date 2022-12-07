@@ -69,9 +69,7 @@ public class TP03 {
 
         // Inisiate Dijkstra First Time (Pos Kurcaci)
         for (int k : kurcaci) {
-            Dist dist = dijkstra(k);
-            memoByNode[k] = dist; // memoize
-            isMemo[k] = true; // memoized
+            palingDijkstra(k); // sekalian memo di dalam fungsi
         }
 
         // ================================= INPUT QUERY ============================================
@@ -390,6 +388,60 @@ public class TP03 {
         // S -> T -> Skip -> X && S -> Skip -> T -> X
         long result = Math.min(minCostST + skipCostTX, skipCostST + minCostTX);
         out.println(result);
+    }
+
+    // DIJKSTRA CAMPUR SUPER & SIMULASI
+    static void palingDijkstra(int src) {
+        // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
+        long[][] dp; MinHeap minHeap;
+        dp = new long[2][V];
+        for (int i = 0; i < V; i++) {
+            dp[0][i] = Long.MAX_VALUE;
+            dp[1][i] = Long.MAX_VALUE;
+        }
+        dp[0][src] = 0; // state 0 -> take
+        dp[1][src] = 0; // state 1 -> skip
+        // dijkstra with 1 is k-skip edge 
+        minHeap = new MinHeap();
+        minHeap.insert(new Node(src, 0, 0));
+        while (!minHeap.isEmpty()) {
+            Node start = minHeap.remove();
+            // e_neighbours
+            long edgeDistance = -1;
+            long noSkip = -1;
+            for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
+                Node desti = adj.get(start.node).get(i); // ambil node tujuan
+                edgeDistance = desti.L; // cost ke v
+
+                if (start.skip) { // saat sudah pernah diskip                    
+                    long belumskip = dp[0][start.node]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
+                    long sudahskip = dp[1][start.node] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
+                    if (Math.min(belumskip, sudahskip) < dp[1][desti.node]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                        dp[1][desti.node] = Math.min(belumskip, sudahskip); // update cost
+                        minHeap.insert(new Node(desti.node, dp[1][desti.node], desti.S, true)); // masukkan ke minHeap
+                    }
+
+                } else { // belum pernah diskip
+                    noSkip = dp[0][start.node] + edgeDistance;
+                    // dijkstra biasa
+                    // dijkstra ini biasa state[0] udah bener
+                    if (noSkip < dp[0][desti.node]) {
+                        dp[0][desti.node] = noSkip;
+                        minHeap.insert(new Node(desti.node, dp[0][desti.node], desti.S, false));
+                    }
+
+                    // skip jika state 1 lebih kecil dari state 0
+                    if (dp[1][desti.node] < noSkip) {
+                        minHeap.insert(new Node(desti.node, dp[1][desti.node], desti.S, true));
+                    }
+                    
+                }
+
+            }
+        }   
+        // memoize
+        memoByNode[src] = new Dist(dp[0]); isMemo[src] = true;
+        memoSkip[src] = new Dist(dp[1]); isMemoSkip[src] = true;
     }
 
     // taken from https://codeforces.com/submissions/Petr
