@@ -39,4 +39,10 @@ SISA         : [TLE] - TIME LIMIT 3s
 92,93        : KABUR, SIMULASI, SUPER
 96,98-100    : KABUR, SIMULASI, SUPER
 
-[SUBMITTED 12]
+[SUBMITTED 12] [93/100]
+ALL          : [AC]
+SISA         : [TLE] - TIME LIMIT 3s
+54           : SUPER
+71,75        : KABUR, SUPER
+81           : SIMULASI, SUPER
+92,96,9      : KABUR, SIMULASI, SUPER 
