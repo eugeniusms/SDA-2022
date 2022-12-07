@@ -266,7 +266,7 @@ public class TP03 {
                     }
                 }
                 // memo minTime for K
-                memoSim_K[k] = minTime;
+                memoSim_K[k] = minTime; isMemoSim_K[k] = true;
             }
             // find max
             if (minTime > maxTime) {
