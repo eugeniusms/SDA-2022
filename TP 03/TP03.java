@@ -95,15 +95,15 @@ public class TP03 {
         } else {
             // saat belum ada di dalam memo
             // inisiate
-            long[] D = new long[V];
+            long[] Ds = new long[V];
             List<Integer> green = new ArrayList<Integer>();
             MaxHeap maxHeap = new MaxHeap();
             // dijkstra
             for (int i = 0; i < V; i++)
-                D[i] = Long.MIN_VALUE;
+                Ds[i] = Long.MIN_VALUE;
 
             maxHeap.insert(new Node(source, 0, Long.MAX_VALUE));
-            D[source] = 0;
+            Ds[source] = 0;
             while (green.size() != V) {
                 if (maxHeap.isEmpty())
                     break;
@@ -118,19 +118,19 @@ public class TP03 {
                     Node v = adj.get(u).get(i);
                     if (!green.contains(v.node)) {
                         edgeDistance = v.S;
-                        newDistance = Math.min(D[u],edgeDistance);
+                        newDistance = Math.min(Ds[u],edgeDistance);
                         if (newDistance == 0) {
                             newDistance = edgeDistance;
                         }
-                        if (newDistance > D[v.node])
-                            D[v.node] = newDistance;
-                        maxHeap.insert(new Node(v.node, v.L , D[v.node]));
+                        if (newDistance > Ds[v.node])
+                            Ds[v.node] = newDistance;
+                        maxHeap.insert(new Node(v.node, v.L , Ds[v.node]));
                         }
                 }
             }
-            out.println(D[destination]);
+            out.println(Ds[destination]);
             // memo kabur
-            Dist dist = new Dist(D);
+            Dist dist = new Dist(Ds);
             memoKabur[source] = dist;
             isMemoKabur[source] = true;
         }
