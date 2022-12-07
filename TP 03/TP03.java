@@ -22,10 +22,6 @@ public class TP03 {
     static Dist[] memoByNode = new Dist[1069]; // [node][Dist[i]]
     static boolean[] isMemo = new boolean[1069]; // [node]
 
-    // SIMULASI 
-    static long[] memoSim_K = new long[1069]; // [node][Simulasi-K[i]]
-    static boolean[] isMemoSim_K = new boolean[1069]; // [node]
-
     // SUPER
     static Dist[] memoSkip = new Dist[1069]; // [node][skip1Dist[i]]
     static boolean[] isMemoSkip = new boolean[1069]; // [node]
@@ -252,19 +248,13 @@ public class TP03 {
         }
         long maxTime = 0;
         for (int k : kurcaci) {
-            long minTime = Long.MAX_VALUE;
             // find min
-            if (isMemoSim_K[k]) {
-                minTime = memoSim_K[k];
-            } else {
-                long[] dist = memoByNode[k].dist;
-                for (int g : gate) {
-                    if (dist[g] < minTime) {
-                        minTime = dist[g];
-                    }
+            long[] dist = memoByNode[k].dist;
+            long minTime = Long.MAX_VALUE;
+            for (int g : gate) {
+                if (dist[g] < minTime) {
+                    minTime = dist[g];
                 }
-                // memo minTime for K
-                memoSim_K[k] = minTime; isMemoSim_K[k] = true;
             }
             // find max
             if (minTime > maxTime) {
