@@ -418,40 +418,8 @@ public class TP03 {
 
             }
         }   
-                // if (!u.skip) { // Take
-                //     edgeDistance = v.L;
-                //     newDistance = dp[u.node][0] + edgeDistance;
-                //     if (newDistance < dp[v.node][0]) {
-                //         dp[v.node][0] = newDistance;
-                //         minHeap.insert(new Node(v.node, dp[v.node][0], v.S, false));
-                //     }
-                //     newDistance = dp[u.node][0] + edgeDistance;
-                //     if (newDistance < dp[v.node][1]) {
-                //         dp[v.node][1] = newDistance;
-                //         minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true));
-                //     }
-                // } else { // Skip
-                //     edgeDistance = v.L;
-                //     newDistance = dp[u.node][1] + edgeDistance;
-                //     if (newDistance < dp[v.node][1]) {
-                //         dp[v.node][1] = newDistance;
-                //         minHeap.insert(new Node(v.node, dp[v.node][1], v.S, true));
-                //     }
-                // }
-            // }
-        // }
-        // print
-        // long versi1 = dp[t][0] + dp[x][0];
-        // long versi2 = dp[s][0] + dp[t][1] + dp[x][0];
-        // print dp table
-        // print final
-        // out.println("FINAL DP TABLE: ");
-        // for (int i = 1; i < V; i++) {
-        //     out.println("dp[" + i + "][0] = " + dp[i][0]);
-        //     out.println("dp[" + i + "][1] = " + dp[i][1]);
-        // }
-        long minCostST = dp[t][0];
-        long skipCostST = dp[t][1];
+        long minCostST = dp[t][0]; // cost dari s ke t tanpa skip
+        long skipCostST = dp[t][1]; // cost dari s ke t dengan skip
         // ============================= DIJKSTRA KEDUA DARI T KE X ===============================
         // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
         dp = new long[V][2]; // reset dp table
@@ -499,13 +467,8 @@ public class TP03 {
 
             }
         }   
-        // out.println("FINAL DP TABLE: ");
-        // for (int i = 1; i < V; i++) {
-        //     out.println("dp[" + i + "][0] = " + dp[i][0]);
-        //     out.println("dp[" + i + "][1] = " + dp[i][1]);
-        // }
-        long minCostTX = dp[x][0];
-        long skipCostTX = dp[x][1];
+        long minCostTX = dp[x][0]; // cost dari t ke x tanpa skip
+        long skipCostTX = dp[x][1]; // cost dari t ke x dengan skip
         // Cari versi terpendek between
         // S -> T -> Skip -> X && S -> Skip -> T -> X
         long result = Math.min(minCostST + skipCostTX, skipCostST + minCostTX);
