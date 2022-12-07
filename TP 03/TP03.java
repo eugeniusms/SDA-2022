@@ -274,44 +274,7 @@ public class TP03 {
 
         out.println(maxTime);
     }
-
-    // Method 1
-    // Dijkstra's Algorithm
-    static Dist dijkstra(int src) { // return Dist with isi [src[v]] to all nodes
-        // inisiate
-        long[] D = new long[V];
-        List<Integer> green = new ArrayList<Integer>();
-        MinHeap minHeap = new MinHeap();
-        // dijkstra
-        for (int i = 0; i < V; i++)
-            D[i] = Long.MAX_VALUE;
-        minHeap.insert(new Node(src, 0, 0));
-        D[src] = 0;
-        while (green.size() != V) {
-            if (minHeap.isEmpty())
-                break;
-            int u = minHeap.remove().node;
-            if (green.contains(u))
-                continue;
-            green.add(u);
-            // e_neighbours
-            long edgeDistance = -1;
-            long newDistance = -1;
-            for (int i = 0; i < adj.get(u).size(); i++) {
-                Node v = adj.get(u).get(i);
-                if (!green.contains(v.node)) {
-                    edgeDistance = v.L;
-                    newDistance = D[u] + edgeDistance;
-                    if (newDistance < D[v.node])
-                        D[v.node] = newDistance;
-                    minHeap.insert(new Node(v.node, D[v.node], v.S));
-                }
-            }
-        }
-        Dist dist = new Dist(D);
-        return dist;
-    }
-
+    
     // QUERY 3 : SUPER
     static void SUPER() { // manfaatin dijkstra dp
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
