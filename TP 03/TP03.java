@@ -273,7 +273,7 @@ public class TP03 {
         // inisiate
         long[] D = new long[V];
         List<Integer> green = new ArrayList<Integer>();
-        MinHeap<Node> minHeap = new MinHeap<Node>();
+        MinHeap minHeap = new MinHeap();
         // dijkstra
         for (int i = 0; i < V; i++)
             D[i] = Long.MAX_VALUE;
@@ -309,7 +309,7 @@ public class TP03 {
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
 
         // CEK SUDAH PERNAH DIMEMO DI SUPER BELUM
-        long[][] dp; MinHeap<Node> minHeap;
+        long[][] dp; MinHeap minHeap;
         long minCostST;
         long skipCostST;
         long minCostTX;
@@ -330,7 +330,7 @@ public class TP03 {
             dp[0][t] = 0; // state 0 -> take
             dp[1][t] = 0; // state 1 -> skip
             // dijkstra with 1 is k-skip edge 
-            minHeap = new MinHeap<Node>();
+            minHeap = new MinHeap();
             minHeap.insert(new Node(t, 0, 0));
             while (!minHeap.isEmpty()) {
                 Node start = minHeap.remove();
@@ -519,14 +519,14 @@ class UnionFind {
     }
 }
 
-class MinHeap<T extends Comparable<T>> {
-	ArrayList<T> data;
+class MinHeap {
+	ArrayList<Node> data;
 
 	public MinHeap() {
-		data = new ArrayList<T>();
+		data = new ArrayList<Node>();
 	}
 
-	public MinHeap(ArrayList<T> arr) {
+	public MinHeap(ArrayList<Node> arr) {
 		data = arr;
 		heapify();
 	}
@@ -535,19 +535,19 @@ class MinHeap<T extends Comparable<T>> {
         return data.isEmpty();
     }
 
-	public T peek() {
+	public Node peek() {
 		if (data.isEmpty())
 			return null;
 		return data.get(0);
 	}
 
-	public void insert(T value) {
+	public void insert(Node value) {
 		data.add(value);
 		percolateUp(data.size() - 1);
 	}
 
-	public T remove() {
-		T removedObject = peek();
+	public Node remove() {
+		Node removedObject = peek();
 
 		if (data.size() == 1)
 			data.clear();
@@ -561,7 +561,7 @@ class MinHeap<T extends Comparable<T>> {
 	}
 
 	private void percolateDown(int idx) {
-		T node = data.get(idx);
+		Node node = data.get(idx);
 		int heapSize = data.size();
 
 		while (true) {
@@ -587,7 +587,7 @@ class MinHeap<T extends Comparable<T>> {
 	}
 
 	private void percolateUp(int idx) {
-		T node = data.get(idx);
+		Node node = data.get(idx);
 		int parentIdx = getParentIdx(idx);
 		while (idx > 0 && node.compareTo(data.get(parentIdx)) < 0) {
 			data.set(idx, data.get(parentIdx));
@@ -623,8 +623,8 @@ class MinHeap<T extends Comparable<T>> {
 		}
 	}
 
-	public T remove(int n) {
-		T removedObject = peek();
+	public Node remove(int n) {
+		Node removedObject = peek();
 
 		if (n > 1) {
 			data.set(0, data.get(n - 1));
@@ -635,7 +635,7 @@ class MinHeap<T extends Comparable<T>> {
 	}
 
 	private void percolateDown(int idx, int n) {
-		T node = data.get(idx);
+		Node node = data.get(idx);
 		int heapSize = n;
 
 		while (true) {
