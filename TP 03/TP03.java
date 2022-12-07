@@ -386,7 +386,7 @@ public class TP03 {
             Node start = minHeap.remove();
             // e_neighbours
             long edgeDistance = -1;
-            long newDistance = -1;
+            long noSkip = -1;
             for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
                 Node desti = adj.get(start.node).get(i); // ambil node tujuan
                 edgeDistance = desti.L; // cost ke v
@@ -401,16 +401,17 @@ public class TP03 {
                     }
 
                 } else { // belum pernah diskip
-                    newDistance = dp[start.node][0] + edgeDistance;
+                    noSkip = dp[start.node][0] + edgeDistance;
                     // dijkstra biasa
                     // dijkstra ini biasa state[0] udah bener
-                    if (newDistance < dp[desti.node][0]) {
-                        dp[desti.node][0] = newDistance;
+                    if (noSkip < dp[desti.node][0]) {
+                        dp[desti.node][0] = noSkip;
                         minHeap.insert(new Node(desti.node, dp[desti.node][0], desti.S, false));
                     }
 
                     // skip jika state 1 lebih kecil dari state 0
-                    if (dp[desti.node][1] < dp[start.node][0] + edgeDistance) {
+                    if (dp[desti.node][1] < noSkip) {
+                        out.println("MASUK");
                         // newDistance = dp[start.node][1] + edgeDistance;
                         // if (newDistance < dp[desti.node][1]) {
                         //     dp[start.node][1] = newDistance;
