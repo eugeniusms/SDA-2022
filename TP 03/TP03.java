@@ -17,9 +17,6 @@ public class TP03 {
     static List<List<Node> > adj;
     static Edge[] edges; 
 
-    // key: dist, value: array[1069] node
-    // static ArrayList<long[]> memo = new ArrayList<long[]>();
-
     // memo shortest path by node
     static ArrayList<Integer> kurcaci = new ArrayList<Integer>();
     static Dist[] memoByNode = new Dist[1069]; // [node][Dist[i]]
@@ -83,7 +80,7 @@ public class TP03 {
                 SIMULASI();
             } else {
                 // SUPER();
-                dijkstraSuper();
+                SUPER();
             }
         }
         out.close();    
@@ -270,71 +267,6 @@ public class TP03 {
         out.println(maxTime);
     }
 
-    // QUERY 3 : SUPER
-
-    static void SUPER() {
-        int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
-        // find D(s,v) == D(v,s)
-        // cek isMemoized
-        Dist S;
-        if (isMemo[s]) {
-            S = memoByNode[s]; 
-        } else {
-            S = dijkstra(s);
-            memoByNode[s] = S; // memoize
-            isMemo[s] = true; // memoized
-        }
-        // find D(t,v) == D(v,t)
-        Dist T;
-        if (isMemo[t]) {
-            T = memoByNode[t]; 
-        } else {
-            T = dijkstra(t);
-            memoByNode[t] = T; // memoize
-            isMemo[t] = true; // memoized
-        }
-        // find D(x,v) == D(v,x)
-        Dist X;
-        if (isMemo[x]) {
-            X = memoByNode[x];
-        } else {
-            X = dijkstra(x);
-            memoByNode[x] = X; // memoize
-            isMemo[x] = true; // memoized
-        }
-
-        // find minCost (s,t)
-        // operate min (D(s,u) - D(w,t)) for all edges (u,w)
-        long minCostST = Long.MAX_VALUE;
-        for (Edge e : edges) {
-            long cost = S.dist[e.start] + T.dist[e.destination]; // (D(s,u) - D(w,t))
-            if (cost < minCostST) {
-                minCostST = cost;
-            }
-        }
-        // find minCost (t,x)
-        // operate min (D(t,u) - D(w,x)) for all edges (u,w)
-        long minCostTX = Long.MAX_VALUE;
-        for (Edge e : edges) {
-            long cost = T.dist[e.start] + X.dist[e.destination]; // (D(t,u) - D(w,x))
-            if (cost < minCostTX) {
-                minCostTX = cost;
-            }
-        }
-
-        // Melakukan comparing combine
-        // S -> skipped -> T -> X
-        long versi1 = minCostST + T.dist[x];
-        // S -> T -> skipped -> X
-        long versi2 = S.dist[t] + minCostTX;
-        // Mencetak yang terkecil di antara kedua versi
-        if (versi1 <= versi2) {
-            out.println(versi1);
-        } else {
-            out.println(versi2);
-        }
-    }
-
     // Method 1
     // Dijkstra's Algorithm
     static Dist dijkstra(int src) { // return Dist with isi [src[v]] to all nodes
@@ -372,7 +304,8 @@ public class TP03 {
         return dist;
     }
 
-    static void dijkstraSuper() {
+    // QUERY 3 : SUPER
+    static void SUPER() { // manfaatin dijkstra dp
         int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
 
         // CEK SUDAH PERNAH DIMEMO DI SUPER BELUM
