@@ -420,7 +420,7 @@ public class TP03 {
                     // }
 
                     // skip jika state 1 lebih kecil dari state 0
-                    if (dp[start.node][1] < dp[start.node][0] + edgeDistance) {
+                    if (dp[desti.node][1] < dp[start.node][0] + edgeDistance) {
                         // newDistance = dp[start.node][1] + edgeDistance;
                         // if (newDistance < dp[desti.node][1]) {
                         //     dp[start.node][1] = newDistance;
