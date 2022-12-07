@@ -390,7 +390,7 @@ public class TP03 {
             for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
                 Node desti = adj.get(start.node).get(i); // ambil node tujuan
                 edgeDistance = desti.L; // cost ke v
-                out.println("start: " + start.node + " desti: " + desti.node);
+                // out.println("start: " + start.node + " desti: " + desti.node);
                 if (start.skip) { // saat sudah pernah diskip
                     
                     long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini 
@@ -421,6 +421,11 @@ public class TP03 {
                 }
 
             }
+            out.println("DP TABLE: | NODE: " + start.node);
+            for (int i = 1; i < V; i++) {
+                out.println("dp[" + i + "][0] = " + dp[i][0]);
+                out.println("dp[" + i + "][1] = " + dp[i][1]);
+            }
         }   
                 // if (!u.skip) { // Take
                 //     edgeDistance = v.L;
@@ -448,6 +453,8 @@ public class TP03 {
         // long versi1 = dp[t][0] + dp[x][0];
         // long versi2 = dp[s][0] + dp[t][1] + dp[x][0];
         // print dp table
+        // print final
+        out.println("FINAL DP TABLE: ");
         for (int i = 1; i < V; i++) {
             out.println("dp[" + i + "][0] = " + dp[i][0]);
             out.println("dp[" + i + "][1] = " + dp[i][1]);
