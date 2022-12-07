@@ -390,9 +390,8 @@ public class TP03 {
             for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
                 Node desti = adj.get(start.node).get(i); // ambil node tujuan
                 edgeDistance = desti.L; // cost ke v
-                // out.println("start: " + start.node + " desti: " + desti.node);
-                if (start.skip) { // saat sudah pernah diskip
-                    
+
+                if (start.skip) { // saat sudah pernah diskip                    
                     long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
                     long sudahskip = dp[start.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
                     if (Math.min(belumskip, sudahskip) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
@@ -411,22 +410,11 @@ public class TP03 {
 
                     // skip jika state 1 lebih kecil dari state 0
                     if (dp[desti.node][1] < noSkip) {
-                        out.println("MASUK");
-                        // newDistance = dp[start.node][1] + edgeDistance;
-                        // if (newDistance < dp[desti.node][1]) {
-                        //     dp[start.node][1] = newDistance;
-                        // dp[start.node][1] = dp[desti.node][1]; // update start state[1]
                         minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
-                        // }
                     }
                     
                 }
 
-            }
-            out.println("DP TABLE: | NODE: " + start.node);
-            for (int i = 1; i < V; i++) {
-                out.println("dp[" + i + "][0] = " + dp[i][0]);
-                out.println("dp[" + i + "][1] = " + dp[i][1]);
             }
         }   
                 // if (!u.skip) { // Take
