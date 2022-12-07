@@ -393,10 +393,10 @@ public class TP03 {
                 // out.println("start: " + start.node + " desti: " + desti.node);
                 if (start.skip) { // saat sudah pernah diskip
                     
-                    long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini 
+                    long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
                     long sudahskip = dp[start.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
-                    if (Math.min(belumskip, sudahskip + edgeDistance) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
-                        dp[desti.node][1] = Math.min(belumskip, sudahskip + edgeDistance); // update cost
+                    if (Math.min(belumskip, sudahskip) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                        dp[desti.node][1] = Math.min(belumskip, sudahskip); // update cost
                         minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true)); // masukkan ke minHeap
                     }
 
