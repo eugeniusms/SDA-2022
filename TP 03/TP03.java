@@ -415,7 +415,8 @@ public class TP03 {
                         // newDistance = dp[start.node][1] + edgeDistance;
                         // if (newDistance < dp[desti.node][1]) {
                         //     dp[start.node][1] = newDistance;
-                            minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
+                        // dp[start.node][1] = dp[desti.node][1]; // update start state[1]
+                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
                         // }
                     }
                     
