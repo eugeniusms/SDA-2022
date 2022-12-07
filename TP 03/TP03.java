@@ -369,8 +369,9 @@ public class TP03 {
     }
 
     static void dijkstraSuper() {
-        int s = in.nextInt(); int t = in.nextInt();
+        int s = in.nextInt(); int t = in.nextInt(); int x = in.nextInt();
 
+        // =============================== DIJKSTRA PERTAMA DARI S KE T ==============================
         // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
         long[][] dp = new long[V][2];
         for (int i = 0; i < V; i++) {
@@ -444,11 +445,71 @@ public class TP03 {
         // long versi2 = dp[s][0] + dp[t][1] + dp[x][0];
         // print dp table
         // print final
-        out.println("FINAL DP TABLE: ");
-        for (int i = 1; i < V; i++) {
-            out.println("dp[" + i + "][0] = " + dp[i][0]);
-            out.println("dp[" + i + "][1] = " + dp[i][1]);
+        // out.println("FINAL DP TABLE: ");
+        // for (int i = 1; i < V; i++) {
+        //     out.println("dp[" + i + "][0] = " + dp[i][0]);
+        //     out.println("dp[" + i + "][1] = " + dp[i][1]);
+        // }
+        long minCostST = dp[t][0];
+        long skipCostST = dp[t][1];
+        // ============================= DIJKSTRA KEDUA DARI T KE X ===============================
+        // dp[destination][state=0/1], 0 -> Take, 1 -> Skip
+        dp = new long[V][2]; // reset dp table
+        for (int i = 0; i < V; i++) {
+            dp[i][0] = Long.MAX_VALUE;
+            dp[i][1] = Long.MAX_VALUE;
         }
+        dp[t][0] = 0; // state 0 -> take
+        dp[t][1] = 0; // state 1 -> skip
+        // dijkstra with 1 is k-skip edge
+        minHeap = new MinHeap<Node>();
+        minHeap.insert(new Node(t, 0, 0));
+        while (!minHeap.isEmpty()) {
+            Node start = minHeap.remove();
+            // e_neighbours
+            long edgeDistance = -1;
+            long noSkip = -1;
+            for (int i = 0; i < adj.get(start.node).size(); i++) { // untuk setiap edges di node u
+                Node desti = adj.get(start.node).get(i); // ambil node tujuan
+                edgeDistance = desti.L; // cost ke v
+
+                if (start.skip) { // saat sudah pernah diskip                    
+                    long belumskip = dp[start.node][0]; // cost belum pernah skip tapi mencoba skip saat ini  // dijkstra biasa
+                    long sudahskip = dp[start.node][1] + edgeDistance; // cost sudah pernah skip + cost ke v (sudah tidak bisa diskip lagi)
+                    if (Math.min(belumskip, sudahskip) < dp[desti.node][1]) { // jika cost ke v lebih kecil dari cost sebelumnya
+                        dp[desti.node][1] = Math.min(belumskip, sudahskip); // update cost
+                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true)); // masukkan ke minHeap
+                    }
+
+                } else { // belum pernah diskip
+                    noSkip = dp[start.node][0] + edgeDistance;
+                    // dijkstra biasa
+                    // dijkstra ini biasa state[0] udah bener
+                    if (noSkip < dp[desti.node][0]) {
+                        dp[desti.node][0] = noSkip;
+                        minHeap.insert(new Node(desti.node, dp[desti.node][0], desti.S, false));
+                    }
+
+                    // skip jika state 1 lebih kecil dari state 0
+                    if (dp[desti.node][1] < noSkip) {
+                        minHeap.insert(new Node(desti.node, dp[desti.node][1], desti.S, true));
+                    }
+                    
+                }
+
+            }
+        }   
+        // out.println("FINAL DP TABLE: ");
+        // for (int i = 1; i < V; i++) {
+        //     out.println("dp[" + i + "][0] = " + dp[i][0]);
+        //     out.println("dp[" + i + "][1] = " + dp[i][1]);
+        // }
+        long minCostTX = dp[x][0];
+        long skipCostTX = dp[x][1];
+        // Cari versi terpendek between
+        // S -> T -> Skip -> X && S -> Skip -> T -> X
+        long result = Math.min(minCostST + skipCostTX, skipCostST + minCostTX);
+        out.println(result);
     }
 
     // taken from https://codeforces.com/submissions/Petr
